@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NTC CAR Baguio</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <img src="images/logo.png" alt="NTC Logo" class="logo">
+      <div class="title">
+        <p>Republic of the Philippines</p>
+        <h1>National Telecommunication Commission<br><span>CAR, Baguio City Philippines</span></h1>
+      </div>
+    </div>
+
+    <nav>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <ul id="navList">
+        <li class="active">Home</li>
+        <li>About us</li>
+        <li>News</li>
+        <li>Contact us</li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="banner">
+    <img src="images/banner-image.png" alt="Campaign Banner" />
+  </section>
+
+  <section class="quick-links">
+    <div class="card">
+      <img src="images/icon-schedule.png" alt="Schedule Icon"/>
+      <p>Schedules</p>
+    </div>
+    <div class="card">
+      <img src="images/icon-forms.png" alt="Forms Icon"/>
+      <p>List of Forms</p>
+    </div>
+    <div class="card">
+      <img src="images/icon-requirements.png" alt="Requirements Icon"/>
+      <p>Requirements</p>
+    </div>
+  </section>
+
+  <section class="news">
+    <h2>CURRENT NEWS</h2>
+
+    <div class="news-item">
+      <img src="news-icon.png" alt="News Icon" class="news-icon">
+      <div class="news-content">
+        <h3>Announcement</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a fringilla velit...</p>
+        <a href="#">Read more</a>
+      </div>
+    </div>
+
+    <div class="news-item">
+      <img src="news-icon.png" alt="News Icon" class="news-icon">
+      <div class="news-content">
+        <h3>Announcement</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a fringilla velit...</p>
+        <a href="#">Read more</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const toggle = document.getElementById("menuToggle");
+    const navList = document.getElementById("navList");
+
+    toggle.addEventListener("click", () => {
+      navList.classList.toggle("open");
+    });
+  </script>
+</body>
+</html>
