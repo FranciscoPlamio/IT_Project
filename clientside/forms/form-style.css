@@ -1,0 +1,152 @@
+/* Shared form styles for NTC forms */
+:root {
+  --form-max-width: 900px;
+  --form-padding: 32px 24px 24px 24px;
+  --form-radius: 12px;
+  --form-shadow: 0 0 8px rgba(0,0,0,0.07);
+  --form-gap: 24px;
+  --form-row-gap: 18px;
+  --form-col-gap: 22px;
+  --form-label-margin: 10px;
+  --form-fieldset-margin: 32px;
+  --form-font-size: 1.13rem;
+  --form-label-size: 1.08rem;
+  --form-legend-size: 1.15rem;
+  --form-input-size: 1.00rem;
+}
+.form1-01-container {
+  max-width: var(--form-max-width);
+  margin: 40px auto;
+  background: #fff;
+  border-radius: var(--form-radius);
+  box-shadow: var(--form-shadow);
+  padding: var(--form-padding);
+  font-size: var(--form-font-size);
+}
+.form1-01-header {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  text-align: center;
+}
+.form1-01-section-title {
+  font-weight: 700;
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 1.22rem;
+}
+fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: var(--form-fieldset-margin);
+  padding: 24px 20px 16px 20px;
+}
+legend {
+  font-weight: 600;
+  font-size: var(--form-legend-size);
+  padding: 0 8px;
+}
+.form1-01-row {
+  display: flex;
+  gap: var(--form-col-gap);
+  margin-bottom: var(--form-row-gap);
+}
+.form1-01-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--form-label-margin);
+}
+.form1-01-label {
+  font-size: var(--form-label-size);
+  margin-bottom: 2px;
+  font-weight: bold;
+}
+.form1-01-input, .form1-01-select, textarea.form1-01-input {
+  font-size: var(--form-input-size);
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  margin-bottom: 0;
+  max-width: 320px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.form1-01-checkbox-group {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.form1-01-checkbox-label {
+  margin-left: 4px;
+  font-size: 0.97rem;
+}
+.form1-01-declaration {
+  font-size: 0.97rem;
+  margin: 18px 0 10px 0;
+  color: #333;
+}
+.form1-01-signature-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 18px;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 180px;
+}
+.form1-01-signature-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--form-label-margin);
+}
+.form1-01-btn {
+  background: #6ee7b7;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 18px;
+}
+.form1-01-btn:hover {
+  background: #34d399;
+}
+@media (max-width: 900px) {
+  .form1-01-container {
+    padding: 16px 2px;
+    font-size: 1rem;
+  }
+  .form1-01-row, .form1-01-signature-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  fieldset {
+    padding: 12px 6px 10px 6px;
+  }
+  .form1-01-header {
+    font-size: 1.2rem;
+  }
+  .form1-01-section-title {
+    font-size: 1rem;
+  }
+  legend {
+    font-size: 1rem;
+  }
+  .form1-01-label {
+    font-size: 1rem;
+  }
+  .form1-01-input, .form1-01-select, textarea.form1-01-input {
+    font-size: 1rem;
+    padding: 8px 10px;
+  }
+} 
