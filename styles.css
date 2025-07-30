@@ -29,8 +29,9 @@ header .top-bar {
 }
 
 nav {
-  background: #666;
+  background: rgba(128,128,128,0.6);
   padding: 10px 20px;
+  backdrop-filter: blur(4px);
   position: relative;
 }
 
@@ -40,6 +41,7 @@ nav ul {
   gap: 20px;
   margin: 0;
   padding: 0;
+  margin-left: 4rem;
 }
 
 nav ul li {
