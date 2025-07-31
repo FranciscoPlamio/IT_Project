@@ -17,7 +17,7 @@
       </div>
       
       <!-- form name in the side of the header it may vary depending on the form -->
-      <div style="position:absolute;top:20px;right:40px;text-align:right;font-size:0.97rem;">
+      <div class="form-header-info">
         <div><b>Form No.</b> <u>NTC 1-22</u></div>
         <div><b>Revision No.</b> <u>02</u></div>
         <div><b>Revision Date</b> <u>03/31/2023</u></div>
@@ -28,12 +28,12 @@
     <form class="form1-01-container">
       <div class="form1-01-header">APPLICATION FOR TVRO REGISTRATION CERTIFICATE/TVRO STATION LICENSE/CATV STATION LICENSE</div>
       <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol style="font-size:0.97rem;margin-bottom:10px;">
+      <ol class="form-instructions">
         <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
         <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
         <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
       </ol>
-      <fieldset style="margin-bottom:18px;">
+      <fieldset class="fieldset-compact">
         <legend>TYPE OF APPLICATION</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
@@ -43,7 +43,7 @@
           </div>
         </div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
+      <fieldset class="fieldset-compact">
         <legend>TYPE OF LICENSE/CERTIFICATE</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
@@ -53,7 +53,7 @@
           </div>
         </div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
+      <fieldset class="fieldset-compact">
         <legend>CLASSIFICATION OF APPLICANT</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
@@ -63,12 +63,12 @@
           <div class="form1-01-col">
             <label><input type="checkbox" name="service_type" value="broadcasting"> BROADCASTING</label>
             <label><input type="checkbox" name="service_type" value="catv"> CATV</label>
-            <label><input type="checkbox" name="service_type" value="others"> OTHERS, specify <input class="form1-01-input" type="text" name="others_service" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="service_type" value="others"> OTHERS, specify <input class="form1-01-input inline-input" type="text" name="others_service"></label>
           </div>
         </div>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">NO. OF YEARS: <input class="form1-01-input" type="number" name="no_of_years" style="display:inline-block;width:120px;margin-left:8px;"></label>
+            <label class="form1-01-label">NO. OF YEARS: <input class="form1-01-input inline-input-small" type="number" name="no_of_years"></label>
           </div>
         </div>
       </fieldset>
@@ -124,7 +124,7 @@
         </div>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Exact Location of TVRO System: <input class="form1-01-input" type="text" name="exact_location" style="width:100%;max-width:none;"></label>
+            <label class="form1-01-label">Exact Location of TVRO System: <input class="form1-01-input full-width-input" type="text" name="exact_location"></label>
           </div>
         </div>
         <div class="form1-01-row">
@@ -138,49 +138,49 @@
       </fieldset>
       <fieldset>
         <legend>PARTICULARS OF EQUIPMENT (FOR MULTIPLE EQUIPMENT, USE FORM G)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+        <div class="table-container">
+          <table class="form-table">
             <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">LNA/LNB</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">RECEIVERS</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">COMBINER(S)</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">MODULATORS</th>
+              <tr>
+                <th>LNA/LNB</th>
+                <th>RECEIVERS</th>
+                <th>COMBINER(S)</th>
+                <th>MODULATORS</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="lna_lnb_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
-                  <input class="form1-01-input" type="text" name="lna_lnb_serial" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Frequency Range:</strong></div>
-                  <input class="form1-01-input" type="text" name="lna_lnb_frequency" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <div class="table-field-label"><strong>Make/Type/Model:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="lna_lnb_make">
+                  <div class="table-field-label"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="lna_lnb_serial">
+                  <div class="table-field-label"><strong>Frequency Range:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="lna_lnb_frequency">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="receivers_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
-                  <input class="form1-01-input" type="text" name="receivers_serial" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Frequency Range:</strong></div>
-                  <input class="form1-01-input" type="text" name="receivers_frequency" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <div class="table-field-label"><strong>Make/Type/Model:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="receivers_make">
+                  <div class="table-field-label"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="receivers_serial">
+                  <div class="table-field-label"><strong>Frequency Range:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="receivers_frequency">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="combiners_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
-                  <input class="form1-01-input" type="text" name="combiners_serial" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Frequency Range:</strong></div>
-                  <input class="form1-01-input" type="text" name="combiners_frequency" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <div class="table-field-label"><strong>Make/Type/Model:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="combiners_make">
+                  <div class="table-field-label"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="combiners_serial">
+                  <div class="table-field-label"><strong>Frequency Range:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="combiners_frequency">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="modulators_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
-                  <input class="form1-01-input" type="text" name="modulators_serial" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Frequency Range:</strong></div>
-                  <input class="form1-01-input" type="text" name="modulators_frequency" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <div class="table-field-label"><strong>Make/Type/Model:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="modulators_make">
+                  <div class="table-field-label"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="modulators_serial">
+                  <div class="table-field-label"><strong>Frequency Range:</strong></div>
+                  <input class="form1-01-input table-input" type="text" name="modulators_frequency">
                 </td>
               </tr>
             </tbody>
@@ -189,29 +189,29 @@
       </fieldset>
       <fieldset>
         <legend>PARTICULARS OF ANTENNA SYSTEM (FOR MULTIPLE ANTENNA, USE FORM G)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+        <div class="table-container">
+          <table class="form-table">
             <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Make/Type/Model</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Dish Diameter</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Polarization</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Azimuth</th>
+              <tr>
+                <th>Make/Type/Model</th>
+                <th>Dish Diameter</th>
+                <th>Polarization</th>
+                <th>Azimuth</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="antenna_make" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="antenna_make">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="dish_diameter" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="dish_diameter">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="polarization" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="polarization">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="azimuth" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="azimuth">
                 </td>
               </tr>
             </tbody>
@@ -220,29 +220,29 @@
       </fieldset>
       <fieldset>
         <legend>PARTICULARS OF SIGNAL TO BE RECEIVED (FOR MULTIPLE SIGNAL, USE FORM G)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+        <div class="table-container">
+          <table class="form-table">
             <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Satellite</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Received Frequency</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Polarization</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:25%;">Name of Programs</th>
+              <tr>
+                <th>Satellite</th>
+                <th>Received Frequency</th>
+                <th>Polarization</th>
+                <th>Name of Programs</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="satellite" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="satellite">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="received_frequency" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="received_frequency">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="signal_polarization" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="signal_polarization">
                 </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="name_of_programs" style="border:none;width:100%;padding:4px;">
+                <td>
+                  <input class="form1-01-input table-input" type="text" name="name_of_programs">
                 </td>
               </tr>
             </tbody>
@@ -256,22 +256,22 @@
         </div>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
-            <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:260px;width:100%;" />
-            <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
+            <input class="form1-01-input signature-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" />
+            <input class="form1-01-input date-input" type="date" name="date_accomplished" placeholder="Date Accomplished" />
           </div>
-          <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-            <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-            <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-            <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-            <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
+          <div class="form1-01-signature-col or-section">
+            <div class="or-label">OR No.:</div>
+            <input class="form1-01-input or-input" type="text" name="or_no" />
+            <div class="or-label">Date:</div>
+            <input class="form1-01-input or-input" type="date" name="or_date" />
+            <div class="or-label">Amount:</div>
+            <input class="form1-01-input or-input" type="text" name="or_amount" />
+            <div class="or-label">Collecting Officer</div>
           </div>
         </div>
       </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+      <div class="form-footer">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
+      <button class="form1-01-btn validate-button" type="button" id="validateBtn">Proceed to Validation</button>
     </form>
     <script>
       document.getElementById('validateBtn').onclick = function() {
