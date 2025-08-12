@@ -1,0 +1,150 @@
+@font-face {
+    font-family: Poppins-800;
+    src: url(fonts/Poppins/Poppins-Black.ttf);
+  }
+  @font-face {
+      font-family: Poppins-700;
+      src: url(fonts/Poppins/Poppins-Bold.ttf);
+  }
+  @font-face {
+    font-family: Poppins-500;
+    src: url(fonts/Poppins/Poppins-Medium.ttf);
+  }
+  
+  @font-face {
+    font-family: Poppins-400;
+    src: url(fonts/Poppins/Poppins-Regular.ttf);
+  }
+  
+  @font-face {
+    font-family: Poppins-600;
+    src: url(fonts/Poppins/Poppins-SemiBold.ttf);
+  }
+  
+  @font-face {
+    font-family: Poppins-Italic;
+    src: url(fonts/Poppins/Poppins-Italic.ttf);
+  }
+  
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left section */
+.left {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.left img {
+    width: 250px;
+    margin-bottom: 20px;
+}
+
+.left h2 {
+    font-family: 'Poppins-600', sans-serif;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+/* Right section */
+.right {
+    width: 50%;
+    background-color: #d7dee6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container {
+    width: 60%;
+}
+
+.form-container h1 {
+    font-family: 'Poppins-600', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: -5px;
+}
+
+.form-container p {
+    font-family: 'Poppins-500', sans-serif;
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+label {
+    font-family: 'Poppins-500', sans-serif;
+    font-size: 16px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+input {
+    font-family: 'Poppins-500', sans-serif;
+    font-size: 16px;
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 15px;
+    border: 1px solid #7d7d7d;
+    border-radius: 8px;
+    outline: none;
+    background-color: #0e1a2d00;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px; /* give space for the icon */
+}
+
+.password-container span {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-container span img {
+    
+    width: 23px; /* adjust icon size */
+    height: 23px;
+    object-fit: contain; /* ensures proper scaling */
+    opacity: 0.9; /* optional, softer look */
+}
+
+
+button {
+    font-family: 'Poppins-500', sans-serif;
+    width: 100%;
+    padding: 12px;
+    background-color: #1d2e44;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0e1a2d;
+}
