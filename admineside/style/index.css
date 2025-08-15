@@ -45,6 +45,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    
 }
 
 .left img {
@@ -109,7 +110,7 @@ input {
 }
 
 .password-container input {
-    padding-right: 40px; /* give space for the icon */
+    padding-right: 40px; 
 }
 
 .password-container span {
@@ -125,26 +126,76 @@ input {
 
 .password-container span img {
     
-    width: 23px; /* adjust icon size */
+    width: 23px; 
     height: 23px;
-    object-fit: contain; /* ensures proper scaling */
-    opacity: 0.9; /* optional, softer look */
+    object-fit: contain; 
+    opacity: 0.9; 
 }
 
 
 button {
     font-family: 'Poppins-500', sans-serif;
-    width: 100%;
+    width: 50%; 
     padding: 12px;
-    background-color: #1d2e44;
+    background-color: #2d507f;
     color: white;
     font-size: 18px;
     font-weight: bold;
     border: none;
     border-radius: 25px;
     cursor: pointer;
+    display: block;        
+    margin: 20px auto 0;   
 }
 
 button:hover {
-    background-color: #0e1a2d;
+    background-color: #0f2a4a;
 }
+
+/* Extra style for typewriter text */
+#welcome-text {
+    font-family: 'Poppins-600', sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: -5px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Right section shadow effect */
+.right {
+    width: 50%;
+    background-color: #d7dee6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* needed for pseudo-element */
+    overflow: hidden;
+}
+
+/* Shadow on the left edge of the right side */
+.right::before {
+    content: "";
+    position: absolute;
+    left: -20px; /* slightly outside */
+    top: 0;
+    height: 100%;
+    width: 20px;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+    pointer-events: none;
+}
+
+/* Initial hidden state */
+.form-container {
+    width: 60%;
+    transform: translateX(-50px); /* start slightly to the left */
+    opacity: 0; /* invisible at start */
+    transition: all 0.7s ease-out; /* smooth animation */
+}
+
+/* Active state: slide into view */
+.form-container.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+

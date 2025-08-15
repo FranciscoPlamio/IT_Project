@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +19,7 @@
     <!-- Right -->
     <div class="right">
         <div class="form-container">
-            <h1 id="welcome-text">Welcome!</h1>
+            <h1 id="welcome-text"></h1>
             <p>Please enter your details.</p>
             
             <label for="employee-id">Employee ID</label>
@@ -31,6 +34,7 @@
             <button>SIGN IN</button>
         </div>
     </div>
+
     <script src="javascript/index.js"></script>
 </body>
 </html>
