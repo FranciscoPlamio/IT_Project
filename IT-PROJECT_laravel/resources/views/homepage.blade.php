@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NTC CAR Baguio</title>
-  <link rel="stylesheet" href="styles.css"/>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <header>
     <div class="top-bar">
-      <img src="images/logo.png" alt="NTC Logo" class="logo">
+      <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
       <div class="title">
         <p>Republic of the Philippines</p>
         <h1>National Telecommunication Commission<br><span>CAR, Baguio City Philippines</span></h1>
@@ -28,22 +28,22 @@
   </header>
 
   <section class="banner">
-    <img src="images/banner-image.png" alt="Campaign Banner" />
+    <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner" />
   </section>
 
   <section class="quick-links">
     <div class="card">
-      <img src="images/icon-schedule.png" alt="Schedule Icon"/>
+      <img src="{{ asset('images/icon-schedule.png') }}" alt="Schedule Icon"/>
       <p>Schedules</p>
     </div>
     <div class="card">
-      <a href="clientside/html/EmailAuthentication.html" style="display:block;text-decoration:none;color:inherit;">
-        <img src="images/icon-forms.png" alt="Forms Icon"/>
+      <a href="{{ asset('clientside/html/EmailAuthentication.html') }}" style="display:block;text-decoration:none;color:inherit;">
+        <img src="{{ asset('images/icon-forms.png') }}" alt="Forms Icon"/>
         <p>List of Forms</p>
       </a>
     </div>
     <div class="card">
-      <img src="images/icon-requirements.png" alt="Requirements Icon"/>
+      <img src="{{ asset('images/icon-requirements.png') }}" alt="Requirements Icon"/>
       <p>Requirements</p>
     </div>
   </section>
@@ -52,7 +52,7 @@
     <h2>CURRENT NEWS</h2>
 
     <div class="news-item">
-      <img src="news-icon.png" alt="News Icon" class="news-icon">
+      <img src="{{ asset('images/news-icon.png') }}" alt="News Icon" class="news-icon">
       <div class="news-content">
         <h3>Announcement</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a fringilla velit...</p>
@@ -61,7 +61,7 @@
     </div>
 
     <div class="news-item">
-      <img src="news-icon.png" alt="News Icon" class="news-icon">
+      <img src="{{ asset('images/news-icon.png') }}" alt="News Icon" class="news-icon">
       <div class="news-content">
         <h3>Announcement</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse a fringilla velit...</p>

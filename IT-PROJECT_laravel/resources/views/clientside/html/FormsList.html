@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>List of Harmonized Forms</title>
+  <!-- <link rel="stylesheet" href="../../styles.css"/>
+  <link rel="stylesheet" href="email-auth.css"/> -->
+  <style>
+    .forms-list-container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.07);
+      padding: 32px 24px 24px 24px;
+    }
+    .forms-list-header {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0;
+    }
+    .forms-list-sub {
+      color: #2d3fd3;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      display: inline-block;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .forms-list-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 18px;
+      background: #fff;
+    }
+    .forms-list-table th, .forms-list-table td {
+      padding: 16px 12px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    .forms-list-table th {
+      color: #222e3a;
+      font-weight: 700;
+      border-bottom: 2px solid #e0e0e0;
+      background: #f8f8f8;
+    }
+    .forms-list-table tr:not(:last-child) td {
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .forms-list-table td {
+      vertical-align: top;
+    }
+    .forms-signup-btn {
+      background: #6ee7b7;
+      color: #fff;
+      border: none;
+      border-radius: 18px;
+      padding: 8px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .forms-signup-btn:hover {
+      background: #34d399;
+    }
+    .forms-search-bar {
+      float: right;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .forms-search-input {
+      padding: 7px 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      font-size: 1rem;
+      width: 180px;
+    }
+    .forms-search-icon {
+      font-size: 1.2rem;
+      color: #222e3a;
+      margin-left: -37px;
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      .forms-list-container {
+        padding: 16px 2px;
+      }
+      .forms-list-table th, .forms-list-table td {
+        padding: 10px 4px;
+        font-size: 0.97rem;
+      }
+      .forms-search-bar {
+        float: none;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <img src="../../images/logo.png" alt="NTC Logo" class="logo">
+      <div class="title">
+        <p>Republic of the Philippines</p>
+        <h1>National Telecommunication Commission<br><span>CAR, Baguio City Philippines</span></h1>
+      </div>
+    </div>
+    <nav>
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <ul id="navList">
+        <li class="active">Home</li>
+        <li>About us</li>
+        <li>News</li>
+        <li>Contact us</li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div class="forms-list-container">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div class="forms-list-header">LIST OF HARMONIZED FORMS</div>
+          <a class="forms-list-sub" href="#">Select Forms</a>
+        </div>
+        <form class="forms-search-bar" onsubmit="return false;">
+          <input class="forms-search-input" type="text" placeholder="Search" />
+          <span class="forms-search-icon">&#128269;</span>
+        </form>
+      </div>
+      <div style="overflow-x:auto;max-height:400px;overflow-y:auto;margin-top:10px;">
+        <table class="forms-list-table">
+          <thead>
+            <tr>
+              <th>Form No.</th>
+              <th>Form Title</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Form No. NTC 1-01</td>
+              <td>Application for Radio Operator Examination</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-01.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-02</td>
+              <td>Application for Radio Operator Certificate</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-02.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-03</td>
+              <td>Application for Amateur Radio Operator Certificate/AmateurRadio Station License</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-03.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-09</td>
+              <td>Aplication for Permit to Purchase/Possess/Sell/Transfer</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-09.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-11</td>
+              <td>Application for Construction Permit/Radio Station License</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-11.html'">Sign up</button></td>
+            </tr>
+            <tr> 
+              <td>Form No. NTC 1-13</td>
+              <td>Form D (For Modification)</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-13.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-14</td>
+              <td>Application for Temporary Permit to Propagate/Demonstrate</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-14.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-16</td>
+              <td>Application for Permit to Transport Radio Transmitter/Transceiver</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-16.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-18</td>
+              <td>Application for Dealer/Manufacturer/Service/Center/Retailer/Reseller/Permit/CPE Supplier Accreditation</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-18.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-19</td>
+              <td>Application for Certificate of Registration (WDN/SRD/RFID/SRRS/Public Trunk Radio)</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-19.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-20</td>
+              <td>Application for Certificate of Registration - Value Added Services</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-20.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-21</td>
+              <td>Application for Duplicate of Permit/License/Certificate</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-21.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-22</td>
+              <td>Application for TVRO Registration Certificate/TVRO/Station License/CATV Station License</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-22.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-24</td>
+              <td>Affidavit of Ownership and Loss with Undertaking</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-24.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-25</td>
+              <td>Complaint Form</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-25.html'">Sign up</button></td>
+            </tr>
+            <tr>
+              <td>Form No. NTC 1-25</td>
+              <td>Complaint on Text Message</td>
+              <td><button class="forms-signup-btn" onclick="window.location.href='../forms/Form1-25(TextMessage).html'">Sign up</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+  <script>
+    const toggle = document.getElementById("menuToggle");
+    const navList = document.getElementById("navList");
+    toggle.addEventListener("click", () => {
+      navList.classList.toggle("open");
+    });
+  </script>
+</body>
+</html> 
