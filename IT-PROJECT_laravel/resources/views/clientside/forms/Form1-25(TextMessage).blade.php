@@ -9,7 +9,7 @@
 <body>
   <header>
     <div class="top-bar">
-      <img src="../../images/logo.png" alt="NTC Logo" class="logo">
+      <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
       <div class="title">
         <p>Republic of the Philippines</p>
         <h1>National Telecommunication Commission<br><span>ONE STOP PUBLIC ASSISTANCE CENTER</span><br><span>Leonard Wood Road, Pacdal, Baguio City 2600</span><br><span>Telephone Number: (074) 442-9342/304-4876</span></h1>
