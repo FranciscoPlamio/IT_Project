@@ -37,7 +37,7 @@
       <p>Schedules</p>
     </div>
     <div class="card">
-      <a href="{{ asset('clientside/html/EmailAuthentication.html') }}" style="display:block;text-decoration:none;color:inherit;">
+      <a href="{{ route('email-auth') }}" style="display:block;text-decoration:none;color:inherit;">
         <img src="{{ asset('images/icon-forms.png') }}" alt="Forms Icon"/>
         <p>List of Forms</p>
       </a>

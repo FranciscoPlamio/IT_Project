@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Application for Certificate of Registration (Form 1-19)</title>
-  <link rel="stylesheet" href="../../styles.css"/>
-  <link rel="stylesheet" href="form-style.css"/>
+  <title>Application for Temporary Permit to Propagate/Demonstrate (Form 1-14)</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <header>
@@ -18,7 +17,7 @@
       
       <!-- form name in the side of the header it may vary depending on the form -->
       <div style="position:absolute;top:20px;right:40px;text-align:right;font-size:0.97rem;">
-        <div><b>Form No.</b> <u>NTC 1-19</u></div>
+        <div><b>Form No.</b> <u>NTC 1-14</u></div>
         <div><b>Revision No.</b> <u>02</u></div>
         <div><b>Revision Date</b> <u>03/31/2023</u></div>
       </div>
@@ -26,7 +25,7 @@
   </header>
   <main>
     <form class="form1-01-container">
-      <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
+      <div class="form1-01-header">APPLICATION FOR TEMPORARY PERMIT TO PROPAGATE/DEMONSTRATE</div>
       <div class="form1-01-section-title">INSTRUCTIONS:</div>
       <ol style="font-size:0.97rem;margin-bottom:10px;">
         <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
@@ -34,14 +33,42 @@
         <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
       </ol>
       <fieldset style="margin-bottom:18px;">
-        <legend>TYPE OF EQUIPMENT/DEVICE</legend>
+        <legend>NATURE OF SERVICE</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label><input type="checkbox" name="equipment_type" value="wdn_indoor"> WIRELESS DATA NETWORK (WDN) DEVICES - INDOOR</label>
-            <label><input type="checkbox" name="equipment_type" value="srd"> SHORT RANGE DEVICES (SRD)</label>
-            <label><input type="checkbox" name="equipment_type" value="rfid"> RADIO FREQUENCY IDENTIFICATION (RFID) DEVICES</label>
-            <label><input type="checkbox" name="equipment_type" value="srrs"> SHORT RANGE RADIO SERVICE (SRRS) DEVICES</label>
-            <label><input type="checkbox" name="equipment_type" value="public_trunked"> PUBLIC TRUNKED RADIO EQUIPMENT (MOBILE/PORTABLE)</label>
+            <label><input type="checkbox" name="nature_service" value="cv_private"> CV (PRIVATE) <input class="form1-01-input" type="text" name="cv_private_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="nature_service" value="co_government"> CO (GOVERNMENT) <input class="form1-01-input" type="text" name="co_government_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="nature_service" value="cp_public"> CP (PUBLIC CORRESPONDENCE) <input class="form1-01-input" type="text" name="cp_public_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset style="margin-bottom:18px;">
+        <legend>CLASS OF STATION (Indicate no. of units in the box)</legend>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label><input type="checkbox" name="station_class" value="rt"> RT <input class="form1-01-input" type="text" name="rt_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="fx"> FX <input class="form1-01-input" type="text" name="fx_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="fb"> FB <input class="form1-01-input" type="text" name="fb_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="ml"> ML <input class="form1-01-input" type="text" name="ml_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="p"> P <input class="form1-01-input" type="text" name="p_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="bc"> BC <input class="form1-01-input" type="text" name="bc_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+          </div>
+          <div class="form1-01-col">
+            <label><input type="checkbox" name="station_class" value="fa"> FA <input class="form1-01-input" type="text" name="fa_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="ma"> MA <input class="form1-01-input" type="text" name="ma_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="tc"> TC <input class="form1-01-input" type="text" name="tc_units" style="display:inline-block;width:60px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="station_class" value="others"> OTHERS, specify <input class="form1-01-input" type="text" name="others_station_specify" style="display:inline-block;width:200px;margin-left:8px;"></label>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset style="margin-bottom:18px;">
+        <legend>TYPE OF RADIO SERVICE</legend>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"> FIXED AND LAND MOBILE <input class="form1-01-input" type="text" name="fixed_land_mobile_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="radio_service" value="aeronautical"> AERONAUTICAL <input class="form1-01-input" type="text" name="aeronautical_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="radio_service" value="broadcast"> BROADCAST <input class="form1-01-input" type="text" name="broadcast_details" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="checkbox" name="radio_service" value="others"> OTHERS, specify <input class="form1-01-input" type="text" name="others_radio_specify" style="display:inline-block;width:200px;margin-left:8px;"></label>
           </div>
         </div>
       </fieldset>
@@ -83,97 +110,28 @@
           <div class="form1-01-col">
             <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit to Import No.: <input class="form1-01-input" type="text" name="permit_import_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Invoice No.: <input class="form1-01-input" type="text" name="invoice_no"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">CPCN/PA/RSL No.: <input class="form1-01-input" type="text" name="cpcn_pa_rsl_no"></label>
-          </div>
         </div>
       </fieldset>
       <fieldset>
-        <legend>PARTICULARS OF EQUIPMENT & DEVICES (Use separate sheet/s, if necessary)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
-            <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:40%;">Make/Type/Model</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Quantity</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Serial Number</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment1_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment1_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment1_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment2_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment2_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment2_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment3_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment3_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment3_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment4_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment4_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment4_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment5_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment5_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment5_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="form1-01-row" style="margin-top:16px;">
+        <legend>PARTICULARS OF STATION / EQUIPMENT / ANTENNA (FOR MULTIPLE STATIONS/EQUIPMENT, USE FORM F)</legend>
+        <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">TOTAL: <input class="form1-01-input" type="number" name="total_quantity" style="display:inline-block;width:120px;margin-left:8px;"></label>
+            <div class="form1-01-label" style="font-weight:bold;margin-bottom:12px;">STATION</div>
+            <label class="form1-01-label">Exact Location: <input class="form1-01-input" type="text" name="exact_location"></label>
+            <label class="form1-01-label">Long (deg-min-sec): <input class="form1-01-input" type="text" name="longitude"></label>
+            <label class="form1-01-label">Lat (deg-min-sec): <input class="form1-01-input" type="text" name="latitude"></label>
+            <label class="form1-01-label">Points of Comm/Service Area: <input class="form1-01-input" type="text" name="points_of_comm"></label>
+            <label class="form1-01-label">Proposed Freq.: <input class="form1-01-input" type="text" name="proposed_freq"></label>
+            <label class="form1-01-label">BW & Emission: <input class="form1-01-input" type="text" name="bw_emission"></label>
+            <label class="form1-01-label">Data Rate: <input class="form1-01-input" type="text" name="data_rate"></label>
+            <label class="form1-01-label">Others, specify: <input class="form1-01-input" type="text" name="others_station"></label>
+          </div>
+          <div class="form1-01-col">
+            <div class="form1-01-label" style="font-weight:bold;margin-bottom:12px;">EQUIPMENT</div>
+            <label class="form1-01-label">Make/Type/Model: <input class="form1-01-input" type="text" name="make_type_model"></label>
+            <label class="form1-01-label">Serial Number: <input class="form1-01-input" type="text" name="serial_number"></label>
+            <label class="form1-01-label">Power Output: <input class="form1-01-input" type="text" name="power_output"></label>
+            <label class="form1-01-label">Frequency Range: <input class="form1-01-input" type="text" name="frequency_range"></label>
           </div>
         </div>
       </fieldset>
@@ -222,7 +180,7 @@
             }
           }
         }
-        localStorage.setItem('form1-19-data', JSON.stringify(entries));
+        localStorage.setItem('form1-14-data', JSON.stringify(entries));
         window.location.href = 'Validation.html';
       };
     </script>

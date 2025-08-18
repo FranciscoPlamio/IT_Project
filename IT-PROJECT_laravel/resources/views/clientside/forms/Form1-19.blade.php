@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Application for Permit to Transport Radio Transmitter(s)/Transceiver(s) (Form 1-16)</title>
-  <link rel="stylesheet" href="../../styles.css"/>
-  <link rel="stylesheet" href="form-style.css"/>
+  <title>Application for Certificate of Registration (Form 1-19)</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <header>
@@ -18,7 +17,7 @@
       
       <!-- form name in the side of the header it may vary depending on the form -->
       <div style="position:absolute;top:20px;right:40px;text-align:right;font-size:0.97rem;">
-        <div><b>Form No.</b> <u>NTC 1-16</u></div>
+        <div><b>Form No.</b> <u>NTC 1-19</u></div>
         <div><b>Revision No.</b> <u>02</u></div>
         <div><b>Revision Date</b> <u>03/31/2023</u></div>
       </div>
@@ -26,7 +25,7 @@
   </header>
   <main>
     <form class="form1-01-container">
-      <div class="form1-01-header">APPLICATION FOR PERMIT TO TRANSPORT RADIO TRANSMITTER(S)/TRANSCEIVER(S)</div>
+      <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
       <div class="form1-01-section-title">INSTRUCTIONS:</div>
       <ol style="font-size:0.97rem;margin-bottom:10px;">
         <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
@@ -34,20 +33,14 @@
         <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
       </ol>
       <fieldset style="margin-bottom:18px;">
-        <legend>TRANSPORT DETAILS</legend>
+        <legend>TYPE OF EQUIPMENT/DEVICE</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Place of origin: <input class="form1-01-input" type="text" name="place_of_origin" required></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Destination: <input class="form1-01-input" type="text" name="destination" required></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Purpose: <input class="form1-01-input" type="text" name="purpose" required></label>
+            <label><input type="checkbox" name="equipment_type" value="wdn_indoor"> WIRELESS DATA NETWORK (WDN) DEVICES - INDOOR</label>
+            <label><input type="checkbox" name="equipment_type" value="srd"> SHORT RANGE DEVICES (SRD)</label>
+            <label><input type="checkbox" name="equipment_type" value="rfid"> RADIO FREQUENCY IDENTIFICATION (RFID) DEVICES</label>
+            <label><input type="checkbox" name="equipment_type" value="srrs"> SHORT RANGE RADIO SERVICE (SRRS) DEVICES</label>
+            <label><input type="checkbox" name="equipment_type" value="public_trunked"> PUBLIC TRUNKED RADIO EQUIPMENT (MOBILE/PORTABLE)</label>
           </div>
         </div>
       </fieldset>
@@ -56,14 +49,6 @@
         <div class="form1-01-row">
           <div class="form1-01-col">
             <label class="form1-01-label">Applicant: <input class="form1-01-input" type="text" name="applicant" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit/RSL No.: <input class="form1-01-input" type="text" name="permit_rsl_no"></label>
           </div>
           <div class="form1-01-col">
             <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
@@ -97,42 +82,98 @@
           <div class="form1-01-col">
             <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
           </div>
+          <div class="form1-01-col">
+            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">Permit to Import No.: <input class="form1-01-input" type="text" name="permit_import_no"></label>
+          </div>
+          <div class="form1-01-col">
+            <label class="form1-01-label">Invoice No.: <input class="form1-01-input" type="text" name="invoice_no"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">CPCN/PA/RSL No.: <input class="form1-01-input" type="text" name="cpcn_pa_rsl_no"></label>
+          </div>
         </div>
       </fieldset>
       <fieldset>
-        <legend>PARTICULARS OF PROPOSED EQUIPMENT (Use separate sheet/s, if necessary)</legend>
+        <legend>PARTICULARS OF EQUIPMENT & DEVICES (Use separate sheet/s, if necessary)</legend>
         <div style="overflow-x:auto;">
           <table style="width:100%;border-collapse:collapse;margin-top:12px;">
             <thead>
               <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:33%;">Equipment</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:33%;">Equipment</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:33%;">Equipment</th>
+                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:40%;">Make/Type/Model</th>
+                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Quantity</th>
+                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Serial Number</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="equipment1_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input" type="text" name="equipment1_make" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="number" name="equipment1_quantity" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
                   <input class="form1-01-input" type="text" name="equipment1_serial" style="border:none;width:100%;padding:4px;">
                 </td>
+              </tr>
+              <tr>
                 <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="equipment2_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
-                  <input class="form1-01-input" type="text" name="equipment2_serial" style="border:none;width:100%;padding:4px;">
+                  <input class="form1-01-input" type="text" name="equipment2_make" style="border:none;width:100%;padding:4px;">
                 </td>
                 <td style="border:1px solid #ddd;padding:8px;">
-                  <div style="margin-bottom:8px;"><strong>Make/Type/Model:</strong></div>
-                  <input class="form1-01-input" type="text" name="equipment3_make" style="border:none;width:100%;padding:4px;margin-bottom:8px;">
-                  <div style="margin-bottom:8px;"><strong>Serial No.:</strong></div>
+                  <input class="form1-01-input" type="number" name="equipment2_quantity" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment2_serial" style="border:none;width:100%;padding:4px;">
+                </td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment3_make" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="number" name="equipment3_quantity" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
                   <input class="form1-01-input" type="text" name="equipment3_serial" style="border:none;width:100%;padding:4px;">
+                </td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment4_make" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="number" name="equipment4_quantity" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment4_serial" style="border:none;width:100%;padding:4px;">
+                </td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment5_make" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="number" name="equipment5_quantity" style="border:none;width:100%;padding:4px;">
+                </td>
+                <td style="border:1px solid #ddd;padding:8px;">
+                  <input class="form1-01-input" type="text" name="equipment5_serial" style="border:none;width:100%;padding:4px;">
                 </td>
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="form1-01-row" style="margin-top:16px;">
+          <div class="form1-01-col">
+            <label class="form1-01-label">TOTAL: <input class="form1-01-input" type="number" name="total_quantity" style="display:inline-block;width:120px;margin-left:8px;"></label>
+          </div>
         </div>
       </fieldset>
       <fieldset>
@@ -145,19 +186,7 @@
             <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:260px;width:100%;" />
             <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
           </div>
-        </div>
-      </fieldset>
-      <fieldset style="margin-top:24px;">
-        <legend>FOR NTC PURPOSES ONLY</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit No.: <input class="form1-01-input" type="text" name="permit_no"></label>
-            <label class="form1-01-label">Date Issued: <input class="form1-01-input" type="date" name="date_issued"></label>
-            <div style="font-size:0.97rem;margin-top:12px;color:#666;">
-              This PERMIT shall be valid for a period of fifteen (15) days from the date of issuance.
-            </div>
-          </div>
-          <div class="form1-01-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
+          <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
             <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
             <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
             <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
@@ -166,14 +195,6 @@
             <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
             <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
           </div>
-        </div>
-        <div class="form1-01-row" style="margin-top:16px;">
-          <div class="form1-01-col">
-            <label class="form1-01-label">FOR THE COMMISSION: <input class="form1-01-input" type="text" name="for_commission_signature" style="margin-left:8px;"></label>
-          </div>
-        </div>
-        <div style="font-size:0.97rem;margin-top:12px;color:#666;font-style:italic;">
-          Note: This PERMIT is valid only when the payment of the required fees is included.
         </div>
       </fieldset>
       <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
@@ -200,7 +221,7 @@
             }
           }
         }
-        localStorage.setItem('form1-16-data', JSON.stringify(entries));
+        localStorage.setItem('form1-19-data', JSON.stringify(entries));
         window.location.href = 'Validation.html';
       };
     </script>

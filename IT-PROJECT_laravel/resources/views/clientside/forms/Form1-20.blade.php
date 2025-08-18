@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Application for Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation (Form 1-18)</title>
-  <link rel="stylesheet" href="../../styles.css"/>
-  <link rel="stylesheet" href="form-style.css"/>
+  <title>Application for Certificate of Registration - Value Added Services (Form 1-20)</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <header>
@@ -18,7 +17,7 @@
       
       <!-- form name in the side of the header it may vary depending on the form -->
       <div style="position:absolute;top:20px;right:40px;text-align:right;font-size:0.97rem;">
-        <div><b>Form No.</b> <u>NTC 1-18</u></div>
+        <div><b>Form No.</b> <u>NTC 1-20</u></div>
         <div><b>Revision No.</b> <u>02</u></div>
         <div><b>Revision Date</b> <u>03/31/2023</u></div>
       </div>
@@ -26,7 +25,7 @@
   </header>
   <main>
     <form class="form1-01-container">
-      <div class="form1-01-header">APPLICATION FOR DEALER/MANUFACTURER/SERVICE CENTER/RETAILER/RESELLER PERMIT/CPE SUPPLIER ACCREDITATION</div>
+      <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
       <div class="form1-01-section-title">INSTRUCTIONS:</div>
       <ol style="font-size:0.97rem;margin-bottom:10px;">
         <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
@@ -34,33 +33,23 @@
         <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
       </ol>
       <fieldset style="margin-bottom:18px;">
-        <legend>TYPE OF APPLICATION</legend>
+        <legend>APPLICATION TYPE / SERVICE CATEGORIES</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
+            <div class="form1-01-label" style="font-weight:bold;margin-bottom:8px;">Application Type:</div>
             <label><input type="checkbox" name="application_type" value="new"> NEW</label>
             <label><input type="checkbox" name="application_type" value="renewal"> RENEWAL</label>
             <label><input type="checkbox" name="application_type" value="modification"> MODIFICATION due to <input class="form1-01-input" type="text" name="modification_reason" style="display:inline-block;width:200px;margin-left:8px;"></label>
           </div>
-        </div>
-      </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>APPLICATION CATEGORIES</legend>
-        <div class="form1-01-row">
           <div class="form1-01-col">
-            <div class="form1-01-label" style="font-weight:bold;margin-bottom:8px;">Radio Communications Equipment (RCE):</div>
-            <label><input type="checkbox" name="rce_category" value="dealer"> Dealer</label>
-            <label><input type="checkbox" name="rce_category" value="radio_transmitter"> Radio Transmitter/Transceiver</label>
-            <label><input type="checkbox" name="rce_category" value="wdn_indoor"> WDN Indoor/SRD/RFID</label>
-            <label><input type="checkbox" name="rce_category" value="manufacturer"> Manufacturer</label>
-            <label><input type="checkbox" name="rce_category" value="service_center"> Service Center</label>
-          </div>
-          <div class="form1-01-col">
-            <div class="form1-01-label" style="font-weight:bold;margin-bottom:8px;">Mobile Phone:</div>
-            <label><input type="checkbox" name="mobile_category" value="dealer_mpdp"> Dealer (MPDP)</label>
-            <label><input type="checkbox" name="mobile_category" value="retailer_reseller"> Retailer/Reseller (MPRR)</label>
-            <label><input type="checkbox" name="mobile_category" value="service_center_mpscp"> Service Center (MPSCP)</label>
-            <div class="form1-01-label" style="font-weight:bold;margin-top:12px;margin-bottom:8px;">Customer Premises Equipment (CPE) Supplier Accreditation:</div>
-            <label><input type="checkbox" name="cpe_category" value="cpe_supplier"> CPE Supplier Accreditation</label>
+            <div class="form1-01-label" style="font-weight:bold;margin-bottom:8px;">Service Categories:</div>
+            <label><input type="checkbox" name="service_category" value="vas_provider"> VALUE-ADDED SERVICE (VAS) PROVIDER</label>
+            <label><input type="checkbox" name="service_category" value="pcsotsp"> PUBLIC CALLING STATION/OFFICE / TELECENTER SERVICE PROVIDER (PCSOTSP)</label>
+            <label><input type="checkbox" name="service_category" value="voip"> VOICE OVER INTERNET PROTOCOL (VOIP)</label>
+            <div style="margin-left:20px;">
+              <label><input type="checkbox" name="voip_type" value="voip_provider"> PROVIDER</label>
+              <label><input type="checkbox" name="voip_type" value="voip_reseller"> RESELLER</label>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -68,30 +57,7 @@
         <legend>APPLICANT'S DETAILS</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Applicant*: <input class="form1-01-input" type="text" name="applicant" required></label>
-            <div style="font-size:0.97rem;color:#666;margin-top:4px;">*Business name appearing in the SEC/DTI Registration or Business/Mayor's Permit</div>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Type of Entity:</label>
-            <label><input type="checkbox" name="entity_type" value="corporation"> Corporation</label>
-            <label><input type="checkbox" name="entity_type" value="single_proprietorship"> Single Proprietorship</label>
-            <label><input type="checkbox" name="entity_type" value="partnership"> Partnership</label>
-            <label><input type="checkbox" name="entity_type" value="others"> Others, specify <input class="form1-01-input" type="text" name="others_entity" style="display:inline-block;width:200px;margin-left:8px;"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit No.: <input class="form1-01-input" type="text" name="permit_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
+            <label class="form1-01-label">Applicant: <input class="form1-01-input" type="text" name="applicant" required></label>
           </div>
           <div class="form1-01-col">
             <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
@@ -99,7 +65,7 @@
         </div>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
+            <label class="form1-01-label">Unit/Rm/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
           </div>
           <div class="form1-01-col">
             <label class="form1-01-label">City/Municipality: <input class="form1-01-input" type="text" name="city"></label>
@@ -107,7 +73,7 @@
         </div>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
+            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
           </div>
           <div class="form1-01-col">
             <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
@@ -115,27 +81,72 @@
         </div>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
+            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
           </div>
           <div class="form1-01-col">
             <label class="form1-01-label">Email Address: <input class="form1-01-input" type="email" name="email"></label>
           </div>
         </div>
-      </fieldset>
-      <fieldset>
-        <legend>PERSONNEL REQUIRED (Not Applicable for WDN Indoor/SRD/RFID and Mobile Phone)</legend>
         <div class="form1-01-row">
           <div class="form1-01-col">
-            <div class="form1-01-label" style="font-weight:bold;margin-bottom:12px;">Supervising Engineer</div>
-            <label class="form1-01-label">Name: <input class="form1-01-input" type="text" name="supervising_engineer_name"></label>
-            <label class="form1-01-label">PECE/ECE No.: <input class="form1-01-input" type="text" name="supervising_engineer_pece"></label>
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="supervising_engineer_validity"></label>
+            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">Type of Entity:</label>
+            <label><input type="checkbox" name="entity_type" value="corporation"> Corporation</label>
+            <label><input type="checkbox" name="entity_type" value="single_proprietorship"> Single Proprietorship</label>
           </div>
           <div class="form1-01-col">
-            <div class="form1-01-label" style="font-weight:bold;margin-bottom:12px;">Technician</div>
-            <label class="form1-01-label">Name: <input class="form1-01-input" type="text" name="technician_name"></label>
-            <label class="form1-01-label">Certificate/ECT No.: <input class="form1-01-input" type="text" name="technician_certificate"></label>
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="technician_validity"></label>
+            <label><input type="checkbox" name="entity_type" value="partnership"> Partnership</label>
+            <label><input type="checkbox" name="entity_type" value="others"> Others, specify <input class="form1-01-input" type="text" name="others_entity" style="display:inline-block;width:200px;margin-left:8px;"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">CPCN/PA/CA No.: <input class="form1-01-input" type="text" name="cpcn_pa_ca_no"></label>
+          </div>
+          <div class="form1-01-col">
+            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="cpcn_validity"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">COR No.: <input class="form1-01-input" type="text" name="cor_no"></label>
+          </div>
+          <div class="form1-01-col">
+            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="cor_validity"></label>
+          </div>
+        </div>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label class="form1-01-label">Is applicant known by another name?</label>
+            <label><input type="radio" name="known_by_another_name" value="yes"> Yes, indicate former name <input class="form1-01-input" type="text" name="former_name" style="display:inline-block;width:200px;margin-left:8px;"></label>
+            <label><input type="radio" name="known_by_another_name" value="no"> No</label>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>LIST OF VALUE ADDED SERVICES (Use separate sheet/s, if necessary)</legend>
+        <div class="form1-01-row">
+          <div class="form1-01-col">
+            <label><input type="checkbox" name="vas_services" value="messaging"> Messaging service</label>
+            <label><input type="checkbox" name="vas_services" value="audio_conferencing"> Audio conferencing</label>
+            <label><input type="checkbox" name="vas_services" value="audio_video_conferencing"> Audio and Video Conferencing</label>
+            <label><input type="checkbox" name="vas_services" value="voice_mail"> Voice mail service</label>
+            <label><input type="checkbox" name="vas_services" value="electronic_mail"> Electronic mail service</label>
+            <label><input type="checkbox" name="vas_services" value="information_service"> Information service</label>
+            <label><input type="checkbox" name="vas_services" value="application_service"> Application service</label>
+          </div>
+          <div class="form1-01-col">
+            <label><input type="checkbox" name="vas_services" value="content_program"> Content and Program service</label>
+            <label><input type="checkbox" name="vas_services" value="audiotext"> Audiotext service</label>
+            <label><input type="checkbox" name="vas_services" value="facsimile"> Facsimile service</label>
+            <label><input type="checkbox" name="vas_services" value="virtual_private_network"> Virtual Private Network service</label>
+            <label><input type="checkbox" name="vas_services" value="hosting"> Hosting service</label>
+            <label><input type="checkbox" name="vas_services" value="electronic_gaming"> Electronic Gaming Services, except gambling</label>
+            <label><input type="checkbox" name="vas_services" value="others"> Others, specify <input class="form1-01-input" type="text" name="others_vas" style="display:inline-block;width:200px;margin-left:8px;"></label>
           </div>
         </div>
       </fieldset>
@@ -184,7 +195,7 @@
             }
           }
         }
-        localStorage.setItem('form1-18-data', JSON.stringify(entries));
+        localStorage.setItem('form1-20-data', JSON.stringify(entries));
         window.location.href = 'Validation.html';
       };
     </script>

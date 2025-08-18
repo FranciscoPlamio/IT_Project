@@ -4,39 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Validation - Application for Radio Operator Examination (Form 1-01)</title>
-  <link rel="stylesheet" href="../../styles.css"/>
-  <link rel="stylesheet" href="form-style.css"/>
-  <style>
-    .validation-section-title {
-      font-size: 1.22rem;
-      font-weight: bold;
-      margin-top: 24px;
-      margin-bottom: 12px;
-    }
-    .validation-list {
-      background: #f8f8f8;
-      border-radius: 8px;
-      padding: 24px 20px;
-      margin-bottom: 32px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.04);
-    }
-    .validation-list dt {
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 1.08rem;
-    }
-    .validation-list dd {
-      margin-left: 0;
-      margin-bottom: 8px;
-      font-size: 1.09rem;
-    }
-    .validation-btns {
-      display: flex;
-      justify-content: center;
-      gap: 24px;
-      margin-top: 32px;
-    }
-  </style>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
   <header>
