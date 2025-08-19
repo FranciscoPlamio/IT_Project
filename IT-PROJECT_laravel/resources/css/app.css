@@ -665,6 +665,12 @@ nav {
   width: 180px;
   text-align: center;
 }
+
+/* Center the Form Title column */
+.forms-list-table th:nth-child(2),
+.forms-list-table td:nth-child(2) {
+  text-align: center;
+}
 .forms-signup-btn {
   background: #6ee7b7;
   color: #fff;
