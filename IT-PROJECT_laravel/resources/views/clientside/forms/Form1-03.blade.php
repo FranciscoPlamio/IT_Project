@@ -24,186 +24,169 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form103">
       <div class="form1-01-header">APPLICATION FOR AMATEUR RADIO OPERATOR CERTIFICATE/AMATEUR RADIO STATION LICENSE</div>
-      <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol style="font-size:0.97rem;margin-bottom:10px;">
-        <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
-        <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
-        <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
-      </ol>
-      <fieldset style="margin-bottom:18px;">
-        <legend>TYPE OF APPLICATION</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+      <div class="form1-01-note"><strong>NOTE:</strong> The system asks for additional info when applicant is a minor.</div>
+      <div class="form1-01-warning"><div class="form1-01-warning-title">WARNING:</div> Ensure that all details in the name and date of birth fields are correct. We cannot edit those fields on site and you will need to set a new appointment.<div class="form1-01-agree"><label><input type="checkbox"/> I agree / Malinaw sa akin</label></div></div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList03">
+            <li class="step-item active" data-step="personal">Personal Information <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="application">Application/Permit <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="class">Class of Station <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="exam">Examination Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="equipment">Equipment Particulars <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="declaration">Declaration <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-personal">
+            <fieldset>
+              <legend>Applicant's Details</legend>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Last Name</label><input class="form1-01-input" type="text" name="last_name" required></div>
+                <div class="form-field"><label class="form-label">First Name</label><input class="form1-01-input" type="text" name="first_name" required></div>
+                <div class="form-field"><label class="form-label">Middle Name</label><input class="form1-01-input" type="text" name="middle_name"></div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Call Sign</label><input class="form1-01-input" type="text" name="call_sign"></div>
+                <div class="form-field"><label class="form-label">ATROC/ARSL No.</label><input class="form1-01-input" type="text" name="atroc_arsl_no"></div>
+                <div class="form-field"><label class="form-label">Date of Birth</label><input class="form1-01-input" type="date" name="dob" required></div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Sex</label><div class="inline-radio"><label><input type="radio" name="sex" value="male" required> Male</label><label><input type="radio" name="sex" value="female"> Female</label></div></div>
+                <div class="form-field"><label class="form-label">Nationality</label><input class="form1-01-input" type="text" name="nationality"></div>
+                <div class="form-field"><label class="form-label">Validity</label><input class="form1-01-input" type="date" name="validity"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Unit/Rm/House/Bldg No.</label><input class="form1-01-input" type="text" name="unit_no"></div>
+                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay"></div>
+                <div class="form-field"><label class="form-label">City/Municipality</label><input class="form1-01-input" type="text" name="city"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province"></div>
+                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number" required></div>
+                <div class="form-field"><label class="form-label">Email</label><input class="form1-01-input" type="email" name="email" required></div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-application">
+            <fieldset class="fieldset-compact">
+              <legend>Type of Application</legend>
+              <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="application_type" value="new"> NEW</label>
             <label><input type="checkbox" name="application_type" value="renewal"> RENEWAL</label>
-            <label><input type="checkbox" name="application_type" value="modification"> MODIFICATION due to <input class="form1-01-input" type="text" name="modification_reason" style="display:inline-block;width:200px;margin-left:8px;"></label>
+                <label><input type="checkbox" name="application_type" value="modification"> MODIFICATION due to</label>
+                <input class="form1-01-input" type="text" name="modification_reason" placeholder="Reason (if modification)">
           </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>TYPE OF PERMIT/LICENSE/CERTIFICATE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+          </section>
+
+          <section class="step-content" id="step-class">
+            <fieldset class="fieldset-compact">
+              <legend>Type of Permit/License/Certificate and Class of Station</legend>
+              <div class="form-grid-2">
+                <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="permit_type" value="amateur_operator"> Amateur Radio Operator Certificate</label>
             <label><input type="checkbox" name="permit_type" value="amateur_station"> Amateur Radio Station License</label>
             <label><input type="checkbox" name="permit_type" value="club_station"> Club Radio Station License</label>
-            <div style="margin-left:20px;margin-top:8px;">
-              <label class="form1-01-label">Name of Club: <input class="form1-01-input" type="text" name="club_name" style="display:inline-block;width:200px;margin-left:8px;"></label>
-              <label class="form1-01-label">Assigned Freq.: <input class="form1-01-input" type="text" name="assigned_frequency" style="display:inline-block;width:150px;margin-left:8px;"></label>
+                  <div style="margin-left:12px;margin-top:8px;">
+                    <label class="form-label">Name of Club</label>
+                    <input class="form1-01-input" type="text" name="club_name">
+                    <label class="form-label">Assigned Freq.</label>
+                    <input class="form1-01-input" type="text" name="assigned_frequency">
             </div>
             <label><input type="checkbox" name="permit_type" value="temporary_foreign"> Temporary Permit for Foreign Visitor</label>
             <label><input type="checkbox" name="permit_type" value="special_vanity"> Special Permit for Vanity/Special Call Sign</label>
-            <label class="form1-01-label">Preferred Call Sign/s: <input class="form1-01-input" type="text" name="preferred_call_sign" style="display:inline-block;width:200px;margin-left:8px;"></label>
+                  <label class="form-label">Preferred Call Sign/s</label>
+                  <input class="form1-01-input" type="text" name="preferred_call_sign">
           </div>
-        </div>
-      </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>CLASS OF STATION</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+                <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="station_class" value="class_a"> Class A</label>
             <label><input type="checkbox" name="station_class" value="class_b"> Class B</label>
             <label><input type="checkbox" name="station_class" value="class_c"> Class C</label>
             <label><input type="checkbox" name="station_class" value="class_d"> Class D</label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">NO. OF YEARS: <input class="form1-01-input" type="text" name="years" style="display:inline-block;width:80px;margin-left:8px;"></label>
+                  <label class="form-label">No. of Years</label>
+                  <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2">
           </div>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset>
-        <legend>APPLICANT'S DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Last Name: <input class="form1-01-input" type="text" name="last_name" required></label>
+          </section>
+
+          <section class="step-content" id="step-exam">
+            <fieldset class="fieldset-compact">
+              <legend>Examination Details</legend>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Place of Exam</label><input class="form1-01-input" type="text" name="exam_place" required></div>
+                <div class="form-field"><label class="form-label">Date</label><input class="form1-01-input" type="date" name="exam_date" required></div>
+                <div class="form-field"><label class="form-label">Rating</label><input class="form1-01-input" type="text" name="rating"></div>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">First Name: <input class="form1-01-input" type="text" name="first_name" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Middle Name: <input class="form1-01-input" type="text" name="middle_name"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Call Sign: <input class="form1-01-input" type="text" name="call_sign"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">ATROC/ARSL No.: <input class="form1-01-input" type="text" name="atroc_arsl_no"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Date of Birth (mm/dd/yy): <input class="form1-01-input" type="date" name="dob" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Sex:
-              <input type="radio" name="sex" value="male"> Male
-              <input type="radio" name="sex" value="female"> Female
-            </label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Nationality: <input class="form1-01-input" type="text" name="nationality"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/House/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">City/Municipality: <input class="form1-01-input" type="text" name="city"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Email: <input class="form1-01-input" type="email" name="email"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-equipment">
       <fieldset>
-        <legend>EXAMINATION DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Place of Exam: <input class="form1-01-input" type="text" name="exam_place"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Date (mm/dd/yy): <input class="form1-01-input" type="date" name="exam_date"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Rating: <input class="form1-01-input" type="text" name="rating"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>PARTICULARS OF EQUIPMENT (Use separate sheet/s, if necessary)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+              <legend>Particulars of Equipment (Use separate sheet/s, if necessary)</legend>
+              <div class="table-container">
+                <table class="form-table">
             <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;">Make</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;">Type/Model</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;">Serial Number</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;">Frequency Range</th>
+                    <tr>
+                      <th>Make</th>
+                      <th>Type/Model</th>
+                      <th>Serial Number</th>
+                      <th>Frequency Range</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_make_1" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_type_1" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_serial_1" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_freq_1" style="border:none;width:100%;padding:4px;"></td>
+                      <td><input class="table-input" type="text" name="equipment_make_1"></td>
+                      <td><input class="table-input" type="text" name="equipment_type_1"></td>
+                      <td><input class="table-input" type="text" name="equipment_serial_1"></td>
+                      <td><input class="table-input" type="text" name="equipment_freq_1"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_make_2" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_type_2" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_serial_2" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_freq_2" style="border:none;width:100%;padding:4px;"></td>
+                      <td><input class="table-input" type="text" name="equipment_make_2"></td>
+                      <td><input class="table-input" type="text" name="equipment_type_2"></td>
+                      <td><input class="table-input" type="text" name="equipment_serial_2"></td>
+                      <td><input class="table-input" type="text" name="equipment_freq_2"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_make_3" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_type_3" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_serial_3" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_freq_3" style="border:none;width:100%;padding:4px;"></td>
+                      <td><input class="table-input" type="text" name="equipment_make_3"></td>
+                      <td><input class="table-input" type="text" name="equipment_type_3"></td>
+                      <td><input class="table-input" type="text" name="equipment_serial_3"></td>
+                      <td><input class="table-input" type="text" name="equipment_freq_3"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_make_4" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_type_4" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_serial_4" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="equipment_freq_4" style="border:none;width:100%;padding:4px;"></td>
+                      <td><input class="table-input" type="text" name="equipment_make_4"></td>
+                      <td><input class="table-input" type="text" name="equipment_type_4"></td>
+                      <td><input class="table-input" type="text" name="equipment_serial_4"></td>
+                      <td><input class="table-input" type="text" name="equipment_freq_4"></td>
               </tr>
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-declaration">
       <fieldset>
         <legend>DECLARATION</legend>
-        <div class="form1-01-declaration">
-          I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.
-        </div>
+              <div class="form1-01-declaration">I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.</div>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
             <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature Over Printed Name of Applicant" style="margin-bottom:16px;max-width:260px;width:100%;" />
@@ -219,34 +202,80 @@
             <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
           </div>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn03">Proceed to Validation</button></div>
       </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+          </section>
+        </div>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
+      (function() {
+        const stepsOrder = ['personal','application','class','exam','equipment','declaration'];
+        const stepsList = document.getElementById('stepsList03');
+        const form = document.getElementById('form103');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
+          document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id === `step-${step}`));
+        }
+        function currentStep() { const a = stepsList.querySelector('.step-item.active'); return a ? a.dataset.step : stepsOrder[0]; }
+        function go(d) { const i = stepsOrder.indexOf(currentStep()); const n = Math.max(0, Math.min(stepsOrder.length-1, i+d)); showStep(stepsOrder[n]); }
+
+        function validateGroups(section) {
+          let ok = true;
+          section.querySelectorAll('[data-require-one]').forEach(group => {
+            const selector = group.getAttribute('data-require-one');
+            const items = group.querySelectorAll(selector);
+            const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value));
+            if (!anyChecked) ok = false;
+          });
+          return ok;
+        }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
+            if (el.type === 'radio') {
+              const name = el.name;
+              const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
+              const anyChecked = Array.from(group).some(r => r.checked);
+              if (!anyChecked) valid = false;
+            } else if (!el.value) {
+              valid = false;
+            }
+          });
+          if (!validateGroups(section)) valid = false;
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) { li.classList.add('completed'); li.querySelector('.step-status').textContent = 'Done'; }
+          else { li.classList.remove('completed'); li.querySelector('.step-status').textContent = ''; }
+          return valid;
+        }
+
+        stepsList.addEventListener('click', (e) => { const li = e.target.closest('.step-item'); if (!li) return; showStep(li.dataset.step); });
+        document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => { if (validateActiveStep()) go(1); }));
+        document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+        const validateBtn = document.getElementById('validateBtn03');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
         const formData = new FormData(form);
         const entries = {};
         for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
+              if (value instanceof File) entries[key] = value.name || '';
+              else {
+                if (entries[key]) { if (Array.isArray(entries[key])) entries[key].push(value); else entries[key] = [entries[key], value]; }
+                else entries[key] = value;
               }
-            } else {
-              entries[key] = value;
             }
-          }
+            localStorage.setItem('form1-03-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
         }
-        localStorage.setItem('form1-03-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>
