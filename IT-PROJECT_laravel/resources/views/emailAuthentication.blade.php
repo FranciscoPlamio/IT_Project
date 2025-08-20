@@ -18,10 +18,11 @@
     <nav>
       <button class="menu-toggle" id="menuToggle">☰</button>
       <ul id="navList">
-        <li class="active">Home</li>
-        <li>About us</li>
-        <li>News</li>
-        <li>Contact us</li>
+        <li class="active"><a href="{{ route('homepage') }}on:none;color:inherit;">Home</a></li>
+        <li><a href="#" style="text-decoration:none;color:inherit;">About us</a></li>
+        <li><a href="#" style="text-decoration:none;color:inherit;">News</a></li>
+        <li><a href="#" style="text-decoration:none;color:inherit;">Contact us</a></li>
+        <li><a href="{{ route('forms.showcase') }}">Showcase Forms</a></li>
       </ul>
     </nav>
   </header>

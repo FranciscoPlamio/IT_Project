@@ -9,12 +9,17 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('homepage');
-});
+})->name('homepage');
 
 // Forms list page
 Route::get('/forms-list', function () {
     return view('FormsList');
 })->name('forms.list');
+
+// Forms showcase gallery
+Route::get('/forms-showcase', function () {
+    return view('showcaseforms');
+})->name('forms.showcase');
 
 // Email Authentication routes
 Route::get('/email-auth', function () {
