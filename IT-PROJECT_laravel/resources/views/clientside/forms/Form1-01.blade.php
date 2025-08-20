@@ -24,220 +24,287 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form101">
       <div class="form1-01-header">APPLICATION FOR RADIO OPERATOR EXAMINATION</div>
-      <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol style="font-size:0.97rem;margin-bottom:10px;">
-        <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
-        <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
-        <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
-      </ol>
-      <fieldset style="margin-bottom:18px;">
-        <legend>EXAM TYPE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <div class="form1-01-label">Radiotelegraphy</div>
-            <label><input type="checkbox" name="exam_type" value="1RTG"> 1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="1RTG-25"> 1RTG - Code (25/20 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="2RTG"> 2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="2RTG-16"> 2RTG - Code (16 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="3RTG"> 3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="3RTG-16"> 3RTG - Code (16 wpm)</label>
-          </div>
-          <div class="form1-01-col">
-            <div class="form1-01-label">Amateur</div>
-            <label><input type="checkbox" name="exam_type" value="amateur-a"> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-a"> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-a-code"> Class A - Code (5 wpm) Only</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-b"> Class B - Elements 5, 6 & 7</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-b2"> Class B - Element 2</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-c"> Class C - Elements 2, 3 & 4</label>
-            <label><input type="checkbox" name="exam_type" value="amateur-d"> Class D - Element 2</label>
-          </div>
-          <div class="form1-01-col">
-            <div class="form1-01-label">Radiotelephony</div>
-            <label><input type="checkbox" name="exam_type" value="1PHN"> 1PHN - Elements 1, 2, 3 & 4</label>
-            <label><input type="checkbox" name="exam_type" value="2PHN"> 2PHN - Elements 1, 2 & 3</label>
-            <label><input type="checkbox" name="exam_type" value="3PHN"> 3PHN - Elements 1 & 2</label>
-            <div class="form1-01-label" style="margin-top:10px;">Restricted Radiotelephony</div>
-            <label><input type="checkbox" name="exam_type" value="rroc-aircraft"> RROC - Aircraft - Element 1</label>
-          </div>
+      <div class="form1-01-note">
+        <strong>NOTE:</strong> The system asks for additional info when applicant is a minor.
+      </div>
+      <div class="form1-01-warning">
+        <div class="form1-01-warning-title">WARNING:</div>
+        Ensure that all details in the name (first name, middle name and last name) and date of birth fields are correct. We cannot edit those fields on site and you will need to set a new appointment.
+        <div class="form1-01-agree">
+          <label><input type="checkbox"/> I agree / Malinaw sa akin</label>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Date of Exam (mm/dd/yy): <input class="form1-01-input" type="date" name="date_of_exam"></label>
-          </div>
-          <div class="form1-01-col" style="align-items:flex-end;">
-            <label class="form1-01-label">1"x1" ID Picture: <input class="form1-01-input" type="file" name="id_picture" accept="image/*"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>APPLICANT'S DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Last Name: <input class="form1-01-input" type="text" name="last_name" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">First Name: <input class="form1-01-input" type="text" name="first_name" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Middle Name: <input class="form1-01-input" type="text" name="middle_name"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Date of Birth: <input class="form1-01-input" type="date" name="dob" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Sex:
-              <input type="radio" name="sex" value="male"> Male
-              <input type="radio" name="sex" value="female"> Female
-            </label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Nationality: <input class="form1-01-input" type="text" name="nationality"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/House/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">City/Municipality: <input class="form1-01-input" type="text" name="city"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Email Address: <input class="form1-01-input" type="email" name="email"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">School Attended: <input class="form1-01-input" type="text" name="school_attended"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Course Taken: <input class="form1-01-input" type="text" name="course_taken"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Year Graduated: <input class="form1-01-input" type="text" name="year_graduated"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>APPLICANT'S REQUEST FOR ASSISTANCE <span style="font-weight:normal;font-size:0.97rem;">(for persons with disabilities, senior citizens, pregnant women or persons with special needs)</span></legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label>Do you have any special needs and/or requests during the examination?
-              <input type="radio" name="special_needs" value="yes"> Yes
-              <input type="radio" name="special_needs" value="no"> No
-            </label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label>If yes, please indicate your specific needs and/or request:
-              <textarea class="form1-01-input" name="special_needs_details" rows="2" style="resize:vertical;"></textarea>
-            </label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>DECLARATION</legend>
-        <div class="form1-01-declaration">
-          I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.
-        </div>
-        <div class="form1-01-signature-row">
-          <div class="form1-01-signature-col">
-            <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature Over Printed Name of Applicant" style="margin-bottom:16px;max-width:260px;width:100%;" />
-            <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
-          </div>
-          <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-            <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-            <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-            <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-            <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
-          </div>
-        </div>
-      </fieldset>
+      </div>
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList">
+            <li class="step-item active" data-step="personal">Personal Information <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="family">Family Information <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="application">Application Information <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="contact">Contact Information <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
 
-      <!-- BEFORE KO GAWIN SA LAHAT PA DOUBLE CHECK LANG IF INCLUDED ITONG PART SA BABA -->
-      <fieldset style="margin-top:32px;">
-        <legend>EXAMINATION ADMISSION SLIP</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label>Please admit Mr./Ms. <input class="form1-01-input" type="text" name="admit_name"> with mailing address at <input class="form1-01-input" type="text" name="admit_address"> in the examination for</label>
-            <label>Place of Exam: <input class="form1-01-input" type="text" name="admit_exam_place"></label>
-            <label>Date of Exam: <input class="form1-01-input" type="date" name="admit_exam_date"></label>
-            <label>Time of Exam: <input class="form1-01-input" type="text" name="admit_exam_time"></label>
-          </div>
-          <div class="form1-01-col" style="align-items:flex-end;">
-            <label class="form1-01-label" style="margin-bottom:16px;">1"x1" ID Picture: <input class="form1-01-input" type="file" name="admit_id_picture" accept="image/*"></label>
-            <div style="height:18px;"></div>
-            <div style="display:flex;flex-direction:column;align-items:center;margin-top:24px;width:100%;">
-              <div style="width:220px;border-bottom:2px solid #222;height:24px;"></div>
-              <span style="font-size:0.97rem;margin-top:4px;">Authorized Officer</span>
-            </div>
-          </div>
+        <div>
+          <section class="step-content active" id="step-personal">
+            <fieldset>
+              <legend>Personal Information</legend>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Phone Number</label>
+                  <input class="form1-01-input" type="text" name="phone_number" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Mobile Number</label>
+                  <input class="form1-01-input" type="text" name="mobile_number" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Email Address</label>
+                  <input class="form1-01-input" type="email" name="email" required>
+                </div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Confirm Email Address</label>
+                  <input class="form1-01-input" type="email" name="email_confirm" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Middle Name</label>
+                  <input class="form1-01-input" type="text" name="middle_name">
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Nationality</label>
+                  <input class="form1-01-input" type="text" name="nationality">
+                </div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Last Name</label>
+                  <input class="form1-01-input" type="text" name="last_name" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Given Name</label>
+                  <input class="form1-01-input" type="text" name="first_name" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Date of Birth</label>
+                  <input class="form1-01-input" type="date" name="dob" required>
+                </div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Gender</label>
+                  <div class="inline-radio">
+                    <label><input type="radio" name="sex" value="male" required> Male</label>
+                    <label><input type="radio" name="sex" value="female"> Female</label>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Civil Status</label>
+                  <select class="form1-01-input" name="civil_status" required>
+                    <option value="">- SELECT CIVIL STATUS -</option>
+                    <option>Single</option>
+                    <option>Married</option>
+                    <option>Separated</option>
+                    <option>Widowed</option>
+                  </select>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Birth Legitimacy</label>
+                  <select class="form1-01-input" name="birth_legitimacy" required>
+                    <option value="">- SELECT BIRTH LEGITIMACY -</option>
+                    <option>Legitimate</option>
+                    <option>Illegitimate</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Country of Birth</label>
+                  <input class="form1-01-input" type="text" name="country_of_birth" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Province</label>
+                  <input class="form1-01-input" type="text" name="province" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">City/Municipality</label>
+                  <input class="form1-01-input" type="text" name="city" required>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button type="button" class="btn-primary" data-next>Next</button>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-family">
+            <fieldset class="fieldset-compact">
+              <legend>Family Information</legend>
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">Mother's Maiden Name</label>
+                  <input class="form1-01-input" type="text" name="mother_name" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Father's Name</label>
+                  <input class="form1-01-input" type="text" name="father_name" required>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button type="button" class="btn-secondary" data-prev>Back</button>
+                <button type="button" class="btn-primary" data-next>Next</button>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-application">
+            <fieldset class="fieldset-compact">
+              <legend>Application Information</legend>
+              <div class="form-grid-3">
+                <div class="form-field">
+                  <label class="form-label">Exam Type</label>
+                  <input class="form1-01-input" type="text" name="exam_type_summary" placeholder="e.g., 1PHN" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Date of Exam</label>
+                  <input class="form1-01-input" type="date" name="date_of_exam" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label">Upload 1x1 ID Picture</label>
+                  <input class="form1-01-input" type="file" name="id_picture" accept="image/*">
+                </div>
+              </div>
+              <div class="step-actions">
+                <button type="button" class="btn-secondary" data-prev>Back</button>
+                <button type="button" class="btn-primary" data-next>Next</button>
+              </div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-contact">
+            <fieldset>
+              <legend>DECLARATION</legend>
+              <div class="form1-01-declaration">
+                I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.
+              </div>
+              <div class="form1-01-signature-row">
+                <div class="form1-01-signature-col">
+                  <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature Over Printed Name of Applicant" style="margin-bottom:16px;max-width:260px;width:100%;" />
+                  <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
+                </div>
+                <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
+                  <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
+                  <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
+                  <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
+                  <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
+                </div>
+              </div>
+              <div class="step-actions">
+                <button type="button" class="btn-secondary" data-prev>Back</button>
+                <button class="form1-01-btn" type="button" id="validateBtn">Proceed to Validation</button>
+              </div>
+            </fieldset>
+          </section>
         </div>
-        <div style="font-size:0.97rem;margin-top:12px;">
-          <ol>
-            <li>Examinees shall present this Admission Slip and any valid government issued ID with picture or School ID, for students. (No Admission Slip and ID, No Exam.)</li>
-            <li>Examinees who are late for more than 30 minutes shall not be allowed to take the examination.</li>
-            <li>Request for re-schedule of examination must be filed at least 1 week before the date of examination.</li>
-            <li>In case of suspension / cancellation of work in government offices due to force majeure, the scheduled regular examination shall be conducted on the next regular working day.</li>
-          </ol>
-        </div>
-      </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
-        const formData = new FormData(form);
-        const entries = {};
-        for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
-              }
-            } else {
-              entries[key] = value;
-            }
-          }
+      (function() {
+        const stepsOrder = ['personal','family','application','contact'];
+        const stepsList = document.getElementById('stepsList');
+        const form = document.getElementById('form101');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => {
+            li.classList.toggle('active', li.dataset.step === step);
+          });
+          document.querySelectorAll('.step-content').forEach(s => {
+            s.classList.toggle('active', s.id === `step-${step}`);
+          });
         }
-        localStorage.setItem('form1-01-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+
+        function currentStep() {
+          const active = stepsList.querySelector('.step-item.active');
+          return active ? active.dataset.step : stepsOrder[0];
+        }
+
+        function go(delta) {
+          const idx = stepsOrder.indexOf(currentStep());
+          const nextIdx = Math.max(0, Math.min(stepsOrder.length - 1, idx + delta));
+          showStep(stepsOrder[nextIdx]);
+        }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
+            if (el.type === 'radio') {
+              const name = el.name;
+              const group = section.querySelectorAll(`input[type="radio"][name="${name}"]`);
+              const anyChecked = Array.from(group).some(r => r.checked);
+              if (!anyChecked) valid = false;
+            } else if (!el.value) {
+              valid = false;
+            }
+          });
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) {
+            li.classList.add('completed');
+            li.querySelector('.step-status').textContent = 'Done';
+          } else {
+            li.classList.remove('completed');
+            li.querySelector('.step-status').textContent = '';
+          }
+          return valid;
+        }
+
+        // Sidebar click
+        stepsList.addEventListener('click', (e) => {
+          const li = e.target.closest('.step-item');
+          if (!li) return;
+          showStep(li.dataset.step);
+        });
+
+        // Prev/Next buttons
+        document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+          if (validateActiveStep()) go(1);
+        }));
+        document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
+
+        // Persist and redirect on validate
+        const validateBtn = document.getElementById('validateBtn');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
+            const formData = new FormData(form);
+            const entries = {};
+            for (const [key, value] of formData.entries()) {
+              if (value instanceof File) {
+                entries[key] = value.name || '';
+              } else {
+                if (entries[key]) {
+                  if (Array.isArray(entries[key])) entries[key].push(value);
+                  else entries[key] = [entries[key], value];
+                } else {
+                  entries[key] = value;
+                }
+              }
+            }
+            localStorage.setItem('form1-01-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
+        }
+
+        // Initialize
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>

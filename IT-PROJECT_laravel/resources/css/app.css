@@ -12,7 +12,7 @@
 
 /* Shared form styles for NTC forms */
 :root {
-    --form-max-width: 900px;
+    --form-max-width: 90%;
     --form-padding: 32px 24px 24px 24px;
     --form-radius: 12px;
     --form-shadow: 0 0 8px rgba(0,0,0,0.07);
@@ -133,6 +133,181 @@
   }
   .form1-01-btn:hover {
     background: #34d399;
+  }
+
+  /* Form1-01 layout refinements to mimic DFA style */
+  .form1-01-container .form1-01-input,
+  .form1-01-container .form1-01-select,
+  .form1-01-container textarea.form1-01-input {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .form1-01-note {
+    background: #e8f3ff;
+    border: 1px solid #cfe3ff;
+    color: #1f3b66;
+    padding: 16px 16px;
+    border-radius: 6px;
+    margin: 12px 0 16px 0;
+    font-size: 0.98rem;
+  }
+
+  .form1-01-warning {
+    background: #fff5f5;
+    border: 1px solid #f3c2c2;
+    color: #7a1f1f;
+    padding: 16px;
+    border-radius: 6px;
+    margin: 12px 0 20px 0;
+    font-size: 0.98rem;
+  }
+
+  .form1-01-warning-title {
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .form1-01-agree {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .form-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 22px;
+    margin-bottom: 18px;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px 22px;
+    margin-bottom: 18px;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-label {
+    font-weight: 600;
+    font-size: 0.98rem;
+    margin-bottom: 6px;
+  }
+
+  .inline-radio {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+  }
+
+  @media (max-width: 900px) {
+    .form-grid-2,
+    .form-grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Sidebar steps layout */
+  .form-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .steps-sidebar {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    border: 1px solid #e5e7eb;
+  }
+
+  .steps-sidebar-header {
+    background: #ebf5ff;
+    color: #1f3b66;
+    padding: 10px 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #dbeafe;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .steps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .step-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    font-size: 0.98rem;
+    color: #374151;
+  }
+
+  .step-item:last-child { border-bottom: 0; }
+
+  .step-item.active {
+    background: #eef2ff;
+    color: #1d4ed8;
+  }
+
+  .step-item.completed {
+    background: #ecfdf5;
+    color: #047857;
+  }
+
+  .step-status {
+    font-size: 0.9rem;
+  }
+
+  .step-content { display: none; }
+  .step-content.active { display: block; }
+
+  .step-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 14px;
+  }
+
+  .btn-secondary {
+    background: #e5e7eb;
+    color: #111827;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 18px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  @media (max-width: 900px) {
+    .form-layout {
+      grid-template-columns: 1fr;
+    }
   }
   
   /* Form1-22 specific styles */

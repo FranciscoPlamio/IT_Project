@@ -24,150 +24,188 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form113">
       <div class="form1-01-header">FORM D (FOR MODIFICATION)</div>
-      <div class="form1-01-row">
-        <div class="form1-01-col">
-          <label class="form1-01-label">APPLICANT: <input class="form1-01-input" type="text" name="applicant" required></label>
+      <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList13">
+            <li class="step-item active" data-step="applicant">Applicant <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="particulars">Particulars <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="sign">Signature <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-applicant">
+            <fieldset>
+              <legend>Applicant</legend>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Applicant</label><input class="form1-01-input" type="text" name="applicant" required></div>
         </div>
-      </div>
-      <fieldset style="margin-top:24px;">
-        <legend>PARTICULARS</legend>
-        <div style="font-size:0.97rem;margin-bottom:16px;text-align:center;">Indicate "N/A" for items not applicable.</div>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-particulars">
+            <fieldset>
+              <legend>Particulars</legend>
+              <div class="table-container">
+                <table class="form-table">
             <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:40%;">Field</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Authorized</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Proposed</th>
+                    <tr>
+                      <th>Field</th>
+                      <th>Authorized</th>
+                      <th>Proposed</th>
               </tr>
             </thead>
             <tbody>
-              <tr style="background-color:#f0f0f0;">
-                <td style="border:1px solid #ddd;padding:8px;font-weight:bold;font-size:0.97rem;" colspan="3">STATION</td>
+                    <tr><td class="table-field-label" colspan="3"><strong>STATION</strong></td></tr>
+                    <tr>
+                      <td>EXACT LOCATION</td>
+                      <td><input class="table-input" type="text" name="authorized_exact_location"></td>
+                      <td><input class="table-input" type="text" name="proposed_exact_location"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">EXACT LOCATION</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_exact_location" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_exact_location" style="border:none;width:100%;padding:4px;"></td>
+                      <td>LONGITUDE (deg-min-sec)</td>
+                      <td><input class="table-input" type="text" name="authorized_longitude"></td>
+                      <td><input class="table-input" type="text" name="proposed_longitude"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">LONGITUDE (deg-min-sec)</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_longitude" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_longitude" style="border:none;width:100%;padding:4px;"></td>
+                      <td>LATITUDE (deg-min-sec)</td>
+                      <td><input class="table-input" type="text" name="authorized_latitude"></td>
+                      <td><input class="table-input" type="text" name="proposed_latitude"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">LATITUDE (deg-min-sec)</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_latitude" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_latitude" style="border:none;width:100%;padding:4px;"></td>
+                      <td>POINTS OF COMM/SERVICE AREA</td>
+                      <td><input class="table-input" type="text" name="authorized_points_of_comm"></td>
+                      <td><input class="table-input" type="text" name="proposed_points_of_comm"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">POINTS OF COMM/SERVICE AREA</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_points_of_comm" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_points_of_comm" style="border:none;width:100%;padding:4px;"></td>
+                      <td>ASSIGNED FREQ.</td>
+                      <td><input class="table-input" type="text" name="authorized_assigned_freq"></td>
+                      <td><input class="table-input" type="text" name="proposed_assigned_freq"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">ASSIGNED FREQ.</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_assigned_freq" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_assigned_freq" style="border:none;width:100%;padding:4px;"></td>
+                      <td>BW & EMISSION</td>
+                      <td><input class="table-input" type="text" name="authorized_bw_emission"></td>
+                      <td><input class="table-input" type="text" name="proposed_bw_emission"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">BW & EMISSION</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_bw_emission" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_bw_emission" style="border:none;width:100%;padding:4px;"></td>
+                      <td>CONFIGURATION</td>
+                      <td><input class="table-input" type="text" name="authorized_configuration"></td>
+                      <td><input class="table-input" type="text" name="proposed_configuration"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">CONFIGURATION</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_configuration" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_configuration" style="border:none;width:100%;padding:4px;"></td>
+                      <td>DATA RATE</td>
+                      <td><input class="table-input" type="text" name="authorized_data_rate"></td>
+                      <td><input class="table-input" type="text" name="proposed_data_rate"></td>
+              </tr>
+                    <tr><td class="table-field-label" colspan="3"><strong>EQUIPMENT</strong></td></tr>
+                    <tr>
+                      <td>MAKE/TYPE/MODEL</td>
+                      <td><input class="table-input" type="text" name="authorized_make_type_model"></td>
+                      <td><input class="table-input" type="text" name="proposed_make_type_model"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">DATA RATE</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_data_rate" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_data_rate" style="border:none;width:100%;padding:4px;"></td>
-              </tr>
-              <tr style="background-color:#f0f0f0;">
-                <td style="border:1px solid #ddd;padding:8px;font-weight:bold;font-size:0.97rem;" colspan="3">EQUIPMENT</td>
+                      <td>SERIAL NO.</td>
+                      <td><input class="table-input" type="text" name="authorized_serial_no"></td>
+                      <td><input class="table-input" type="text" name="proposed_serial_no"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">MAKE/TYPE/MODEL</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_make_type_model" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_make_type_model" style="border:none;width:100%;padding:4px;"></td>
+                      <td>POWER OUTPUT</td>
+                      <td><input class="table-input" type="text" name="authorized_power_output"></td>
+                      <td><input class="table-input" type="text" name="proposed_power_output"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">SERIAL NO.</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_serial_no" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_serial_no" style="border:none;width:100%;padding:4px;"></td>
+                      <td>FREQ. RANGE</td>
+                      <td><input class="table-input" type="text" name="authorized_freq_range"></td>
+                      <td><input class="table-input" type="text" name="proposed_freq_range"></td>
+              </tr>
+                    <tr><td class="table-field-label" colspan="3"><strong>OTHERS</strong></td></tr>
+                    <tr>
+                      <td>OTHERS 1</td>
+                      <td><input class="table-input" type="text" name="authorized_others_1"></td>
+                      <td><input class="table-input" type="text" name="proposed_others_1"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">POWER OUTPUT</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_power_output" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_power_output" style="border:none;width:100%;padding:4px;"></td>
+                      <td>OTHERS 2</td>
+                      <td><input class="table-input" type="text" name="authorized_others_2"></td>
+                      <td><input class="table-input" type="text" name="proposed_others_2"></td>
               </tr>
               <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">FREQ. RANGE</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_freq_range" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_freq_range" style="border:none;width:100%;padding:4px;"></td>
-              </tr>
-              <tr style="background-color:#f0f0f0;">
-                <td style="border:1px solid #ddd;padding:8px;font-weight:bold;font-size:0.97rem;" colspan="3">OTHERS</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">OTHERS 1</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_others_1" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_others_1" style="border:none;width:100%;padding:4px;"></td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">OTHERS 2</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_others_2" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_others_2" style="border:none;width:100%;padding:4px;"></td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;font-size:0.97rem;">OTHERS 3</td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="authorized_others_3" style="border:none;width:100%;padding:4px;"></td>
-                <td style="border:1px solid #ddd;padding:8px;"><input class="form1-01-input" type="text" name="proposed_others_3" style="border:none;width:100%;padding:4px;"></td>
+                      <td>OTHERS 3</td>
+                      <td><input class="table-input" type="text" name="authorized_others_3"></td>
+                      <td><input class="table-input" type="text" name="proposed_others_3"></td>
               </tr>
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset style="margin-top:24px;">
-        <legend>SIGNATURE AND DATE</legend>
+          </section>
+
+          <section class="step-content" id="step-sign">
+            <fieldset>
+              <legend>Signature and Date</legend>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
             <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:400px;width:100%;" />
             <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
           </div>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn13">Proceed to Validation</button></div>
       </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+          </section>
+        </div>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
+      (function() {
+        const stepsOrder = ['applicant','particulars','sign'];
+        const stepsList = document.getElementById('stepsList13');
+        const form = document.getElementById('form113');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
+          document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id === `step-${step}`));
+        }
+        function currentStep() { const a = stepsList.querySelector('.step-item.active'); return a ? a.dataset.step : stepsOrder[0]; }
+        function go(d) { const i = stepsOrder.indexOf(currentStep()); const n = Math.max(0, Math.min(stepsOrder.length-1, i+d)); showStep(stepsOrder[n]); }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required]').forEach(el => { if (!el.value) valid = false; });
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) { li.classList.add('completed'); li.querySelector('.step-status').textContent = 'Done'; }
+          else { li.classList.remove('completed'); li.querySelector('.step-status').textContent = ''; }
+          return valid;
+        }
+
+        stepsList.addEventListener('click', (e) => { const li = e.target.closest('.step-item'); if (!li) return; showStep(li.dataset.step); });
+        document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => { if (validateActiveStep()) go(1); }));
+        document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+        const validateBtn = document.getElementById('validateBtn13');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
         const formData = new FormData(form);
         const entries = {};
         for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
-              }
-            } else {
-              entries[key] = value;
+              if (value instanceof File) entries[key] = value.name || '';
+              else entries[key] = value;
             }
-          }
+            localStorage.setItem('form1-13-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
         }
-        localStorage.setItem('form1-13-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>
