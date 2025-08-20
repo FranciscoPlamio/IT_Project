@@ -24,17 +24,40 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form124">
       <div class="form1-01-header">AFFIDAVIT OF OWNERSHIP AND LOSS WITH UNDERTAKING</div>
       <div style="text-align:center;font-size:0.97rem;margin-bottom:20px;">
         <strong>REPUBLIC OF THE PHILIPPINES</strong><br>
         <strong>QUEZON CITY</strong>
       </div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList24">
+            <li class="step-item active" data-step="affiant">Affiant Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="handset">Handset Blocking <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="sim">SIM Card Blocking <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="documents">Supporting Documents <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="incident">Incident Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="signature">Signature & Notary <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-affiant">
+            <fieldset>
+              <legend>Affiant Information</legend>
       <div class="inline-text-container">
-        I, <input class="inline-input-name" type="text" name="affiant_name" required> of legal age, Filipino citizen and presently residing at <input class="inline-input-address" type="text" name="residence_address">, with telephone number <input class="inline-input-phone" type="text" name="telephone_number"> and with office address at <input class="inline-input-address" type="text" name="office_address"> and office telephone number <input class="inline-input-phone" type="text" name="office_telephone">, after having been duly sworn to in accordance with law do hereby despose and say:
+                I, <input class="inline-input-name" type="text" name="affiant_name" required> of legal age, Filipino citizen and presently residing at <input class="inline-input-address" type="text" name="residence_address" required>, with telephone number <input class="inline-input-phone" type="text" name="telephone_number"> and with office address at <input class="inline-input-address" type="text" name="office_address"> and office telephone number <input class="inline-input-phone" type="text" name="office_telephone">, after having been duly sworn to in accordance with law do hereby despose and say:
       </div>
-      <fieldset style="margin-bottom:18px;">
-        <legend>1. HANDSET BLOCKING/UNBLOCKING REQUEST</legend>
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-handset">
+            <fieldset>
+              <legend>1. Handset Blocking/Unblocking Request</legend>
         <div style="font-size:0.97rem;margin-bottom:12px;">
           That I am requesting all CMTS carriers to 
           <label><input type="checkbox" name="request_type" value="block"> BLOCK</label>
@@ -125,9 +148,13 @@
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>2. SIM CARD/PHONE NUMBER BLOCKING REQUEST</legend>
+          </section>
+
+          <section class="step-content" id="step-sim">
+            <fieldset>
+              <legend>2. SIM Card/Phone Number Blocking Request</legend>
         <div style="font-size:0.97rem;margin-bottom:12px;">
           That I am also requesting to block the Subscriber Identity Module (SIM) card/cell phone number contained in the lost/stolen cell phone mentioned above;
         </div>
@@ -171,80 +198,85 @@
             </tbody>
           </table>
         </div>
-      </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>3. UNDERTAKING CLAUSE</legend>
+              <fieldset style="margin-top:16px;">
+                <legend>3. Undertaking Clause</legend>
         <div style="font-size:0.97rem;">
           That I hereby undertake to hold free from any responsibility or shall not hold NTC and the above-mentioned carriers liable for whatever claims, loss or damages that any party may institute by reason of NTC's action to permanently block the aforementioned unit from usage;
         </div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>4. SUPPORTING DOCUMENTS AND PROOF OF OWNERSHIP</legend>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-documents">
+            <fieldset>
+              <legend>4. Supporting Documents and Proof of Ownership</legend>
         <div style="font-size:0.97rem;margin-bottom:12px;">
           That in support of this request and as proof of my ownership of said cell phone unit, I attached hereto the following documents, after making the original available for comparison;
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <div class="form-field" data-require-one="input[type=checkbox]">
+                <div class="form-label">Supporting Documents</div>
             <label><input type="checkbox" name="supporting_docs" value="govt_id"> Copy of any government-issued ID OR Passport</label>
             <label><input type="checkbox" name="supporting_docs" value="school_id"> Copy of school ID (For students)</label>
             <label><input type="checkbox" name="supporting_docs" value="birth_cert"> Copy of Birth Certificate OR NBI Clearance (for cases when ID is not available)</label>
-          </div>
         </div>
         <div style="font-size:0.97rem;margin-top:16px;margin-bottom:8px;font-weight:bold;">
           Proof of Ownership (ANY of the following):
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="proof_ownership" value="official_receipt"> Copy of the Official Receipt of the mobile phone</label>
             <label><input type="checkbox" name="proof_ownership" value="phone_box"> Box of the mobile phone with International Mobile Equipment Identity (IMEI)</label>
             <label><input type="checkbox" name="proof_ownership" value="certificate_purchase"> Certificate of Purchase issued by the Authorized Seller with the Name of the Purchaser, Date of Purchase and IMEI</label>
             <label><input type="checkbox" name="proof_ownership" value="affidavit_loss"> In the absence of 2.1, 2.2 & 2.3, Affidavit (of loss, declaring ownership and providing a reference for blocking such as IMEI and attached, if available, the Police Blotter)</label>
           </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>ADDITIONAL INFORMATION</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+          </section>
+
+          <section class="step-content" id="step-incident">
+            <fieldset>
+              <legend>Additional Information</legend>
+              <div class="form-field" data-require-one="input[type=checkbox]">
+                <div class="form-label">Type of Incident</div>
             <label><input type="checkbox" name="incident_type" value="lost"> Lost/Misplaced</label>
             <label><input type="checkbox" name="incident_type" value="stolen"> Stolen (Theft/Robbery/Hold-up)</label>
           </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Place of Incident</label><input class="form1-01-input" type="text" name="place_of_incident"></div>
+                <div class="form-field"><label class="form-label">Date</label><input class="form1-01-input" type="date" name="incident_date"></div>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Place of Incident: <input class="form1-01-input" type="text" name="place_of_incident"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Date: <input class="form1-01-input" type="date" name="incident_date"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Sex:
-              <input type="radio" name="sex" value="male"> Male
-              <input type="radio" name="sex" value="female"> Female
-            </label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Age:
-              <input type="radio" name="age_range" value="below_18"> below 18
-              <input type="radio" name="age_range" value="18_29"> 18-29
-              <input type="radio" name="age_range" value="30_39"> 30-39
-              <input type="radio" name="age_range" value="40_49"> 40-49
-              <input type="radio" name="age_range" value="50_59"> 50-59
-              <input type="radio" name="age_range" value="60_up"> 60 up
-            </label>
+              <div class="form-grid-2">
+                <div class="form-field">
+                  <label class="form-label">Sex</label>
+                  <div class="inline-radio">
+                    <label><input type="radio" name="sex" value="male"> Male</label>
+                    <label><input type="radio" name="sex" value="female"> Female</label>
           </div>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+                <div class="form-field">
+                  <label class="form-label">Age</label>
+                  <div class="inline-radio">
+                    <label><input type="radio" name="age_range" value="below_18"> below 18</label>
+                    <label><input type="radio" name="age_range" value="18_29"> 18-29</label>
+                    <label><input type="radio" name="age_range" value="30_39"> 30-39</label>
+                    <label><input type="radio" name="age_range" value="40_49"> 40-49</label>
+                    <label><input type="radio" name="age_range" value="50_59"> 50-59</label>
+                    <label><input type="radio" name="age_range" value="60_up"> 60 up</label>
+          </div>
+          </div>
+        </div>
+              <div class="form-field" data-require-one="input[type=checkbox]">
+                <div class="form-label">Time of Incident</div>
             <label><input type="checkbox" name="time_of_incident" value="daytime"> Daytime</label>
             <label><input type="checkbox" name="time_of_incident" value="nighttime"> Nighttime</label>
           </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>5. EXECUTION CLAUSE</legend>
+          </section>
+
+          <section class="step-content" id="step-signature">
+            <fieldset>
+              <legend>5. Execution Clause</legend>
         <div style="font-size:0.97rem;">
           That I am executing this affidavit of ownership and loss with undertaking to attest to the veracity and truthfulness of the foregoing declaration and to be used for whatever legal intent and purposes the same may thus serve.
         </div>
@@ -253,72 +285,99 @@
         </div>
       </fieldset>
       <fieldset>
-        <legend>AFFIANT SIGNATURE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <legend>Affiant Signature</legend>
+              <div class="form-grid-2">
+                <div class="form-field">
             <input class="form1-01-input" type="text" name="affiant_signature" placeholder="AFFIANT" style="margin-bottom:16px;max-width:260px;width:100%;" />
             <div style="font-size:0.97rem;text-align:center;">Signature Over Printed Name</div>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">TIN No.: <input class="form1-01-input" type="text" name="tin_no"></label>
-          </div>
+                <div class="form-field"><label class="form-label">TIN No.</label><input class="form1-01-input" type="text" name="tin_no"></div>
         </div>
       </fieldset>
-      <fieldset style="margin-bottom:18px;">
-        <legend>SUBSCRIPTION AND SWORN</legend>
+            <fieldset>
+              <legend>Subscription and Sworn</legend>
         <div style="font-size:0.97rem;margin-bottom:12px;">
           Subscribed and sworn before me this <input class="form1-01-input" type="text" name="sworn_day" style="display:inline-block;width:80px;margin:0 8px;"> day of <input class="form1-01-input" type="text" name="sworn_month" style="display:inline-block;width:120px;margin:0 8px;">, 20<input class="form1-01-input" type="text" name="sworn_year" style="display:inline-block;width:60px;margin:0 8px;">.
         </div>
         <div style="font-size:0.97rem;margin-bottom:12px;">
           Affiant exhibited to me his/her Residence Certificate No. <input class="form1-01-input" type="text" name="residence_cert_no" style="display:inline-block;width:150px;margin:0 8px;"> issued at <input class="form1-01-input" type="text" name="residence_cert_place" style="display:inline-block;width:200px;margin:0 8px;"> on <input class="form1-01-input" type="date" name="residence_cert_date" style="display:inline-block;width:150px;margin:0 8px;">.
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Doc. No.: <input class="form1-01-input" type="text" name="doc_no"></label>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Doc. No.</label><input class="form1-01-input" type="text" name="doc_no"></div>
+                <div class="form-field"><label class="form-label">Page No.</label><input class="form1-01-input" type="text" name="page_no"></div>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Page No.: <input class="form1-01-input" type="text" name="page_no"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Book No.: <input class="form1-01-input" type="text" name="book_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Series of: <input class="form1-01-input" type="text" name="series_of"></label>
-          </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Book No.</label><input class="form1-01-input" type="text" name="book_no"></div>
+                <div class="form-field"><label class="form-label">Series of</label><input class="form1-01-input" type="text" name="series_of"></div>
         </div>
         <div style="text-align:center;font-size:1.1rem;font-weight:bold;margin-top:16px;">
           NOTARY PUBLIC
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn24">Proceed to Validation</button></div>
       </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+          </section>
+        </div>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
+      (function() {
+        const stepsOrder = ['affiant','handset','sim','documents','incident','signature'];
+        const stepsList = document.getElementById('stepsList24');
+        const form = document.getElementById('form124');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
+          document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id === `step-${step}`));
+        }
+        function currentStep() { const a = stepsList.querySelector('.step-item.active'); return a ? a.dataset.step : stepsOrder[0]; }
+        function go(d) { const i = stepsOrder.indexOf(currentStep()); const n = Math.max(0, Math.min(stepsOrder.length-1, i+d)); showStep(stepsOrder[n]); }
+
+        function validateGroups(section) {
+          let ok = true;
+          section.querySelectorAll('[data-require-one]').forEach(group => {
+            const selector = group.getAttribute('data-require-one');
+            const items = group.querySelectorAll(selector);
+            const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value));
+            if (!anyChecked) ok = false;
+          });
+          return ok;
+        }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => { if (!el.value) valid = false; });
+          if (!validateGroups(section)) valid = false;
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) { li.classList.add('completed'); li.querySelector('.step-status').textContent = 'Done'; }
+          else { li.classList.remove('completed'); li.querySelector('.step-status').textContent = ''; }
+          return valid;
+        }
+
+        stepsList.addEventListener('click', (e) => { const li = e.target.closest('.step-item'); if (!li) return; showStep(li.dataset.step); });
+        document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => { if (validateActiveStep()) go(1); }));
+        document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+        const validateBtn = document.getElementById('validateBtn24');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
         const formData = new FormData(form);
         const entries = {};
         for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
+              if (value instanceof File) entries[key] = value.name || '';
+              else {
+                if (entries[key]) { if (Array.isArray(entries[key])) entries[key].push(value); else entries[key] = [entries[key], value]; }
+                else entries[key] = value;
               }
-            } else {
-              entries[key] = value;
             }
-          }
+            localStorage.setItem('form1-24-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
         }
-        localStorage.setItem('form1-24-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>

@@ -24,121 +24,151 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form121">
       <div class="form1-01-header">APPLICATION FOR DUPLICATE OF PERMIT/LICENSE/CERTIFICATE</div>
-      <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol style="font-size:0.97rem;margin-bottom:10px;">
-        <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
-        <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
-        <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
-      </ol>
-      <fieldset>
-        <legend>APPLICANT'S DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Applicant: <input class="form1-01-input" type="text" name="applicant" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
-          </div>
+      <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList21">
+            <li class="step-item active" data-step="applicant">Applicant Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="permit">Permit/License Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="circumstances">Circumstances <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="declaration">Declaration <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-applicant">
+            <fieldset>
+              <legend>Applicant's Details</legend>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Applicant</label><input class="form1-01-input" type="text" name="applicant" required></div>
+                <div class="form-field"><label class="form-label">Email Address</label><input class="form1-01-input" type="email" name="email" required></div>
+                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number" required></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input class="form1-01-input" type="text" name="unit_no"></div>
+                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay"></div>
+                <div class="form-field"><label class="form-label">Municipality/City</label><input class="form1-01-input" type="text" name="city"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province"></div>
+                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code"></div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-permit">
+            <fieldset>
+              <legend>Particulars of Permit/License/Certificate</legend>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Permit/License/Certificate No.</label><input class="form1-01-input" type="text" name="permit_license_certificate_no" required></div>
+                <div class="form-field"><label class="form-label">Validity</label><input class="form1-01-input" type="date" name="validity"></div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-circumstances">
+            <fieldset>
+              <legend>State Briefly Circumstances Relating to the Lost/Mutilation of Permit/License/Certificate</legend>
+              <div class="form-field">
+                <textarea class="form1-01-input" name="circumstances" rows="6" style="resize:vertical;width:100%;max-width:none;" placeholder="Please provide detailed explanation of how the permit/license/certificate was lost or mutilated..." required></textarea>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+
+          <section class="step-content" id="step-declaration">
+            <fieldset>
+              <legend>DECLARATION</legend>
+              <div class="form1-01-declaration">I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.</div>
+              <div class="form1-01-signature-row">
+                <div class="form1-01-signature-col">
+                  <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:260px;width:100%;" />
+                  <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
+                </div>
+                <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
+                  <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
+                  <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
+                  <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
+                  <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
+                  <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
+                </div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn21">Proceed to Validation</button></div>
+            </fieldset>
+          </section>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Municipality/City: <input class="form1-01-input" type="text" name="city"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Email Address: <input class="form1-01-input" type="email" name="email"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>PARTICULARS OF PERMIT/LICENSE/CERTIFICATE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit/License/Certificate No.: <input class="form1-01-input" type="text" name="permit_license_certificate_no" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>STATE BRIEFLY CIRCUMSTANCES RELATING TO THE LOST/MUTILATION OF PERMIT/LICENSE/CERTIFICATE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <textarea class="form1-01-input" name="circumstances" rows="6" style="resize:vertical;width:100%;max-width:none;" placeholder="Please provide detailed explanation of how the permit/license/certificate was lost or mutilated..."></textarea>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>DECLARATION</legend>
-        <div class="form1-01-declaration">
-          I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.
-        </div>
-        <div class="form1-01-signature-row">
-          <div class="form1-01-signature-col">
-            <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:260px;width:100%;" />
-            <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
-          </div>
-          <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-            <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-            <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-            <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-            <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
-            <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
-          </div>
-        </div>
-      </fieldset>
-      <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn" type="button" id="validateBtn" style="display:block;margin:32px auto 0 auto;">Proceed to Validation</button>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
-        const formData = new FormData(form);
-        const entries = {};
-        for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
-              }
-            } else {
-              entries[key] = value;
-            }
-          }
+      (function() {
+        const stepsOrder = ['applicant','permit','circumstances','declaration'];
+        const stepsList = document.getElementById('stepsList21');
+        const form = document.getElementById('form121');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
+          document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id === `step-${step}`));
         }
-        localStorage.setItem('form1-21-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+        function currentStep() { const a = stepsList.querySelector('.step-item.active'); return a ? a.dataset.step : stepsOrder[0]; }
+        function go(d) { const i = stepsOrder.indexOf(currentStep()); const n = Math.max(0, Math.min(stepsOrder.length-1, i+d)); showStep(stepsOrder[n]); }
+
+        function validateGroups(section) {
+          let ok = true;
+          section.querySelectorAll('[data-require-one]').forEach(group => {
+            const selector = group.getAttribute('data-require-one');
+            const items = group.querySelectorAll(selector);
+            const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value));
+            if (!anyChecked) ok = false;
+          });
+          return ok;
+        }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => { if (!el.value) valid = false; });
+          if (!validateGroups(section)) valid = false;
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) { li.classList.add('completed'); li.querySelector('.step-status').textContent = 'Done'; }
+          else { li.classList.remove('completed'); li.querySelector('.step-status').textContent = ''; }
+          return valid;
+        }
+
+        stepsList.addEventListener('click', (e) => { const li = e.target.closest('.step-item'); if (!li) return; showStep(li.dataset.step); });
+        document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => { if (validateActiveStep()) go(1); }));
+        document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+        const validateBtn = document.getElementById('validateBtn21');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
+            const formData = new FormData(form);
+            const entries = {};
+            for (const [key, value] of formData.entries()) {
+              if (value instanceof File) entries[key] = value.name || '';
+              else {
+                if (entries[key]) { if (Array.isArray(entries[key])) entries[key].push(value); else entries[key] = [entries[key], value]; }
+                else entries[key] = value;
+              }
+            }
+            localStorage.setItem('form1-21-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
+        }
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>

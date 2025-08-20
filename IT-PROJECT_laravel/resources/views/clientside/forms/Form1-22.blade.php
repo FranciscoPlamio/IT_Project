@@ -24,119 +24,102 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form122">
       <div class="form1-01-header">APPLICATION FOR TVRO REGISTRATION CERTIFICATE/TVRO STATION LICENSE/CATV STATION LICENSE</div>
-      <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol class="form-instructions">
-        <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
-        <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
-        <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
-      </ol>
+      <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList22">
+            <li class="step-item active" data-step="application">Application Type <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="applicant">Applicant Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="equipment">Equipment Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="antenna">Antenna System <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="signal">Signal Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="declaration">Declaration <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-application">
       <fieldset class="fieldset-compact">
-        <legend>TYPE OF APPLICATION</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <legend>Type of Application</legend>
+              <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="application_type" value="new"> NEW</label>
             <label><input type="checkbox" name="application_type" value="renewal"> RENEWAL</label>
             <label><input type="checkbox" name="application_type" value="modification"> Modification, use Form B</label>
-          </div>
         </div>
       </fieldset>
       <fieldset class="fieldset-compact">
-        <legend>TYPE OF LICENSE/CERTIFICATE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <legend>Type of License/Certificate</legend>
+              <div class="form-field" data-require-one="input[type=checkbox]">
             <label><input type="checkbox" name="license_type" value="tvro_registration"> TVRO REGISTRATION CERTIFICATE</label>
             <label><input type="checkbox" name="license_type" value="tvro_station"> TVRO STATION LICENSE</label>
             <label><input type="checkbox" name="license_type" value="catv_station"> CATV STATION LICENSE</label>
-          </div>
         </div>
       </fieldset>
       <fieldset class="fieldset-compact">
-        <legend>CLASSIFICATION OF APPLICANT</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
+              <legend>Classification of Applicant</legend>
+              <div class="form-grid-2">
+                <div class="form-field" data-require-one="input[type=checkbox]">
+                  <div class="form-label">Classification</div>
             <label><input type="checkbox" name="applicant_classification" value="commercial"> COMMERCIAL</label>
             <label><input type="checkbox" name="applicant_classification" value="non_commercial"> NON-COMMERCIAL</label>
           </div>
-          <div class="form1-01-col">
+                <div class="form-field" data-require-one="input[type=checkbox]">
+                  <div class="form-label">Service Type</div>
             <label><input type="checkbox" name="service_type" value="broadcasting"> BROADCASTING</label>
             <label><input type="checkbox" name="service_type" value="catv"> CATV</label>
-            <label><input type="checkbox" name="service_type" value="others"> OTHERS, specify <input class="form1-01-input inline-input" type="text" name="others_service"></label>
+                  <label><input type="checkbox" name="service_type" value="others"> OTHERS, specify</label>
+                  <input class="form1-01-input" type="text" name="others_service" placeholder="Specify">
           </div>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">NO. OF YEARS: <input class="form1-01-input inline-input-small" type="number" name="no_of_years"></label>
+              <div class="form-field">
+                <label class="form-label">No. of Years</label>
+                <input class="form1-01-input" type="number" name="no_of_years" placeholder="Number of years">
           </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-applicant">
       <fieldset>
-        <legend>APPLICANT'S DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Applicant: <input class="form1-01-input" type="text" name="applicant" required></label>
+              <legend>Applicant's Details</legend>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Applicant</label><input class="form1-01-input" type="text" name="applicant" required></div>
+                <div class="form-field"><label class="form-label">Email Address</label><input class="form1-01-input" type="email" name="email" required></div>
+                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number" required></div>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input class="form1-01-input" type="text" name="unit_no"></div>
+                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street"></div>
           </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay"></div>
+                <div class="form-field"><label class="form-label">City/Municipality</label><input class="form1-01-input" type="text" name="city"></div>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province"></div>
+                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code"></div>
           </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">City/Municipality: <input class="form1-01-input" type="text" name="city"></label>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Validity</label><input class="form1-01-input" type="date" name="validity"></div>
+                <div class="form-field"><label class="form-label">PA/CA No.</label><input class="form1-01-input" type="text" name="pa_ca_no"></div>
           </div>
+              <div class="form-field"><label class="form-label">Service Area</label><input class="form1-01-input" type="text" name="service_area"></div>
+              <div class="form-field"><label class="form-label">Exact Location of TVRO System</label><input class="form1-01-input" type="text" name="exact_location"></div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Longitude (deg-min-sec)</label><input class="form1-01-input" type="text" name="longitude"></div>
+                <div class="form-field"><label class="form-label">Latitude (deg-min-sec)</label><input class="form1-01-input" type="text" name="latitude"></div>
         </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Email Address: <input class="form1-01-input" type="email" name="email"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">PA/CA No.: <input class="form1-01-input" type="text" name="pa_ca_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Service Area: <input class="form1-01-input" type="text" name="service_area"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Exact Location of TVRO System: <input class="form1-01-input full-width-input" type="text" name="exact_location"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Longitude (deg-min-sec): <input class="form1-01-input" type="text" name="longitude"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Latitude (deg-min-sec): <input class="form1-01-input" type="text" name="latitude"></label>
-          </div>
-        </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-equipment">
       <fieldset>
-        <legend>PARTICULARS OF EQUIPMENT (FOR MULTIPLE EQUIPMENT, USE FORM G)</legend>
+              <legend>Particulars of Equipment (For Multiple Equipment, Use Form G)</legend>
         <div class="table-container">
           <table class="form-table">
             <thead>
@@ -185,9 +168,13 @@
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-antenna">
       <fieldset>
-        <legend>PARTICULARS OF ANTENNA SYSTEM (FOR MULTIPLE ANTENNA, USE FORM G)</legend>
+              <legend>Particulars of Antenna System (For Multiple Antenna, Use Form G)</legend>
         <div class="table-container">
           <table class="form-table">
             <thead>
@@ -216,9 +203,13 @@
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-signal">
       <fieldset>
-        <legend>PARTICULARS OF SIGNAL TO BE RECEIVED (FOR MULTIPLE SIGNAL, USE FORM G)</legend>
+              <legend>Particulars of Signal to be Received (For Multiple Signal, Use Form G)</legend>
         <div class="table-container">
           <table class="form-table">
             <thead>
@@ -247,12 +238,14 @@
             </tbody>
           </table>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
       </fieldset>
+          </section>
+
+          <section class="step-content" id="step-declaration">
       <fieldset>
         <legend>DECLARATION</legend>
-        <div class="form1-01-declaration">
-          I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.
-        </div>
+              <div class="form1-01-declaration">I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.</div>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
             <input class="form1-01-input signature-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" />
@@ -268,34 +261,71 @@
             <div class="or-label">Collecting Officer</div>
           </div>
         </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn validate-button" type="button" id="validateBtn22">Proceed to Validation</button></div>
       </fieldset>
-      <div class="form-footer">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
-      <button class="form1-01-btn validate-button" type="button" id="validateBtn">Proceed to Validation</button>
+          </section>
+        </div>
+      </div>
     </form>
     <script>
-      document.getElementById('validateBtn').onclick = function() {
-        const form = document.querySelector('.form1-01-container');
+      (function() {
+        const stepsOrder = ['application','applicant','equipment','antenna','signal','declaration'];
+        const stepsList = document.getElementById('stepsList22');
+        const form = document.getElementById('form122');
+
+        function showStep(step) {
+          stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
+          document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id === `step-${step}`));
+        }
+        function currentStep() { const a = stepsList.querySelector('.step-item.active'); return a ? a.dataset.step : stepsOrder[0]; }
+        function go(d) { const i = stepsOrder.indexOf(currentStep()); const n = Math.max(0, Math.min(stepsOrder.length-1, i+d)); showStep(stepsOrder[n]); }
+
+        function validateGroups(section) {
+          let ok = true;
+          section.querySelectorAll('[data-require-one]').forEach(group => {
+            const selector = group.getAttribute('data-require-one');
+            const items = group.querySelectorAll(selector);
+            const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value));
+            if (!anyChecked) ok = false;
+          });
+          return ok;
+        }
+
+        function validateActiveStep() {
+          const step = currentStep();
+          const section = document.getElementById(`step-${step}`);
+          let valid = true;
+          section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => { if (!el.value) valid = false; });
+          if (!validateGroups(section)) valid = false;
+          const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+          if (valid) { li.classList.add('completed'); li.querySelector('.step-status').textContent = 'Done'; }
+          else { li.classList.remove('completed'); li.querySelector('.step-status').textContent = ''; }
+          return valid;
+        }
+
+        stepsList.addEventListener('click', (e) => { const li = e.target.closest('.step-item'); if (!li) return; showStep(li.dataset.step); });
+        document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => { if (validateActiveStep()) go(1); }));
+        document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+        const validateBtn = document.getElementById('validateBtn22');
+        if (validateBtn) {
+          validateBtn.addEventListener('click', () => {
+            if (!validateActiveStep()) return;
         const formData = new FormData(form);
         const entries = {};
         for (const [key, value] of formData.entries()) {
-          if (value instanceof File) {
-            // Save the file name if a file is selected, otherwise empty string
-            entries[key] = value.name || '';
-          } else {
-            if (entries[key]) {
-              if (Array.isArray(entries[key])) {
-                entries[key].push(value);
-              } else {
-                entries[key] = [entries[key], value];
+              if (value instanceof File) entries[key] = value.name || '';
+              else {
+                if (entries[key]) { if (Array.isArray(entries[key])) entries[key].push(value); else entries[key] = [entries[key], value]; }
+                else entries[key] = value;
               }
-            } else {
-              entries[key] = value;
             }
-          }
+            localStorage.setItem('form1-22-data', JSON.stringify(entries));
+            window.location.href = 'Validation.html';
+          });
         }
-        localStorage.setItem('form1-22-data', JSON.stringify(entries));
-        window.location.href = 'Validation.html';
-      };
+        showStep(stepsOrder[0]);
+      })();
     </script>
   </main>
 </body>

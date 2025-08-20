@@ -24,158 +24,113 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container">
+    <form class="form1-01-container" id="form119">
       <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
-      <div class="form1-01-section-title">INSTRUCTIONS:</div>
-      <ol style="font-size:0.97rem;margin-bottom:10px;">
-        <li>Accomplish this application form properly, in ALL CAPS, handwritten or computer-printed.</li>
-        <li>Attach the complete requirements including supporting documents. For the List of requirements, please refer to the <a href="https://ntc.gov.ph" target="_blank">NTC Citizen's Charter</a> at the NTC website: ntc.gov.ph</li>
-        <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
-      </ol>
-      <fieldset style="margin-bottom:18px;">
-        <legend>TYPE OF EQUIPMENT/DEVICE</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label><input type="checkbox" name="equipment_type" value="wdn_indoor"> WIRELESS DATA NETWORK (WDN) DEVICES - INDOOR</label>
-            <label><input type="checkbox" name="equipment_type" value="srd"> SHORT RANGE DEVICES (SRD)</label>
-            <label><input type="checkbox" name="equipment_type" value="rfid"> RADIO FREQUENCY IDENTIFICATION (RFID) DEVICES</label>
-            <label><input type="checkbox" name="equipment_type" value="srrs"> SHORT RANGE RADIO SERVICE (SRRS) DEVICES</label>
-            <label><input type="checkbox" name="equipment_type" value="public_trunked"> PUBLIC TRUNKED RADIO EQUIPMENT (MOBILE/PORTABLE)</label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>APPLICANT'S DETAILS</legend>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Applicant: <input class="form1-01-input" type="text" name="applicant" required></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Street: <input class="form1-01-input" type="text" name="street"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Unit/Rm/Bldg No.: <input class="form1-01-input" type="text" name="unit_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">City/Municipality: <input class="form1-01-input" type="text" name="city"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Barangay: <input class="form1-01-input" type="text" name="barangay"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Zip Code: <input class="form1-01-input" type="text" name="zip_code"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Province: <input class="form1-01-input" type="text" name="province"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Email Address: <input class="form1-01-input" type="email" name="email"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Contact Number: <input class="form1-01-input" type="text" name="contact_number"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Validity (mm/dd/yy): <input class="form1-01-input" type="date" name="validity"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">Permit to Import No.: <input class="form1-01-input" type="text" name="permit_import_no"></label>
-          </div>
-          <div class="form1-01-col">
-            <label class="form1-01-label">Invoice No.: <input class="form1-01-input" type="text" name="invoice_no"></label>
-          </div>
-        </div>
-        <div class="form1-01-row">
-          <div class="form1-01-col">
-            <label class="form1-01-label">CPCN/PA/RSL No.: <input class="form1-01-input" type="text" name="cpcn_pa_rsl_no"></label>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>PARTICULARS OF EQUIPMENT & DEVICES (Use separate sheet/s, if necessary)</legend>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;margin-top:12px;">
-            <thead>
-              <tr style="background-color:#f5f5f5;">
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:40%;">Make/Type/Model</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Quantity</th>
-                <th style="border:1px solid #ddd;padding:8px;text-align:left;font-size:0.97rem;width:30%;">Serial Number</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment1_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment1_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment1_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment2_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment2_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment2_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment3_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment3_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment3_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment4_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment4_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment4_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-              <tr>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment5_make" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="number" name="equipment5_quantity" style="border:none;width:100%;padding:4px;">
-                </td>
-                <td style="border:1px solid #ddd;padding:8px;">
-                  <input class="form1-01-input" type="text" name="equipment5_serial" style="border:none;width:100%;padding:4px;">
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="form1-01-row" style="margin-top:16px;">
-          <div class="form1-01-col">
-            <label class="form1-01-label">TOTAL: <input class="form1-01-input" type="number" name="total_quantity" style="display:inline-block;width:120px;margin-left:8px;"></label>
-          </div>
-        </div>
-      </fieldset>
+      <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
+
+      <div class="form-layout">
+        <aside class="steps-sidebar">
+          <div class="steps-sidebar-header">Individual Appointment</div>
+          <ul class="steps-list" id="stepsList19">
+            <li class="step-item active" data-step="equipment">Type of Equipment/Device <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="applicant">Applicant Details <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="particulars">Equipment & Devices <span class="step-status">&nbsp;</span></li>
+            <li class="step-item" data-step="declaration">Declaration <span class="step-status">&nbsp;</span></li>
+          </ul>
+        </aside>
+
+        <div>
+          <section class="step-content active" id="step-equipment">
+            <fieldset class="fieldset-compact">
+              <legend>Type of Equipment/Device</legend>
+              <div class="form-field" data-require-one="input[type=checkbox]">
+                <label><input type="checkbox" name="equipment_type" value="wdn_indoor"> WIRELESS DATA NETWORK (WDN) DEVICES - INDOOR</label>
+                <label><input type="checkbox" name="equipment_type" value="srd"> SHORT RANGE DEVICES (SRD)</label>
+                <label><input type="checkbox" name="equipment_type" value="rfid"> RADIO FREQUENCY IDENTIFICATION (RFID) DEVICES</label>
+                <label><input type="checkbox" name="equipment_type" value="srrs"> SHORT RANGE RADIO SERVICE (SRRS) DEVICES</label>
+                <label><input type="checkbox" name="equipment_type" value="public_trunked"> PUBLIC TRUNKED RADIO EQUIPMENT (MOBILE/PORTABLE)</label>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+          <section class="step-content" id="step-applicant">
+            <fieldset>
+              <legend>Applicant's Details</legend>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Applicant</label><input class="form1-01-input" type="text" name="applicant" required></div>
+                <div class="form-field"><label class="form-label">Email Address</label><input class="form1-01-input" type="email" name="email" required></div>
+                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number" required></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input class="form1-01-input" type="text" name="unit_no"></div>
+                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay"></div>
+                <div class="form-field"><label class="form-label">City/Municipality</label><input class="form1-01-input" type="text" name="city"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province"></div>
+                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code"></div>
+              </div>
+              <div class="form-grid-3">
+                <div class="form-field"><label class="form-label">Validity</label><input class="form1-01-input" type="date" name="validity"></div>
+                <div class="form-field"><label class="form-label">Permit to Import No.</label><input class="form1-01-input" type="text" name="permit_import_no"></div>
+                <div class="form-field"><label class="form-label">Invoice No.</label><input class="form1-01-input" type="text" name="invoice_no"></div>
+              </div>
+              <div class="form-grid-2">
+                <div class="form-field"><label class="form-label">CPCN/PA/RSL No.</label><input class="form1-01-input" type="text" name="cpcn_pa_rsl_no"></div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
+          <section class="step-content" id="step-particulars">
+            <fieldset>
+              <legend>Particulars of Equipment & Devices</legend>
+              <div class="table-container">
+                <table class="form-table">
+                  <thead>
+                    <tr>
+                      <th>Make/Type/Model</th>
+                      <th>Quantity</th>
+                      <th>Serial Number</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><input class="table-input" type="text" name="equipment1_make"></td>
+                      <td><input class="table-input" type="number" name="equipment1_quantity"></td>
+                      <td><input class="table-input" type="text" name="equipment1_serial"></td>
+                    </tr>
+                    <tr>
+                      <td><input class="table-input" type="text" name="equipment2_make"></td>
+                      <td><input class="table-input" type="number" name="equipment2_quantity"></td>
+                      <td><input class="table-input" type="text" name="equipment2_serial"></td>
+                    </tr>
+                    <tr>
+                      <td><input class="table-input" type="text" name="equipment3_make"></td>
+                      <td><input class="table-input" type="number" name="equipment3_quantity"></td>
+                      <td><input class="table-input" type="text" name="equipment3_serial"></td>
+                    </tr>
+                    <tr>
+                      <td><input class="table-input" type="text" name="equipment4_make"></td>
+                      <td><input class="table-input" type="number" name="equipment4_quantity"></td>
+                      <td><input class="table-input" type="text" name="equipment4_serial"></td>
+                    </tr>
+                    <tr>
+                      <td><input class="table-input" type="text" name="equipment5_make"></td>
+                      <td><input class="table-input" type="number" name="equipment5_quantity"></td>
+                      <td><input class="table-input" type="text" name="equipment5_serial"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="form-grid-2" style="margin-top:12px;">
+                <div class="form-field"><label class="form-label">TOTAL</label><input class="form1-01-input" type="number" name="total_quantity"></div>
+              </div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
+            </fieldset>
+          </section>
       <fieldset>
         <legend>DECLARATION</legend>
         <div class="form1-01-declaration">

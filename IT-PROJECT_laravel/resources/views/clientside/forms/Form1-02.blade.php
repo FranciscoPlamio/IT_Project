@@ -148,7 +148,7 @@
                   <label class="form-label">Email Address</label>
                   <input class="form1-01-input" type="email" name="email" required>
                 </div>
-              </div>
+          </div>
               <div class="step-actions">
                 <button type="button" class="btn-primary" data-next>Next</button>
         </div>
@@ -188,7 +188,7 @@
               <div class="step-actions">
                 <button type="button" class="btn-secondary" data-prev>Back</button>
                 <button type="button" class="btn-primary" data-next>Next</button>
-              </div>
+        </div>
       </fieldset>
           </section>
 
@@ -240,7 +240,7 @@
               <div class="step-actions">
                 <button type="button" class="btn-secondary" data-prev>Back</button>
                 <button class="form1-01-btn" type="button" id="validateBtn02">Proceed to Validation</button>
-              </div>
+        </div>
       </fieldset>
           </section>
         </div>
