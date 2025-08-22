@@ -27,7 +27,7 @@
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
-    font-family: Poppins, sans-serif; 
+    font-family: 'Poppins-400', sans-serif; 
 }
 
 body { 
@@ -58,8 +58,8 @@ body {
 .menu-item {
     display: flex;
     align-items: center;   /* perfectly vertical align icon + text */
-    gap: 11px;             /* even space between icon and text */
-    padding: 12px 24px;
+    gap: 8px;             /* even space between icon and text */
+    padding: 12px 12px;
     color: #333;
     font-weight: 500;
     font-size: 15px;       /* matches better with icon size */
@@ -83,7 +83,7 @@ body {
 }
 
 .menu-item:hover { 
-    background: rgba(32, 32, 32, 0.648); 
+    background: rgba(52, 52, 52, 0.648); 
     border-radius: 12px; 
     margin: 0 8px; 
 }
@@ -103,13 +103,13 @@ body {
 /* Stats */
 .pie { 
     display: flex; 
-    gap: 10px; 
+    gap: 15px; 
     grid-column: 1 / 2; 
 }
 .pie-card {
     background: #fff;
-    height: 150px;
-    padding: 50px 65px;       /* reduced padding */
+    height: 140px;
+    padding: 40px 75px;       /* reduced padding */
     border-radius: 10px; 
     flex: 1;
     display: flex;
@@ -124,19 +124,19 @@ body {
 }
 
 .pie-circle {
-    width: 75px;              /* smaller circle */
-    height: 75px;
+    width: 55px;              /* smaller circle */
+    height: 55px;
     border-radius: 50%;
 }
 
 .pie.done     { 
-    background: conic-gradient(#22c55e 0% 50%, #e5e7eb 50% 100%); 
+    background: conic-gradient(#22c55e 0% 50%, #d1d3d7 50% 100%); 
 }
 .pie.progress { 
-    background: conic-gradient(#facc15 0% 30%, #e5e7eb 30% 100%); 
+    background: conic-gradient(#facc15 0% 30%, #d1d3d7 30% 100%); 
 }
 .pie.pending  { 
-    background: conic-gradient(#ef4444 0% 20%, #e5e7eb 20% 100%); 
+    background: conic-gradient(#ef4444 0% 20%, #d1d3d7 20% 100%); 
 }
 
 /* Notifications */
@@ -149,18 +149,18 @@ body {
     grid-column: 2 / 3; 
     align-self: start;
 
-    max-height: 250px;       
+    max-height: 300px;       
     overflow-y: scroll;      
     scrollbar-width: thin;   
 }
 .notifications h3 { 
     margin-bottom: 15px; 
-    font-size: 15px; 
-    font-weight: 600; 
+    font-size: 16px; 
+    font-family: 'Poppins-600', sans-serif;  
 }
 .notifications p { 
     margin-bottom: 12px; 
-    border-bottom: 1px solid #eee; 
+    border-bottom: 2px solid #eee; 
     padding-bottom: 10px; 
     line-height: 1.4; 
 }
@@ -170,18 +170,23 @@ body {
 
 /* Certification Log */
 .cert-log {
-    margin-top: -170px;
+    margin-top: -70px;
+    margin-bottom: 50px;
     background: #fff; border-radius: 14px; 
     padding: 20px; 
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
-    grid-column: 1 / 3;
+    grid-column: 1/ 3 ;
     
-    max-height: 400px;       
+    
+    max-height: 550px;       
     overflow-y: scroll;      
     scrollbar-width: thin;
 }
 .cert-log h3 { 
-    margin-bottom: 12px; font-size: 15px; font-family: Poppins-600, sans-serif; color: #222; 
+    margin-bottom: 12px; 
+    font-size: 15px; 
+    font-family: 'Poppins-600', sans-serif; 
+    color: #222; 
 }
 
 /* Each row uses a grid so the status area has a fixed width across rows */
@@ -190,11 +195,17 @@ body {
     grid-template-columns: 1fr 180px; /* <-- STATUS COLUMN FIXED: adjust 180px if needed */
     align-items: center;
     padding: 12px 0;
-    border-bottom: 1px solid #eef2f7;
+    border-bottom: 3px solid #eef2f7;
     font-size: 13px; color: #444;
     column-gap: 16px;
 }
-.log-item:last-child { border-bottom: none; }
+.log-item h5{
+    margin-top: -25px;
+    font-weight: medium;
+}
+.log-item:last-child { 
+    border-bottom: none; 
+}
 
 /* Status: fixed inner grid so icon and label always align */
 .status {
