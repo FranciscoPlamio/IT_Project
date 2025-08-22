@@ -19,11 +19,11 @@
     <nav>
       <button class="menu-toggle" id="menuToggle">☰</button>
       <ul id="navList">
-        <li class="active"><a href="{{ route('homepage') }}" style="text-decoration:none;color:inherit;">Home</a></li>
-        <li><a href="#" style="text-decoration:none;color:inherit;">About us</a></li>
-        <li><a href="#" style="text-decoration:none;color:inherit;">News</a></li>
-        <li><a href="#" style="text-decoration:none;color:inherit;">Contact us</a></li>
-        <li><a href="{{ route('forms.showcase') }}">Showcase Forms</a></li>
+        <li class="active"><a href="{{ url('/') }}">Home</a></li>
+        <li><a href="https://car.ntc.gov.ph/category/announcements/news-and-updates/" target="_blank" rel="noopener">News</a></li>
+        <li><a href="{{ route('forms.display') }}">Forms</a></li>
+        <li><a href="https://car.ntc.gov.ph/i-announcements-and-news/mandate-mission-vision/" target="_blank" rel="noopener">About us</a></li>
+        <li><a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/" target="_blank" rel="noopener">Contact us</a></li>
       </ul>
     </nav>
   </header>
@@ -33,20 +33,24 @@
   </section>
 
   <section class="quick-links">
-    <div class="card">
-      <img src="{{ asset('images/icon-schedule.png') }}" alt="Schedule Icon"/>
-      <p>Schedules</p>
-    </div>
+    <a href="https://car.ntc.gov.ph/category/announcements/examination/schedule/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+      <div class="card">
+        <img src="{{ asset('images/icon-schedule.png') }}" alt="Schedule Icon"/>
+        <p>Schedules</p>
+      </div>
+    </a>
     <div class="card">
       <a href="{{ route('email-auth') }}" style="display:block;text-decoration:none;color:inherit;">
         <img src="{{ asset('images/icon-forms.png') }}" alt="Forms Icon"/>
-        <p>List of Forms</p>
+        <p>Apply</p>
       </a>
     </div>
-    <div class="card">
-      <img src="{{ asset('images/icon-requirements.png') }}" alt="Requirements Icon"/>
-      <p>Requirements</p>
-    </div>
+    <a href="https://car.ntc.gov.ph/wp-content/uploads/2025/05/NTC-CAR-Citizens-Charter-2025.png" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
+      <div class="card">
+        <img src="{{ asset('images/icon-requirements.png') }}" alt="Requirements Icon"/>
+        <p>Requirements</p>
+      </div>
+    </a>
   </section>
 
   <section class="news">

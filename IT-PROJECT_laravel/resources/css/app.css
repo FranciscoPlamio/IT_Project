@@ -631,13 +631,29 @@ nav {
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 #navList li {
-  padding: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
   border-bottom: 3px solid transparent;
+  margin: 0;
+  white-space: nowrap;
+}
+
+#navList li a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 #navList li:hover,
@@ -980,5 +996,206 @@ nav {
   
   .news h2 {
     font-size: 1.5rem;
+  }
+} 
+
+/* Forms Gallery Styles */
+.forms-gallery-container {
+  max-width: 100%;
+  margin: 40px auto;
+  padding: 0 40px;
+  background: transparent;
+}
+
+.forms-gallery--md {
+  max-width: 100%;
+}
+
+.forms-gallery--comfy {
+  padding: 0 48px;
+}
+
+.forms-gallery-header {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #1e3a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.forms-gallery-note {
+  text-align: center;
+  color: #1e40af;
+  font-size: 1rem;
+  margin-bottom: 48px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+  background: #dbeafe;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  padding: 16px 20px;
+  position: relative;
+  font-weight: 500;
+}
+
+.forms-gallery-note::before {
+  content: "ℹ️";
+  display: block;
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.forms-gallery-section {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 48px 0 32px 0;
+  text-align: left;
+  padding-left: 0;
+}
+
+.forms-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px 20px; /* Gallery Spacing */
+  margin-bottom: 48px;
+  padding-left: 24px;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.form-card:hover {
+  transform: translateY(-8px);
+}
+
+/* image sized  in the gallery*/
+.form-card img {
+  width: 300px;
+  height: 380px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 16px;
+  transition: box-shadow 0.3s ease;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 8px;
+}
+
+.form-card:hover img {
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
+
+.form-card-caption {
+  text-align: center;
+  width: 100%;
+  max-width: 280px;
+}
+
+.form-card-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1e3a8a;
+  line-height: 1.4;
+  display: block;
+  background: #1e3a8a;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 6px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.form-card:hover .form-card-title {
+  background: #3b82f6;
+}
+
+/* Responsive Design for Forms Gallery */
+@media (max-width: 768px) {
+  .forms-gallery-container {
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  
+  .forms-gallery--comfy {
+    padding: 0 24px;
+  }
+  
+  .forms-gallery-header {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
+  
+  .forms-gallery-note {
+    font-size: 0.95rem;
+    margin-bottom: 32px;
+  }
+  
+  .forms-gallery-section {
+    font-size: 1.2rem;
+    margin: 32px 0 24px 0;
+  }
+  
+  .forms-gallery-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px 16px;
+    margin-bottom: 32px;
+    padding-left: 16px;
+  }
+  
+  .form-card img {
+    width: 180px;
+    height: 240px;
+  }
+  
+  .form-card-title {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .forms-gallery-container {
+    padding: 0 16px;
+  }
+  
+  .forms-gallery-header {
+    font-size: 1.4rem;
+  }
+  
+  .forms-gallery-section {
+    font-size: 1.1rem;
+  }
+  
+  .forms-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 16px; /* Gallery Spacing */
+    padding-left: 12px;
+  }
+  
+  .form-card img {
+    width: 180px;
+    height: 240px;
+  }
+  
+  .form-card-title {
+    font-size: 0.8rem;
+    padding: 8px 10px;
   }
 } 

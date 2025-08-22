@@ -17,9 +17,9 @@ Route::get('/forms-list', function () {
 })->name('forms.list');
 
 // Forms showcase gallery
-Route::get('/forms-showcase', function () {
-    return view('showcaseforms');
-})->name('forms.showcase');
+Route::get('/Displayforms', function () {
+    return view('Displayforms');
+})->name('forms.display');
 
 // Email Authentication routes
 Route::get('/email-auth', function () {
