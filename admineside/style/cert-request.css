@@ -254,3 +254,53 @@ table th, table td {
 .table-container table td:first-child {
   font-family: 'Poppins-700', sans-serif; 
 }
+
+/* Modal content */
+.modal-content {
+  background: #fff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+  margin-bottom: 20px;
+  font-family: 'Poppins-600', sans-serif;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+}
+
+.confirm-btn {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ccc;
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.confirm-btn:hover {
+  background: #9b1818;
+}
+
+.cancel-btn:hover {
+  background: #757575;
+}
