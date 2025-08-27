@@ -20,6 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             form.classList.add("show"); // triggers CSS transition
         }, 500); // delay to coordinate with typewriter
+        
+        // ✅ Redirect on SIGN IN button click
+    const signInButton = document.querySelector("button");
+    signInButton.addEventListener("click", function () {
+        window.location.href = "dashboard.html"; // redirect to dashboard
+    });
 });
 
 
