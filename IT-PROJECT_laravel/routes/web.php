@@ -21,6 +21,11 @@ Route::get('/Displayforms', function () {
     return view('Displayforms');
 })->name('forms.display');
 
+// Simple GCash payment demo page
+Route::get('/payment/gcash', function () {
+    return view('payment.gcash');
+})->name('payment.gcash');
+
 // Email Authentication routes
 Route::get('/email-auth', function () {
     return view('emailAuthentication');
@@ -36,6 +41,7 @@ Route::post('/email-auth', function (Request $request) {
 Route::prefix('forms')->name('forms.')->group(function () {
     // GET routes to render form views
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
+    Route::get('1-01/validation', fn () => view('clientside.forms.Validation'))->name('1-01.validation');
     Route::get('1-02', fn () => view('clientside.forms.Form1-02'))->name('1-02');
     Route::get('1-03', fn () => view('clientside.forms.Form1-03'))->name('1-03');
     Route::get('1-09', fn () => view('clientside.forms.Form1-09'))->name('1-09');

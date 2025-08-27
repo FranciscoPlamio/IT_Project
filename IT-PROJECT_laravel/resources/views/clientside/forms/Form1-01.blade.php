@@ -198,7 +198,7 @@
                 <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR SALE AND CAN BE REPRODUCED</div>
               </fieldset>
 
-              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn">Proceed to Validation</button></div>
+              <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button class="form1-01-btn" type="button" id="validateBtn">Proceed to Validation</button><a id="validationLink" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a></div>
             </fieldset>
           </section>
         </div>
@@ -209,6 +209,7 @@
         const stepsOrder = ['application','applicant','assistance','declaration'];
         const stepsList = document.getElementById('stepsList01');
         const form = document.getElementById('form101');
+        const validationLink = document.getElementById('validationLink');
 
         function showStep(step) {
           stepsList.querySelectorAll('.step-item').forEach(li => {
@@ -298,7 +299,9 @@
               }
             }
             localStorage.setItem('form1-01-data', JSON.stringify(entries));
-            window.location.href = 'Validation.html';
+            if (validationLink) {
+              window.location.href = validationLink.href;
+            }
           });
         }
 

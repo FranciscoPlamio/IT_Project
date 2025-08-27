@@ -23,7 +23,7 @@
       <dl class="validation-list" id="validationList"></dl>
       <div class="validation-btns">
         <button class="form1-01-btn" onclick="window.history.back()">Back to Edit</button>
-        <button class="form1-01-btn" onclick="alert('Submitted! (Demo only)')">Confirm & Submit</button>
+        <a class="form1-01-btn" href="{{ route('payment.gcash') }}">Proceed to Payment</a>
       </div>
     </div>
     <script>

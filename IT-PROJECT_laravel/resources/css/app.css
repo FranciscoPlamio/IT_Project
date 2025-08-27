@@ -1212,3 +1212,24 @@ nav {
     padding: 8px 10px;
   }
 } 
+
+/* GCash demo styles */
+.gcash-container{max-width:960px;margin:24px auto;padding:16px}
+.gcash-header{background:#0aa0ff;border-radius:16px;color:#fff;padding:24px 20px;text-align:center}
+.gcash-logo{font-weight:700;font-size:2rem;letter-spacing:1px}
+.gcash-subtitle{opacity:.95;margin-top:6px}
+.gcash-card{background:#fff;border-radius:18px;padding:20px;margin-top:-28px;box-shadow:0 8px 30px rgba(0,0,0,.1);text-align:center}
+.gcash-merchant{font-weight:700;font-size:1.25rem}
+.gcash-number{color:#333;margin-top:4px}
+.gcash-qr{display:flex;justify-content:center;align-items:center;margin:16px auto}
+.gcash-qr img{width:320px;max-width:80%;height:auto;border-radius:12px;border:8px solid #e7f4ff}
+.gcash-btn{display:inline-block;background:#0aa0ff;color:#fff;text-decoration:none;border-radius:10px;padding:10px 16px;margin-top:6px}
+.gcash-btn:hover{background:#008dea}
+.gcash-instructions{background:#f8fbff;border:1px solid #e7f0fa;border-radius:14px;padding:16px 18px;margin-top:18px}
+.gcash-instructions h2{margin:0 0 8px 0;font-size:1.1rem}
+.gcash-instructions ol{margin:0 0 0 18px}
+.gcash-alt{margin-top:12px;padding-top:10px;border-top:1px dashed #cfe3f8}
+.gcash-alt-title{font-weight:600;margin-bottom:6px}
+.gcash-footer{text-align:center;margin-top:16px}
+.gcash-link{color:#0aa0ff;text-decoration:none}
+.gcash-link:hover{text-decoration:underline}
