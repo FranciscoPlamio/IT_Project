@@ -151,8 +151,7 @@
               </div>
               <div class="form1-01-signature-row">
                 <div class="form1-01-signature-col">
-                  <input class="form1-01-input" type="text" name="affiant_signature" placeholder="SIGNATURE" style="margin-bottom:16px;max-width:260px;width:100%;" required />
-                  <div style="font-size:0.97rem;text-align:center;">SIGNATURE OVER PRINTED NAME</div>
+                  <input class="signature-line-input" type="text" name="affiant_signature" placeholder="SIGNATURE OVER PRINTED NAME" required />
                   <label class="form1-01-label" style="margin-top:16px;">Telephone Number: <input class="form1-01-input" type="text" name="telephone_number"></label>
                 </div>
               </div>

@@ -390,6 +390,19 @@
     max-width: 260px;
     width: 100%;
   }
+
+  /* Underline-style input for signatures */
+  .signature-line-input {
+    border: none;
+    border-bottom: 1px solid #333;
+    border-radius: 0;
+    background: transparent;
+    padding: 6px 4px;
+    max-width: 260px;
+    width: 100%;
+    outline: none;
+    font-size: var(--form-input-size);
+  }
   
   .date-input {
     max-width: 180px;

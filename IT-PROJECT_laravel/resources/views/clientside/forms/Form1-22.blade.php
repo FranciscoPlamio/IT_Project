@@ -248,7 +248,7 @@
               <div class="form1-01-declaration">I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.</div>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
-            <input class="form1-01-input signature-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" />
+            <input class="signature-line-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant" />
             <input class="form1-01-input date-input" type="date" name="date_accomplished" placeholder="Date Accomplished" />
           </div>
           <div class="form1-01-signature-col or-section">

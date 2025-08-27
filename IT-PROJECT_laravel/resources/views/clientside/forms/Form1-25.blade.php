@@ -148,7 +148,7 @@
               <legend>Signature and Date</legend>
               <div class="form1-01-signature-row">
                 <div class="form1-01-signature-col">
-                  <input class="form1-01-input" type="text" name="complainant_signature" placeholder="Signature over Printed Name of the Complainant" style="margin-bottom:16px;max-width:260px;width:100%;" required />
+                <input class="signature-line-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant" />
                   <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" required />
                 </div>
               </div>

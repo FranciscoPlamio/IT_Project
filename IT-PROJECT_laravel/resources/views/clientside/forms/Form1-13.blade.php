@@ -152,7 +152,7 @@
               <legend>Signature and Date</legend>
         <div class="form1-01-signature-row">
           <div class="form1-01-signature-col">
-            <input class="form1-01-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant / Duly Authorized Signatory/Representative" style="margin-bottom:16px;max-width:400px;width:100%;" />
+          <input class="signature-line-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant" />
             <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
           </div>
         </div>
