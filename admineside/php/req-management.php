@@ -23,7 +23,6 @@ $page_title = "Request Management";
       <a href="bill-pay.php" class="menu-item"><img src="images/billicon.png" alt="">Billings and Payment</a>
     </nav>
     <div class="bottom-links">
-      <a class="menu-item"><img src="images/help-icon.png" alt="">Help & Support</a>
       <a class="menu-item"><img src="images/out-icon.png" alt="">Log out</a>
     </div>
   </aside>
