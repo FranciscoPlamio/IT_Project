@@ -1,53 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>GCash Payment</title>
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GCash Payment</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
-  <main>
-    <div class="gcash-container">
-      <header class="gcash-header">
-        <div class="gcash-logo">GCash</div>
-        <div class="gcash-subtitle">Scan to pay or send via mobile number</div>
-      </header>
-
-      <section class="gcash-card">
-        <div class="gcash-merchant">NTC CAR</div>
-        <div class="gcash-number">0999-XXX-1234</div>
-        <div class="gcash-qr">
-          <img src="{{ asset('images/GCASH_MOCKUP.png') }}" alt="GCash QR Code" />
+    <!-- Full-width Blue Header -->
+    <header class="gcash-header">
+        <div class="gcash-header-content">
+            <img src="{{ asset('images/white-gcash.png') }}" alt="GCash Logo" class="gcash-logo-img">
         </div>
-        <a class="gcash-btn" href="gcash:pay">Open GCash</a>
-      </section>
+    </header>
 
-      <section class="gcash-instructions">
-        <h2>How to pay</h2>
-        <ol>
-          <li>Open the GCash app and log in to your account.</li>
-          <li>Choose <b>Pay QR</b> and tap <b>Scan QR</b>, then point your camera at the QR above.</li>
-          <li>Enter the amount to pay and review the details.</li>
-          <li>Tap <b>Pay</b> to complete the transaction.</li>
-        </ol>
-        <div class="gcash-alt">
-          <div class="gcash-alt-title">Alternative: Pay via mobile number</div>
-          <ol>
-            <li>In GCash, tap <b>Send</b> → <b>Express Send</b>.</li>
-            <li>Enter the mobile number <b>0999-XXX-1234</b>.</li>
-            <li>Input the amount and an optional note/reference.</li>
-            <li>Confirm to send payment.</li>
-          </ol>
-        </div>
-      </section>
+    <main class="gcash-main">
+        <!-- White Card with QR -->
+        <section class="gcash-card">
+            <p class="gcash-note">Securely complete the payment with your GCash app</p>
+            <p class="gcash-subnote">Log in to GCash and scan this QR with the QR Scanner.</p>
+            <p class="gcash-name"><b>NTC CAR    |    09491191100</b></p>
 
-      <footer class="gcash-footer">
-        <a class="gcash-link" href="{{ route('homepage') }}">Back to Home</a>
-      </footer>
-    </div>
-  </main>
+            <div class="gcash-qr">
+                <img src="{{ asset('images/qr_code.png') }}" alt="GCash QR Code">
+            </div>
+        </section>
+
+        <!-- Instructions -->
+        <section class="gcash-instructions">
+            <h2>How to Pay</h2>
+            <div class="instructions-grid">
+                <div class="instruction-column">
+                  <h3>Pay via QR code:</h3>
+                    <ol>
+                        <li>Open the GCash app and log in to your account.</li>
+                        <li>Choose <b>Pay QR</b> and tap <b>Scan QR</b>.</li>
+                        <li>Point your camera at the QR above.</li>
+                        <li>Enter the amount to pay and review details.</li>
+                        <li>Tap <b>Pay</b> to complete the transaction.</li>
+                    </ol>
+                </div>
+                <div class="instruction-column">
+                    <h3>Pay via Mobile Number:</h3>
+                    <ol>
+                        <li>In GCash, tap <b>Send</b> → <b>Express Send</b>.</li>
+                        <li>Enter the mobile number <b>0999-XXX-1234</b>.</li>
+                        <li>Input the amount and an optional note.</li>
+                        <li>Confirm to send payment.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
-
-
