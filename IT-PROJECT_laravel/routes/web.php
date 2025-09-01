@@ -170,3 +170,8 @@ Route::prefix('forms')->name('forms.')->group(function () {
         ]);
     })->name('1-25-text-message.submit');
 });
+// Admin routes
+Route::get('/admin', function () {
+    return view('adminside.index');
+})->name('admin.index');
+
