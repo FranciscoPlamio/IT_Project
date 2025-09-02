@@ -208,11 +208,13 @@
         </div>
       </div>
     </form>
+    <a id="validationLink03" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
     <script>
       (function() {
         const stepsOrder = ['personal','application','class','exam','equipment','declaration'];
         const stepsList = document.getElementById('stepsList03');
         const form = document.getElementById('form103');
+        const validationLink03 = document.getElementById('validationLink03');
 
         function showStep(step) {
           stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step === step));
@@ -271,7 +273,10 @@
               }
             }
             localStorage.setItem('form1-03-data', JSON.stringify(entries));
-            window.location.href = 'Validation.html';
+            localStorage.setItem('active-form', '1-03');
+            if (validationLink03) {
+              window.location.href = validationLink03.href;
+            }
           });
         }
         showStep(stepsOrder[0]);

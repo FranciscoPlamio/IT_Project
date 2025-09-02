@@ -170,6 +170,7 @@
         </div>
       </div>
     </form>
+    <a id="validationLink26text" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
     <script>
       (function() {
         const stepsOrder = ['affiant','messages','complaint','undertaking','signature'];
@@ -224,7 +225,10 @@
               }
             }
             localStorage.setItem('form1-26-data', JSON.stringify(entries));
-            window.location.href = 'Validation.html';
+            localStorage.setItem('active-form', '1-26');
+            if (validationLink26text) {
+              window.location.href = validationLink26text.href;
+            }
           });
         }
         showStep(stepsOrder[0]);

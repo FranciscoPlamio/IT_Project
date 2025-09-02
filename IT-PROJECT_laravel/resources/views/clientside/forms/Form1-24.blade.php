@@ -319,6 +319,7 @@
         </div>
       </div>
     </form>
+    <a id="validationLink24" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
     <script>
       (function() {
         const stepsOrder = ['affiant','handset','sim','documents','incident','signature'];
@@ -373,7 +374,10 @@
               }
             }
             localStorage.setItem('form1-24-data', JSON.stringify(entries));
-            window.location.href = 'Validation.html';
+            localStorage.setItem('active-form', '1-24');
+            if (validationLink24) {
+              window.location.href = validationLink24.href;
+            }
           });
         }
         showStep(stepsOrder[0]);

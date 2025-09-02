@@ -299,6 +299,7 @@
               }
             }
             localStorage.setItem('form1-01-data', JSON.stringify(entries));
+            localStorage.setItem('active-form', '1-01');
             if (validationLink) {
               window.location.href = validationLink.href;
             }
