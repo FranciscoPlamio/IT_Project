@@ -170,8 +170,12 @@ Route::prefix('forms')->name('forms.')->group(function () {
         ]);
     })->name('1-25-text-message.submit');
 });
-// Admin routes
-Route::get('/admin', function () {
-    return view('adminside.index');
-})->name('admin.index');
+
+// Handle adminside login form submit
+Route::post('/adminside/login', function (Request $request) {
+    // Placeholder handling; replace with real auth logic later
+    return back()->with('status', 'Login submitted for employee ' . $request->input('employee_id'));
+})->name('login.submit');
+
+
 
