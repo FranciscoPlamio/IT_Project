@@ -171,11 +171,33 @@ Route::prefix('forms')->name('forms.')->group(function () {
     })->name('1-25-text-message.submit');
 });
 
-// Handle adminside login form submit
-Route::post('/adminside/login', function (Request $request) {
-    // Placeholder: replace with real auth logic later
+// Adminside Pages
+// Adminside Index Page
+Route::get('/adminside/index', function () {
+    return view('adminside.index');
+})->name('adminside.index');
+
+// Adminside Dashboard Page
+Route::get('/adminside/dashboard', function () {
+    return view('adminside.dashboard');
+})->name('adminside.dashboard');
+
+// Sign Up (temporary redirect)
+Route::post('/login-submit', function () {
     return redirect()->route('adminside.dashboard');
 })->name('login.submit');
+
+// Default route (optional)
+Route::get('/', function () {
+    return redirect()->route('adminside.index');
+});
+
+Route::post('/logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+    return redirect('adminside/index'); // or route('index') if named
+})->name('logout');
 
 
 

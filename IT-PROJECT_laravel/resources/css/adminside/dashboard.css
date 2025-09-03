@@ -124,8 +124,8 @@ body {
 }
 
 .pie-circle {
-    width: 55px;              /* smaller circle */
-    height: 55px;
+    width: 54px;              /* smaller circle */
+    height: 54px;
     border-radius: 50%;
 }
 

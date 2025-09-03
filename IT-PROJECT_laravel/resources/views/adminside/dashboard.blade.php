@@ -9,18 +9,18 @@
 <body>
     <!-- Sidebar -->
     <aside class="sidebar">
-        <img src="{{ asset('images/NTClogo.png') }}" class="logo" alt="NTC Logo" />
+        <img src="{{ asset('images/ntc-logo.png') }}" class="logo" alt="NTC Logo" />
         <nav class="menu">
             <a href="{{ route('adminside.dashboard') }}" class="menu-item active">
                 <img src="{{ asset('images/whitedash-icon.png') }}" alt=""> Dashboard
             </a>
-            <a href="{{ route('adminaide.certRequest') }}" class="menu-item">
+            <a href="" class="menu-item">
                 <img src="{{ asset('images/cert-icon.png') }}" alt=""> Certification Request
             </a>
-            <a href="{{ route('adminside.reqManagement') }}" class="menu-item">
+            <a href="" class="menu-item">
                 <img src="{{ asset('images/req-icon.png') }}" alt=""> Request Management
             </a>
-            <a href="{{ route('adminside.billPay') }}" class="menu-item">
+            <a href="" class="menu-item">
                 <img src="{{ asset('images/billicon.png') }}" alt=""> Billings & Payment
             </a>
         </nav>
@@ -39,6 +39,9 @@
                     <button id="cancel-logout" class="cancel-btn">No</button>
                 </div>
             </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
     </aside>
 
