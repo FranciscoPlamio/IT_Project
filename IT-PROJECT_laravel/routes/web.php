@@ -177,15 +177,6 @@ Route::post('/adminside/login', function (Request $request) {
     return redirect()->route('adminside.dashboard');
 })->name('login.submit');
 
-// Show the login/index page
-Route::get('/adminside', function () {
-    return view('adminside.index'); // corresponds to resources/views/adminside/index.blade.php
-})->name('adminside');
-
-// Show the dashboard page
-Route::get('/adminside/dashboard', function () {
-    return view('adminside.dashboard'); // corresponds to resources/views/adminside/dashboard.blade.php
-})->name('adminside.dashboard');
 
 
 
