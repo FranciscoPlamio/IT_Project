@@ -203,5 +203,8 @@ Route::get('/adminside/cert-request', function () {
     return view('adminside.cert-request');
 })->name('adminside.cert-request');
 
+Route::get('/adminside/req-management', function () {
+    return view('adminside.req-management');
+})->name('adminside.req-management');
 
 

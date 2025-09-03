@@ -11,13 +11,13 @@
     <aside class="sidebar">
         <img src="{{ asset('images/ntc-logo.png') }}" class="logo" alt="NTC Logo" />
         <nav class="menu">
-            <a href="{{ route('adminside.dashboard') }}" class="menu-item active">
+            <a href="{{ route('adminside.dashboard') }}" class="menu-item   active">
                 <img src="{{ asset('images/whitedash-icon.png') }}" alt=""> Dashboard
             </a>
             <a href="{{ route('adminside.cert-request') }}" class="menu-item">
                 <img src="{{ asset('images/cert-icon.png') }}" alt=""> Certification Request
             </a>
-            <a href="" class="menu-item">
+            <a href="{{ route('adminside.req-management') }}" class="menu-item">
                 <img src="{{ asset('images/req-icon.png') }}" alt=""> Request Management
             </a>
             <a href="" class="menu-item">
