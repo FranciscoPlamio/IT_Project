@@ -14,7 +14,7 @@
             <a href="{{ route('adminside.dashboard') }}" class="menu-item active">
                 <img src="{{ asset('images/whitedash-icon.png') }}" alt=""> Dashboard
             </a>
-            <a href="" class="menu-item">
+            <a href="{{ route('adminside.cert-request') }}" class="menu-item">
                 <img src="{{ asset('images/cert-icon.png') }}" alt=""> Certification Request
             </a>
             <a href="" class="menu-item">

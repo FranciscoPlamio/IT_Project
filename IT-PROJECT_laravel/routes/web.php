@@ -196,9 +196,12 @@ Route::post('/logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();
-    return redirect('adminside/index'); // or route('index') if named
+    return redirect('adminside/index');
 })->name('logout');
 
+Route::get('/adminside/cert-request', function () {
+    return view('adminside.cert-request');
+})->name('adminside.cert-request');
 
 
 
