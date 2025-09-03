@@ -22,8 +22,8 @@
             <a href="{{ route('adminside.req-management') }}" class="menu-item">
                 <img src="{{ asset('images/req-icon.png') }}" alt=""> Request Management
             </a>
-            <a href="" class="menu-item">
-                <img src="{{ asset('images/billicon.png') }}" alt=""> Billings & Payment
+            <a href="{{ route('adminside.bill-pay') }}" class="menu-item">
+                <img src="{{ asset('images/billicon.png') }}" alt="">Billings and Payment
             </a>
         </nav>
         <div class="bottom-links">
