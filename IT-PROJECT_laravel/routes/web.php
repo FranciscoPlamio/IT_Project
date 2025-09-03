@@ -173,9 +173,19 @@ Route::prefix('forms')->name('forms.')->group(function () {
 
 // Handle adminside login form submit
 Route::post('/adminside/login', function (Request $request) {
-    // Placeholder handling; replace with real auth logic later
-    return back()->with('status', 'Login submitted for employee ' . $request->input('employee_id'));
+    // Placeholder: replace with real auth logic later
+    return redirect()->route('adminside.dashboard');
 })->name('login.submit');
+
+// Show the login/index page
+Route::get('/adminside', function () {
+    return view('adminside.index'); // corresponds to resources/views/adminside/index.blade.php
+})->name('adminside');
+
+// Show the dashboard page
+Route::get('/adminside/dashboard', function () {
+    return view('adminside.dashboard'); // corresponds to resources/views/adminside/dashboard.blade.php
+})->name('adminside.dashboard');
 
 
 

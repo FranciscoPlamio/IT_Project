@@ -9,7 +9,7 @@
 <body>
     <!-- Left -->
     <div class="left">
-        <img src="{{ asset('/images/logo.png') }}" alt="NTC Logo">
+        <img src="{{ asset('/images/ntc-logo.png') }}" alt="NTC Logo">
         <h2>NTC Online System</h2>
     </div>
 
