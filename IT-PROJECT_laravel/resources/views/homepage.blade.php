@@ -12,7 +12,7 @@
       <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
       <div class="title">
         <p>Republic of the Philippines</p>
-        <h1>National Telecommunication Commission<br><span>CAR, Baguio City Philippines</span></h1>
+        <h1>National Telecommunication Commission<br><span>Cordillera Administrative Region, Baguio City Philippines</span></h1>
       </div>
     </div>
 
