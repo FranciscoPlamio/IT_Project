@@ -2,14 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Form1_01_Controller;
+use App\Http\Controllers\ValidationController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
-Route::get('/', function () {
-    return view('homepage');
-})->name('homepage');
 
 // Forms list page
 Route::get('/forms-list', function () {
@@ -41,7 +40,7 @@ Route::post('/email-auth', function (Request $request) {
 Route::prefix('forms')->name('forms.')->group(function () {
     // GET routes to render form views
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
-    Route::get('1-01/validation', fn () => view('clientside.forms.Validation'))->name('1-01.validation');
+    Route::get('1-01/validation', [Form1_01_Controller::class, 'showValidation'])->name('1-01.validation');
     Route::get('1-02', fn () => view('clientside.forms.Form1-02'))->name('1-02');
     Route::get('1-03', fn () => view('clientside.forms.Form1-03'))->name('1-03');
     Route::get('1-09', fn () => view('clientside.forms.Form1-09'))->name('1-09');
@@ -58,12 +57,7 @@ Route::prefix('forms')->name('forms.')->group(function () {
     Route::get('1-25', fn () => view('clientside.forms.Form1-25'))->name('1-25');
     Route::get('1-25/text-message', fn () => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
 
-    Route::post('1-01', function (Request $request) {
-        return response()->json([
-            'message' => 'Form 1-01 received',
-            'data' => $request->all(),
-        ]);
-    })->name('1-01.submit');
+    Route::post('1-01', [Form1_01_Controller::class, 'storeAll'])->name('1-01.submit');
 
     Route::post('1-02', function (Request $request) {
         return response()->json([
@@ -187,10 +181,15 @@ Route::post('/login-submit', function () {
     return redirect()->route('adminside.dashboard');
 })->name('login.submit');
 
-// Default route (optional)
+// Default route (optional) (Uncomment to make the default url to adminside only 1 can be used) 
+// Route::get('/', function () {
+//     return redirect()->route('adminside.index');
+// });
+
+// Default route (optional) (Uncomment to make the default url to homepage only 1 can be used)
 Route::get('/', function () {
-    return redirect()->route('adminside.index');
-});
+    return view('homepage');
+})->name('homepage');
 
 Route::post('/logout', function () {
     Auth::logout();

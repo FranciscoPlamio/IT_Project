@@ -24,7 +24,9 @@
     </div>
   </header>
   <main>
-    <form class="form1-01-container" id="form101">
+    <form class="form1-01-container" id="form101" method="POST" action="{{ route('forms.1-01.submit') }}">
+      @csrf
+      <input type="hidden" name="form_token" value="{{ session('form_token') }}">
       <div class="form1-01-header">APPLICATION FOR RADIO OPERATOR EXAMINATION</div>
 
       <div class="form-layout">
@@ -51,38 +53,38 @@
             <fieldset class="fieldset-compact">
               <legend>Radiotelegraphy</legend>
               <div class="form-field" data-require-one="input[type=checkbox]">
-                <label><input type="checkbox" name="rtg" value="1rtg_e1256_code25"> 1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
-                <label><input type="checkbox" name="rtg" value="1rtg_code25"> 1RTG - Code (25/20 wpm)</label>
-                <label><input type="checkbox" name="rtg" value="2rtg_e1256_code16"> 2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
-                <label><input type="checkbox" name="rtg" value="2rtg_code16"> 2RTG - Code (16wpm)</label>
-                <label><input type="checkbox" name="rtg" value="3rtg_e125_code16"> 3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
-                <label><input type="checkbox" name="rtg" value="3rtg_code16"> 3RTG - Code (16wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="1rtg_e1256_code25"> 1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="1rtg_code25"> 1RTG - Code (25/20 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="2rtg_e1256_code16"> 2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="2rtg_code16"> 2RTG - Code (16wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="3rtg_e125_code16"> 3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="3rtg_code16"> 3RTG - Code (16wpm)</label>
               </div>
             </fieldset>
             <fieldset class="fieldset-compact">
               <legend>Amateur</legend>
               <div class="form-field" data-require-one="input[type=checkbox]">
-                <label><input type="checkbox" name="amateur" value="class_a_e8910_code5"> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
-                <label><input type="checkbox" name="amateur" value="class_a_code5_only"> Class A - Code (5 wpm) Only</label>
-                <label><input type="checkbox" name="amateur" value="class_b_e567"> Class B - Elements 5, 6 & 7</label>
-                <label><input type="checkbox" name="amateur" value="class_b_e2"> Class B - Element 2</label>
-                <label><input type="checkbox" name="amateur" value="class_c_e234"> Class C - Elements 2, 3 & 4</label>
-                <label><input type="checkbox" name="amateur" value="class_d_e2"> Class D - Element 2</label>
+                <label><input type="checkbox" name="amateur[]" value="class_a_e8910_code5"> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
+                <label><input type="checkbox" name="amateur[]" value="class_a_code5_only"> Class A - Code (5 wpm) Only</label>
+                <label><input type="checkbox" name="amateur[]" value="class_b_e567"> Class B - Elements 5, 6 & 7</label>
+                <label><input type="checkbox" name="amateur[]" value="class_b_e2"> Class B - Element 2</label>
+                <label><input type="checkbox" name="amateur[]" value="class_c_e234"> Class C - Elements 2, 3 & 4</label>
+                <label><input type="checkbox" name="amateur[]" value="class_d_e2"> Class D - Element 2</label>
               </div>
             </fieldset>
             <div class="form-grid-3">
               <fieldset class="fieldset-compact">
                 <legend>Radiotelephony</legend>
                 <div class="form-field" data-require-one="input[type=checkbox]">
-                  <label><input type="checkbox" name="rphn" value="1phn_e1234"> 1PHN - Elements 1, 2, 3 & 4</label>
-                  <label><input type="checkbox" name="rphn" value="2phn_e123"> 2PHN - Elements 1, 2 & 3</label>
-                  <label><input type="checkbox" name="rphn" value="3phn_e12"> 3PHN - Elements 1 & 2</label>
+                  <label><input type="checkbox" name="rphn[]" value="1phn_e1234"> 1PHN - Elements 1, 2, 3 & 4</label>
+                  <label><input type="checkbox" name="rphn[]" value="2phn_e123"> 2PHN - Elements 1, 2 & 3</label>
+                  <label><input type="checkbox" name="rphn[]" value="3phn_e12"> 3PHN - Elements 1 & 2</label>
                 </div>
               </fieldset>
               <fieldset class="fieldset-compact">
                 <legend>Restricted Radiotelephone</legend>
                 <div class="form-field" data-require-one="input[type=checkbox]">
-                  <label><input type="checkbox" name="rroc" value="rroc_aircraft_e1"> RROC - Aircraft - Element 1</label>
+                  <label><input type="checkbox" name="rroc[]" value="rroc_aircraft_e1"> RROC - Aircraft - Element 1</label>
                 </div>
               </fieldset>
               <div class="form-field">
@@ -135,7 +137,7 @@
               <div class="form-grid-3">
                 <div class="form-field" style="grid-column:span 1;">
                   <label class="form-label">Do you have any special needs and/or requests during the examination?</label>
-                  <div class="inline-radio"><label><input type="radio" name="needs" value="yes"> Yes</label> <label><input type="radio" name="needs" value="no"> No</label></div>
+                  <div class="inline-radio"><label><input type="radio" name="needs" value="1"> Yes</label> <label><input type="radio" name="needs" value="0"> No</label></div>
                 </div>
                 <div class="form-field" style="grid-column:span 2;">
                   <label class="form-label">If yes, please indicate your specific needs and/or request.</label>
@@ -163,7 +165,7 @@
                   <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
                   <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
                   <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-                  <input class="form1-01-input" type="text" name="or_amount" style="margin-bottom:6px;" />
+                  <input class="form1-01-input" type="number" name="or_amount" step="0.01" min="0" inputmode="decimal" style="margin-bottom:6px;" />
                   <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
                 </div>
               </div>
@@ -282,26 +284,36 @@
 
         const validateBtn = document.getElementById('validateBtn');
         if (validateBtn) {
-          validateBtn.addEventListener('click', () => {
+          validateBtn.addEventListener('click', async () => {
             if (!validateActiveStep()) return;
             const formData = new FormData(form);
-            const entries = {};
-            for (const [key, value] of formData.entries()) {
-              if (value instanceof File) {
-                entries[key] = value.name || '';
-              } else {
-                if (entries[key]) {
-                  if (Array.isArray(entries[key])) entries[key].push(value);
-                  else entries[key] = [entries[key], value];
-                } else {
-                  entries[key] = value;
+            try {
+              const res = await fetch(form.action, {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: formData
+              });
+              const text = await res.text();
+              let json = null;
+              try { json = JSON.parse(text); } catch (e) {}
+              if (res.ok) {
+                if (json.form_token) {
+                  localStorage.setItem('form_token', json.form_token);
                 }
+                localStorage.setItem('active-form', '1-01');
+                if (validationLink) {
+                  const token = json && json.form_token ? json.form_token : (localStorage.getItem('form_token') || '');
+                  const url = new URL(validationLink.href, window.location.origin);
+                  if (token) url.searchParams.set('token', token);
+                  window.location.href = url.toString();
+                }
+              } else {
+                console.error('Save failed payload:', json || text);
+                alert('Failed to save. Details logged to console.');
               }
-            }
-            localStorage.setItem('form1-01-data', JSON.stringify(entries));
-            localStorage.setItem('active-form', '1-01');
-            if (validationLink) {
-              window.location.href = validationLink.href;
+            } catch (e) {
+              console.error('Network error:', e);
+              alert('Network error. Please try again.');
             }
           });
         }
