@@ -22,7 +22,7 @@
       <div class="validation-section-title">Please review your details before final submission:</div>
       <dl class="validation-list" id="validationList"></dl>
       <div class="validation-btns">
-        <button class="form1-01-btn" onclick="window.history.back()">Back to Edit</button>
+        <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
         <a class="form1-01-btn" href="{{ route('payment.gcash') }}">Proceed to Payment</a>
       </div>
     </div>
@@ -87,7 +87,8 @@
         return rawValue ?? '';
       }
 
-      const data = JSON.parse(localStorage.getItem('form1-01-data') || '{}');
+      const server101 = JSON.parse('{!! json_encode(isset($form101) ? $form101 : null) !!}');
+      const data = {}; // always prefer server; keep empty to avoid localStorage conflicts
       const list = document.getElementById('validationList');
       const data102 = JSON.parse(localStorage.getItem('form1-02-data') || '{}');
       const data103 = JSON.parse(localStorage.getItem('form1-03-data') || '{}');
@@ -156,8 +157,10 @@
       }
 
       function render101() {
-        for (const key in data) {
-          const value = formatValue(key, data[key]);
+        const payload = server101 && typeof server101 === 'object' ? server101 : data;
+        for (const key in payload) {
+          if (key === 'form_token') continue;
+          const value = formatValue(key, payload[key]);
           const dt = document.createElement('dt');
           dt.textContent = formatKey(key);
           const dd = document.createElement('dd');
@@ -600,8 +603,23 @@
           list.appendChild(dd);
         }
       }
+      // Wire Back to Edit with token
+      (function wireBackToEdit(){
+        try {
+          const btn = document.getElementById('backToEditBtn');
+          if (!btn) return;
+          const tokenFromServer = server101 && server101.form_token ? server101.form_token : '';
+          const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
+          const storedToken = localStorage.getItem('form_token') || '';
+          const token = tokenFromServer || tokenFromQuery || storedToken;
+          const url = new URL("{{ route('forms.1-01.edit') }}", window.location.origin);
+          if (token) url.searchParams.set('token', token);
+          btn.href = url.toString();
+        } catch (e) { /* noop */ }
+      })();
+
       // Show only the active form (fallback to whichever has data)
-      if (activeForm === '1-01' && has101) {
+      if (activeForm === '1-01' && server101) {
         render101();
       } else if (activeForm === '1-02' && has102) {
         render102();

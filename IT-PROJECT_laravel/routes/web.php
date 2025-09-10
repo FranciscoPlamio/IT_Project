@@ -38,9 +38,12 @@ Route::post('/email-auth', function (Request $request) {
 })->name('email-auth.submit');
 
 Route::prefix('forms')->name('forms.')->group(function () {
+    
     // GET routes to render form views
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
+    Route::get('1-01/edit', [Form1_01_Controller::class, 'edit'])->name('1-01.edit');
     Route::get('1-01/validation', [Form1_01_Controller::class, 'showValidation'])->name('1-01.validation');
+
     Route::get('1-02', fn () => view('clientside.forms.Form1-02'))->name('1-02');
     Route::get('1-03', fn () => view('clientside.forms.Form1-03'))->name('1-03');
     Route::get('1-09', fn () => view('clientside.forms.Form1-09'))->name('1-09');

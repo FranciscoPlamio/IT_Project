@@ -26,7 +26,7 @@
   <main>
     <form class="form1-01-container" id="form101" method="POST" action="{{ route('forms.1-01.submit') }}">
       @csrf
-      <input type="hidden" name="form_token" value="{{ session('form_token') }}">
+      <input type="hidden" name="form_token" value="{{ (isset($form101['form_token']) ? $form101['form_token'] : session('form_token')) }}">
       <div class="form1-01-header">APPLICATION FOR RADIO OPERATOR EXAMINATION</div>
 
       <div class="form-layout">
@@ -53,43 +53,43 @@
             <fieldset class="fieldset-compact">
               <legend>Radiotelegraphy</legend>
               <div class="form-field" data-require-one="input[type=checkbox]">
-                <label><input type="checkbox" name="rtg[]" value="1rtg_e1256_code25"> 1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
-                <label><input type="checkbox" name="rtg[]" value="1rtg_code25"> 1RTG - Code (25/20 wpm)</label>
-                <label><input type="checkbox" name="rtg[]" value="2rtg_e1256_code16"> 2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
-                <label><input type="checkbox" name="rtg[]" value="2rtg_code16"> 2RTG - Code (16wpm)</label>
-                <label><input type="checkbox" name="rtg[]" value="3rtg_e125_code16"> 3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
-                <label><input type="checkbox" name="rtg[]" value="3rtg_code16"> 3RTG - Code (16wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="1rtg_e1256_code25" {{ isset($form101['rtg']) && in_array('1rtg_e1256_code25', (array)$form101['rtg']) ? 'checked' : '' }}> 1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="1rtg_code25" {{ isset($form101['rtg']) && in_array('1rtg_code25', (array)$form101['rtg']) ? 'checked' : '' }}> 1RTG - Code (25/20 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="2rtg_e1256_code16" {{ isset($form101['rtg']) && in_array('2rtg_e1256_code16', (array)$form101['rtg']) ? 'checked' : '' }}> 2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="2rtg_code16" {{ isset($form101['rtg']) && in_array('2rtg_code16', (array)$form101['rtg']) ? 'checked' : '' }}> 2RTG - Code (16wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="3rtg_e125_code16" {{ isset($form101['rtg']) && in_array('3rtg_e125_code16', (array)$form101['rtg']) ? 'checked' : '' }}> 3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
+                <label><input type="checkbox" name="rtg[]" value="3rtg_code16" {{ isset($form101['rtg']) && in_array('3rtg_code16', (array)$form101['rtg']) ? 'checked' : '' }}> 3RTG - Code (16wpm)</label>
               </div>
             </fieldset>
             <fieldset class="fieldset-compact">
               <legend>Amateur</legend>
               <div class="form-field" data-require-one="input[type=checkbox]">
-                <label><input type="checkbox" name="amateur[]" value="class_a_e8910_code5"> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
-                <label><input type="checkbox" name="amateur[]" value="class_a_code5_only"> Class A - Code (5 wpm) Only</label>
-                <label><input type="checkbox" name="amateur[]" value="class_b_e567"> Class B - Elements 5, 6 & 7</label>
-                <label><input type="checkbox" name="amateur[]" value="class_b_e2"> Class B - Element 2</label>
-                <label><input type="checkbox" name="amateur[]" value="class_c_e234"> Class C - Elements 2, 3 & 4</label>
-                <label><input type="checkbox" name="amateur[]" value="class_d_e2"> Class D - Element 2</label>
+                <label><input type="checkbox" name="amateur[]" value="class_a_e8910_code5" {{ isset($form101['amateur']) && in_array('class_a_e8910_code5', (array)$form101['amateur']) ? 'checked' : '' }}> Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
+                <label><input type="checkbox" name="amateur[]" value="class_a_code5_only" {{ isset($form101['amateur']) && in_array('class_a_code5_only', (array)$form101['amateur']) ? 'checked' : '' }}> Class A - Code (5 wpm) Only</label>
+                <label><input type="checkbox" name="amateur[]" value="class_b_e567" {{ isset($form101['amateur']) && in_array('class_b_e567', (array)$form101['amateur']) ? 'checked' : '' }}> Class B - Elements 5, 6 & 7</label>
+                <label><input type="checkbox" name="amateur[]" value="class_b_e2" {{ isset($form101['amateur']) && in_array('class_b_e2', (array)$form101['amateur']) ? 'checked' : '' }}> Class B - Element 2</label>
+                <label><input type="checkbox" name="amateur[]" value="class_c_e234" {{ isset($form101['amateur']) && in_array('class_c_e234', (array)$form101['amateur']) ? 'checked' : '' }}> Class C - Elements 2, 3 & 4</label>
+                <label><input type="checkbox" name="amateur[]" value="class_d_e2" {{ isset($form101['amateur']) && in_array('class_d_e2', (array)$form101['amateur']) ? 'checked' : '' }}> Class D - Element 2</label>
               </div>
             </fieldset>
             <div class="form-grid-3">
               <fieldset class="fieldset-compact">
                 <legend>Radiotelephony</legend>
                 <div class="form-field" data-require-one="input[type=checkbox]">
-                  <label><input type="checkbox" name="rphn[]" value="1phn_e1234"> 1PHN - Elements 1, 2, 3 & 4</label>
-                  <label><input type="checkbox" name="rphn[]" value="2phn_e123"> 2PHN - Elements 1, 2 & 3</label>
-                  <label><input type="checkbox" name="rphn[]" value="3phn_e12"> 3PHN - Elements 1 & 2</label>
+                  <label><input type="checkbox" name="rphn[]" value="1phn_e1234" {{ isset($form101['rphn']) && in_array('1phn_e1234', (array)$form101['rphn']) ? 'checked' : '' }}> 1PHN - Elements 1, 2, 3 & 4</label>
+                  <label><input type="checkbox" name="rphn[]" value="2phn_e123" {{ isset($form101['rphn']) && in_array('2phn_e123', (array)$form101['rphn']) ? 'checked' : '' }}> 2PHN - Elements 1, 2 & 3</label>
+                  <label><input type="checkbox" name="rphn[]" value="3phn_e12" {{ isset($form101['rphn']) && in_array('3phn_e12', (array)$form101['rphn']) ? 'checked' : '' }}> 3PHN - Elements 1 & 2</label>
                 </div>
               </fieldset>
               <fieldset class="fieldset-compact">
                 <legend>Restricted Radiotelephone</legend>
                 <div class="form-field" data-require-one="input[type=checkbox]">
-                  <label><input type="checkbox" name="rroc[]" value="rroc_aircraft_e1"> RROC - Aircraft - Element 1</label>
+                  <label><input type="checkbox" name="rroc[]" value="rroc_aircraft_e1" {{ isset($form101['rroc']) && in_array('rroc_aircraft_e1', (array)$form101['rroc']) ? 'checked' : '' }}> RROC - Aircraft - Element 1</label>
                 </div>
               </fieldset>
               <div class="form-field">
                 <label class="form-label">DATE OF EXAM (mm/dd/yy)</label>
-                <input class="form1-01-input" type="date" name="date_of_exam">
+                <input class="form1-01-input" type="date" name="date_of_exam" value="{{ isset($form101['date_of_exam']) ? $form101['date_of_exam'] : '' }}">
               </div>
             </div>
             <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button></div>
@@ -99,33 +99,33 @@
             <fieldset>
               <legend>Applicant's Details</legend>
               <div class="form-grid-3">
-                <div class="form-field"><label class="form-label">Last Name</label><input class="form1-01-input" type="text" name="last_name" required></div>
-                <div class="form-field"><label class="form-label">First Name</label><input class="form1-01-input" type="text" name="first_name" required></div>
-                <div class="form-field"><label class="form-label">Middle Name</label><input class="form1-01-input" type="text" name="middle_name"></div>
+                <div class="form-field"><label class="form-label">Last Name</label><input class="form1-01-input" type="text" name="last_name" value="{{ $form101['last_name'] ?? '' }}" required></div>
+                <div class="form-field"><label class="form-label">First Name</label><input class="form1-01-input" type="text" name="first_name" value="{{ $form101['first_name'] ?? '' }}" required></div>
+                <div class="form-field"><label class="form-label">Middle Name</label><input class="form1-01-input" type="text" name="middle_name" value="{{ $form101['middle_name'] ?? '' }}"></div>
               </div>
               <div class="form-grid-3">
-                <div class="form-field"><label class="form-label">Date of Birth (mm/dd/yy)</label><input class="form1-01-input" type="date" name="dob" required></div>
-                <div class="form-field"><label class="form-label">Sex</label><div class="inline-radio"><label><input type="radio" name="sex" value="male" required> Male</label> <label><input type="radio" name="sex" value="female"> Female</label></div></div>
-                <div class="form-field"><label class="form-label">Nationality</label><input class="form1-01-input" type="text" name="nationality"></div>
+                <div class="form-field"><label class="form-label">Date of Birth (mm/dd/yy)</label><input class="form1-01-input" type="date" name="dob" value="{{ $form101['dob'] ?? '' }}" required></div>
+                <div class="form-field"><label class="form-label">Sex</label><div class="inline-radio"><label><input type="radio" name="sex" value="male" {{ (isset($form101['sex']) && $form101['sex']==='male') ? 'checked' : '' }} required> Male</label> <label><input type="radio" name="sex" value="female" {{ (isset($form101['sex']) && $form101['sex']==='female') ? 'checked' : '' }}> Female</label></div></div>
+                <div class="form-field"><label class="form-label">Nationality</label><input class="form1-01-input" type="text" name="nationality" value="{{ $form101['nationality'] ?? '' }}"></div>
               </div>
               <div class="form-grid-2">
-                <div class="form-field"><label class="form-label">Unit/Rm/House/Bldg No.</label><input class="form1-01-input" type="text" name="unit"></div>
-                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street"></div>
+                <div class="form-field"><label class="form-label">Unit/Rm/House/Bldg No.</label><input class="form1-01-input" type="text" name="unit" value="{{ $form101['unit'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">Street</label><input class="form1-01-input" type="text" name="street" value="{{ $form101['street'] ?? '' }}"></div>
               </div>
               <div class="form-grid-3">
-                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay"></div>
-                <div class="form-field"><label class="form-label">City/Municipality</label><input class="form1-01-input" type="text" name="city"></div>
-                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province"></div>
+                <div class="form-field"><label class="form-label">Barangay</label><input class="form1-01-input" type="text" name="barangay" value="{{ $form101['barangay'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">City/Municipality</label><input class="form1-01-input" type="text" name="city" value="{{ $form101['city'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">Province</label><input class="form1-01-input" type="text" name="province" value="{{ $form101['province'] ?? '' }}"></div>
               </div>
               <div class="form-grid-3">
-                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code"></div>
-                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number"></div>
-                <div class="form-field"><label class="form-label">Email Address</label><input class="form1-01-input" type="email" name="email"></div>
+                <div class="form-field"><label class="form-label">Zip Code</label><input class="form1-01-input" type="text" name="zip_code" value="{{ $form101['zip_code'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">Contact Number</label><input class="form1-01-input" type="text" name="contact_number" value="{{ $form101['contact_number'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">Email Address</label><input class="form1-01-input" type="email" name="email" value="{{ $form101['email'] ?? '' }}"></div>
               </div>
-              <div class="form-field"><label class="form-label">School Attended</label><input class="form1-01-input" type="text" name="school_attended"></div>
+              <div class="form-field"><label class="form-label">School Attended</label><input class="form1-01-input" type="text" name="school_attended" value="{{ $form101['school_attended'] ?? '' }}"></div>
               <div class="form-grid-3">
-                <div class="form-field"><label class="form-label">Course Taken</label><input class="form1-01-input" type="text" name="course_taken"></div>
-                <div class="form-field"><label class="form-label">Year Graduated</label><input class="form1-01-input" type="text" name="year_graduated"></div>
+                <div class="form-field"><label class="form-label">Course Taken</label><input class="form1-01-input" type="text" name="course_taken" value="{{ $form101['course_taken'] ?? '' }}"></div>
+                <div class="form-field"><label class="form-label">Year Graduated</label><input class="form1-01-input" type="text" name="year_graduated" value="{{ $form101['year_graduated'] ?? '' }}"></div>
               </div>
               <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
             </fieldset>
@@ -137,11 +137,11 @@
               <div class="form-grid-3">
                 <div class="form-field" style="grid-column:span 1;">
                   <label class="form-label">Do you have any special needs and/or requests during the examination?</label>
-                  <div class="inline-radio"><label><input type="radio" name="needs" value="1"> Yes</label> <label><input type="radio" name="needs" value="0"> No</label></div>
+                  <div class="inline-radio"><label><input type="radio" name="needs" value="1" {{ (isset($form101['needs']) && (string)$form101['needs']==='1') ? 'checked' : '' }}> Yes</label> <label><input type="radio" name="needs" value="0" {{ (isset($form101['needs']) && (string)$form101['needs']==='0') ? 'checked' : '' }}> No</label></div>
                 </div>
                 <div class="form-field" style="grid-column:span 2;">
                   <label class="form-label">If yes, please indicate your specific needs and/or request.</label>
-                  <input class="form1-01-input" type="text" name="needs_details">
+                  <input class="form1-01-input" type="text" name="needs_details" value="{{ $form101['needs_details'] ?? '' }}">
                 </div>
               </div>
               <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button></div>
@@ -156,16 +156,16 @@
               </div>
               <div class="form1-01-signature-row">
                 <div class="form1-01-signature-col">
-                  <input class="signature-line-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant" />
-                  <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
+                  <input class="signature-line-input" type="text" name="signature_name" placeholder="Signature over Printed Name of Applicant" value="{{ $form101['signature_name'] ?? '' }}" />
+                  <input class="form1-01-input" type="date" name="date_accomplished" placeholder="Date Accomplished" value="{{ $form101['date_accomplished'] ?? '' }}" style="max-width:180px;width:100%;" />
                 </div>
                 <div class="form1-01-signature-col" style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
                   <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-                  <input class="form1-01-input" type="text" name="or_no" style="margin-bottom:6px;" />
+                  <input class="form1-01-input" type="text" name="or_no" value="{{ $form101['or_no'] ?? '' }}" style="margin-bottom:6px;" />
                   <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-                  <input class="form1-01-input" type="date" name="or_date" style="margin-bottom:6px;" />
+                  <input class="form1-01-input" type="date" name="or_date" value="{{ $form101['or_date'] ?? '' }}" style="margin-bottom:6px;" />
                   <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-                  <input class="form1-01-input" type="number" name="or_amount" step="0.01" min="0" inputmode="decimal" style="margin-bottom:6px;" />
+                  <input class="form1-01-input" type="number" name="or_amount" step="0.01" min="0" inputmode="decimal" value="{{ $form101['or_amount'] ?? '' }}" style="margin-bottom:6px;" />
                   <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
                 </div>
               </div>
@@ -174,12 +174,12 @@
               <fieldset style="margin-top:16px;">
                 <legend>EXAMINATION ADMISSION SLIP</legend>
                 <div class="form-field" style="margin-bottom:8px;">TO: THE CHAIRPERSON, Radio Operators Examination Committee</div>
-                <div class="form-field" style="margin-bottom:8px;">Please admit Mr. / Ms. <input class="form1-01-input" type="text" name="admit_name" style="max-width:320px;">, with mailing address at <input class="form1-01-input" type="text" name="mailing_address" style="max-width:420px;"></div>
+                <div class="form-field" style="margin-bottom:8px;">Please admit Mr. / Ms. <input class="form1-01-input" type="text" name="admit_name" value="{{ $form101['admit_name'] ?? '' }}" style="max-width:320px;">, with mailing address at <input class="form1-01-input" type="text" name="mailing_address" value="{{ $form101['mailing_address'] ?? '' }}" style="max-width:420px;"></div>
                 <div class="form-field" style="margin-bottom:8px;">in the examination for <input class="form1-01-input" type="text" name="exam_for" style="max-width:500px;"></div>
                 <div class="form-grid-3">
-                  <div class="form-field"><label class="form-label">Place of Exam:</label><input class="form1-01-input" type="text" name="place_of_exam"></div>
-                  <div class="form-field"><label class="form-label">Date of Exam (mm/dd/yy):</label><input class="form1-01-input" type="date" name="admission_date"></div>
-                  <div class="form-field"><label class="form-label">Time of Exam:</label><input class="form1-01-input" type="text" name="time_of_exam"></div>
+                  <div class="form-field"><label class="form-label">Place of Exam:</label><input class="form1-01-input" type="text" name="place_of_exam" value="{{ $form101['place_of_exam'] ?? '' }}"></div>
+                  <div class="form-field"><label class="form-label">Date of Exam (mm/dd/yy):</label><input class="form1-01-input" type="date" name="admission_date" value="{{ $form101['admission_date'] ?? '' }}"></div>
+                  <div class="form-field"><label class="form-label">Time of Exam:</label><input class="form1-01-input" type="text" name="time_of_exam" value="{{ $form101['time_of_exam'] ?? '' }}"></div>
                 </div>
                 <div style="display:flex;gap:16px;align-items:flex-end;margin-top:8px;">
                   <div style="flex:1;"></div>
