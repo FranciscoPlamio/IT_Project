@@ -19,13 +19,11 @@
     <nav>
       <button class="menu-toggle" id="menuToggle">☰</button>
       <ul id="navList">
-      <ul id="navList">
         <li class="active"><a href="{{ url('/') }}">Home</a></li>
         <li><a href="https://car.ntc.gov.ph/category/announcements/news-and-updates/" target="_blank" rel="noopener">News</a></li>
         <li><a href="{{ route('forms.display') }}">Forms</a></li>
         <li><a href="https://car.ntc.gov.ph/i-announcements-and-news/mandate-mission-vision/" target="_blank" rel="noopener">About us</a></li>
         <li><a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/" target="_blank" rel="noopener">Contact us</a></li>
-      </ul>
       </ul>
     </nav>
   </header>
@@ -41,7 +39,7 @@
           <span class="forms-search-icon">&#128269;</span>
         </form>
       </div>
-      <div style="overflow-x:auto;max-height:400px;overflow-y:auto;margin-top:10px;">
+      <div class="forms-list-wrapper">
         <table class="forms-list-table">
           <thead>
             <tr>

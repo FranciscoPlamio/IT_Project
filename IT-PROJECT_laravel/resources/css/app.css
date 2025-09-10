@@ -820,12 +820,12 @@ nav {
 
 /* Forms List Styles */
 .forms-list-container {
-  max-width: 900px;
-  margin: 40px auto;
+  width: min(1600px, 96vw);
+  margin: 16px auto;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 0 8px rgba(0,0,0,0.07);
-  padding: 32px 24px 24px 24px;
+  padding: 20px 1.5vw 16px 1.5vw;
 }
 .forms-list-header {
   font-size: 1.4rem;
@@ -895,7 +895,6 @@ nav {
   background: #34d399;
 }
 .forms-search-bar {
-  float: right;
   margin-bottom: 18px;
   display: flex;
   align-items: center;
@@ -917,15 +916,30 @@ nav {
 
 @media (max-width: 900px) {
   .forms-list-container {
-    padding: 16px 2px;
+    width: 98vw;
+    padding: 12px 8px;
+    margin: 12px auto;
   }
   .forms-list-table th, .forms-list-table td {
-    padding: 10px 4px;
+    padding: 10px 6px;
     font-size: 0.97rem;
   }
   .forms-search-bar {
-    float: none;
     margin-bottom: 10px;
+  }
+}
+
+/* Forms List: scrollable table wrapper that fits viewport height */
+.forms-list-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: calc(100vh - 280px);
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .forms-list-wrapper {
+    max-height: calc(100vh - 320px);
   }
 }
 
@@ -1015,8 +1029,9 @@ nav {
 /* Forms Gallery Styles */
 .forms-gallery-container {
   max-width: 100%;
-  margin: 40px auto;
-  padding: 0 40px;
+  width: min(1600px, 96vw);
+  margin: 16px auto;
+  padding: 0 1.5vw;
   background: transparent;
 }
 
@@ -1025,7 +1040,7 @@ nav {
 }
 
 .forms-gallery--comfy {
-  padding: 0 48px;
+  padding: 0 1.5vw;
 }
 
 .forms-gallery-header {
@@ -1042,7 +1057,7 @@ nav {
   text-align: center;
   color: #1e40af;
   font-size: 1rem;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
@@ -1067,17 +1082,16 @@ nav {
   font-size: 1.4rem;
   font-weight: 600;
   color: #374151;
-  margin: 48px 0 32px 0;
+  margin: 32px 0 24px 0;
   text-align: left;
   padding-left: 0;
 }
 
 .forms-gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px 20px; /* Gallery Spacing */
-  margin-bottom: 48px;
-  padding-left: 24px;
+  margin-bottom: 40px;
 }
 
 .form-card {
@@ -1099,8 +1113,10 @@ nav {
 
 /* image sized  in the gallery*/
 .form-card img {
-  width: 300px;
-  height: 380px;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 3 / 4;
+  height: auto;
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -1118,7 +1134,7 @@ nav {
 .form-card-caption {
   text-align: center;
   width: 100%;
-  max-width: 280px;
+  max-width: 100%;
 }
 
 .form-card-title {
@@ -1142,12 +1158,12 @@ nav {
 /* Responsive Design for Forms Gallery */
 @media (max-width: 768px) {
   .forms-gallery-container {
-    margin: 20px auto;
-    padding: 0 20px;
+    margin: 12px auto;
+    padding: 0 16px;
   }
   
   .forms-gallery--comfy {
-    padding: 0 24px;
+    padding: 0 16px;
   }
   
   .forms-gallery-header {
@@ -1166,15 +1182,13 @@ nav {
   }
   
   .forms-gallery-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px 16px;
-    margin-bottom: 32px;
-    padding-left: 16px;
+    margin-bottom: 28px;
   }
   
   .form-card img {
-    width: 180px;
-    height: 240px;
+    max-width: 320px;
   }
   
   .form-card-title {
@@ -1185,7 +1199,7 @@ nav {
 
 @media (max-width: 480px) {
   .forms-gallery-container {
-    padding: 0 16px;
+    padding: 0 12px;
   }
   
   .forms-gallery-header {
@@ -1199,12 +1213,10 @@ nav {
   .forms-gallery-grid {
     grid-template-columns: 1fr;
     gap: 16px; /* Gallery Spacing */
-    padding-left: 12px;
   }
   
   .form-card img {
-    width: 180px;
-    height: 240px;
+    max-width: 260px;
   }
   
   .form-card-title {
