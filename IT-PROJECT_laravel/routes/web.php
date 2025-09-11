@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Form1_01_Controller;
 use App\Http\Controllers\ValidationController;
+use App\Http\Controllers\AdminAuthController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -169,20 +170,20 @@ Route::prefix('forms')->name('forms.')->group(function () {
 });
 
 // Adminside Pages
-// Adminside Index Page
-Route::get('/adminside/index', function () {
-    return view('adminside.index');
-})->name('adminside.index');
+// Show login page (GET)
+Route::get('/adminside', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 
-// Adminside Dashboard Page
-Route::get('/adminside/dashboard', function () {
-    return view('adminside.dashboard');
-})->name('adminside.dashboard');
+// Handle login (POST) → same page (index.blade.php)
+Route::post('/adminside', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+
+// Dashboard (after login)
+Route::get('/adminside/dashboard', [AdminAuthController::class, 'dashboard'])->name('adminside.dashboard');
+
+// Logout
+Route::post('/adminside/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
 // Sign Up (temporary redirect)
-Route::post('/login-submit', function () {
-    return redirect()->route('adminside.dashboard');
-})->name('login.submit');
+
 
 // Default route (optional) (Uncomment to make the default url to adminside only 1 can be used) 
 // Route::get('/', function () {
@@ -193,13 +194,6 @@ Route::post('/login-submit', function () {
 Route::get('/', function () {
     return view('homepage');
 })->name('homepage');
-
-Route::post('/logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-    return redirect('adminside/index');
-})->name('logout');
 
 Route::get('/adminside/cert-request', function () {
     return view('adminside.cert-request');

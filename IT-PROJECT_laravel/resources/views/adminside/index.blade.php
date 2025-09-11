@@ -19,19 +19,26 @@
             <h1 id="welcome-text"></h1>
             <p>Please enter your details.</p>
 
-            <form action="{{ route('login.submit') }}" method="POST">
-                @csrf
-                <label for="employee-id">Employee ID</label>
-                <input type="text" id="employee-id" name="employee_id" placeholder="Enter your ID" required>
+            @if(session('error'))
+    <div style="color:red; margin-bottom:10px;">
+        {{ session('error') }}
+    </div>
+@endif
 
-                <label for="password">Password</label>
-                <div class="password-container">
-                    <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
-                    <span><img src="{{ asset('images/eye.png') }}" alt="eye icon"></span>
-                </div>
+<form action="{{ route('admin.login.submit') }}" method="POST">
+    @csrf
+    <label for="employee-id">Employee ID</label>
+    <input type="text" id="employee-id" name="employee_id" placeholder="Enter your ID" required>
 
-                <button type="submit">SIGN IN</button>
-            </form>
+    <label for="password">Password</label>
+    <div class="password-container">
+        <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
+        <span><img src="{{ asset('images/eye.png') }}" alt="eye icon"></span>
+    </div>
+
+    <button type="submit">SIGN IN</button>
+</form>
+
         </div>
     </div>
 </body>
