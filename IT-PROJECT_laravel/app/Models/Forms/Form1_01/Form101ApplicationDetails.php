@@ -2,7 +2,7 @@
 
 namespace App\Models\Forms\Form1_01;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Form101ApplicationDetails extends Model
@@ -59,5 +59,3 @@ class Form101ApplicationDetails extends Model
         return $this->hasOne(Declaration::class, 'form_token', 'form_token');
     }
 }
-
-

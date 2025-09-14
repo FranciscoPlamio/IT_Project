@@ -2,7 +2,7 @@
 
 namespace App\Models\Forms\Form1_01;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class Declaration extends Model
 {
@@ -39,5 +39,3 @@ class Declaration extends Model
         'admission_date' => 'date',
     ];
 }
-
-
