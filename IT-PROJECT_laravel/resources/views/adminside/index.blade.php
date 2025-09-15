@@ -32,8 +32,10 @@
 
     <label for="password">Password</label>
     <div class="password-container">
-        <input type="password" id="password" name="password" placeholder="••••••••••••••" required>
-        <span><img src="{{ asset('images/eye.png') }}" alt="eye icon"></span>
+        <input type="password" id="password" name="password" placeholder="Enter you password" required>
+        <span>
+            <img src="{{ asset('images/eye.png') }}" alt="eye icon" id="toggle-password" style="cursor:pointer;">
+        </span>
     </div>
 
     <button type="submit">SIGN IN</button>

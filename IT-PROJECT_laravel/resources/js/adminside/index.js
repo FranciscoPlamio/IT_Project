@@ -23,28 +23,35 @@ document.addEventListener("DOMContentLoaded", function () {
         form.classList.add("show");
     }, 500);
 });
-// document.addEventListener('DOMContentLoaded', function () {
-//     const form = document.querySelector('form');
-    
-//     if (form) {
-//         form.addEventListener('submit', function (e) {
-//             e.preventDefault(); // Prevent form from submitting immediately
 
-//             const employeeId = document.getElementById('employee-id').value.trim();
-//             const password = document.getElementById('password').value.trim();
+document.addEventListener("DOMContentLoaded", () => {
+    const passwordInput = document.getElementById("password");
+    const toggleEye = document.getElementById("toggle-password");
 
-//             if (employeeId === '' || password === '') {
-//                 alert('Please fill in all fields.');
-//                 return;
-//             }
+    if (toggleEye && passwordInput) {
+        // Show password while pressing
+        toggleEye.addEventListener("mousedown", () => {
+            passwordInput.type = "text";
+        });
 
-//             if (password.length < 6) {
-//                 alert('Password must be at least 6 characters.');
-//                 return;
-//             }
+        // Hide password when releasing
+        toggleEye.addEventListener("mouseup", () => {
+            passwordInput.type = "password";
+        });
 
-//             // If validation passes, submit the form
-//             form.submit();
-//         });
-//     }
-// });
+        // Hide password if mouse leaves the icon while pressed
+        toggleEye.addEventListener("mouseleave", () => {
+            passwordInput.type = "password";
+        });
+
+        // Also works for mobile (touch events)
+        toggleEye.addEventListener("touchstart", () => {
+            passwordInput.type = "text";
+        });
+
+        toggleEye.addEventListener("touchend", () => {
+            passwordInput.type = "password";
+        });
+    }
+});
+

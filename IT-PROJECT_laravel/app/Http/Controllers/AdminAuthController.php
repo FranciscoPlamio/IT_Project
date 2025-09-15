@@ -32,6 +32,14 @@ class AdminAuthController extends Controller   // <-- rename this
         return back()->with('error', 'Invalid credentials, please try again.');
     }
 
+    public function logout(Request $request)
+{
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('admin.login'); // Goes back to index.blade.php
+}
+
 
     public function dashboard(Request $request)
 {
