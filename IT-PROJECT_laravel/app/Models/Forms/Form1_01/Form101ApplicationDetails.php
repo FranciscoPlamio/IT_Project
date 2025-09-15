@@ -22,6 +22,7 @@ class Form101ApplicationDetails extends Model
         'rphn',
         'rroc',
         'date_of_exam',
+        'status',
     ];
 
     /**

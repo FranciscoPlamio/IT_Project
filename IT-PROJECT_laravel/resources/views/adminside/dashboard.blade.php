@@ -50,18 +50,21 @@
         <!-- Pie Charts -->
         <section class="pie">
             <div class="pie-card">
-                <div class="pie-circle pie done"></div>
-                <div><strong>50%</strong><br>Done</div>
+                <div class="pie-circle done" style="--percent: {{ $percentages['done'] }}%;"></div>
+                <div><strong>{{ $percentages['done'] }}%</strong><br>Done ({{ $done }})</div>
             </div>
+
             <div class="pie-card">
-                <div class="pie-circle pie progress"></div>
-                <div><strong>30%</strong><br>In Progress</div>
+                <div class="pie-circle progress" style="--percent: {{ $percentages['progress'] }}%;"></div>
+                <div><strong>{{ $percentages['progress'] }}%</strong><br>In Progress ({{ $progress }})</div>
             </div>
+
             <div class="pie-card">
-                <div class="pie-circle pie pending"></div>
-                <div><strong>20%</strong><br>Pending</div>
+                <div class="pie-circle pending" style="--percent: {{ $percentages['pending'] }}%;"></div>
+                <div><strong>{{ $percentages['pending'] }}%</strong><br>Pending ({{ $pending }})</div>
             </div>
         </section>
+
 
         <!-- Notifications -->
         <section class="notifications">
@@ -73,44 +76,30 @@
 
         <!-- Certification Log -->
         <section class="cert-log">
-            <h1>Certification Log</h1>
+    <h1>Certification Log</h1>
+
+    @if($recentApps->isEmpty())
+        <p>No application records found.</p>
+    @else
+        @foreach($recentApps as $app)
+            @php
+                // map status text to class and icon file name
+                $cls = $app->status === 'In Progress' ? 'progress' : strtolower(str_replace(' ', '-', $app->status));
+                $icon = $app->status === 'Done' ? 'Done.png' : ($app->status === 'In Progress' ? 'In-prog.png' : 'Pending.png');
+            @endphp
+
             <div class="log-item">
                 <div>
-                    <h3>#0123456789</h3><br><h5>08/14/24</h5>
+                    <h3>#{{ $app->id }}</h3><br><h5>{{ optional($app->created_at)->format('m/d/Y') }}</h5>
                 </div>
-                <div class="status pending">
-                    <img src="{{ asset('images/Pending.png') }}" alt="">
-                    <span>Pending</span>
-                </div>
-            </div>
-            <div class="log-item">
-                <div>
-                    <h3>#0123324556</h3><br><h5>08/14/24</h5>
-                </div>
-                <div class="status done">
-                    <img src="{{ asset('images/Done.png') }}" alt="">
-                    <span>Done</span>
+                <div class="status {{ $cls }}">
+                    <img src="{{ asset('images/' . $icon) }}" alt="">
+                    <span>{{ $app->status ?? 'Pending' }}</span>
                 </div>
             </div>
-            <div class="log-item">
-                <div>
-                    <h3>#003246463</h3><br><h5>08/10/24</h5>
-                </div>
-                <div class="status progress">
-                    <img src="{{ asset('images/In-prog.png') }}" alt="">
-                    <span>In Progress</span>
-                </div>
-            </div>
-            <div class="log-item">
-                <div>
-                    <h3>#028476285</h3><br><h5>08/10/24</h5>
-                </div>
-                <div class="status progress">
-                    <img src="{{ asset('images/In-prog.png') }}" alt="">
-                    <span>In Progress</span>
-                </div>
-            </div>
-        </section>
+        @endforeach
+    @endif
+</section>
     </main>
 </body>
 </html>

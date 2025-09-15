@@ -33,7 +33,8 @@
 body { 
     display: flex; 
     background: #f8f9fb; 
-    color: #333; }
+    color: #333; 
+}
 
 /* Sidebar */
 .sidebar {
@@ -57,23 +58,23 @@ body {
 }
 .menu-item {
     display: flex;
-    align-items: center;   /* perfectly vertical align icon + text */
-    gap: 8px;             /* even space between icon and text */
+    align-items: center;   
+    gap: 8px;             
     padding: 12px 12px;
     color: #333;
     font-weight: 500;
-    font-size: 15px;       /* matches better with icon size */
+    font-size: 15px;      
     text-decoration: none;
     transition: background .2s;
-    line-height: 1.2;      /* keeps spacing balanced */
+    line-height: 1.2;     
     margin: 0 8px; 
     border-radius: 12px; 
 }
 .menu-item img {
-    width: 27px;          /* slightly larger so it matches text height */
+    width: 27px;          
     height: 27px;
-    object-fit: contain;  /* keeps proportions */
-    display: block;       /* removes extra space under images */
+    object-fit: contain; 
+    display: block;       
 }
 .menu-item.active { 
     background: #2a3545; 
@@ -109,34 +110,36 @@ body {
 .pie-card {
     background: #fff;
     height: 140px;
-    padding: 40px 75px;       /* reduced padding */
+    padding: 40px 75px;       
     border-radius: 10px; 
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;                /* smaller space between circle & text */
+    gap: 10px;                
     box-shadow: 0 2px 8px rgba(0,0,0,.05);
-    font-size: 13px;          /* slightly smaller text */
+    font-size: 13px;         
 }
 
 .pie-card strong {
-    font-size: 15px;          /* reduced size for title text */
+    font-size: 15px;         
 }
 
 .pie-circle {
-    width: 54px;              /* smaller circle */
+    width: 54px;
     height: 54px;
     border-radius: 50%;
+    background: conic-gradient(var(--color, #000) 0% var(--percent, 0%), #d1d3d7 var(--percent, 0%) 100%);
 }
 
-.pie.done     { 
-    background: conic-gradient(#22c55e 0% 50%, #d1d3d7 50% 100%); 
+/* Assign colors */
+.pie-circle.done {
+    --color: #22c55e; 
 }
-.pie.progress { 
-    background: conic-gradient(#facc15 0% 30%, #d1d3d7 30% 100%); 
+.pie-circle.progress {
+    --color: #facc15; 
 }
-.pie.pending  { 
-    background: conic-gradient(#ef4444 0% 20%, #d1d3d7 20% 100%); 
+.pie-circle.pending {
+    --color: #ef4444;
 }
 
 /* Notifications */
@@ -176,6 +179,7 @@ body {
     padding: 20px; 
     box-shadow: 0 2px 8px rgba(0,0,0,.06);
     grid-column: 1/ 3 ;
+    font-family: 'Poppins-400', sans-serif; 
     
     
     max-height: 550px;       
@@ -184,7 +188,7 @@ body {
 }
 .cert-log h3 { 
     margin-bottom: 12px; 
-    font-size: 15px; 
+    font-size: 20px; 
     font-family: 'Poppins-600', sans-serif; 
     color: #222; 
 }
@@ -196,7 +200,8 @@ body {
     align-items: center;
     padding: 12px 0;
     border-bottom: 3px solid #eef2f7;
-    font-size: 13px; color: #444;
+    font-size: 18px; 
+    color: #444;
     column-gap: 16px;
 }
 .log-item h5{
@@ -217,10 +222,10 @@ body {
     gap: 10px;          
 }
 .status img { 
-    width: 16px; height: 16px; display: block; 
+    width: 20px; height: 20px; display: block; 
 }
 .status span { 
-    font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; 
+    font-size: 16px; font-weight: 600; line-height: 1.2; white-space: nowrap; 
 }
 
 /* Always show scrollbars */
