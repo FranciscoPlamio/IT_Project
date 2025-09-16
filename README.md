@@ -2,8 +2,13 @@
 
 ## Create database in mongodb
 
-1. Must be connected to default mongodb connection = mongodb://localhost:27017
-2. If connected to mongodb run the command in the IT-PROJECT_laravel directory: php artisan migrate
+1. PHP extension mongodb must be installed to use mongodb. Before downloading please check the extension that will be download matches the php version and if it is Thread Safe(TS) or Not Thread Safe(NTS).
+2. Check PHP Version - Open cmd or VS code terminal or any terminal and run this command to check php version: php -v
+3. Download the extension on this site: https://pecl.php.net/package/mongodb/1.21.1/windows.
+4. After downloading extract it then copy or cut then paste the php_mongodb.dll into the php/ext folder.
+5. Modify the php.ini by adding this line extension=php_mongodb.dll preferably somewhere under the extensions section
+6. Connect to default mongodb connection = mongodb://localhost:27017
+7. If connected to mongodb run the command in the IT-PROJECT_laravel directory: php artisan migrate
 
 ## Getting started
 
