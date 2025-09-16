@@ -4,11 +4,17 @@
 
 1. PHP extension mongodb must be installed to use mongodb. Before downloading please check the extension that will be download matches the php version and if it is Thread Safe(TS) or Not Thread Safe(NTS).
 2. Check PHP Version - Open cmd or VS code terminal or any terminal and run this command to check php version: php -v
-3. Download the extension on this site: https://pecl.php.net/package/mongodb/1.21.1/windows.
-4. After downloading extract it then copy or cut then paste the php_mongodb.dll into the php/ext folder.
-5. Modify the php.ini by adding this line extension=php_mongodb.dll preferably somewhere under the extensions section
-6. Connect to default mongodb connection = mongodb://localhost:27017
-7. If connected to mongodb run the command in the IT-PROJECT_laravel directory: php artisan migrate
+3. Check if its TS or NTS - Run this command: php -i | findstr "Thread"
+
+- If Thread Safety => enabled → download TS
+- If Thread Safety => disabled → download NTS
+
+4. Download the extension on this site: https://pecl.php.net/package/mongodb/1.21.1/windows
+5. After downloading extract it then copy or cut then paste the php_mongodb.dll into the php/ext folder where php is installed.
+6. Modify the php.ini by adding this line extension=php_mongodb.dll, preferably somewhere under the extensions section
+7. Restart XAMPP or WAMPP if it is running.
+8. Connect to default mongodb connection = mongodb://localhost:27017
+9. If connected to mongodb run the command in the IT-PROJECT_laravel directory: php artisan migrate
 
 ## Getting started
 
