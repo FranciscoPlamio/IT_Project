@@ -2,7 +2,7 @@
 
 namespace App\Models\Forms\Form1_01;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class ApplicantDetails extends Model
 {
@@ -42,5 +42,3 @@ class ApplicantDetails extends Model
         'dob' => 'date',
     ];
 }
-
-
