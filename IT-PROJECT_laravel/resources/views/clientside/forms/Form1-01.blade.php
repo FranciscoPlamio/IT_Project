@@ -57,7 +57,8 @@
                                     computer-printed.</li>
                                 <li>Attach the complete requirements including supporting documents. For the List of
                                     requirements, please refer to the <u>NTC Citizen's Charter</u> at the NTC website:
-                                    <a href="https://ntc.gov.ph" target="_blank" rel="noopener">ntc.gov.ph</a></li>
+                                    <a href="https://ntc.gov.ph" target="_blank" rel="noopener">ntc.gov.ph</a>
+                                </li>
                                 <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
                             </ol>
                         </fieldset>
@@ -428,41 +429,52 @@
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
-                        if (!validateActiveStep()) return;
                         const formData = new FormData(form);
-                        try {
-                            const res = await fetch(form.action, {
-                                method: 'POST',
-                                headers: {
-                                    'Accept': 'application/json'
-                                },
-                                body: formData
-                            });
-                            const text = await res.text();
-                            let json = null;
-                            try {
-                                json = JSON.parse(text);
-                            } catch (e) {}
-                            if (res.ok) {
-                                if (json.form_token) {
-                                    localStorage.setItem('form_token', json.form_token);
-                                }
-                                localStorage.setItem('active-form', '1-01');
-                                if (validationLink) {
-                                    const token = json && json.form_token ? json.form_token : (localStorage
-                                        .getItem('form_token') || '');
-                                    const url = new URL(validationLink.href, window.location.origin);
-                                    if (token) url.searchParams.set('token', token);
-                                    window.location.href = url.toString();
-                                }
-                            } else {
-                                console.error('Save failed payload:', json || text);
-                                alert('Failed to save. Details logged to console.');
-                            }
-                        } catch (e) {
-                            console.error('Network error:', e);
-                            alert('Network error. Please try again.');
-                        }
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        form.submit();
+
+                        // -- commented AJAX for now--
+                        // -- uncomment if fixed -Richmond
+
+                        //const formData = new FormData(form);
+                        // try {
+                        //     const res = await fetch(form.action, {
+                        //         method: 'POST',
+                        //         headers: {
+                        //             'Content-Type': 'application/json',
+                        //             'Accept': 'application/json'
+                        //         },
+                        //         body: formData
+                        //     });
+                        //     const text = await res.text();
+                        //     console.log(text);
+                        //     let json = null;
+                        //     try {
+                        //         json = JSON.parse(text);
+                        //     } catch (e) {}
+                        //     if (res.ok) {
+                        //         if (json.form_token) {
+                        //             localStorage.setItem('form_token', json.form_token);
+                        //         }
+                        //         localStorage.setItem('active-form', '1-01');
+                        //         if (validationLink) {
+                        //             const token = json && json.form_token ? json.form_token : (localStorage
+                        //                 .getItem('form_token') || '');
+                        //             const url = new URL(validationLink.href, window.location.origin);
+                        //             if (token) url.searchParams.set('token', token);
+                        //             window.location.href = url.toString();
+                        //         }
+                        //     } else {
+                        //         console.error('Save failed payload:', json || text);
+                        //         alert('Failed to save. Details logged to console.');
+                        //     }
+                        // } catch (e) {
+                        //     console.error('Network error:', e);
+                        //     alert('Network error. Please try again.');
+                        // }
                     });
                 }
 

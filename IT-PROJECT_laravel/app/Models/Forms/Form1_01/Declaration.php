@@ -35,7 +35,7 @@ class Declaration extends Model
     protected $casts = [
         'date_accomplished' => 'date',
         'or_date' => 'date',
-        'or_amount' => 'decimal:2',
+        'or_amount' => 'float',
         'admission_date' => 'date',
     ];
 }

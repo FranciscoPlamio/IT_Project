@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Form101ApplicationDetails extends Model
 {
+    protected $connection = 'mongodb';
     /**
      * The table associated with the model.
      */
