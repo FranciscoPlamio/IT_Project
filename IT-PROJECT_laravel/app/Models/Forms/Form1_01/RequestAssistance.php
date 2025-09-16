@@ -2,7 +2,7 @@
 
 namespace App\Models\Forms\Form1_01;
 
-use Illuminate\Database\Eloquent\Model;
+use MongoDB\Laravel\Eloquent\Model;
 
 class RequestAssistance extends Model
 {
@@ -27,5 +27,3 @@ class RequestAssistance extends Model
         'needs' => 'boolean',
     ];
 }
-
-
