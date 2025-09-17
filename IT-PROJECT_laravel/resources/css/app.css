@@ -832,14 +832,6 @@ nav {
   font-weight: 700;
   margin-bottom: 0;
 }
-.forms-list-sub {
-  color: #2d3fd3;
-  font-size: 1.05rem;
-  margin-bottom: 18px;
-  display: inline-block;
-  cursor: pointer;
-  text-decoration: none;
-}
 .forms-list-table {
   width: 100%;
   border-collapse: separate;

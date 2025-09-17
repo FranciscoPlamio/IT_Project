@@ -44,7 +44,6 @@
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
           <div class="forms-list-header">LIST OF HARMONIZED FORMS</div>
-          <a class="forms-list-sub" href="#">Select Forms</a>
         </div>
         <div style="display:flex;align-items:center;gap:15px;">
           @if(session('email_verified'))
