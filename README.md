@@ -20,7 +20,7 @@
 ## Install Laravel
 1. Make sure to have XAMPP OR WAMP 
 - WAMP: https://wampserver.aviatechno.net/   
-- XAMPPhttps://www.apachefriends.org/download.html
+- XAMPP: https://www.apachefriends.org/download.html
 - Also installs php 
 
 2. Install Composer : https://getcomposer.org/download/
