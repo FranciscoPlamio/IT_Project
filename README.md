@@ -21,7 +21,7 @@
 1. Make sure to have XAMPP OR WAMP 
 WAMP: https://wampserver.aviatechno.net/   
 XAMPPhttps://www.apachefriends.org/download.html
-Also installs php 
+- Also installs php 
 
 2. Install Composer : https://getcomposer.org/download/
 - check path must be in php path (C:xampp\php\php.exe) CHOOSE VERSION 8.2.12 or BELOW
