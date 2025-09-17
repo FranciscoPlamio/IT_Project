@@ -40,7 +40,7 @@ Also installs php
 - type composer --version
 
 5. To install laravel enter command : 
-"composer global require laravel/installer"
+- "composer global require laravel/installer"
 
 6. to make sure laravel works with wamp or xampp
 - go to php.ini (C:xampp\php\)
