@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Form1_01_Controller;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\EmailController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -14,12 +15,12 @@ use App\Http\Controllers\AdminAuthController;
 // Forms list page
 Route::get('/forms-list', function () {
     return view('FormsList');
-})->name('forms.list');
+})->name('forms.list')->middleware('email.verified');
 
 // Forms showcase gallery
 Route::get('/Displayforms', function () {
     return view('Displayforms');
-})->name('forms.display');
+})->name('forms.display')->middleware('email.verified');
 
 // Simple GCash payment demo page
 Route::get('/payment/gcash', function () {
@@ -27,18 +28,13 @@ Route::get('/payment/gcash', function () {
 })->name('payment.gcash');
 
 // Email Authentication routes
-Route::get('/email-auth', function () {
-    return view('emailAuthentication');
-})->name('email-auth');
+Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');
+Route::post('/email-auth', [EmailController::class, 'sendAuthEmail'])->name('email-auth.submit');
+Route::get('/email-auth/verify/{token}', [EmailController::class, 'verifyEmail'])->name('email-auth.verify');
+Route::get('/email-auth/status', [EmailController::class, 'checkEmailStatus'])->name('email-auth.status');
+Route::post('/email-auth/clear', [EmailController::class, 'clearEmailVerification'])->name('email-auth.clear');
 
-Route::post('/email-auth', function (Request $request) {
-    return response()->json([
-        'message' => 'Email authentication received',
-        'email' => $request->input('email'),
-    ]);
-})->name('email-auth.submit');
-
-Route::prefix('forms')->name('forms.')->group(function () {
+Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(function () {
     
     // GET routes to render form views
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
