@@ -24,59 +24,59 @@ XAMPPhttps://www.apachefriends.org/download.html
 Also installs php 
 
 2. Install Composer : https://getcomposer.org/download/
-check path must be in php path (C:xampp\php\php.exe) CHOOSE VERSION 8.2.12 or BELOW
-skip proxy server
-install
-restart cmd/file explorer or restart computer
+- check path must be in php path (C:xampp\php\php.exe) CHOOSE VERSION 8.2.12 or BELOW
+- skip proxy server
+- install
+- restart cmd/file explorer or restart computer
 
 3. Go to environmental variables
-go to system variables
-create new system variable
-Variable name : PHP
-variable value: where php is install (C:xampp\php\php.exe)(go to where php is installed: XAMPP/WAMP)
+- go to system variables
+- create new system variable
+- Variable name : PHP
+- variable value: where php is install (C:xampp\php\php.exe)(go to where php is installed: XAMPP/WAMP)
 
 4. check if composer is installed 
-open cmd
-type composer --version
+- open cmd
+- type composer --version
 
 5. To install laravel enter command : 
 "composer global require laravel/installer"
 
 6. to make sure laravel works with wamp or xampp
-go to php.ini (C:xampp\php\)
-open in VS Code
-CRT + F to search 
-Search (extension=zip) MAKE SURE TO UNCOMMENT (Remove semi Collon)
-Search (extension=fileinfo) MAKE SURE TO UNCOMMENT (Remove semi Collon)
-Search (extension=mysqli) MAKE SURE TO UNCOMMENT (Remove semi Collon)
-close php.ini 
+- go to php.ini (C:xampp\php\)
+- open in VS Code
+- CRT + F to search 
+- Search (extension=zip) MAKE SURE TO UNCOMMENT (Remove semi Collon)
+- Search (extension=fileinfo) MAKE SURE TO UNCOMMENT (Remove semi Collon)
+- Search (extension=mysqli) MAKE SURE TO UNCOMMENT (Remove semi Collon)
+- close php.ini 
 
 # SKIP IF PROJECT IS ALREADY IN LARAVEL 
 7. To Set up the laravel Project 
-Open VS terminal
-Go to Project Directory (C:wamp\www\IT PROJECT\IT-PROJECT_Laravel)
-TOP HEADER under "Terminal" 
-Click new Terminal
-laravel new "Name of project"
-if there is an error , Restart your VSCode
-SKip staterkit (default)
-Choose Pest (O)
-Choose DB (MYSQL) REFER TO MONGODB 
+- Open VS terminal
+- Go to Project Directory (C:wamp\www\IT PROJECT\IT-PROJECT_Laravel)
+- TOP HEADER under "Terminal" 
+- Click new Terminal
+- laravel new "Name of project"
+- if there is an error , Restart your VSCode
+- SKip staterkit (default)
+- Choose Pest (O)
+- Choose DB (MYSQL) REFER TO MONGODB 
 
 - Migrate Db ? (YES) (WILL SET UP TABLES )(NEW DATABASE)
 - Migrate DB ? (NO) (If the DB has already been Setup)
 
 # SKIP IF PROJECT IS ALREADY IN MONGODB 
 8. Add Database for Laravel (MYSQL)
-Open phpmyadmin
-Click on new Database (name it the same DB on repository "it_project_laravel")
-after installing click import and import database
-restart wamp (Just in case) 
-Migrate Db ? (YES)
+- Open phpmyadmin
+- Click on new Database (name it the same DB on repository "it_project_laravel")
+- after installing click import and import database
+- restart wamp (Just in case) 
+- Migrate Db ? (YES)
 
 9. To open Website
-enter Localhost in web browser (make sure to empty cache or no history of searching localhost)
-Go To Public Folder to View Website
+- enter Localhost in web browser (make sure to empty cache or no history of searching localhost)
+- Go To Public Folder to View Website
 
 
 ## Getting started
