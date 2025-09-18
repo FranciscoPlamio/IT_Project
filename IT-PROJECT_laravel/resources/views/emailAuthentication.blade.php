@@ -31,12 +31,14 @@
     <div class="email-auth-container">
       <h2>Enter your E-mail</h2>
       <p>Please provide the information.</p>
+      
       <form class="email-auth-form" id="emailAuthForm" data-redirect-url="{{ route('forms.list') }}">
         <label class="email-auth-label" for="email">Email address</label>
         <input class="email-auth-input" type="email" id="email" name="email" placeholder="Enter your email" required />
         <button class="email-auth-btn" type="submit" id="submitBtn">Continue</button>
       </form>
       <a class="email-auth-resend" href="#" id="resendLink" style="display:none;">Resend</a>
+      <span id="resendCountdown" style="display:none; color:#6c757d; font-size:14px;"></span>
       <div id="auth-success" style="display:none; margin-top:24px;">
         <p style="color:#22b573;font-weight:600;">Email authenticated! Proceed to the forms list:</p>
         <a href="{{ route('forms.list') }}" class="email-auth-btn" style="display:inline-block;width:auto;padding:10px 32px;">Go to Forms List</a>
@@ -47,6 +49,10 @@
       <div id="auth-loading" style="display:none; margin-top:24px;">
         <p style="color:#007bff;font-weight:600;">Sending authentication email...</p>
       </div>
+      <!-- Resend button message -->
+      <div id="auth-sent" style="display:none; margin-top:24px;">
+        <p style="color:#28a745;font-weight:600;">Authentication email sent! Please check your inbox or spam folder and click the verification link.</p>
+      </div>
     </div>
   </main>
 
@@ -55,14 +61,28 @@
       const form = document.getElementById('emailAuthForm');
       const submitBtn = document.getElementById('submitBtn');
       const resendLink = document.getElementById('resendLink');
+      const resendCountdown = document.getElementById('resendCountdown');
       const authSuccess = document.getElementById('auth-success');
       const authError = document.getElementById('auth-error');
       const authLoading = document.getElementById('auth-loading');
+      const authSent = document.getElementById('auth-sent');
       const errorMessage = document.getElementById('errorMessage');
       const emailInput = document.getElementById('email');
+      
+      let countdownTimer = null;
 
       // Check if email is already verified
       checkEmailStatus();
+      
+      // Show resend button immediately but disabled
+      resendLink.style.display = 'block';
+      resendLink.style.color = '#6c757d'; // Gray color
+      resendLink.style.pointerEvents = 'none';
+      resendLink.style.cursor = 'not-allowed';
+      resendCountdown.style.display = 'none'; // Hide timer initially
+      
+      // Start countdown immediately to enable button after 30 seconds
+      startResendCountdown();
 
       form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -78,6 +98,12 @@
 
       resendLink.addEventListener('click', function(e) {
         e.preventDefault();
+        
+        // Check if resend is disabled (gray state)
+        if (resendLink.style.color === 'rgb(108, 117, 125)' || resendLink.style.pointerEvents === 'none') {
+          return; // Do nothing if disabled
+        }
+        
         const email = emailInput.value.trim();
         if (email) {
           sendAuthEmail(email);
@@ -102,10 +128,16 @@
           hideLoading();
           
           if (data.success) {
-            showSuccess();
+            // Show email sent message and resend button
+            showEmailSent();
             resendLink.style.display = 'block';
             submitBtn.disabled = true;
+            submitBtn.style.background = '#6c757d'; // Gray background
+            submitBtn.style.cursor = 'not-allowed'; // Not clickable cursor
             emailInput.disabled = true;
+            
+            // Start countdown timer for resend link
+            startResendCountdown(true);
             
             // Check for email verification periodically
             startVerificationCheck();
@@ -126,6 +158,7 @@
         .then(data => {
           if (data.verified) {
             showSuccess();
+            hideEmailSent(); // Hide "email sent" message when authenticated
             emailInput.value = data.email;
             emailInput.disabled = true;
             submitBtn.disabled = true;
@@ -144,6 +177,7 @@
             if (data.verified) {
               clearInterval(checkInterval);
               showSuccess();
+              hideEmailSent(); // Hide "email sent" message when authenticated
               emailInput.disabled = true;
               submitBtn.disabled = true;
             }
@@ -184,6 +218,65 @@
 
       function hideSuccess() {
         authSuccess.style.display = 'none';
+      }
+
+      function showEmailSent() {
+        authSent.style.display = 'block';
+      }
+
+      function hideEmailSent() {
+        authSent.style.display = 'none';
+      }
+
+
+      function startResendCountdown(showTimer = false) {
+        // Clear any existing timer
+        if (countdownTimer) {
+          clearInterval(countdownTimer);
+        }
+        
+        let timeLeft = 60; // 1 minutes
+        
+        // Disable resend link initially
+        resendLink.style.color = '#6c757d'; // Gray color
+        resendLink.style.pointerEvents = 'none';
+        resendLink.style.cursor = 'not-allowed';
+        
+        // Show timer only when email is sent
+        if (showTimer) {
+          resendCountdown.style.display = 'inline';
+        }
+        
+        // Update countdown display
+        function updateCountdown() {
+          if (showTimer) {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            resendCountdown.textContent = `Resend available in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+          }
+          
+          if (timeLeft <= 0) {
+            // Enable resend link
+            resendLink.style.color = '#2d3fd3'; // Blue color (from CSS)
+            resendLink.style.pointerEvents = ''; // Enable pointer events
+            resendLink.style.cursor = 'pointer'; // Show pointer cursor
+            resendCountdown.style.display = 'none'; // Hide timer
+            
+            // Disable Continue button when resend becomes available
+            submitBtn.disabled = true;
+            submitBtn.style.background = '#6c757d'; // Gray background
+            submitBtn.style.cursor = 'not-allowed'; // Not clickable cursor
+            
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+          } else {
+            timeLeft--;
+          }
+        }
+        
+        // Update immediately and then every second
+        updateCountdown();
+        countdownTimer = setInterval(updateCountdown, 1000);
       }
     });
   </script>

@@ -31,6 +31,7 @@ Route::get('/payment/gcash', function () {
 Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');
 Route::post('/email-auth', [EmailController::class, 'sendAuthEmail'])->name('email-auth.submit');
 Route::get('/email-auth/verify/{token}', [EmailController::class, 'verifyEmail'])->name('email-auth.verify');
+Route::get('/email-auth/verify-script/{token}', [EmailController::class, 'verifyEmailScript'])->name('email-auth.verify-script');
 Route::get('/email-auth/status', [EmailController::class, 'checkEmailStatus'])->name('email-auth.status');
 Route::post('/email-auth/clear', [EmailController::class, 'clearEmailVerification'])->name('email-auth.clear');
 

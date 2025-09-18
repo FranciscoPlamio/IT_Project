@@ -136,9 +136,7 @@ class EmailController extends Controller
     {
         session()->forget('email_verified');
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Email verification cleared.'
-        ]);
+        // Redirect to home page after signing out
+        return redirect()->route('homepage')->with('success', 'You have been signed out successfully.');
     }
 }
