@@ -47,7 +47,10 @@ class AdminAuthController extends Controller   // <-- rename this
         return redirect()->route('admin.login');
     }
 
-    // --- counts for pie chart (use existing model) ---
+    // user
+    $user = User::find($request->session()->get('admin'));
+
+    // counts for pie chart
     $done = Form101ApplicationDetails::where('status', 'Done')->count();
     $progress = Form101ApplicationDetails::where('status', 'In Progress')->count();
     $pending = Form101ApplicationDetails::where('status', 'Pending')->count();
@@ -59,11 +62,9 @@ class AdminAuthController extends Controller   // <-- rename this
         'pending'  => $total > 0 ? round(($pending / $total) * 100) : 0,
     ];
 
-    // --- recent applications for the "Certification Log" (last 10) ---
-    $recentApps = Form101ApplicationDetails::orderBy('created_at', 'desc')->limit(10)->get();
-
-    // keep your existing user retrieval
-    $user = User::find($request->session()->get('admin'));
+    // notifications (latest 5). also keep alias for older code that might expect 'recentApps'
+    $notifications = Form101ApplicationDetails::orderBy('created_at', 'desc')->take(5)->get();
+    $recentApps = $notifications;
 
     return view('adminside.dashboard', compact(
         'user',
@@ -71,6 +72,7 @@ class AdminAuthController extends Controller   // <-- rename this
         'done',
         'progress',
         'pending',
+        'notifications',
         'recentApps'
     ));
 }

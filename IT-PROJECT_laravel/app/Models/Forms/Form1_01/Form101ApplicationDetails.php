@@ -23,6 +23,7 @@ class Form101ApplicationDetails extends Model
         'rroc',
         'date_of_exam',
         'status',
+         'created_at',
     ];
 
     /**
@@ -59,6 +60,9 @@ class Form101ApplicationDetails extends Model
     {
         return $this->hasOne(Declaration::class, 'form_token', 'form_token');
     }
+    public function getFormattedDateAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('m/d/Y') : null;
+    }
 }
-
 
