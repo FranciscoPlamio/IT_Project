@@ -59,3 +59,67 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## Project Setup for Network Access
+
+### Prerequisites
+- WAMP Server installed and running
+- Node.js and npm installed
+- Both devices (laptop and phone) connected to the same network
+
+### Steps to Host Laravel Project for Network Access
+
+#### 1. Configure APP_URL
+Set your Laravel application URL in the `.env` file:
+```env
+APP_URL=http://[YOUR_LAPTOP_IP]/it-project/IT-PROJECT_laravel/public/
+```
+Replace `[YOUR_LAPTOP_IP]` with your laptop's local network IP address.
+
+#### 2. Configure Vite for Network Access
+Update `vite.config.js` to allow external connections:
+```javascript
+server: {
+    host: '0.0.0.0', // Allow external connections
+    port: 5173,
+    hmr: {
+        host: '[YOUR_LAPTOP_IP]', // Replace with your laptop's IP address
+    },
+},
+```
+
+#### 3. Configure WAMP Apache Settings
+- Right-click WAMP icon → Apache → vhost-httpd.conf
+- Make sure vhost-httpd.conf is default
+- Ensure your virtual host includes:
+  ```apache
+  Options +Indexes +Includes +FollowSymLinks +MultiViews
+  AllowOverride All
+  Require all granted
+  ```
+- Restart Apache
+
+#### 4. Configure Windows Firewall for Apache
+Follow these steps to allow Apache (httpd.exe) through the firewall:
+
+1. Open Control Panel → Windows Defender Firewall
+2. Click "Allow an app through firewall"
+3. Click "Change settings" → "Allow another app..."
+4. Browse to: `C:\wamp64\bin\apache\apache2.4.xx\bin\httpd.exe`
+5. Check both "Private" and "Public" boxes
+6. Click "OK"
+
+#### 5. Configure Windows Firewall Communication
+1. Open Windows Defender Firewall with Advanced Security
+2. Enable rules for both IPv4 and IPv6 "File Sharing and Printing" in both outbound and  inbound rules.
+
+#### 6. Start Development Servers
+```bash
+# Terminal 1: Start Vite dev server
+npx vite --host
+
+#### 6. Access from Mobile Device
+- Use your laptop's IP: `http://[YOUR_LAPTOP_IP]/it-project/IT-PROJECT_laravel/public/`
+- Vite assets will be served from: `http://[YOUR_LAPTOP_IP]:5173`
