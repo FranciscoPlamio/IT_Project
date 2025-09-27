@@ -29,7 +29,7 @@
   </header>
 
   <section class="banner">
-    <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner" />
+    <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner" />
   </section>
 
   <section class="quick-links">
