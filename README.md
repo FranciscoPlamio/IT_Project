@@ -93,7 +93,7 @@
 - Enter Localhost in web browser (make sure to empty cache or no history of searching localhost)
 - Go To Public Folder to View Website
 
-## Project Setup for Network Access
+# Project Setup for Network Access
 
 ### Prerequisites
 - WAMP Server installed and running
