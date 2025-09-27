@@ -762,31 +762,49 @@ nav {
 }
 
 .card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1.5rem;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
     cursor: pointer;
+    border: 2px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: row;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.18);
+    background: #e0f2fe;
+    border-color: #3b82f6;
 }
 
 .card img {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 1rem;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 0;
 }
 
 .card p {
-    font-size: 1.1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #333;
-    margin: 0;
+    margin: 0; 
+}
+
+/* Footer Styles */
+footer {
+    background: #1e3a8a;
+    color: white;
+    text-align: center;
+    padding: 1rem 2rem;
+    font-size: 0.9rem;
+    margin-top: 2rem;
 }
 
 /* News Section Styles */
