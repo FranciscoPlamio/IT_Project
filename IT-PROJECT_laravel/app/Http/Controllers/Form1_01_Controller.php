@@ -145,8 +145,9 @@ class Form1_01_Controller extends Controller
      */
     public function storeAll(Request $request)
     {
-        try {
-            $validated = $request->validate([
+
+        $validated = $request->validate(
+            [
                 // Application Details
                 'date_of_exam' => ['nullable', 'date'],
                 'rtg' => ['nullable', 'array'],
@@ -155,23 +156,23 @@ class Form1_01_Controller extends Controller
                 'rroc' => ['nullable', 'array'],
 
                 // Applicant Details
-                'last_name' => ['nullable', 'string'],
-                'first_name' => ['nullable', 'string'],
-                'middle_name' => ['nullable', 'string'],
-                'dob' => ['nullable', 'date'],
-                'sex' => ['nullable', 'string'],
-                'nationality' => ['nullable', 'string'],
-                'unit' => ['nullable', 'string'],
-                'street' => ['nullable', 'string'],
-                'barangay' => ['nullable', 'string'],
-                'city' => ['nullable', 'string'],
-                'province' => ['nullable', 'string'],
-                'zip_code' => ['nullable', 'string'],
-                'contact_number' => ['nullable', 'string'],
+                'last_name' => ['required', 'string', 'min:3'],
+                'first_name' => ['required', 'string', 'min:3'],
+                'middle_name' => ['required', 'string', 'min:3'],
+                'dob' => ['required', 'date'],
+                'sex' => ['required', 'string'],
+                'nationality' => ['required', 'string'],
+                'unit' => ['required', 'string'],
+                'street' => ['required', 'string'],
+                'barangay' => ['required', 'string'],
+                'city' => ['required', 'string'],
+                'province' => ['required', 'string'],
+                'zip_code' => ['required', 'string'],
+                'contact_number' => ['required', 'integer'],
                 'email' => ['nullable', 'email'],
-                'school_attended' => ['nullable', 'string'],
-                'course_taken' => ['nullable', 'string'],
-                'year_graduated' => ['nullable', 'string'],
+                'school_attended' => ['required', 'string'],
+                'course_taken' => ['required', 'string'],
+                'year_graduated' => ['required', 'string'],
 
                 // Assistance
                 'needs' => ['nullable', 'boolean'],
@@ -189,144 +190,152 @@ class Form1_01_Controller extends Controller
                 'place_of_exam' => ['nullable', 'string'],
                 'admission_date' => ['nullable', 'date'],
                 'time_of_exam' => ['nullable', 'string'],
-            ]);
+            ],
+            [], // custom messages (leave empty if none)
+            [
+                'dob' => 'date of birth', // custom attribute name
+            ]
+        );
 
-            $formToken = $request->input('form_token');
-            if (!$formToken) {
-                $formToken = (string) Str::uuid();
-            }
-
-            Form1_01::updateOrCreate(
-                ['form_token' => $formToken],
-                [
-                    'last_name' => $validated['last_name'] ?? null,
-                    'first_name' => $validated['first_name'] ?? null,
-                    'middle_name' => $validated['middle_name'] ?? null,
-                    'dob' => $validated['dob'] ?? null,
-                    'sex' => $validated['sex'] ?? null,
-                    'nationality' => $validated['nationality'] ?? null,
-                    'unit' => $validated['unit'] ?? null,
-                    'street' => $validated['street'] ?? null,
-                    'barangay' => $validated['barangay'] ?? null,
-                    'city' => $validated['city'] ?? null,
-                    'province' => $validated['province'] ?? null,
-                    'zip_code' => $validated['zip_code'] ?? null,
-                    'contact_number' => $validated['contact_number'] ?? null,
-                    'email' => $validated['email'] ?? null,
-                    'school_attended' => $validated['school_attended'] ?? null,
-                    'course_taken' => $validated['course_taken'] ?? null,
-                    'year_graduated' => $validated['year_graduated'] ?? null,
-                    'rtg' => $validated['rtg'] ?? null,
-                    'amateur' => $validated['amateur'] ?? null,
-                    'rphn' => $validated['rphn'] ?? null,
-                    'rroc' => $validated['rroc'] ?? null,
-                    'date_of_exam' => $validated['date_of_exam'] ?? null,
-                    'signature_name' => $validated['signature_name'] ?? null,
-                    'date_accomplished' => $validated['date_accomplished'] ?? null,
-                    'or_no' => $validated['or_no'] ?? null,
-                    'or_date' => $validated['or_date'] ?? null,
-                    'or_amount' => $validated['or_amount'] ?? null,
-                    'admit_name' => $validated['admit_name'] ?? null,
-                    'mailing_address' => $validated['mailing_address'] ?? null,
-                    'exam_for' => $validated['exam_for'] ?? null,
-                    'place_of_exam' => $validated['place_of_exam'] ?? null,
-                    'admission_date' => $validated['admission_date'] ?? null,
-                    'time_of_exam' => $validated['time_of_exam'] ?? null,
-                    'needs' => $validated['needs'] ?? null,
-                    'needs_details' => $validated['needs_details'] ?? null,
-                ]
-            );
-
-            // -- (Commented this for now )Transaction method will not work as the current mongodb 
-            // -- replication mode is disabled, uncomment if fixed - Richmond
-
-            // DB::transaction(function () use ($validated, $formToken) {
-            //     Form101ApplicationDetails::updateOrCreate(
-            //         ['form_token' => $formToken],
-            //         [
-            //             'rtg' => $validated['rtg'] ?? null,
-            //             'amateur' => $validated['amateur'] ?? null,
-            //             'rphn' => $validated['rphn'] ?? null,
-            //             'rroc' => $validated['rroc'] ?? null,
-            //             'date_of_exam' => $validated['date_of_exam'] ?? null,
-            //         ]
-            //     );
-
-            //     ApplicantDetails::updateOrCreate(
-            //         ['form_token' => $formToken],
-            //         [
-            //             'last_name' => $validated['last_name'] ?? null,
-            //             'first_name' => $validated['first_name'] ?? null,
-            //             'middle_name' => $validated['middle_name'] ?? null,
-            //             'dob' => $validated['dob'] ?? null,
-            //             'sex' => $validated['sex'] ?? null,
-            //             'nationality' => $validated['nationality'] ?? null,
-            //             'unit' => $validated['unit'] ?? null,
-            //             'street' => $validated['street'] ?? null,
-            //             'barangay' => $validated['barangay'] ?? null,
-            //             'city' => $validated['city'] ?? null,
-            //             'province' => $validated['province'] ?? null,
-            //             'zip_code' => $validated['zip_code'] ?? null,
-            //             'contact_number' => $validated['contact_number'] ?? null,
-            //             'email' => $validated['email'] ?? null,
-            //             'school_attended' => $validated['school_attended'] ?? null,
-            //             'course_taken' => $validated['course_taken'] ?? null,
-            //             'year_graduated' => $validated['year_graduated'] ?? null,
-            //         ]
-            //     );
-
-            //     RequestAssistance::updateOrCreate(
-            //         ['form_token' => $formToken],
-            //         [
-            //             'needs' => $validated['needs'] ?? null,
-            //             'needs_details' => $validated['needs_details'] ?? null,
-            //         ]
-            //     );
-
-            //     Declaration::updateOrCreate(
-            //         ['form_token' => $formToken],
-            //         [
-            //             'signature_name' => $validated['signature_name'] ?? null,
-            //             'date_accomplished' => $validated['date_accomplished'] ?? null,
-            //             'or_no' => $validated['or_no'] ?? null,
-            //             'or_date' => $validated['or_date'] ?? null,
-            //             'or_amount' => $validated['or_amount'] ?? null,
-            //             'admit_name' => $validated['admit_name'] ?? null,
-            //             'mailing_address' => $validated['mailing_address'] ?? null,
-            //             'exam_for' => $validated['exam_for'] ?? null,
-            //             'place_of_exam' => $validated['place_of_exam'] ?? null,
-            //             'admission_date' => $validated['admission_date'] ?? null,
-            //             'time_of_exam' => $validated['time_of_exam'] ?? null,
-            //         ]
-            //     );
-            // });
-
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'message' => 'Form 1-01 saved',
-                    'form_token' => $formToken,
-                    'payload' => $validated,
-                ]);
-            }
-
-            return redirect('/')->with([
-                'status' => 'Form 1-01 saved',
-                'form_token' => $formToken,
-            ]);
-        } catch (\Throwable $e) {
-            Log::error('Form 1-01 save failed', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'request' => $request->all(),
-            ]);
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'message' => 'Failed to save Form 1-01',
-                    'error' => $e->getMessage(),
-                ], 500);
-            }
-            return redirect()->back()->withErrors('Failed to save Form 1-01: ' . $e->getMessage());
+        $formToken = $request->input('form_token');
+        if (!$formToken) {
+            $formToken = (string) Str::uuid();
         }
+
+        Form1_01::updateOrCreate(
+            ['form_token' => $formToken],
+            [
+                'last_name' => $validated['last_name'] ?? null,
+                'first_name' => $validated['first_name'] ?? null,
+                'middle_name' => $validated['middle_name'] ?? null,
+                'dob' => $validated['dob'] ?? null,
+                'sex' => $validated['sex'] ?? null,
+                'nationality' => $validated['nationality'] ?? null,
+                'unit' => $validated['unit'] ?? null,
+                'street' => $validated['street'] ?? null,
+                'barangay' => $validated['barangay'] ?? null,
+                'city' => $validated['city'] ?? null,
+                'province' => $validated['province'] ?? null,
+                'zip_code' => $validated['zip_code'] ?? null,
+                'contact_number' => $validated['contact_number'] ?? null,
+                'email' => $validated['email'] ?? null,
+                'school_attended' => $validated['school_attended'] ?? null,
+                'course_taken' => $validated['course_taken'] ?? null,
+                'year_graduated' => $validated['year_graduated'] ?? null,
+                'rtg' => $validated['rtg'] ?? null,
+                'amateur' => $validated['amateur'] ?? null,
+                'rphn' => $validated['rphn'] ?? null,
+                'rroc' => $validated['rroc'] ?? null,
+                'date_of_exam' => $validated['date_of_exam'] ?? null,
+                'signature_name' => $validated['signature_name'] ?? null,
+                'date_accomplished' => $validated['date_accomplished'] ?? null,
+                'or_no' => $validated['or_no'] ?? null,
+                'or_date' => $validated['or_date'] ?? null,
+                'or_amount' => $validated['or_amount'] ?? null,
+                'admit_name' => $validated['admit_name'] ?? null,
+                'mailing_address' => $validated['mailing_address'] ?? null,
+                'exam_for' => $validated['exam_for'] ?? null,
+                'place_of_exam' => $validated['place_of_exam'] ?? null,
+                'admission_date' => $validated['admission_date'] ?? null,
+                'time_of_exam' => $validated['time_of_exam'] ?? null,
+                'needs' => $validated['needs'] ?? null,
+                'needs_details' => $validated['needs_details'] ?? null,
+            ]
+        );
+
+        // -- (Commented this for now )Transaction method will not work as the current mongodb 
+        // -- replication mode is disabled, uncomment if fixed - Richmond
+
+        // DB::transaction(function () use ($validated, $formToken) {
+        //     Form101ApplicationDetails::updateOrCreate(
+        //         ['form_token' => $formToken],
+        //         [
+        //             'rtg' => $validated['rtg'] ?? null,
+        //             'amateur' => $validated['amateur'] ?? null,
+        //             'rphn' => $validated['rphn'] ?? null,
+        //             'rroc' => $validated['rroc'] ?? null,
+        //             'date_of_exam' => $validated['date_of_exam'] ?? null,
+        //         ]
+        //     );
+
+        //     ApplicantDetails::updateOrCreate(
+        //         ['form_token' => $formToken],
+        //         [
+        //             'last_name' => $validated['last_name'] ?? null,
+        //             'first_name' => $validated['first_name'] ?? null,
+        //             'middle_name' => $validated['middle_name'] ?? null,
+        //             'dob' => $validated['dob'] ?? null,
+        //             'sex' => $validated['sex'] ?? null,
+        //             'nationality' => $validated['nationality'] ?? null,
+        //             'unit' => $validated['unit'] ?? null,
+        //             'street' => $validated['street'] ?? null,
+        //             'barangay' => $validated['barangay'] ?? null,
+        //             'city' => $validated['city'] ?? null,
+        //             'province' => $validated['province'] ?? null,
+        //             'zip_code' => $validated['zip_code'] ?? null,
+        //             'contact_number' => $validated['contact_number'] ?? null,
+        //             'email' => $validated['email'] ?? null,
+        //             'school_attended' => $validated['school_attended'] ?? null,
+        //             'course_taken' => $validated['course_taken'] ?? null,
+        //             'year_graduated' => $validated['year_graduated'] ?? null,
+        //         ]
+        //     );
+
+        //     RequestAssistance::updateOrCreate(
+        //         ['form_token' => $formToken],
+        //         [
+        //             'needs' => $validated['needs'] ?? null,
+        //             'needs_details' => $validated['needs_details'] ?? null,
+        //         ]
+        //     );
+
+        //     Declaration::updateOrCreate(
+        //         ['form_token' => $formToken],
+        //         [
+        //             'signature_name' => $validated['signature_name'] ?? null,
+        //             'date_accomplished' => $validated['date_accomplished'] ?? null,
+        //             'or_no' => $validated['or_no'] ?? null,
+        //             'or_date' => $validated['or_date'] ?? null,
+        //             'or_amount' => $validated['or_amount'] ?? null,
+        //             'admit_name' => $validated['admit_name'] ?? null,
+        //             'mailing_address' => $validated['mailing_address'] ?? null,
+        //             'exam_for' => $validated['exam_for'] ?? null,
+        //             'place_of_exam' => $validated['place_of_exam'] ?? null,
+        //             'admission_date' => $validated['admission_date'] ?? null,
+        //             'time_of_exam' => $validated['time_of_exam'] ?? null,
+        //         ]
+        //     );
+        // });
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Form 1-01 saved',
+                'form_token' => $formToken,
+                'payload' => $validated,
+            ]);
+        }
+
+        // Commented for now for the default laravel validation error for the fields -Richmond
+        // Uncomment if there are changes or fix
+
+        return redirect('/')->with([
+            'status' => 'Form 1-01 saved',
+            'form_token' => $formToken,
+        ]);
+        // } catch (\Throwable $e) {
+        //     Log::error('Form 1-01 save failed', [
+        //         'error' => $e->getMessage(),
+        //         'trace' => $e->getTraceAsString(),
+        //         'request' => $request->all(),
+        //     ]);
+        //     if ($request->wantsJson()) {
+        //         return response()->json([
+        //             'message' => 'Failed to save Form 1-01',
+        //             'error' => $e->getMessage(),
+        //         ], 500);
+        //     }
+        //     return redirect()->back()->withErrors('Failed to save Form 1-01: ' . $e->getMessage());
+        // }
     }
 
     /**
