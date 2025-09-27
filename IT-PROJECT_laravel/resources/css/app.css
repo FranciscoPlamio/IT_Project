@@ -827,6 +827,11 @@ nav {
     margin-bottom: 0.5rem;
     color: #1e3a8a;
 }
+.news-content h5 {
+    font-size: 0.95rem;
+    color: #9ca3af;
+    margin-bottom: 0.75rem;
+}
 
 .news-content p {
     color: #6b7280;
