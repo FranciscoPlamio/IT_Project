@@ -68,11 +68,20 @@
 
         <!-- Notifications -->
         <section class="notifications">
-            <h3>Notifications</h3>
-            <p><strong>#0123456789 Request Certification</strong><br>Request for certification (#0123456789) is pending ...</p>
-            <p><strong>#003246463 Request Certification</strong><br>Request for certification (#003246463) is in progress ...</p>
-            <p><strong>#028476285 Request Certification</strong><br>Request for certification (#028476285) is in progress ...</p>
-        </section>
+        <h3>Notifications</h3>
+
+        @forelse ($notifications as $notif)
+            <p>
+                <strong>#{{ $notif->id }} Request Certification</strong><br>
+                Request 
+                {{ $notif->rtg ? 'RTG' : ($notif->amateur ? 'Amateur' : ($notif->rphn ? 'RPHN' : ($notif->rroc ? 'RROC' : 'Certification'))) }}
+                submitted on {{ $notif->formatted_date }} is {{ $notif->status }} ...
+            </p>
+        @empty
+            <p>No recent certification requests.</p>
+        @endforelse
+    </section>
+
 
         <!-- Certification Log -->
         <section class="cert-log">
