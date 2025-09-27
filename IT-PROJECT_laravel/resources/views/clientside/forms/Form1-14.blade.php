@@ -27,6 +27,11 @@
     <form class="form1-01-container" id="form114">
       <div class="form1-01-header">APPLICATION FOR TEMPORARY PERMIT TO PROPAGATE/DEMONSTRATE</div>
       <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
+      <div class="form1-01-warning">
+				<div class="form1-01-warning-title">WARNING:</div>
+				Ensure that all details in the name and date of birth fields are correct. We cannot edit those fields on site and you will need to set a new appointment.
+				<div class="form1-01-agree"><label><input type="checkbox"/> I agree / Malinaw sa akin</label></div>
+			</div>
 
       <div class="form-layout">
         <aside class="steps-sidebar">

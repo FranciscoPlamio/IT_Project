@@ -521,6 +521,11 @@
   .email-auth-btn:hover {
     background: #1a2230;
   }
+  .email-auth-btn:disabled {
+    background: #6c757d !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+  }
   .email-auth-resend {
     color: #2d3fd3;
     font-size: 0.98rem;
@@ -831,14 +836,6 @@ nav {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 0;
-}
-.forms-list-sub {
-  color: #2d3fd3;
-  font-size: 1.05rem;
-  margin-bottom: 18px;
-  display: inline-block;
-  cursor: pointer;
-  text-decoration: none;
 }
 .forms-list-table {
   width: 100%;

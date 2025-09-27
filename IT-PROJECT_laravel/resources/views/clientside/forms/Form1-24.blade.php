@@ -29,6 +29,11 @@
       <div style="text-align:center;font-size:0.97rem;margin-bottom:20px;">
         <strong>REPUBLIC OF THE PHILIPPINES</strong><br>
         <strong>QUEZON CITY</strong>
+        <div class="form1-01-warning">
+				<div class="form1-01-warning-title">WARNING:</div>
+				Ensure that all details in the name and date of birth fields are correct. We cannot edit those fields on site and you will need to set a new appointment.
+				<div class="form1-01-agree"><label><input type="checkbox"/> I agree / Malinaw sa akin</label></div>
+			</div>
       </div>
 
       <div class="form-layout">
