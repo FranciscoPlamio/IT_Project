@@ -175,8 +175,8 @@ class Form1_01_Controller extends Controller
                 'year_graduated' => ['required', 'string'],
 
                 // Assistance
-                'needs' => ['nullable', 'boolean'],
-                'needs_details' => ['nullable', 'string'],
+                'needs' => ['required', 'boolean'],
+                'needs_details' => ['required_if:needs,1', 'string', 'nullable'],
 
                 // Declaration
                 'signature_name' => ['nullable', 'string'],
@@ -191,7 +191,10 @@ class Form1_01_Controller extends Controller
                 'admission_date' => ['nullable', 'date'],
                 'time_of_exam' => ['nullable', 'string'],
             ],
-            [], // custom messages (leave empty if none)
+            [
+                'needs.required' => 'Please select Yes or No',
+                'needs_details.required_if' => 'Please specify your needs',
+            ], // custom messages 
             [
                 'dob' => 'date of birth', // custom attribute name
             ]

@@ -322,18 +322,31 @@
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
                                         examination?</label>
-                                    <div class="inline-radio"><label><input type="radio" name="needs"
-                                                value="1"
-                                                {{ isset($form101['needs']) && (string) $form101['needs'] === '1' ? 'checked' : '' }}>
-                                            Yes</label> <label><input type="radio" name="needs" value="0"
-                                                {{ isset($form101['needs']) && (string) $form101['needs'] === '0' ? 'checked' : '' }}>
-                                            No</label></div>
+                                    <div class="inline-radio">
+                                        <label>
+                                            <input type="radio" name="needs" value="1"
+                                                {{ old('needs', $form101['needs'] ?? '') == '1' ? 'checked' : '' }}>
+                                            Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="needs" value="0"
+                                                {{ old('needs', $form101['needs'] ?? '') == '0' ? 'checked' : '' }}>
+                                            No
+                                        </label>
+                                    </div>
+                                    @error('needs')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field" style="grid-column:span 2;">
                                     <label class="form-label">If yes, please indicate your specific needs and/or
-                                        request.</label>
+                                        request.
+                                    </label>
                                     <input class="form1-01-input" type="text" name="needs_details"
-                                        value="{{ $form101['needs_details'] ?? '' }}">
+                                        value="{{ old('needs_details', $form101['needs_details'] ?? '') }}">
+                                    @error('needs_details')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
