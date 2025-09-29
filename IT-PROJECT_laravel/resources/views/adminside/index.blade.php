@@ -27,8 +27,8 @@
 
 <form action="{{ route('admin.login.submit') }}" method="POST">
     @csrf
-    <label for="employee-id">Employee ID</label>
-    <input type="text" id="employee-id" name="employee_id" placeholder="Enter your ID" required>
+    <label for="employee-id">Email</label>
+    <input type="text" id="email" name="email" placeholder="Enter your email" required>
 
     <label for="password">Password</label>
     <div class="password-container">
