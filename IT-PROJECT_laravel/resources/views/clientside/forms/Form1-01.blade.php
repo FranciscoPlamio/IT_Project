@@ -324,18 +324,19 @@
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
                                         examination?</label>
-                                    <div class="inline-radio"><label><input type="radio" name="needs"
+                                    <div class="inline-radio"><label><input id="needs_yes" type="radio" name="needs"
                                                 value="1"
                                                 {{ isset($form101['needs']) && (string) $form101['needs'] === '1' ? 'checked' : '' }}>
                                             Yes</label> <label><input type="radio" name="needs" value="0"
+                                                id="needs_no"
                                                 {{ isset($form101['needs']) && (string) $form101['needs'] === '0' ? 'checked' : '' }}>
                                             No</label></div>
                                 </div>
                                 <div class="form-field" style="grid-column:span 2;">
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
-                                    <input class="form1-01-input" type="text" name="needs_details"
-                                        value="{{ $form101['needs_details'] ?? '' }}">
+                                    <input id="needs_details" class="form1-01-input" type="text" name="needs_details"
+                                        value="{{ $form101['needs_details'] ?? '' }}" disabled>
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -575,6 +576,23 @@
                         // }
                     });
                 }
+
+                // Toggle enable/disable for needs_details based on Yes/No selection
+                const needsYes = document.getElementById('needs_yes');
+                const needsNo = document.getElementById('needs_no');
+                const needsDetails = document.getElementById('needs_details');
+                function updateNeedsDetails() {
+                    if (!needsDetails) return;
+                    const isYes = !!(needsYes && needsYes.checked);
+                    needsDetails.disabled = !isYes;
+                    if (!isYes) {
+                        needsDetails.value = '';
+                    }
+                }
+                if (needsYes) needsYes.addEventListener('change', updateNeedsDetails);
+                if (needsNo) needsNo.addEventListener('change', updateNeedsDetails);
+                // Initialize state on load (handles prefilled values)
+                updateNeedsDetails();
 
                 showStep(stepsOrder[0]);
             })();

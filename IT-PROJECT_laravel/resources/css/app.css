@@ -1780,7 +1780,8 @@ nav {
 .form-card-caption {
     text-align: center;
     width: 100%;
-    max-width: 100%;
+    max-width: 420px; /* Match default image max-width */
+    margin: 0 auto;   /* Center to align with image */
 }
 
 .form-card-title {
@@ -1836,6 +1837,9 @@ nav {
     .form-card img {
         max-width: 320px;
     }
+    .form-card-caption {
+        max-width: 320px; /* Keep title box same width as image */
+    }
 
     .form-card-title {
         font-size: 0.85rem;
@@ -1863,6 +1867,9 @@ nav {
 
     .form-card img {
         max-width: 260px;
+    }
+    .form-card-caption {
+        max-width: 260px; /* Keep title box same width as image */
     }
 
     .form-card-title {
