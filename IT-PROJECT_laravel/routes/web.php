@@ -42,6 +42,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
     Route::get('1-01/edit', [Form1_01_Controller::class, 'edit'])->name('1-01.edit');
     Route::get('1-01/validation', [Form1_01_Controller::class, 'showValidation'])->name('1-01.validation');
+    Route::post('1-01', [Form1_01_Controller::class, 'storeAll'])->name('1-01.submit');
 
     Route::get('1-02', fn () => view('clientside.forms.Form1-02'))->name('1-02');
     Route::get('1-03', fn () => view('clientside.forms.Form1-03'))->name('1-03');
@@ -59,7 +60,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('1-25', fn () => view('clientside.forms.Form1-25'))->name('1-25');
     Route::get('1-25/text-message', fn () => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
 
-    Route::post('1-01', [Form1_01_Controller::class, 'storeAll'])->name('1-01.submit');
+    
 
     Route::post('1-02', function (Request $request) {
         return response()->json([
