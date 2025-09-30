@@ -155,23 +155,23 @@
                             <div class="form-grid-3">
                                 <div class="form-field"><label class="form-label">Last Name</label>
                                     <input class="form1-01-input" type="text" name="last_name"
-                                        value={{ old('last_name') }}>
+                                        value="{{ old('last_name', $form101['last_name'] ?? '') }}">
                                     @error('last_name')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field"><label class="form-label">First Name</label>
                                     <input class="form1-01-input" type="text" name="first_name"
-                                        value={{ old('first_name') }}>
+                                        value="{{ old('first_name', $form101['first_name'] ?? '') }}">
                                     @error('first_name')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field"><label class="form-label">Middle Name</label>
                                     <input class="form1-01-input" type="text" name="middle_name"
-                                        value={{ old('middle_name') }}>
+                                        value="{{ old('middle_name', $form101['middle_name'] ?? '') }}">
                                     @error('middle_name')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -181,35 +181,35 @@
                                         (mm/dd/yy)
                                     </label>
                                     <input class="form1-01-input" type="date" name="dob"
-                                        value={{ old('dob') }} required>
+                                        value="{{ old('dob', $form101['dob'] ?? '') }}">
                                     @error('dob')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field"><label class="form-label">Sex</label>
                                     <div class="inline-radio">
                                         <label>
                                             <input type="radio" name="sex" value="male"
-                                                {{ old('sex') === 'male' ? 'checked' : '' }}>
+                                                {{ old('sex', $form101['sex'] ?? '') === 'male' ? 'checked' : '' }}>
                                             Male
                                         </label>
                                         <label>
                                             <input type="radio" name="sex" value="female"
-                                                {{ old('sex') === 'female' ? 'checked' : '' }}>
+                                                {{ old('sex', $form101['sex'] ?? '') === 'female' ? 'checked' : '' }}>
                                             Female
                                         </label>
                                     </div>
                                     @error('sex')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
 
                                 <div class="form-field">
                                     <label class="form-label">Nationality</label>
                                     <input class="form1-01-input" type="text" name="nationality"
-                                        value={{ old('nationality') }}>
+                                        value="{{ old('nationality', $form101['nationality'] ?? '') }}">
                                     @error('nationality')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -217,17 +217,17 @@
                                 <div class="form-field">
                                     <label class="form-label">Unit/Rm/House/Bldg No.</label>
                                     <input class="form1-01-input" type="text" name="unit"
-                                        value={{ old('unit') }}>
+                                        value="{{ old('unit', $form101['unit'] ?? '') }}">
                                     @error('unit')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Street</label>
                                     <input class="form1-01-input" type="text" name="street"
-                                        value={{ old('street') }}>
+                                        value="{{ old('street', $form101['street'] ?? '') }}">
                                     @error('street')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -235,25 +235,25 @@
                                 <div class="form-field">
                                     <label class="form-label">Barangay</label>
                                     <input class="form1-01-input" type="text" name="barangay"
-                                        value={{ old('barangay') }}>
+                                        value="{{ old('barangay', $form101['barangay'] ?? '') }}">
                                     @error('barangay')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">City/Municipality</label>
                                     <input class="form1-01-input" type="text" name="city"
-                                        value={{ old('city') }}>
+                                        value="{{ old('city', $form101['city'] ?? '') }}">
                                     @error('city')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Province</label>
                                     <input class="form1-01-input" type="text" name="province"
-                                        value={{ old('province') }}>
+                                        value="{{ old('province', $form101['province'] ?? '') }}">
                                     @error('province')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -261,51 +261,51 @@
                                 <div class="form-field">
                                     <label class="form-label">Zip Code</label>
                                     <input class="form1-01-input" type="text" name="zip_code"
-                                        value={{ old('zip_code') }}>
+                                        value="{{ old('zip_code', $form101['zip_code'] ?? '') }}">
                                     @error('zip_code')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Contact Number</label>
                                     <input class="form1-01-input" type="text" name="contact_number"
-                                        value={{ old('contact_number') }}>
+                                        value="{{ old('contact_number', $form101['contact_number'] ?? '') }}">
                                     @error('contact_number')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Email Address</label>
                                     <input class="form1-01-input" type="email" name="email"
-                                        value={{ old('email') }}>
+                                        value="{{ old('email', $form101['email'] ?? '') }}">
                                     @error('email')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
                             <div class="form-field">
                                 <label class="form-label">School Attended</label>
                                 <input class="form1-01-input" type="text" name="school_attended"
-                                    value={{ old('school_attended') }}>
+                                    value="{{ old('school_attended', $form101['school_attended'] ?? '') }}">
                                 @error('school_attended')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-grid-3">
                                 <div class="form-field">
                                     <label class="form-label">Course Taken</label>
                                     <input class="form1-01-input" type="text" name="course_taken"
-                                        value={{ old('course_taken') }}>
+                                        value="{{ old('course_taken', $form101['course_taken'] ?? '') }}">
                                     @error('course_taken')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Year Graduated</label>
                                     <input class="form1-01-input" type="text" name="year_graduated"
-                                        value={{ old('year_graduated') }}>
+                                        value="{{ old('year_graduated', $form101['year_graduated'] ?? '') }}">
                                     @error('year_graduated')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -335,7 +335,7 @@
                                         </label>
                                     </div>
                                     @error('needs')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field" style="grid-column:span 2;">
@@ -345,7 +345,7 @@
                                     <input class="form1-01-input" type="text" name="needs_details"
                                         value="{{ old('needs_details', $form101['needs_details'] ?? '') }}">
                                     @error('needs_details')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>

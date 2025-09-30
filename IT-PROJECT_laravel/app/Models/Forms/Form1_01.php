@@ -2,6 +2,7 @@
 
 namespace App\Models\Forms;
 
+use App\Models\User;
 use MongoDB\Laravel\Eloquent\Model;
 
 class Form1_01 extends Model
@@ -51,6 +52,7 @@ class Form1_01 extends Model
         'time_of_exam',
         'needs',
         'needs_details',
+        'user_id',
     ];
 
     // Fields data type
@@ -67,4 +69,9 @@ class Form1_01 extends Model
         'admission_date' => 'date',
         'needs' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

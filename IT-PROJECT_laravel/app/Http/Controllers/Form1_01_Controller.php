@@ -9,6 +9,7 @@ use App\Models\Forms\Form1_01\Form101ApplicationDetails;
 use App\Models\Forms\Form1_01\ApplicantDetails;
 use App\Models\Forms\Form1_01\RequestAssistance;
 use App\Models\Forms\Form1_01\Declaration;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -29,65 +30,62 @@ class Form1_01_Controller extends Controller
      */
     public function edit(Request $request)
     {
+        // Check token
         $token = $request->query('token') ?: $request->input('token');
-        $applicantId = $request->query('applicant_id') ?: $request->input('applicant_id');
-
-        if (!$token && $applicantId) {
-            // $applicant = ApplicantDetails::find($applicantId);
-            // if ($applicant) {
-            //     $token = $applicant->form_token;
-            // }
-        }
-
         if (!$token) {
-            return redirect()->route('forms.1-01')->withErrors('Missing form token or applicant ID.');
+            return redirect()->route('forms.1-01')->withErrors('Missing form token.');
         }
 
-        // $app = Form101ApplicationDetails::with(['applicantDetails', 'requestAssistance', 'declaration'])
-        //     ->where('form_token', $token)
-        //     ->first();
+        // Check form
+        $form = Form1_01::where('form_token', $token)->first();
+        if (!$form) {
+            return redirect()->route('forms.1-01')->withErrors('Form not found.');
+        }
 
-        // if (!$app) {
-        //     return redirect()->route('forms.1-01')->withErrors('Form not found for the provided token.');
-        // }
+        // Check if user is editing his/her own form.
+        $sessionEmail = session('email_verified');
+        $user = User::where('email', $sessionEmail)->first();
+        if (!$user || (string) $form->user_id !== (string) $user->_id) {
+            return redirect()->route('forms.1-01')->withErrors('Unauthorized access to this form.');
+        }
 
         $payload = [
-            // 'form_token' => $token,
-            // 'rtg' => $app->rtg,
-            // 'amateur' => $app->amateur,
-            // 'rphn' => $app->rphn,
-            // 'rroc' => $app->rroc,
-            // 'date_of_exam' => optional($app->date_of_exam)->toDateString(),
-            // 'last_name' => optional($app->applicantDetails)->last_name,
-            // 'first_name' => optional($app->applicantDetails)->first_name,
-            // 'middle_name' => optional($app->applicantDetails)->middle_name,
-            // 'dob' => optional(optional($app->applicantDetails)->dob)->toDateString(),
-            // 'sex' => optional($app->applicantDetails)->sex,
-            // 'nationality' => optional($app->applicantDetails)->nationality,
-            // 'unit' => optional($app->applicantDetails)->unit,
-            // 'street' => optional($app->applicantDetails)->street,
-            // 'barangay' => optional($app->applicantDetails)->barangay,
-            // 'city' => optional($app->applicantDetails)->city,
-            // 'province' => optional($app->applicantDetails)->province,
-            // 'zip_code' => optional($app->applicantDetails)->zip_code,
-            // 'contact_number' => optional($app->applicantDetails)->contact_number,
-            // 'email' => optional($app->applicantDetails)->email,
-            // 'school_attended' => optional($app->applicantDetails)->school_attended,
-            // 'course_taken' => optional($app->applicantDetails)->course_taken,
-            // 'year_graduated' => optional($app->applicantDetails)->year_graduated,
-            // 'needs' => optional($app->requestAssistance)->needs,
-            // 'needs_details' => optional($app->requestAssistance)->needs_details,
-            // 'signature_name' => optional($app->declaration)->signature_name,
-            // 'date_accomplished' => optional(optional($app->declaration)->date_accomplished)->toDateString(),
-            // 'or_no' => optional($app->declaration)->or_no,
-            // 'or_date' => optional(optional($app->declaration)->or_date)->toDateString(),
-            // 'or_amount' => optional($app->declaration)->or_amount,
-            // 'admit_name' => optional($app->declaration)->admit_name,
-            // 'mailing_address' => optional($app->declaration)->mailing_address,
-            // 'exam_for' => optional($app->declaration)->exam_for,
-            // 'place_of_exam' => optional($app->declaration)->place_of_exam,
-            // 'admission_date' => optional(optional($app->declaration)->admission_date)->toDateString(),
-            // 'time_of_exam' => optional($app->declaration)->time_of_exam,
+            'form_token' => $token,
+            'rtg' => optional($form)->rtg,
+            'amateur' => optional($form)->amateur,
+            'rphn' => optional($form)->rphn,
+            'rroc' => optional($form)->rroc,
+            'date_of_exam' => optional($form->date_of_exam)->toDateString(),
+            'last_name' => optional($form)->last_name,
+            'first_name' => optional($form)->first_name,
+            'middle_name' => optional($form)->middle_name,
+            'dob' => optional($form->dob)->toDateString(),
+            'sex' => optional($form)->sex,
+            'nationality' => optional($form)->nationality,
+            'unit' => optional($form)->unit,
+            'street' => optional($form)->street,
+            'barangay' => optional($form)->barangay,
+            'city' => optional($form)->city,
+            'province' => optional($form)->province,
+            'zip_code' => optional($form)->zip_code,
+            'contact_number' => optional($form)->contact_number,
+            'email' => optional($form)->email,
+            'school_attended' => optional($form)->school_attended,
+            'course_taken' => optional($form)->course_taken,
+            'year_graduated' => optional($form)->year_graduated,
+            'needs' => optional($form)->needs,
+            'needs_details' => optional($form)->needs_details,
+            'signature_name' => optional($form)->signature_name,
+            'date_accomplished' => optional($form->date_accomplished)->toDateString(),
+            'or_no' => optional($form)->or_no,
+            'or_date' => optional($form->or_date)->toDateString(),
+            'or_amount' => optional($form)->or_amount,
+            'admit_name' => optional($form)->admit_name,
+            'mailing_address' => optional($form)->mailing_address,
+            'exam_for' => optional($form)->exam_for,
+            'place_of_exam' => optional($form)->place_of_exam,
+            'admission_date' => optional($form->admission_date)->toDateString(),
+            'time_of_exam' => optional($form)->time_of_exam,
         ];
 
         return view('clientside.forms.Form1-01', [
@@ -205,6 +203,10 @@ class Form1_01_Controller extends Controller
             $formToken = (string) Str::uuid();
         }
 
+        // User email
+        $userEmail = session('email_verified');
+        $user = User::where('email', $userEmail)->first();
+
         Form1_01::updateOrCreate(
             ['form_token' => $formToken],
             [
@@ -243,10 +245,9 @@ class Form1_01_Controller extends Controller
                 'time_of_exam' => $validated['time_of_exam'] ?? null,
                 'needs' => $validated['needs'] ?? null,
                 'needs_details' => $validated['needs_details'] ?? null,
+                'user_id' => $user->_id,
             ]
         );
-
-
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -255,9 +256,6 @@ class Form1_01_Controller extends Controller
                 'payload' => $validated,
             ]);
         }
-
-        // Commented for now for the default laravel validation error for the fields -Richmond
-        // Uncomment if there are changes or fix
 
         return redirect()->route('forms.1-01.validation', ['token' => $formToken])->with([
             'status' => 'Form 1-01 saved',
