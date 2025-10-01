@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::connection('mongodb')->create('form1_01', function (Blueprint $collection) {
             $collection->unique('form_token'); // unique index for updateOrCreate
+            $collection->index('user_id');  // add index for user_id
         });
     }
 

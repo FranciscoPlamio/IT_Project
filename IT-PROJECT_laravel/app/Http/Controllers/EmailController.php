@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -38,13 +39,13 @@ class EmailController extends Controller
         }
 
         $email = $request->input('email');
-        
+
         // Generate a verification token
         $token = Str::random(32);
-        
+
         // Store the token in cache for 15 minutes
         Cache::put('email_auth_' . $token, $email, 900); // 15 minutes
-        
+
         try {
             // Send the authentication email
             Mail::send('emails.auth-email', [
@@ -53,7 +54,7 @@ class EmailController extends Controller
                 'verification_url' => route('email-auth.verify', ['token' => $token])
             ], function ($message) use ($email) {
                 $message->to($email)
-                        ->subject('Email Authentication - NTC Forms System');
+                    ->subject('Email Authentication - NTC Forms System');
             });
 
             return response()->json([
@@ -61,11 +62,10 @@ class EmailController extends Controller
                 'message' => 'Authentication email sent successfully. Please check your inbox.',
                 'email' => $email
             ]);
-
         } catch (\Exception $e) {
             // Log the error
             Log::error('Email sending failed: ' . $e->getMessage());
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to send authentication email. Please try again later.'
@@ -79,7 +79,7 @@ class EmailController extends Controller
     public function verifyEmail(Request $request, $token)
     {
         $email = Cache::get('email_auth_' . $token);
-        
+
         if (!$email) {
             if ($request->expectsJson()) {
                 return response()->json([
@@ -87,16 +87,30 @@ class EmailController extends Controller
                     'message' => 'Invalid or expired verification token.'
                 ], 400);
             }
-            
+
             return redirect()->route('email-auth')->with('error', 'Invalid or expired verification token.');
         }
 
         // Remove the token from cache
         Cache::forget('email_auth_' . $token);
-        
+
         // Store verified email in session
         session(['email_verified' => $email]);
-        
+
+        // Store verified email in database
+        try {
+            if (!User::where('email', $email)->exists()) {
+                $user = User::create([
+                    'email' => $email,
+                ]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unexpected error: ' . $e->getMessage(),
+            ], 500);
+        }
+
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
@@ -105,7 +119,7 @@ class EmailController extends Controller
                 'redirect_url' => route('forms.list')
             ]);
         }
-        
+
         // Redirect to forms list for direct browser requests
         return redirect()->route('forms.list')->with('success', 'Email verified successfully!');
     }
@@ -116,14 +130,14 @@ class EmailController extends Controller
     public function checkEmailStatus(Request $request)
     {
         $verifiedEmail = session('email_verified');
-        
+
         if ($verifiedEmail) {
             return response()->json([
                 'verified' => true,
                 'email' => $verifiedEmail
             ]);
         }
-        
+
         return response()->json([
             'verified' => false
         ]);
@@ -135,7 +149,7 @@ class EmailController extends Controller
     public function clearEmailVerification(Request $request)
     {
         session()->forget('email_verified');
-        
+
         // Redirect to home page after signing out
         return redirect()->route('homepage')->with('success', 'You have been signed out successfully.');
     }

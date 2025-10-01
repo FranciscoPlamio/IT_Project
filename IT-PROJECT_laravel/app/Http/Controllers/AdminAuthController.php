@@ -51,9 +51,10 @@ public function login(Request $request)
 
     public function dashboard(Request $request)
 {
-    if (!$request->session()->has('admin')) {
-        return redirect()->route('admin.login');
-    }
+    // Commented for now to test the login
+    // if (!$request->session()->has('admin')) {
+    //     return redirect()->route('admin.login');
+    // }
 
     // user
     $user = User::find($request->session()->get('admin'));

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Validation - Application for Radio Operator Examination (Form 1-01)</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body>
   <header>
     <div class="top-bar">
@@ -68,9 +70,9 @@
               .filter(Boolean)
               .join(', ');
           }
-          return typeof rawValue === 'string' && rawValue.length > 0
-            ? rawValue.split('\\').pop().split('/').pop()
-            : 'No file selected';
+          return typeof rawValue === 'string' && rawValue.length > 0 ?
+            rawValue.split('\\').pop().split('/').pop() :
+            'No file selected';
         }
 
         // Map checkbox values to their labels when applicable
@@ -141,9 +143,18 @@
           'TP RROC-Aircraft': 'TP RROC-Aircraft (Foreign Pilot)',
           'others': 'OTHERS, specify'
         },
-        sex: { male: 'Male', female: 'Female' },
-        employment_status: { employed: 'Employed', unemployed: 'Unemployed' },
-        employment_type: { local: 'Local', foreign: 'Foreign' }
+        sex: {
+          male: 'Male',
+          female: 'Female'
+        },
+        employment_status: {
+          employed: 'Employed',
+          unemployed: 'Unemployed'
+        },
+        employment_type: {
+          local: 'Local',
+          foreign: 'Foreign'
+        }
       };
 
       function formatValue102(key, rawValue) {
@@ -188,7 +199,11 @@
 
       // ===== Form 1-03 mapping and renderer =====
       const labelMaps103 = {
-        application_type: { new: 'NEW', renewal: 'RENEWAL', modification: 'MODIFICATION' },
+        application_type: {
+          new: 'NEW',
+          renewal: 'RENEWAL',
+          modification: 'MODIFICATION'
+        },
         permit_type: {
           amateur_operator: 'Amateur Radio Operator Certificate',
           amateur_station: 'Amateur Radio Station License',
@@ -202,7 +217,10 @@
           class_c: 'Class C',
           class_d: 'Class D'
         },
-        sex: { male: 'Male', female: 'Female' }
+        sex: {
+          male: 'Male',
+          female: 'Female'
+        }
       };
 
       function formatValue103(key, rawValue) {
@@ -232,7 +250,11 @@
 
       // ===== Form 1-11 mapping and renderer =====
       const labelMaps111 = {
-        application_type: { new: 'NEW', renewal: 'RENEWAL', modification: 'MODIFICATION' },
+        application_type: {
+          new: 'NEW',
+          renewal: 'RENEWAL',
+          modification: 'MODIFICATION'
+        },
         permit_type: {
           construction_permit: 'CONSTRUCTION PERMIT',
           radio_station_license: 'RADIO STATION LICENSE'
@@ -245,7 +267,16 @@
           others: 'OTHERS'
         },
         station_class: {
-          rt: 'RT', fx: 'FX', fb: 'FB', ml: 'ML', p: 'P', bc: 'BC', fc: 'FC', fa: 'FA', ma: 'MA', tc: 'TC',
+          rt: 'RT',
+          fx: 'FX',
+          fb: 'FB',
+          ml: 'ML',
+          p: 'P',
+          bc: 'BC',
+          fc: 'FC',
+          fa: 'FA',
+          ma: 'MA',
+          tc: 'TC',
           others_station: 'OTHERS'
         }
       };
@@ -303,13 +334,13 @@
           list.appendChild(dt);
           list.appendChild(dd);
         }
-      } 
+      }
       // ===== Form 1-14 mapping and renderer =====
       const labelMaps114 = {
         // Currently Form 1-14 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue114(key, rawValue) {
         const map = labelMaps114[key];
         if (map) {
@@ -319,6 +350,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render114() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-14 Details:';
@@ -368,8 +400,8 @@
       const labelMaps118 = {
         // Currently Form 1-18 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue118(key, rawValue) {
         const map = labelMaps118[key];
         if (map) {
@@ -379,6 +411,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render118() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-18 Details:';
@@ -398,8 +431,8 @@
       const labelMaps119 = {
         // Currently Form 1-19 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue119(key, rawValue) {
         const map = labelMaps119[key];
         if (map) {
@@ -409,6 +442,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render119() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-19 Details:';
@@ -428,8 +462,8 @@
       const labelMaps120 = {
         // Currently Form 1-20 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue120(key, rawValue) {
         const map = labelMaps120[key];
         if (map) {
@@ -439,6 +473,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render120() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-20 Details:';
@@ -458,8 +493,8 @@
       const labelMaps121 = {
         // Currently Form 1-21 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue121(key, rawValue) {
         const map = labelMaps121[key];
         if (map) {
@@ -469,6 +504,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render121() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-21 Details:';
@@ -488,8 +524,8 @@
       const labelMaps122 = {
         // Currently Form 1-22 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue122(key, rawValue) {
         const map = labelMaps122[key];
         if (map) {
@@ -499,6 +535,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render122() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-22 Details:';
@@ -518,8 +555,8 @@
       const labelMaps124 = {
         // Currently Form 1-24 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue124(key, rawValue) {
         const map = labelMaps124[key];
         if (map) {
@@ -529,6 +566,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render124() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-24 Details:';
@@ -548,9 +586,9 @@
       const labelMaps125 = {
         // Currently Form 1-25 uses text inputs only; keep for future mappings
       };
-      
-      
-      function formatValue125(key, rawValue) {    
+
+
+      function formatValue125(key, rawValue) {
         const map = labelMaps125[key];
         if (map) {
           if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
@@ -559,6 +597,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render125() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-25 Details:';
@@ -578,8 +617,8 @@
       const labelMaps126 = {
         // Currently Form 1-26 uses text inputs only; keep for future mappings
       };
-      
-      
+
+
       function formatValue126(key, rawValue) {
         const map = labelMaps126[key];
         if (map) {
@@ -589,6 +628,7 @@
         if (Array.isArray(rawValue)) return rawValue.join(', ');
         return rawValue ?? '';
       }
+
       function render126() {
         const titleEl = document.querySelector('.validation-section-title');
         if (titleEl) titleEl.textContent = 'Form 1-26 Details:';
@@ -604,7 +644,7 @@
         }
       }
       // Wire Back to Edit with token
-      (function wireBackToEdit(){
+      (function wireBackToEdit() {
         try {
           const btn = document.getElementById('backToEditBtn');
           if (!btn) return;
@@ -614,8 +654,10 @@
           const token = tokenFromServer || tokenFromQuery || storedToken;
           const url = new URL("{{ route('forms.1-01.edit') }}", window.location.origin);
           if (token) url.searchParams.set('token', token);
+          console.log(token);
           btn.href = url.toString();
-        } catch (e) { /* noop */ }
+        } catch (e) {
+          /* noop */ }
       })();
 
       // Show only the active form (fallback to whichever has data)
@@ -683,4 +725,5 @@
     </script>
   </main>
 </body>
-</html> 
+
+</html>
