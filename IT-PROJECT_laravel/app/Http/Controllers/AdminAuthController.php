@@ -15,11 +15,15 @@ class AdminAuthController extends Controller   // <-- rename this
         return view('adminside.index');   // stays correct
     }
 
-    public function login(Request $request)
+public function login(Request $request)
 {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required'
+    ], [
+        'email.required' => 'Email is required.',
+        'email.email'    => 'Please enter a valid email address.',
+        'password.required' => 'Password is required.'
     ]);
 
     // Look up user in MongoDB
@@ -32,7 +36,8 @@ class AdminAuthController extends Controller   // <-- rename this
         return redirect()->route('adminside.dashboard');
     }
 
-    return back()->with('error', 'Invalid credentials, please try again.');
+    // Invalid credentials
+    return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
 }
 
     public function logout(Request $request)

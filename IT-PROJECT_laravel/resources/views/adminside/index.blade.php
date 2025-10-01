@@ -19,20 +19,32 @@
             <h1 id="welcome-text"></h1>
             <p>Please enter your details.</p>
 
-            @if(session('error'))
-    <div style="color:red; margin-bottom:10px;">
+<!-- {{-- Show Laravel validation errors --}} -->
+@if ($errors->any())
+    <div style="color:red; margin-bottom:10px; margin-left:15px;">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+{{-- Show manual error (invalid credentials) --}}
+@if(session('error'))
+    <div style="color:red; margin-bottom:10px; margin-left:15px;">
         {{ session('error') }}
     </div>
 @endif
 
 <form action="{{ route('admin.login.submit') }}" method="POST">
     @csrf
-    <label for="employee-id">Email</label>
-    <input type="text" id="email" name="email" placeholder="Enter your email" required>
+    <label for="email">Email</label>
+    <input type="text" id="email" name="email" placeholder="Enter your email" value="{{ old('email') }}" required>
 
     <label for="password">Password</label>
     <div class="password-container">
-        <input type="password" id="password" name="password" placeholder="Enter you password" required>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
         <span>
             <img src="{{ asset('images/eye.png') }}" alt="eye icon" id="toggle-password" style="cursor:pointer;">
         </span>
@@ -40,6 +52,7 @@
 
     <button type="submit">SIGN IN</button>
 </form>
+
 
         </div>
     </div>
