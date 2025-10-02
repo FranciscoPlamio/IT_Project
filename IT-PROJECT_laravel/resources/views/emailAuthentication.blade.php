@@ -36,12 +36,7 @@
             }
         </style>
     </x-slot:head>
-    <!-- Header -->
-    <header>
-        <x-top-bar />
 
-        <x-navbar />
-    </header>
     <main>
         <div class="email-auth-container">
             <h2>Enter your E-mail</h2>

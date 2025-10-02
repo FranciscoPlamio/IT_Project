@@ -1,16 +1,30 @@
+@props([
+    'title' => 'NTC CAR Baguio',
+    'head' => '',
+    'formHeader' => null,
+    'showNavbar' => true,
+])
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{{ $title ?? 'NTC CAR Baguio' }}</title>
+    <title>{{ $title }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{ $head ?? '' }}
+    {{ $head }}
 </head>
 
 <body>
+    <header>
+        <x-top-bar :form-header="$formHeader" />
+
+        @if ($showNavbar)
+            <x-navbar />
+        @endif
+    </header>
     <main>
         {{ $slot }}
     </main>

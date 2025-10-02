@@ -1,35 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']" :show-navbar="false">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Application for Radio Operator Examination (Form 1-01)</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
-    <header>
-        <div class="top-bar">
-            <a href="{{ route('homepage') }}" aria-label="Go to homepage">
-        <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
-      </a>
-            <div class="title">
-                <p>Republic of the Philippines</p>
-                <h1>National Telecommunication Commission<br><span>Cordillera Administrative Region, Baguio City
-                        Philippines</span></h1>
-            </div>
-
-            <!-- form name in the side of the header it may vary depending on the form -->
-            <div style="position:absolute;top:20px;right:40px;text-align:right;font-size:0.97rem;">
-                <div><b>Form No.</b> <u>NTC 1-01</u></div>
-                <div><b>Revision No.</b> <u>03</u></div>
-                <div><b>Revision Date</b> <u>03/31/2023</u></div>
-            </div>
-        </div>
-    </header>
     <main>
-
         <form class="form1-01-container" id="form101" method="POST" action="{{ route('forms.1-01.submit') }}">
             @csrf
             <input type="hidden" name="form_token"
@@ -324,8 +295,8 @@
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
                                         examination?</label>
-                                    <div class="inline-radio"><label><input id="needs_yes" type="radio" name="needs"
-                                                value="1"
+                                    <div class="inline-radio"><label><input id="needs_yes" type="radio"
+                                                name="needs" value="1"
                                                 {{ isset($form101['needs']) && (string) $form101['needs'] === '1' ? 'checked' : '' }}>
                                             Yes</label> <label><input type="radio" name="needs" value="0"
                                                 id="needs_no"
@@ -335,8 +306,8 @@
                                 <div class="form-field" style="grid-column:span 2;">
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
-                                    <input id="needs_details" class="form1-01-input" type="text" name="needs_details"
-                                        value="{{ $form101['needs_details'] ?? '' }}" disabled>
+                                    <input id="needs_details" class="form1-01-input" type="text"
+                                        name="needs_details" value="{{ $form101['needs_details'] ?? '' }}" disabled>
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -581,6 +552,7 @@
                 const needsYes = document.getElementById('needs_yes');
                 const needsNo = document.getElementById('needs_no');
                 const needsDetails = document.getElementById('needs_details');
+
                 function updateNeedsDetails() {
                     if (!needsDetails) return;
                     const isYes = !!(needsYes && needsYes.checked);
@@ -598,6 +570,4 @@
             })();
         </script>
     </main>
-</body>
-
-</html>
+</x-layout>

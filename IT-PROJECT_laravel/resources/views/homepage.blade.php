@@ -1,11 +1,4 @@
-<x-layout :title="'NTC Car Baguio'">
-    <!-- Header -->
-    <header>
-        <x-top-bar />
-
-        <x-navbar />
-    </header>
-
+<x-layout>
     <!-- Body -->
     <section class="banner">
         <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner" />

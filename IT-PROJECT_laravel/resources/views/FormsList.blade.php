@@ -1,9 +1,5 @@
 <x-layout :title="'List of Harmonized Forms'">
-    <header>
-        <x-top-bar />
 
-        <x-navbar />
-    </header>
     <main>
         <div class="forms-list-container">
             @if (session('success'))

@@ -1,10 +1,4 @@
 <x-layout :title="'Showcase Forms'">
-    <!-- Header -->
-    <header>
-        <x-top-bar />
-
-        <x-navbar />
-    </header>
     <main>
         <div class="forms-gallery-container forms-gallery--md forms-gallery--comfy">
             <div class="forms-gallery-header">LIST OF HARMONIZED FORMS</div>
