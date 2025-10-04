@@ -23,10 +23,20 @@ Route::get('/Displayforms', function () {
     return view('Displayforms');
 })->name('forms.display')->middleware('email.verified');
 
+// Payment method selection page
+Route::get('/payment/method', function () {
+    return view('payment.payment-method');
+})->name('payment.method');
+
 // Simple GCash payment demo page
 Route::get('/payment/gcash', function () {
     return view('payment.gcash');
 })->name('payment.gcash');
+
+// Cash payment confirmation page
+Route::get('/payment/cash', function () {
+    return view('payment.cash');
+})->name('payment.cash');
 
 // Email Authentication routes
 Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');

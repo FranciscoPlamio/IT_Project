@@ -27,7 +27,7 @@
       <dl class="validation-list" id="validationList"></dl>
       <div class="validation-btns">
         <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-        <a class="form1-01-btn" href="{{ route('payment.gcash') }}">Proceed to Payment</a>
+        <a class="form1-01-btn" href="{{ route('payment.method') }}">Proceed to Payment</a>
       </div>
     </div>
     <script>
