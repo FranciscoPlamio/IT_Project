@@ -11,7 +11,9 @@
 <body>
   <header>
     <div class="top-bar">
-      <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
+      <a href="{{ route('homepage') }}" aria-label="Go to homepage">
+        <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
+      </a>
       <div class="title">
         <p>Republic of the Philippines</p>
         <h1>National Telecommunication Commission<br><span>BIR Road, East Triangle, Diliman, Quezon City</span></h1>
