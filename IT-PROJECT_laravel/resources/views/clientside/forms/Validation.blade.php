@@ -169,11 +169,34 @@
         return rawValue ?? '';
       }
 
-      function render101() {
-        const payload = server101 && typeof server101 === 'object' ? server101 : data;
-        for (const key in payload) {
-          if (key === 'form_token') continue;
-          const value = formatValue(key, payload[key]);
+
+
+      // Unified function to render form data from server FORM 1-01 (pj)
+      function renderFormData(formData, formType = '1-01') {
+        const titleEl = document.querySelector('.validation-section-title');
+        if (titleEl) {
+          titleEl.textContent = `Form ${formType} Details:`;
+        }
+        
+        // Clear existing content
+        list.innerHTML = '';
+        
+        if (!formData || typeof formData !== 'object') {
+          const dt = document.createElement('dt');
+          dt.textContent = 'No Data';
+          const dd = document.createElement('dd');
+          dd.textContent = 'No form data available';
+          list.appendChild(dt);
+          list.appendChild(dd);
+          return;
+        }
+        
+        for (const key in formData) {
+          if (key === 'form_token' || key === '_id' || key === 'user_id' || key === 'created_at' || key === 'updated_at') continue;
+          
+          const value = formatValue(key, formData[key]);
+          if (value === '' || value === null || value === undefined) continue;
+          
           const dt = document.createElement('dt');
           dt.textContent = formatKey(key);
           const dd = document.createElement('dd');
@@ -181,6 +204,13 @@
           list.appendChild(dt);
           list.appendChild(dd);
         }
+      }
+
+      
+
+      function render101() {
+        const payload = server101 && typeof server101 === 'object' ? server101 : data;
+        renderFormData(payload, '1-01');
       }
 
       function render102() {
@@ -664,7 +694,7 @@
 
       // Show only the active form (fallback to whichever has data)
       if (activeForm === '1-01' && server101) {
-        render101();
+        renderFormData(server101, '1-01');
       } else if (activeForm === '1-02' && has102) {
         render102();
       } else if (activeForm === '1-03' && has103) {
@@ -693,8 +723,8 @@
         render125();
       } else if (activeForm === '1-26' && has126) {
         render126();
-      } else if (has101) {
-        render101();
+      } else if (server101) {
+        renderFormData(server101, '1-01');
       } else if (has102) {
         render102();
       } else if (has103) {

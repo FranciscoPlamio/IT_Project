@@ -278,6 +278,13 @@ class Form1_01_Controller extends Controller
             return redirect()->route('forms.1-01')->withErrors('Form not found for the provided token.');
         }
 
+        // Check if user is viewing his/her own form
+        $sessionEmail = session('email_verified');
+        $user = User::where('email', $sessionEmail)->first();
+        if (!$user || (string) $form->user_id !== (string) $user->_id) {
+            return redirect()->route('forms.1-01')->withErrors('Unauthorized access to this form.');
+        }
+
         return view('clientside.forms.Validation', [
             'form101' => $form,
             'activeForm' => '1-01',
