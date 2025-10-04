@@ -10,4 +10,11 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    server: {
+        host: 'localhost', // Allow external connections (change depending on your IP)
+        port: 5173,
+        hmr: {
+            host: 'localhost', //(change depending on your IP)
+        },
+    },
 });
