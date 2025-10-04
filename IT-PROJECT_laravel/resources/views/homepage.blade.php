@@ -28,34 +28,4 @@
         </a>
     </section>
 
-
-    <section class="news">
-        <h2>CURRENT NEWS</h2>
-
-        <div class="news-item">
-            <img src="{{ asset('images/news-icon.png') }}" alt="News Icon" class="news-icon">
-            <div class="news-content">
-                <h3>PCC, NTC sign pact to promote fair competition in data transmission industry</h3>
-                <h5>Published September 19, 2025 8:29pm</h5>
-                <p>"The Philippine Competition Commission (PCC) and the National Telecommunications Commission (NTC)
-                    have signed a pact to promote fair competition and regulatory...</p>
-                <a
-                    href="https://www.gmanetwork.com/news/topstories/nation/959736/pcc-ntc-sign-pact-to-promote-fair-competition-in-data-transmission-industry/story/">Read
-                    more</a>
-            </div>
-        </div>
-
-        <div class="news-item">
-            <img src="{{ asset('images/news-icon.png') }}" alt="News Icon" class="news-icon">
-            <div class="news-content">
-                <h3>NTC adopts NorMin broadband mapping system for nationwide use</h3>
-                <h5>Published August 26, 2025, 6:51 pm</h5>
-                <p>The National Telecommunications Commission (NTC) launched the nationwide broadband mapping system
-                    here on Tuesday, developed by engineers and information technology professionals from Northern
-                    Mindanao...</p>
-                <a href="https://www.pna.gov.ph/articles/1257367">Read more</a>
-            </div>
-        </div>
-    </section>
-
 </x-layout>
