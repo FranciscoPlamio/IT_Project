@@ -160,8 +160,13 @@
 
             let countdownTimer = null;
 
-            // Show disclaimer modal on page load
-            showDisclaimer();
+            // Show disclaimer modal on page load only if not already agreed
+            if (!sessionStorage.getItem('privacyNoticeAgreed')) {
+                showDisclaimer();
+            } else {
+                // If already agreed, enable the form immediately
+                enableEmailForm();
+            }
 
             // Disclaimer modal functions
             function showDisclaimer() {
@@ -204,6 +209,8 @@
             if (agreeBtn) {
                 agreeBtn.addEventListener('click', function() {
                     if (agreeBtn.disabled) return;
+                    // Set session storage to remember user agreed
+                    sessionStorage.setItem('privacyNoticeAgreed', 'true');
                     closeDisclaimer();
                     enableEmailForm();
                 });
