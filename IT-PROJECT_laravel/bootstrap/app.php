@@ -13,8 +13,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'email.verified' => \App\Http\Middleware\EmailVerified::class,
+            'block.mobile'   => \App\Http\Middleware\BlockMobileDevices::class, // 👈 add this
         ]);
-    })
+    }) 
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+    ->create();

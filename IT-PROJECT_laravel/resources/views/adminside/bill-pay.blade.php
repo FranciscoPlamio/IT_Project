@@ -26,7 +26,7 @@
       <div class="modal-content">
         <h3>Are you sure you want to log out?</h3>
         <div class="modal-buttons">
-          <form id="logout-form" method="POST" action="{{ route('logout') }}">
+          <form id="logout-form" method="POST" action="{{ route('admin.logout') }}">
             @csrf
             <button type="submit" id="confirm-logout" class="confirm-btn">Yes</button>
             <button type="button" id="cancel-logout" class="cancel-btn">No</button>

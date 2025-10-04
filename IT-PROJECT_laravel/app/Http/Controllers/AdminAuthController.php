@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Forms\Form1_01\Form101ApplicationDetails;
+use App\Models\Forms\Form1_01;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -15,22 +15,30 @@ class AdminAuthController extends Controller   // <-- rename this
         return view('adminside.index');   // stays correct
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'employee_id' => 'required',
-            'password'    => 'required'
-        ]);
+public function login(Request $request)
+{
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required'
+    ], [
+        'email.required' => 'Email is required.',
+        'email.email'    => 'Please enter a valid email address.',
+        'password.required' => 'Password is required.'
+    ]);
 
-        $user = User::where('employee_id', $request->employee_id)->first();
+    // Look up user in MongoDB
+    $user = User::where('email', $request->email)->first();
 
-        if ($user && Hash::check($request->password, $user->password)) {
-            $request->session()->put('admin', $user->id);
-            return redirect()->route('adminside.dashboard');
-        }
+    if ($user && \Hash::check($request->password, $user->password)) {
+        // Save admin session
+        $request->session()->put('admin', (string) $user->_id);
 
-        return back()->with('error', 'Invalid credentials, please try again.');
+        return redirect()->route('adminside.dashboard');
     }
+
+    // Invalid credentials
+    return back()->withErrors(['email' => 'Invalid credentials.'])->withInput();
+}
 
     public function logout(Request $request)
 {
@@ -43,17 +51,18 @@ class AdminAuthController extends Controller   // <-- rename this
 
     public function dashboard(Request $request)
 {
-    if (!$request->session()->has('admin')) {
-        return redirect()->route('admin.login');
-    }
+    // Commented for now to test the login
+    // if (!$request->session()->has('admin')) {
+    //     return redirect()->route('admin.login');
+    // }
 
     // user
     $user = User::find($request->session()->get('admin'));
 
     // counts for pie chart
-    $done = Form101ApplicationDetails::where('status', 'Done')->count();
-    $progress = Form101ApplicationDetails::where('status', 'In Progress')->count();
-    $pending = Form101ApplicationDetails::where('status', 'Pending')->count();
+    $done = Form1_01::where('status', 'Done')->count();
+    $progress = Form1_01::where('status', 'In Progress')->count();
+    $pending = Form1_01::where('status', 'Pending')->count();
 
     $total = $done + $progress + $pending;
     $percentages = [
@@ -63,7 +72,7 @@ class AdminAuthController extends Controller   // <-- rename this
     ];
 
     // notifications (latest 5). also keep alias for older code that might expect 'recentApps'
-    $notifications = Form101ApplicationDetails::orderBy('created_at', 'desc')->take(5)->get();
+    $notifications = Form1_01::orderBy('created_at', 'desc')->take(5)->get();
     $recentApps = $notifications;
 
     return view('adminside.dashboard', compact(

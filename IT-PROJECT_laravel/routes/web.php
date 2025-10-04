@@ -7,10 +7,11 @@ use App\Http\Controllers\Form1_01_Controller;
 use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EmailController;
+use App\Http\Middleware\BlockMobileDevices;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+     return view('welcome');
+});
 
 // Forms list page
 Route::get('/forms-list', function () {
@@ -41,6 +42,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('1-01', fn () => view('clientside.forms.Form1-01'))->name('1-01');
     Route::get('1-01/edit', [Form1_01_Controller::class, 'edit'])->name('1-01.edit');
     Route::get('1-01/validation', [Form1_01_Controller::class, 'showValidation'])->name('1-01.validation');
+    Route::post('1-01', [Form1_01_Controller::class, 'storeAll'])->name('1-01.submit');
 
     Route::get('1-02', fn () => view('clientside.forms.Form1-02'))->name('1-02');
     Route::get('1-03', fn () => view('clientside.forms.Form1-03'))->name('1-03');
@@ -58,7 +60,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('1-25', fn () => view('clientside.forms.Form1-25'))->name('1-25');
     Route::get('1-25/text-message', fn () => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
 
-    Route::post('1-01', [Form1_01_Controller::class, 'storeAll'])->name('1-01.submit');
+    
 
     Route::post('1-02', function (Request $request) {
         return response()->json([
@@ -204,3 +206,11 @@ Route::get('/adminside/bill-pay', function () {
     return view('adminside.bill-pay');
 })->name('adminside.bill-pay');
 
+Route::prefix('adminside')
+    ->middleware(\App\Http\Middleware\BlockMobileDevices::class)
+    ->group(function () {
+        Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+        Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
+        Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('adminside.dashboard');
+        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    });

@@ -53,5 +53,11 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordInput.type = "password";
         });
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.innerWidth < 1024) { // blocks < 1024px (tablet & mobile)
+            document.body.innerHTML = "<h2 style='text-align:center; margin-top:20%;'>This site is only accessible on desktop view.</h2>";
+        }
+    });
 });
 
