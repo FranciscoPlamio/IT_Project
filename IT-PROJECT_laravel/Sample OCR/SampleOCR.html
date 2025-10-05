@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ID Card OCR with Configurable Layouts</title>
+  <script src="js/tesseract.min.js"></script>
+  <script src="js/ocr.js"></script>
+  <style>
+    #preview, .crop {
+      max-width: 200px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      padding: 3px;
+    }
+    .field {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>ID Card OCR with Multiple Layouts</h2>
+  
+  <label for="idType">Select ID Type:</label>
+  <select id="idType">
+    <option value="umid">UMID</option>
+    <option value="driver">Driver’s License</option>
+    <option value="passport">Passport</option>
+    <option value="nationalID">Philippine National ID</option>
+    <option value="sssID">SSS ID</option>
+  </select>
+  <br><br>
+
+  <input type="file" id="fileInput" accept="image/*">
+  <button id="processBtn">Process ID</button>
+  
+  <h3>Uploaded Image:</h3>
+  <img id="preview" alt="Preview will appear here">
+  
+  <h3>Extracted Data:</h3>
+  <div id="results"></div>
+  
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const preview = document.getElementById("preview");
+    const resultsDiv = document.getElementById("results");
+    const idTypeSelect = document.getElementById("idType");
+
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        preview.src = URL.createObjectURL(fileInput.files[0]);
+      }
+    });
+
+    document.getElementById("processBtn").addEventListener("click", async () => {
+      if (!fileInput.files.length) {
+        resultsDiv.textContent = "Please select an image file first.";
+        return;
+      }
+
+      const idType = idTypeSelect.value;
+      const reader = new IDCardReader(fileInput.files[0], idType);
+      resultsDiv.textContent = "Processing, please wait...";
+
+      try {
+        const data = await reader.process();
+        resultsDiv.innerHTML = "";
+
+        for (const key in data) {
+          const fieldDiv = document.createElement("div");
+          fieldDiv.className = "field";
+          fieldDiv.innerHTML = `
+            <strong>${key}:</strong> ${data[key].text}<br>
+            <img class="crop" src="${data[key].crop}" alt="${key} crop">
+          `;
+          resultsDiv.appendChild(fieldDiv);
+        }
+      } catch (err) {
+        resultsDiv.textContent = "Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
