@@ -5,12 +5,6 @@ class IDCardReader {
 
         // Crop definitions per ID type
         this.layouts = {
-          umid: {
-	    commonRefNumber: { x: 0.57, y: 0.28, w: 0.45, h: 0.06 },
-            surName:         { x: 0.43, y: 0.41, w: 0.15, h: 0.05 },
-            givenName:       { x: 0.43, y: 0.50, w: 0.15, h: 0.05 },
-            middleName:      { x: 0.43, y: 0.64, w: 0.15, h: 0.05 }
-          },
           driver: {
             licenseNumber: { x: 0.32, y: 0.65, w: 0.25, h: 0.07 },
             name:          { x: 0.32, y: 0.31, w: 0.80, h: 0.07 },
@@ -31,12 +25,6 @@ class IDCardReader {
             middleName: { x: 0.44, y: 0.64, w: 0.45, h: 0.07 },  // Middle Name
             birthdate:  { x: 0.44, y: 0.75, w: 0.40, h: 0.07 },  // Date of Birth
             address:    { x: 0.06, y: 0.86, w: 0.75, h: 0.10 }   // Address block
-          },
-          sssID: {
-	    commonRefNumber: { x: 0.55, y: 0.28, w: 0.45, h: 0.06 },
-            surName:         { x: 0.43, y: 0.41, w: 0.15, h: 0.05 },
-            givenName:       { x: 0.43, y: 0.51, w: 0.15, h: 0.04 },
-            middleName:      { x: 0.43, y: 0.64, w: 0.15, h: 0.05 }
           }
         };
       }
