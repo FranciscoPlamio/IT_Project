@@ -65,24 +65,6 @@
             </div>
         </section>
 
-
-        <!-- Notifications -->
-        <section class="notifications">
-        <h3>Notifications</h3>
-
-        @forelse ($notifications as $notif)
-            <p>
-                <strong>#{{ $notif->id }} Request Certification</strong><br>
-                Request 
-                {{ $notif->rtg ? 'RTG' : ($notif->amateur ? 'Amateur' : ($notif->rphn ? 'RPHN' : ($notif->rroc ? 'RROC' : 'Certification'))) }}
-                submitted on {{ $notif->formatted_date }} is {{ $notif->status }} ...
-            </p>
-        @empty
-            <p>No recent certification requests.</p>
-        @endforelse
-    </section>
-
-
         <!-- Certification Log -->
         <section class="cert-log">
     <h1>Certification Log</h1>

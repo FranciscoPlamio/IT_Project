@@ -98,82 +98,48 @@ body {
     flex: 1; 
     padding: 30px; 
     display: grid; 
-    grid-template-columns: 2fr 1fr; 
-    grid-gap: 20px; }
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+}
 
 /* Stats */
 .pie { 
     display: flex; 
-    gap: 15px; 
-    grid-column: 1 / 2; 
+    justify-content: space-around;
+    gap: 20px; 
+    grid-column: 1 / 1; 
 }
+
 .pie-card {
     background: #fff;
-    height: 140px;
+    height: 160px; 
     padding: 40px 75px;       
     border-radius: 10px; 
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;                
+    justify-content: center; 
+    gap: 15px;                
     box-shadow: 0 2px 8px rgba(0,0,0,.05);
-    font-size: 13px;         
+    font-size: 14px;         
 }
 
 .pie-card strong {
-    font-size: 15px;         
+    font-size: 16px;         
 }
 
 .pie-circle {
-    width: 54px;
-    height: 54px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: conic-gradient(var(--color, #000) 0% var(--percent, 0%), #d1d3d7 var(--percent, 0%) 100%);
 }
 
-/* Assign colors */
-.pie-circle.done {
-    --color: #22c55e; 
-}
-.pie-circle.progress {
-    --color: #facc15; 
-}
-.pie-circle.pending {
-    --color: #ef4444;
-}
 
-/* Notifications */
-.notifications {
-    background: #fff; 
-    padding: 20px; 
-    border-radius: 12px; 
-    font-size: 13px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.05); 
-    grid-column: 2 / 3; 
-    align-self: start;
-
-    max-height: 300px;       
-    overflow-y: scroll;      
-    scrollbar-width: thin;   
-}
-.notifications h3 { 
-    margin-bottom: 15px; 
-    font-size: 16px; 
-    font-family: 'Poppins-600', sans-serif;  
-}
-.notifications p { 
-    margin-bottom: 12px; 
-    border-bottom: 2px solid #eee; 
-    padding-bottom: 10px; 
-    line-height: 1.4; 
-}
-.notifications p:last-child { 
-    border: none; 
-}
 
 /* Certification Log */
 .cert-log {
-    margin-top: -70px;
+    margin-top: -300px;
     margin-bottom: 50px;
     background: #fff; border-radius: 14px; 
     padding: 20px; 

@@ -49,21 +49,22 @@ public function login(Request $request)
 }
 
 
-    public function dashboard(Request $request)
+   public function dashboard(Request $request)
 {
-    // Commented for now to test the login
+    // Optional: Keep login session validation if needed
     // if (!$request->session()->has('admin')) {
     //     return redirect()->route('admin.login');
     // }
 
-    // user
+    // Get admin user info
     $user = User::find($request->session()->get('admin'));
 
-    // counts for pie chart
+    // Counts for pie chart
     $done = Form1_01::where('status', 'Done')->count();
     $progress = Form1_01::where('status', 'In Progress')->count();
     $pending = Form1_01::where('status', 'Pending')->count();
 
+    // Calculate percentages
     $total = $done + $progress + $pending;
     $percentages = [
         'done'     => $total > 0 ? round(($done / $total) * 100) : 0,
@@ -71,17 +72,16 @@ public function login(Request $request)
         'pending'  => $total > 0 ? round(($pending / $total) * 100) : 0,
     ];
 
-    // notifications (latest 5). also keep alias for older code that might expect 'recentApps'
-    $notifications = Form1_01::orderBy('created_at', 'desc')->take(5)->get();
-    $recentApps = $notifications;
+    // Recent applications (for certification log)
+    $recentApps = Form1_01::orderBy('created_at', 'desc')->take(5)->get();
 
+    // Return view with only necessary data
     return view('adminside.dashboard', compact(
         'user',
         'percentages',
         'done',
         'progress',
         'pending',
-        'notifications',
         'recentApps'
     ));
 }
