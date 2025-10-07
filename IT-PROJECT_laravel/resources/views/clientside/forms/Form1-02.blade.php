@@ -1,7 +1,10 @@
 <x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
 
     <main>
-        <form class="form1-01-container" id="form102">
+        <form class="form1-01-container" id="form102" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+
             <div class="form1-01-header">APPLICATION FOR RADIO OPERATOR CERTIFICATE</div>
             <div class="form1-01-note">
                 <strong>NOTE:</strong> The system asks for additional info when applicant is a minor.
@@ -34,25 +37,16 @@
                     <section class="step-content active" id="step-personal">
                         <fieldset>
                             <legend>Applicant's Details</legend>
+
+                            <!-- Name fields-->
+                            <x-forms.name-fields :form="$form101 ?? []" />
+
+                            <!-- formOne-blueprint-three fields -->
+                            <x-forms.formOne-blueprint-three :form="$form101 ?? []" />
+
+
                             <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Last Name</label>
-                                    <input class="form1-01-input" type="text" name="last_name" required>
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">First Name</label>
-                                    <input class="form1-01-input" type="text" name="first_name" required>
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Middle Name</label>
-                                    <input class="form1-01-input" type="text" name="middle_name">
-                                </div>
-                            </div>
-                            <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Date of Birth</label>
-                                    <input class="form1-01-input" type="date" name="dob" required>
-                                </div>
+
                                 <div class="form-field">
                                     <label class="form-label">Weight (kg)</label>
                                     <input class="form1-01-input" type="text" name="weight">
@@ -62,19 +56,8 @@
                                     <input class="form1-01-input" type="text" name="height">
                                 </div>
                             </div>
-                            <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Sex</label>
-                                    <div class="inline-radio">
-                                        <label><input type="radio" name="sex" value="male" required>
-                                            Male</label>
-                                        <label><input type="radio" name="sex" value="female"> Female</label>
-                                    </div>
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Nationality</label>
-                                    <input class="form1-01-input" type="text" name="nationality">
-                                </div>
+
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Employment Status</label>
                                     <div class="inline-radio">
@@ -84,8 +67,6 @@
                                             Unemployed</label>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">If Employed</label>
                                     <div class="inline-radio">
@@ -96,46 +77,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Unit/Rm/House/Bldg No.</label>
-                                    <input class="form1-01-input" type="text" name="unit_no">
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Street</label>
-                                    <input class="form1-01-input" type="text" name="street">
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Barangay</label>
-                                    <input class="form1-01-input" type="text" name="barangay">
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">City/Municipality</label>
-                                    <input class="form1-01-input" type="text" name="city">
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Province</label>
-                                    <input class="form1-01-input" type="text" name="province">
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Zip Code</label>
-                                    <input class="form1-01-input" type="text" name="zip_code">
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Contact Number</label>
-                                    <input class="form1-01-input" type="text" name="contact_number" required>
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email" required>
-                                </div>
-                            </div>
+
+                            <!-- address fields format -->
+                            <x-forms.address-fields :form="$form101 ?? []" />
+
+                            <!-- -->
                             <div class="step-actions">
                                 <button type="button" class="btn-primary" data-next>Next</button>
                             </div>
@@ -157,8 +103,7 @@
                                     <input class="form1-01-input" type="text" name="modification_reason"
                                         placeholder="Reason (if modification)">
                                     <label class="form-label">No. of Years</label>
-                                    <input class="form1-01-input" type="text" name="years"
-                                        placeholder="e.g., 2">
+                                    <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2">
                                 </div>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     <label class="form-label">Type of Certificate</label>
@@ -264,7 +209,7 @@
                 </div>
             </div>
         </form>
-        <a id="validationLink02" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+
         <script>
             (function() {
                 const stepsOrder = ['personal', 'application', 'exam', 'declaration'];
@@ -347,24 +292,26 @@
                     validateBtn.addEventListener('click', () => {
                         if (!validateActiveStep()) return;
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) {
-                                entries[key] = value.name || '';
-                            } else {
-                                if (entries[key]) {
-                                    if (Array.isArray(entries[key])) entries[key].push(value);
-                                    else entries[key] = [entries[key], value];
-                                } else {
-                                    entries[key] = value;
-                                }
-                            }
-                        }
-                        localStorage.setItem('form1-02-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-02');
-                        if (validationLink02) {
-                            window.location.href = validationLink02.href;
-                        }
+                        form.submit();
+
+                        // const entries = {};
+                        // for (const [key, value] of formData.entries()) {
+                        //     if (value instanceof File) {
+                        //         entries[key] = value.name || '';
+                        //     } else {
+                        //         if (entries[key]) {
+                        //             if (Array.isArray(entries[key])) entries[key].push(value);
+                        //             else entries[key] = [entries[key], value];
+                        //         } else {
+                        //             entries[key] = value;
+                        //         }
+                        //     }
+                        // }
+                        // localStorage.setItem('form1-02-data', JSON.stringify(entries));
+                        // localStorage.setItem('active-form', '1-02');
+                        // if (validationLink02) {
+                        //     window.location.href = validationLink02.href;
+                        // }
                     });
                 }
 

@@ -1,7 +1,9 @@
 <x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']" :show-navbar="false">
 
     <main>
-        <form class="form1-01-container" id="form101" method="POST" action="{{ route('forms.1-01.submit') }}">
+
+        <form class="form1-01-container" id="form101" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
             @csrf
             <input type="hidden" name="form_token"
                 value="{{ isset($form101['form_token']) ? $form101['form_token'] : session('form_token') }}">
@@ -115,6 +117,7 @@
                             <div class="form-field">
                                 <label class="form-label">DATE OF EXAM (mm/dd/yy)</label>
                                 <input class="form1-01-input" type="date" name="date_of_exam"
+                                    max="{{ date('Y-m-d') }}"
                                     value="{{ isset($form101['date_of_exam']) ? $form101['date_of_exam'] : '' }}">
                             </div>
                         </div>
@@ -125,143 +128,23 @@
                     <section class="step-content" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-3">
-                                <div class="form-field"><label class="form-label">Last Name</label>
-                                    <input class="form1-01-input" type="text" name="last_name"
-                                        value="{{ old('last_name', $form101['last_name'] ?? '') }}">
-                                    @error('last_name')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field"><label class="form-label">First Name</label>
-                                    <input class="form1-01-input" type="text" name="first_name"
-                                        value="{{ old('first_name', $form101['first_name'] ?? '') }}">
-                                    @error('first_name')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field"><label class="form-label">Middle Name</label>
-                                    <input class="form1-01-input" type="text" name="middle_name"
-                                        value="{{ old('middle_name', $form101['middle_name'] ?? '') }}">
-                                    @error('middle_name')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Date of Birth
-                                        (mm/dd/yy)
-                                    </label>
-                                    <input class="form1-01-input" type="date" name="dob"
-                                        value="{{ old('dob', $form101['dob'] ?? '') }}">
-                                    @error('dob')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field"><label class="form-label">Sex</label>
-                                    <div class="inline-radio">
-                                        <label>
-                                            <input type="radio" name="sex" value="male"
-                                                {{ old('sex', $form101['sex'] ?? '') === 'male' ? 'checked' : '' }}>
-                                            Male
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="sex" value="female"
-                                                {{ old('sex', $form101['sex'] ?? '') === 'female' ? 'checked' : '' }}>
-                                            Female
-                                        </label>
-                                    </div>
-                                    @error('sex')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
 
-                                <div class="form-field">
-                                    <label class="form-label">Nationality</label>
-                                    <input class="form1-01-input" type="text" name="nationality"
-                                        value="{{ old('nationality', $form101['nationality'] ?? '') }}">
-                                    @error('nationality')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Unit/Rm/House/Bldg No.</label>
-                                    <input class="form1-01-input" type="text" name="unit"
-                                        value="{{ old('unit', $form101['unit'] ?? '') }}">
-                                    @error('unit')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Street</label>
-                                    <input class="form1-01-input" type="text" name="street"
-                                        value="{{ old('street', $form101['street'] ?? '') }}">
-                                    @error('street')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Barangay</label>
-                                    <input class="form1-01-input" type="text" name="barangay"
-                                        value="{{ old('barangay', $form101['barangay'] ?? '') }}">
-                                    @error('barangay')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">City/Municipality</label>
-                                    <input class="form1-01-input" type="text" name="city"
-                                        value="{{ old('city', $form101['city'] ?? '') }}">
-                                    @error('city')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Province</label>
-                                    <input class="form1-01-input" type="text" name="province"
-                                        value="{{ old('province', $form101['province'] ?? '') }}">
-                                    @error('province')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Zip Code</label>
-                                    <input class="form1-01-input" type="text" name="zip_code"
-                                        value="{{ old('zip_code', $form101['zip_code'] ?? '') }}">
-                                    @error('zip_code')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Contact Number</label>
-                                    <input class="form1-01-input" type="text" name="contact_number"
-                                        value="{{ old('contact_number', $form101['contact_number'] ?? '') }}">
-                                    @error('contact_number')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email"
-                                        value="{{ old('email', $form101['email'] ?? '') }}">
-                                    @error('email')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            <!-- Name fields-->
+                            <x-forms.name-fields :form="$form101 ?? []" />
+
+                            <!-- formOne-blueprint-three fields -->
+                            <x-forms.formOne-blueprint-three :form="$form101 ?? []" />
+
+                            <!-- address fields format -->
+                            <x-forms.address-fields :form="$form101 ?? []" />
+
+
                             <div class="form-field">
                                 <label class="form-label">School Attended</label>
                                 <input class="form1-01-input" type="text" name="school_attended"
                                     value="{{ old('school_attended', $form101['school_attended'] ?? '') }}">
                                 @error('school_attended')
-                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-grid-3">
@@ -270,7 +153,7 @@
                                     <input class="form1-01-input" type="text" name="course_taken"
                                         value="{{ old('course_taken', $form101['course_taken'] ?? '') }}">
                                     @error('course_taken')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
@@ -278,7 +161,7 @@
                                     <input class="form1-01-input" type="text" name="year_graduated"
                                         value="{{ old('year_graduated', $form101['year_graduated'] ?? '') }}">
                                     @error('year_graduated')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -295,19 +178,31 @@
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
                                         examination?</label>
-                                    <div class="inline-radio"><label><input id="needs_yes" type="radio"
-                                                name="needs" value="1"
-                                                {{ isset($form101['needs']) && (string) $form101['needs'] === '1' ? 'checked' : '' }}>
-                                            Yes</label> <label><input type="radio" name="needs" value="0"
-                                                id="needs_no"
-                                                {{ isset($form101['needs']) && (string) $form101['needs'] === '0' ? 'checked' : '' }}>
-                                            No</label></div>
+                                    <div class="inline-radio">
+                                        <label>
+                                            <input id="needs_yes" type="radio" name="needs" value="1"
+                                                {{ old('needs', $form101['needs'] ?? '') === '1' ? 'checked' : '' }}>
+                                            Yes
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="needs" value="0" id="needs_no"
+                                                {{ old('needs', $form101['needs'] ?? '') === '0' ? 'checked' : '' }}>
+                                            No
+                                        </label>
+
+                                    </div>
+                                    @error('needs')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field" style="grid-column:span 2;">
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
                                         name="needs_details" value="{{ $form101['needs_details'] ?? '' }}" disabled>
+                                    @error('needs_details')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -411,8 +306,7 @@
 
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button><a id="validationLink"
-                                    href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+                                    id="validateBtn">Proceed to Validation</button>
                             </div>
                         </fieldset>
                     </section>

@@ -4,46 +4,13 @@ namespace App\Models\Forms;
 
 use App\Models\User;
 
-class Form1_01 extends BaseForm
+class Form1_02 extends BaseForm
 {
     // Table name
-    protected $table = 'form1_01';
+    protected $table = 'form1_02';
 
     // Database fields
-    protected $extraFields = [
-        'dob',
-        'sex',
-        'nationality',
-        'unit',
-        'street',
-        'barangay',
-        'city',
-        'province',
-        'zip_code',
-        'contact_number',
-        'email',
-        'school_attended',
-        'course_taken',
-        'year_graduated',
-        'rtg',
-        'amateur',
-        'rphn',
-        'rroc',
-        'date_of_exam',
-        'signature_name',
-        'date_accomplished',
-        'or_no',
-        'or_date',
-        'or_amount',
-        'admit_name',
-        'mailing_address',
-        'exam_for',
-        'place_of_exam',
-        'admission_date',
-        'time_of_exam',
-        'needs',
-        'needs_details',
-    ];
+    protected $extraFields = [];
 
     // Fields data type
     protected $casts = [

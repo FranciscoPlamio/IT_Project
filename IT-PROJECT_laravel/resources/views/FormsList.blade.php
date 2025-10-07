@@ -49,90 +49,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Form No. NTC 1-01</td>
-                            <td>Application for Radio Operator Examination</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-01') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-02</td>
-                            <td>Application for Radio Operator Certificate</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-02') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-03</td>
-                            <td>Application for Amateur Radio Operator Certificate/AmateurRadio Station License</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-03') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-09</td>
-                            <td>Aplication for Permit to Purchase/Possess/Sell/Transfer</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-09') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-11</td>
-                            <td>Application for Construction Permit/Radio Station License</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-11') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-13</td>
-                            <td>Form D (For Modification)</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-13') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-14</td>
-                            <td>Application for Temporary Permit to Propagate/Demonstrate</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-14') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-16</td>
-                            <td>Application for Permit to Transport Radio Transmitter/Transceiver</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-16') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-18</td>
-                            <td>Application for Dealer/Manufacturer/Service/Center/Retailer/Reseller/Permit/CPE
-                                Supplier Accreditation</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-18') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-19</td>
-                            <td>Application for Certificate of Registration (WDN/SRD/RFID/SRRS/Public Trunk Radio)
-                            </td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-19') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-20</td>
-                            <td>Application for Certificate of Registration - Value Added Services</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-20') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-21</td>
-                            <td>Application for Duplicate of Permit/License/Certificate</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-21') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-22</td>
-                            <td>Application for TVRO Registration Certificate/TVRO/Station License/CATV Station
-                                License</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-22') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-24</td>
-                            <td>Affidavit of Ownership and Loss with Undertaking</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-24') }}">Sign up</a></td>
-                        </tr>
-                        <tr>
-                            <td>Form No. NTC 1-25</td>
-                            <td>Complaint Form</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-25') }}">Sign up</a></td>
-                        </tr>
+                        @foreach ($forms as $form)
+                            <tr>
+                                <td>Form No. NTC {{ $form['number'] }}</td>
+                                <td>{{ $form['title'] }}</td>
+                                <td>
+                                    <a class="forms-signup-btn"
+                                        href="{{ route('forms.show', ['formType' => $form['number']]) }}">
+                                        Sign up</a>
+                                </td>
+                            </tr>
+                        @endforeach
                         <tr>
                             <td>Form No. NTC 1-25</td>
                             <td>Complaint on Text Message</td>
                             <td><a class="forms-signup-btn" href="{{ route('forms.1-25-text-message') }}">Sign
                                     up</a></td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>
