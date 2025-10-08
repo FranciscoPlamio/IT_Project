@@ -78,13 +78,6 @@ public function login(Request $request)
     // Get latest forms first (descending by created_at)
     $recentApps = FormsTransactions::orderBy('created_at', 'desc')->take(15)->get();
 
-    // Add an incremental number (latest = 1)
-    $counter = 1;
-    foreach ($recentApps as $app) {
-        $app->display_number = str_pad($counter, 4, '0', STR_PAD_LEFT);
-        $counter++;
-    }
-
     return view('adminside.dashboard', compact(
         'user',
         'percentages',
