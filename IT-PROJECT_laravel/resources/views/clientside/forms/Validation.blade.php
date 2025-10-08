@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
     <header>
         <div class="top-bar">
             <a href="{{ route('homepage') }}" aria-label="Go to homepage">

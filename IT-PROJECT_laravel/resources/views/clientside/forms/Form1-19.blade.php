@@ -199,7 +199,7 @@
                         </fieldset>
                     </section>
         </form>
-        <a id="validationLink19" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+
         <script>
             (function() {
                 const stepsOrder = ['equipment', 'applicant', 'particulars', 'declaration'];
