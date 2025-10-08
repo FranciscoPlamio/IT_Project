@@ -41,6 +41,11 @@ Route::get('/payment/transaction', function () {
     return view('payment.transaction');
 })->name('payment.transaction');
 
+// Requirements page
+Route::get('/requirements', function () {
+    return view('requirements');
+})->name('requirements');
+
 // Email Authentication routes
 Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');
 Route::post('/email-auth', [EmailController::class, 'sendAuthEmail'])->name('email-auth.submit');

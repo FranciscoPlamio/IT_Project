@@ -2340,3 +2340,336 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* Requirements Page Styles */
+.requirements-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.07);
+    padding: 32px 24px 24px 24px;
+    font-size: 1.13rem;
+}
+
+.requirements-header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.requirements-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1e3a8a;
+}
+
+.requirements-header p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0;
+}
+
+.requirements-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 16px;
+}
+
+.nav-btn {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    color: #333;
+    white-space: nowrap;
+}
+
+.nav-btn:hover {
+    background: #e9ecef;
+    border-color: #3b82f6;
+}
+
+.nav-btn.active {
+    background: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+.requirements-section {
+    display: none;
+}
+
+.requirements-section.active {
+    display: block;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.zoom-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.zoom-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zoom-btn:hover {
+    background: #1d4ed8;
+    transform: scale(1.1);
+}
+
+.zoom-btn.zoom-reset {
+    background: #6b7280;
+    font-size: 12px;
+    width: 60px;
+    border-radius: 20px;
+}
+
+.zoom-btn.zoom-reset:hover {
+    background: #4b5563;
+}
+
+.charter-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, cursor 0.2s ease;
+    cursor: pointer;
+}
+
+.charter-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Fullscreen Modal Styles */
+.fullscreen-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.fullscreen-content {
+    position: relative;
+    max-width: 95%;
+    max-height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.close-btn {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10001;
+}
+
+.close-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.fullscreen-zoom-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.fullscreen-zoom-controls .zoom-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+}
+
+.fullscreen-zoom-controls .zoom-btn.zoom-reset {
+    width: 70px;
+    font-size: 14px;
+}
+
+.fullscreen-image {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    cursor: grab;
+}
+
+.fullscreen-image:active {
+    cursor: grabbing;
+}
+
+/* Responsive Design for Requirements Page */
+@media (max-width: 768px) {
+    .requirements-container {
+        margin: 20px auto;
+        padding: 20px 16px;
+    }
+    
+    .requirements-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .requirements-nav {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .nav-btn {
+        text-align: center;
+        padding: 10px 16px;
+    }
+    
+    .image-container {
+        padding: 16px;
+    }
+    
+    .zoom-controls {
+        padding: 6px 12px;
+        gap: 6px;
+    }
+    
+    .zoom-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .zoom-btn.zoom-reset {
+        width: 50px;
+        font-size: 10px;
+    }
+    
+    .fullscreen-zoom-controls {
+        padding: 8px 16px;
+        gap: 8px;
+    }
+    
+    .fullscreen-zoom-controls .zoom-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .fullscreen-zoom-controls .zoom-btn.zoom-reset {
+        width: 60px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .requirements-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .image-container {
+        padding: 12px;
+    }
+    
+    .charter-image {
+        border-radius: 6px;
+    }
+    
+    .zoom-controls {
+        padding: 4px 8px;
+        gap: 4px;
+        margin-bottom: 10px;
+    }
+    
+    .zoom-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .zoom-btn.zoom-reset {
+        width: 45px;
+        font-size: 9px;
+    }
+    
+    .close-btn {
+        top: -40px;
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    
+    .fullscreen-zoom-controls {
+        padding: 6px 12px;
+        gap: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .fullscreen-zoom-controls .zoom-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    
+    .fullscreen-zoom-controls .zoom-btn.zoom-reset {
+        width: 50px;
+        font-size: 10px;
+    }
+}
