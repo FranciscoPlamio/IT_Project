@@ -15,15 +15,15 @@ class FormsTransactions extends Model
     protected $fillable = [
         'form_id',
         'form_token',
-        'form_type', // Form number ex. "form1-01", "form1-02"
+        'form_type', 
         'user_id',
-        'status',   // Status of form ex. "pending", "approved", "denied" 
-        'payment_status',   // Status of payment ex. "paid", "unpaid"
-        'payment_method',   // "Cash", "GCash"
-        'payment_reference',  // Reference number if GCash
+        'status',   
+        'payment_status',   
+        'payment_method',   
+        'payment_reference',  
         'payment_amount',
         'payment_date',
-        'remarks'   // Message of admin if like denied.
+        'remarks'   
     ];
 
     // Fields data type
