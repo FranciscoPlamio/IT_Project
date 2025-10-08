@@ -53,3 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+ document.addEventListener("DOMContentLoaded", function() {
+        const highlighted = document.querySelector(".highlighted");
+        if (highlighted) {
+            highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    });

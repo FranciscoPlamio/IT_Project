@@ -317,3 +317,12 @@ table th, table td {
 .cancel-btn:hover {
   background: #757575;
 }
+
+.request-row.highlighted {
+    background-color: #d3d3d3; /* light gray */
+    transition: background-color 0.5s ease;
+}
+
+.request-row.highlighted:hover {
+    background-color: #bfbfbf;
+}

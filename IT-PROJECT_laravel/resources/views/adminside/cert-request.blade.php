@@ -77,28 +77,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td>#0123456789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456779</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456889</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456289</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></td></tr>
-            <tr><td>#0123451789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123454789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123436789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></td></tr>
-            <tr><td>#0123756789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-
-
-            <tr><td>#0123456789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456779</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456889</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456289</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456779</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456889</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456289</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456779</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456889</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
-            <tr><td>#0123456289</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt=""></span></td></tr>
+          @forelse($requests as $req)
+              <tr class="request-row {{ isset($highlight) && $highlight == $req->form_id ? 'highlighted' : '' }}">
+                  <td>#{{ $req->form_id }}</td>
+                  <td>{{ strtoupper($req->form_type ?? 'N/A') }}</td>
+                  <td>{{ $req->formatted_date ?? 'N/A' }}</td>
+                  <td>
+                      <span class="see-more">
+                          See more 
+                          <img src="{{ asset('images/see-icon.png') }}" alt="">
+                      </span>
+                  </td>
+              </tr>
+          @empty
+              <tr><td colspan="4" style="text-align:center;">No certification requests found.</td></tr>
+          @endforelse
           </tbody>
         </table>
       </div>

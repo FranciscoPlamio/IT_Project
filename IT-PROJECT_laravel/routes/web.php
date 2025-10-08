@@ -93,9 +93,7 @@ Route::get('/', function () {
     return view('homepage');
 })->name('homepage');
 
-Route::get('/adminside/cert-request', function () {
-    return view('adminside.cert-request');
-})->name('adminside.cert-request');
+Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
 
 Route::get('/adminside/req-management', function () {
     return view('adminside.req-management');

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Forms\Form1_01;
 use App\Models\Forms\FormsTransactions;
 use MongoDB\BSON\Regex;
+use Carbon\Carbon;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -92,5 +93,27 @@ public function login(Request $request)
         'pending',
         'recentApps'
     ));
+}
+public function certRequest(Request $request)
+{
+    // Optional: check session
+    // if (!$request->session()->has('admin')) {
+    //     return redirect()->route('admin.login');
+    // }
+
+    $user = User::find($request->session()->get('admin'));
+
+    $requests = FormsTransactions::orderBy('created_at', 'desc')->get();
+
+    foreach ($requests as $req) {
+        $req->formatted_date = $req->created_at
+            ? \Carbon\Carbon::parse($req->created_at)->format('d F Y')
+            : 'No date';
+    }
+
+    // Get the ID to highlight
+    $highlight = $request->query('highlight');
+
+    return view('adminside.cert-request', compact('user', 'requests', 'highlight'));
 }
 }
