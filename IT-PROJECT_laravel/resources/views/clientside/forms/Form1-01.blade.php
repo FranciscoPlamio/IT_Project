@@ -6,7 +6,7 @@
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
             @csrf
             <input type="hidden" name="form_token"
-                value="{{ isset($form101['form_token']) ? $form101['form_token'] : session('form_token') }}">
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR RADIO OPERATOR EXAMINATION</div>
 
             <div class="form1-01-warning">
@@ -45,83 +45,132 @@
                                 <li>Check (✓) appropriate box. Indicate "N/A" for items not applicable.</li>
                             </ol>
                         </fieldset>
+                        @php
+                            $examTypeValue = old('exam_type', $form['exam_type'] ?? null);
+                        @endphp
+
+
                         <fieldset class="fieldset-compact">
                             <legend>Radiotelegraphy</legend>
-                            <div class="form-field" data-require-one="input[type=checkbox]">
-                                <label><input type="checkbox" name="rtg[]" value="1rtg_e1256_code25"
-                                        {{ isset($form101['rtg']) && in_array('1rtg_e1256_code25', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)</label>
-                                <label><input type="checkbox" name="rtg[]" value="1rtg_code25"
-                                        {{ isset($form101['rtg']) && in_array('1rtg_code25', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    1RTG - Code (25/20 wpm)</label>
-                                <label><input type="checkbox" name="rtg[]" value="2rtg_e1256_code16"
-                                        {{ isset($form101['rtg']) && in_array('2rtg_e1256_code16', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)</label>
-                                <label><input type="checkbox" name="rtg[]" value="2rtg_code16"
-                                        {{ isset($form101['rtg']) && in_array('2rtg_code16', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    2RTG - Code (16wpm)</label>
-                                <label><input type="checkbox" name="rtg[]" value="3rtg_e125_code16"
-                                        {{ isset($form101['rtg']) && in_array('3rtg_e125_code16', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    3RTG - Elements 1, 2, 5 & Code (16 wpm)</label>
-                                <label><input type="checkbox" name="rtg[]" value="3rtg_code16"
-                                        {{ isset($form101['rtg']) && in_array('3rtg_code16', (array) $form101['rtg']) ? 'checked' : '' }}>
-                                    3RTG - Code (16wpm)</label>
+                            <div class="form-field">
+
+                                <label>
+                                    <input type="radio" name="exam_type" value="1rtg_e1256_code25"
+                                        {{ $examTypeValue == '1rtg_e1256_code25' ? 'checked' : '' }}>
+                                    1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="1rtg_code25"
+                                        {{ $examTypeValue == '1rtg_code25' ? 'checked' : '' }}>
+                                    1RTG - Code (25/20 wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="2rtg_e1256_code16"
+                                        {{ $examTypeValue == '2rtg_e1256_code16' ? 'checked' : '' }}>
+                                    2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="2rtg_code16"
+                                        {{ $examTypeValue == '2rtg_code16' ? 'checked' : '' }}>
+                                    2RTG - Code (16wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="3rtg_e125_code16"
+                                        {{ $examTypeValue == '3rtg_e125_code16' ? 'checked' : '' }}>
+                                    3RTG - Elements 1, 2, 5 & Code (16 wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="3rtg_code16"
+                                        {{ $examTypeValue == '3rtg_code16' ? 'checked' : '' }}>
+                                    3RTG - Code (16wpm)
+                                </label>
                             </div>
                         </fieldset>
                         <fieldset class="fieldset-compact">
                             <legend>Amateur</legend>
-                            <div class="form-field" data-require-one="input[type=checkbox]">
-                                <label><input type="checkbox" name="amateur[]" value="class_a_e8910_code5"
-                                        {{ isset($form101['amateur']) && in_array('class_a_e8910_code5', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class A - Elements 8, 9, 10 & Code (5 wpm)</label>
-                                <label><input type="checkbox" name="amateur[]" value="class_a_code5_only"
-                                        {{ isset($form101['amateur']) && in_array('class_a_code5_only', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class A - Code (5 wpm) Only</label>
-                                <label><input type="checkbox" name="amateur[]" value="class_b_e567"
-                                        {{ isset($form101['amateur']) && in_array('class_b_e567', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class B - Elements 5, 6 & 7</label>
-                                <label><input type="checkbox" name="amateur[]" value="class_b_e2"
-                                        {{ isset($form101['amateur']) && in_array('class_b_e2', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class B - Element 2</label>
-                                <label><input type="checkbox" name="amateur[]" value="class_c_e234"
-                                        {{ isset($form101['amateur']) && in_array('class_c_e234', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class C - Elements 2, 3 & 4</label>
-                                <label><input type="checkbox" name="amateur[]" value="class_d_e2"
-                                        {{ isset($form101['amateur']) && in_array('class_d_e2', (array) $form101['amateur']) ? 'checked' : '' }}>
-                                    Class D - Element 2</label>
+                            @php
+                                $amateurValues = [];
+                            @endphp
+
+                            <div class="form-field">
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_a_e8910_code5"
+                                        {{ $examTypeValue == 'class_a_e8910_code5' ? 'checked' : '' }}>
+                                    Class A - Elements 8, 9, 10 & Code (5 wpm)
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_a_code5_only"
+                                        {{ $examTypeValue == 'class_a_code5_only' ? 'checked' : '' }}>
+                                    Class A - Code (5 wpm) Only
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_b_e567"
+                                        {{ $examTypeValue == 'class_b_e567' ? 'checked' : '' }}>
+                                    Class B - Elements 5, 6 & 7
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_b_e2"
+                                        {{ $examTypeValue == 'class_b_e2' ? 'checked' : '' }}>
+                                    Class B - Element 2
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_c_e234"
+                                        {{ $examTypeValue == 'class_c_e234' ? 'checked' : '' }}>
+                                    Class C - Elements 2, 3 & 4
+                                </label>
+                                <label>
+                                    <input type="radio" name="exam_type" value="class_d_e2"
+                                        {{ $examTypeValue == 'class_d_e2' ? 'checked' : '' }}>
+                                    Class D - Element 2
+                                </label>
                             </div>
                         </fieldset>
                         <div class="form-grid-3">
                             <fieldset class="fieldset-compact">
                                 <legend>Radiotelephony</legend>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
-                                    <label><input type="checkbox" name="rphn[]" value="1phn_e1234"
-                                            {{ isset($form101['rphn']) && in_array('1phn_e1234', (array) $form101['rphn']) ? 'checked' : '' }}>
-                                        1PHN - Elements 1, 2, 3 & 4</label>
-                                    <label><input type="checkbox" name="rphn[]" value="2phn_e123"
-                                            {{ isset($form101['rphn']) && in_array('2phn_e123', (array) $form101['rphn']) ? 'checked' : '' }}>
-                                        2PHN - Elements 1, 2 & 3</label>
-                                    <label><input type="checkbox" name="rphn[]" value="3phn_e12"
-                                            {{ isset($form101['rphn']) && in_array('3phn_e12', (array) $form101['rphn']) ? 'checked' : '' }}>
-                                        3PHN - Elements 1 & 2</label>
+                                    <label>
+                                        <input type="radio" name="exam_type" value="1phn_e1234"
+                                            {{ $examTypeValue == '1phn_e1234' ? 'checked' : '' }}>
+                                        1PHN - Elements 1, 2, 3 & 4
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="exam_type" value="2phn_e123"
+                                            {{ $examTypeValue == '2phn_e123' ? 'checked' : '' }}>
+                                        2PHN - Elements 1, 2 & 3
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="exam_type" value="3phn_e12"
+                                            {{ $examTypeValue == '3phn_e12' ? 'checked' : '' }}>
+                                        3PHN - Elements 1 & 2
+                                    </label>
+
                                 </div>
                             </fieldset>
                             <fieldset class="fieldset-compact">
                                 <legend>Restricted Radiotelephone</legend>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
-                                    <label><input type="checkbox" name="rroc[]" value="rroc_aircraft_e1"
-                                            {{ isset($form101['rroc']) && in_array('rroc_aircraft_e1', (array) $form101['rroc']) ? 'checked' : '' }}>
-                                        RROC - Aircraft - Element 1</label>
+                                    <label>
+                                        <input type="radio" name="exam_type" value="rroc_aircraft_e1"
+                                            {{ $examTypeValue == 'rroc_aircraft_e1' ? 'checked' : '' }}>
+                                        RROC - Aircraft - Element 1
+                                    </label>
                                 </div>
                             </fieldset>
                             <div class="form-field">
                                 <label class="form-label">DATE OF EXAM (mm/dd/yy)</label>
                                 <input class="form1-01-input" type="date" name="date_of_exam"
                                     max="{{ date('Y-m-d') }}"
-                                    value="{{ isset($form101['date_of_exam']) ? $form101['date_of_exam'] : '' }}">
+                                    value="{{ isset($form['date_of_exam']) ? $form['date_of_exam'] : '' }}">
                             </div>
                         </div>
-                        <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+
+
+                        <div class="step-actions">
+                            @error('exam_type')
+                                <p class="text-red text-lg text-center w-full">{{ $message }}</p>
+                            @enderror
+                            <button type="button" class="btn-primary" data-next>Next</button>
                         </div>
                     </section>
 
@@ -130,19 +179,19 @@
                             <legend>Applicant's Details</legend>
 
                             <!-- Name fields-->
-                            <x-forms.name-fields :form="$form101 ?? []" />
+                            <x-forms.name-fields :form="$form ?? []" />
 
                             <!-- formOne-blueprint-three fields -->
-                            <x-forms.formOne-blueprint-three :form="$form101 ?? []" />
+                            <x-forms.formOne-blueprint-three :form="$form ?? []" />
 
                             <!-- address fields format -->
-                            <x-forms.address-fields :form="$form101 ?? []" />
+                            <x-forms.address-fields :form="$form ?? []" />
 
 
                             <div class="form-field">
                                 <label class="form-label">School Attended</label>
                                 <input class="form1-01-input" type="text" name="school_attended"
-                                    value="{{ old('school_attended', $form101['school_attended'] ?? '') }}">
+                                    value="{{ old('school_attended', $form['school_attended'] ?? '') }}">
                                 @error('school_attended')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
@@ -151,7 +200,7 @@
                                 <div class="form-field">
                                     <label class="form-label">Course Taken</label>
                                     <input class="form1-01-input" type="text" name="course_taken"
-                                        value="{{ old('course_taken', $form101['course_taken'] ?? '') }}">
+                                        value="{{ old('course_taken', $form['course_taken'] ?? '') }}">
                                     @error('course_taken')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -159,7 +208,7 @@
                                 <div class="form-field">
                                     <label class="form-label">Year Graduated</label>
                                     <input class="form1-01-input" type="text" name="year_graduated"
-                                        value="{{ old('year_graduated', $form101['year_graduated'] ?? '') }}">
+                                        value="{{ old('year_graduated', $form['year_graduated'] ?? '') }}">
                                     @error('year_graduated')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -181,12 +230,12 @@
                                     <div class="inline-radio">
                                         <label>
                                             <input id="needs_yes" type="radio" name="needs" value="1"
-                                                {{ old('needs', $form101['needs'] ?? '') === '1' ? 'checked' : '' }}>
+                                                {{ old('needs', $form['needs'] ?? '') === '1' ? 'checked' : '' }}>
                                             Yes
                                         </label>
                                         <label>
                                             <input type="radio" name="needs" value="0" id="needs_no"
-                                                {{ old('needs', $form101['needs'] ?? '') === '0' ? 'checked' : '' }}>
+                                                {{ old('needs', $form['needs'] ?? '') === '0' ? 'checked' : '' }}>
                                             No
                                         </label>
 
@@ -199,7 +248,7 @@
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
-                                        name="needs_details" value="{{ $form101['needs_details'] ?? '' }}" disabled>
+                                        name="needs_details" value="{{ $form['needs_details'] ?? '' }}" disabled>
                                     @error('needs_details')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -220,30 +269,30 @@
                                 misrepresentation(s) made in this application form that may serve as a valid ground for
                                 the denial of this application and/or cancellation/revocation of the permit
                                 issued/granted. Further, I am freely giving full consent for the collection and
-                                processing of personal information in accordance with Republic Act No. 10173, Data
+                                processing of personal information in accordance with Republic Act No. 73, Data
                                 Privacy Act of 2012.
                             </div>
                             <div class="form1-01-signature-row">
                                 <div class="form1-01-signature-col">
                                     <input class="signature-line-input" type="text" name="signature_name"
                                         placeholder="Signature over Printed Name of Applicant"
-                                        value="{{ $form101['signature_name'] ?? '' }}" />
+                                        value="{{ $form['signature_name'] ?? '' }}" />
                                     <input class="form1-01-input" type="date" name="date_accomplished"
                                         placeholder="Date Accomplished"
-                                        value="{{ $form101['date_accomplished'] ?? '' }}"
+                                        value="{{ $form['date_accomplished'] ?? '' }}"
                                         style="max-width:180px;width:100%;" />
                                 </div>
                                 <div class="form1-01-signature-col"
                                     style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
                                     <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
                                     <input class="form1-01-input" type="text" name="or_no"
-                                        value="{{ $form101['or_no'] ?? '' }}" style="margin-bottom:6px;" />
+                                        value="{{ $form['or_no'] ?? '' }}" style="margin-bottom:6px;" />
                                     <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
                                     <input class="form1-01-input" type="date" name="or_date"
-                                        value="{{ $form101['or_date'] ?? '' }}" style="margin-bottom:6px;" />
+                                        value="{{ $form['or_date'] ?? '' }}" style="margin-bottom:6px;" />
                                     <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
                                     <input class="form1-01-input" type="number" name="or_amount" step="0.01"
-                                        min="0" inputmode="decimal" value="{{ $form101['or_amount'] ?? '' }}"
+                                        min="0" inputmode="decimal" value="{{ $form['or_amount'] ?? '' }}"
                                         style="margin-bottom:6px;" />
                                     <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
                                 </div>
@@ -257,9 +306,9 @@
                                     Operators Examination Committee</div>
                                 <div class="form-field" style="margin-bottom:8px;">Please admit Mr. / Ms. <input
                                         class="form1-01-input" type="text" name="admit_name"
-                                        value="{{ $form101['admit_name'] ?? '' }}" style="max-width:320px;">, with
+                                        value="{{ $form['admit_name'] ?? '' }}" style="max-width:320px;">, with
                                     mailing address at <input class="form1-01-input" type="text"
-                                        name="mailing_address" value="{{ $form101['mailing_address'] ?? '' }}"
+                                        name="mailing_address" value="{{ $form['mailing_address'] ?? '' }}"
                                         style="max-width:420px;"></div>
                                 <div class="form-field" style="margin-bottom:8px;">in the examination for <input
                                         class="form1-01-input" type="text" name="exam_for"
@@ -267,14 +316,14 @@
                                 <div class="form-grid-3">
                                     <div class="form-field"><label class="form-label">Place of Exam:</label><input
                                             class="form1-01-input" type="text" name="place_of_exam"
-                                            value="{{ $form101['place_of_exam'] ?? '' }}"></div>
+                                            value="{{ $form['place_of_exam'] ?? '' }}"></div>
                                     <div class="form-field"><label class="form-label">Date of Exam
                                             (mm/dd/yy):</label><input class="form1-01-input" type="date"
-                                            name="admission_date" value="{{ $form101['admission_date'] ?? '' }}">
+                                            name="admission_date" value="{{ $form['admission_date'] ?? '' }}">
                                     </div>
                                     <div class="form-field"><label class="form-label">Time of Exam:</label><input
                                             class="form1-01-input" type="text" name="time_of_exam"
-                                            value="{{ $form101['time_of_exam'] ?? '' }}"></div>
+                                            value="{{ $form['time_of_exam'] ?? '' }}"></div>
                                 </div>
                                 <div style="display:flex;gap:16px;align-items:flex-end;margin-top:8px;">
                                     <div style="flex:1;"></div>

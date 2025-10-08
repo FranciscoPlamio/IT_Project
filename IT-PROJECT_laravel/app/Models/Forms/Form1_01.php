@@ -25,10 +25,7 @@ class Form1_01 extends BaseForm
         'school_attended',
         'course_taken',
         'year_graduated',
-        'rtg',
-        'amateur',
-        'rphn',
-        'rroc',
+        'exam_type',
         'date_of_exam',
         'signature_name',
         'date_accomplished',
@@ -48,10 +45,6 @@ class Form1_01 extends BaseForm
     // Fields data type
     protected $casts = [
         'dob' => 'date',
-        'rtg' => 'array',
-        'amateur' => 'array',
-        'rphn' => 'array',
-        'rroc' => 'array',
         'date_of_exam' => 'date',
         'date_accomplished' => 'date',
         'or_date' => 'date',
@@ -63,12 +56,5 @@ class Form1_01 extends BaseForm
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    public function __construct(array $attributes = [])
-    {
-        // Merge BaseForm fillable with extra fields
-        $this->fillable = array_merge($this->fillable ?? [], $this->extraFields);
-        parent::__construct($attributes);
     }
 }

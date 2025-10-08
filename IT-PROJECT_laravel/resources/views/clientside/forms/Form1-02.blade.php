@@ -1,5 +1,4 @@
 <x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
-
     <main>
         <form class="form1-01-container" id="form102" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -39,21 +38,29 @@
                             <legend>Applicant's Details</legend>
 
                             <!-- Name fields-->
-                            <x-forms.name-fields :form="$form101 ?? []" />
+                            <x-forms.name-fields :form="$form ?? []" />
 
                             <!-- formOne-blueprint-three fields -->
-                            <x-forms.formOne-blueprint-three :form="$form101 ?? []" />
+                            <x-forms.formOne-blueprint-three :form="$form ?? []" />
 
 
                             <div class="form-grid-3">
 
                                 <div class="form-field">
                                     <label class="form-label">Weight (kg)</label>
-                                    <input class="form1-01-input" type="text" name="weight">
+                                    <input class="form1-01-input" type="text" name="weight"
+                                        value="{{ old('weight', $form['weight'] ?? '') }}">
+                                    @error('weight')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Height (cm)</label>
-                                    <input class="form1-01-input" type="text" name="height">
+                                    <input class="form1-01-input" type="text" name="height"
+                                        value="{{ old('height', $form['height'] ?? '') }}">
+                                    @error('height')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
 
@@ -61,25 +68,37 @@
                                 <div class="form-field">
                                     <label class="form-label">Employment Status</label>
                                     <div class="inline-radio">
-                                        <label><input type="radio" name="employment_status" value="employed">
-                                            Employed</label>
-                                        <label><input type="radio" name="employment_status" value="unemployed">
-                                            Unemployed</label>
+                                        <label>
+                                            <input type="radio" name="employment_status" value="employed"
+                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'employed' ? 'checked' : '' }}>
+                                            Employed
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="employment_status" value="unemployed"
+                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'unemployed' ? 'checked' : '' }}>
+                                            Unemployed
+                                        </label>
                                     </div>
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">If Employed</label>
                                     <div class="inline-radio">
-                                        <label><input type="radio" name="employment_type" value="local">
-                                            Local</label>
-                                        <label><input type="radio" name="employment_type" value="foreign">
-                                            Foreign</label>
+                                        <label>
+                                            <input type="radio" name="employment_type" value="local"
+                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'local' ? 'checked' : '' }}>
+                                            Local
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="employment_type" value="foreign"
+                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'foreign' ? 'checked' : '' }}>
+                                            Foreign
+                                        </label>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- address fields format -->
-                            <x-forms.address-fields :form="$form101 ?? []" />
+                            <x-forms.address-fields :form="$form ?? []" />
 
                             <!-- -->
                             <div class="step-actions">

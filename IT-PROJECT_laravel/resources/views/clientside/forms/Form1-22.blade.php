@@ -334,7 +334,7 @@
                 </div>
             </div>
         </form>
-        <a id="validationLink22" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+
         <script>
             (function() {
                 const stepsOrder = ['application', 'applicant', 'equipment', 'antenna', 'signal', 'declaration'];
