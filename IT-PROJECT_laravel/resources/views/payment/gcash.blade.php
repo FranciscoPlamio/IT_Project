@@ -50,6 +50,12 @@
                     </ol>
                 </div>
             </div>
+            
+            <!-- Action Buttons -->
+            <div class="gcash-actions">
+                <a href="{{ route('payment.method') }}" class="gcash-btn gcash-btn-secondary">Back to Payment Method</a>
+                <a href="{{ route('payment.transaction') }}" class="gcash-btn gcash-btn-primary">View Transaction</a>
+            </div>
         </section>
     </main>
 </body>
