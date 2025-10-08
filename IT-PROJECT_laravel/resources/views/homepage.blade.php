@@ -19,8 +19,7 @@
                 <p>Apply</p>
             </a>
         </div>
-        <a href="https://car.ntc.gov.ph/wp-content/uploads/2025/05/NTC-CAR-Citizens-Charter-2025.png" target="_blank"
-            rel="noopener" style="text-decoration:none;color:inherit;">
+        <a href="{{ route('requirements') }}" style="text-decoration:none;color:inherit;">
             <div class="card">
                 <img src="{{ asset('images/icon-requirements.png') }}" alt="Requirements Icon" />
                 <p>Requirements</p>

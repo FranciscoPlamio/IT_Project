@@ -9,11 +9,8 @@ class Form1_01Rules
         return [
             'rules' => [
                 // Application Details
+                'exam_type' => ['required', 'string'],
                 'date_of_exam' => ['nullable', 'date', 'before_or_equal:today'],
-                'rtg' => ['nullable', 'array'],
-                'amateur' => ['nullable', 'array'],
-                'rphn' => ['nullable', 'array'],
-                'rroc' => ['nullable', 'array'],
 
                 // Applicant Details
                 'last_name' => ['required', 'string', 'min:2'],
@@ -53,6 +50,7 @@ class Form1_01Rules
             ],
 
             'messages' => [
+                'exam_type.required' => 'Please select a class',
                 'needs.required' => 'Please select Yes or No',
                 'needs_details.required_if' => 'Please specify your needs',
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',

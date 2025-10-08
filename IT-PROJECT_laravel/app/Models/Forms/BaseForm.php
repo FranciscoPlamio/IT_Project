@@ -13,6 +13,16 @@ abstract class BaseForm extends Model
         'user_id',
         'last_name',
         'first_name',
-        'middle_name'
+        'middle_name',
+        'attachments'
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        if (property_exists($this, 'extraFields')) {
+            $this->fillable = array_merge($this->fillable, $this->extraFields);
+        }
+    }
 }

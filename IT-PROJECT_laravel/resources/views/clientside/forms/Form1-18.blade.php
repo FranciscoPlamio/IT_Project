@@ -206,7 +206,7 @@
                 </div>
             </div>
         </form>
-        <a id="validationLink18" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+
         <script>
             (function() {
                 const stepsOrder = ['application', 'categories', 'applicant', 'personnel', 'declaration'];

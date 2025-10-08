@@ -171,7 +171,7 @@
                 </div>
             </div>
         </form>
-        <a id="validationLink25" href="{{ route('forms.1-01.validation') }}" style="display:none;">Validation</a>
+
         <script>
             (function() {
                 const stepsOrder = ['complainant', 'provider', 'complaint', 'details', 'documents', 'signature'];
