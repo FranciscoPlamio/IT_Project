@@ -69,27 +69,32 @@
         <section class="cert-log">
     <h1>Certification Log</h1>
 
-    @if($recentApps->isEmpty())
-        <p>No application records found.</p>
-    @else
-        @foreach($recentApps as $app)
-            @php
-                // map status text to class and icon file name
-                $cls = $app->status === 'In Progress' ? 'progress' : strtolower(str_replace(' ', '-', $app->status));
-                $icon = $app->status === 'Done' ? 'Done.png' : ($app->status === 'In Progress' ? 'In-prog.png' : 'Pending.png');
-            @endphp
+    @foreach($recentApps as $app)
+    @php
+        // Normalize the status (handle case sensitivity and missing values)
+        $status = strtolower($app->status ?? 'pending');
 
-            <div class="log-item">
-                <div>
-                    <h3>#{{ $app->id }}</h3><br><h5>{{ optional($app->created_at)->format('m/d/Y') }}</h5>
-                </div>
-                <div class="status {{ $cls }}">
-                    <img src="{{ asset('images/' . $icon) }}" alt="">
-                    <span>{{ $app->status ?? 'Pending' }}</span>
-                </div>
-            </div>
-        @endforeach
-    @endif
+        // Assign class and icon based on status
+        $cls = $status === 'in progress' ? 'progress' : str_replace(' ', '-', $status);
+        $icon = match($status) {
+            'done' => 'Done.png',
+            'in progress' => 'In-prog.png',
+            'denied' => 'Denied.png', // optional: if you add denied later
+            default => 'Pending.png'
+        };
+    @endphp
+
+    <div class="log-item">
+        <div>
+            <h3>#{{ $app->display_number }} | {{ strtoupper($app->form_type) }}</h3><br>
+            <h5>{{ optional($app->created_at)->format('m/d/Y') }}</h5>
+        </div>
+        <div class="status {{ $cls }}">
+            <img src="{{ asset('images/' . $icon) }}" alt="">
+            <span>{{ ucfirst($status) }}</span>
+        </div>
+    </div>
+    @endforeach
 </section>
     </main>
 </body>

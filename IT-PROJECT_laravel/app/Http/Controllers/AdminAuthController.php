@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Forms\Form1_01;
+use App\Models\Forms\FormsTransactions;
+use MongoDB\BSON\Regex;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -51,7 +53,7 @@ public function login(Request $request)
 
    public function dashboard(Request $request)
 {
-    // Optional: Keep login session validation if needed
+    // Optional: login session validation
     // if (!$request->session()->has('admin')) {
     //     return redirect()->route('admin.login');
     // }
@@ -59,23 +61,29 @@ public function login(Request $request)
     // Get admin user info
     $user = User::find($request->session()->get('admin'));
 
-    // Counts for pie chart
-    $done = Form1_01::where('status', 'Done')->count();
-    $progress = Form1_01::where('status', 'In Progress')->count();
-    $pending = Form1_01::where('status', 'Pending')->count();
+    // Fetch data from forms_transactions (lowercase status for MongoDB)
+    $done = FormsTransactions::where('status', new Regex('^done$', 'i'))->count();
+    $progress = FormsTransactions::where('status', new Regex('^in progress$', 'i'))->count();
+    $pending = FormsTransactions::where('status', new Regex('^pending$', 'i'))->count();
 
-    // Calculate percentages
     $total = $done + $progress + $pending;
+
     $percentages = [
-        'done'     => $total > 0 ? round(($done / $total) * 100) : 0,
-        'progress' => $total > 0 ? round(($progress / $total) * 100) : 0,
-        'pending'  => $total > 0 ? round(($pending / $total) * 100) : 0,
+        'done'     => $total > 0 ? round(($done / $total) * 100, 2) : 0,
+        'progress' => $total > 0 ? round(($progress / $total) * 100, 2) : 0,
+        'pending'  => $total > 0 ? round(($pending / $total) * 100, 2) : 0,
     ];
 
-    // Recent applications (for certification log)
-    $recentApps = Form1_01::orderBy('created_at', 'desc')->take(5)->get();
+    // Get latest forms first (descending by created_at)
+    $recentApps = FormsTransactions::orderBy('created_at', 'desc')->take(15)->get();
 
-    // Return view with only necessary data
+    // Add an incremental number (latest = 1)
+    $counter = 1;
+    foreach ($recentApps as $app) {
+        $app->display_number = str_pad($counter, 4, '0', STR_PAD_LEFT);
+        $counter++;
+    }
+
     return view('adminside.dashboard', compact(
         'user',
         'percentages',
