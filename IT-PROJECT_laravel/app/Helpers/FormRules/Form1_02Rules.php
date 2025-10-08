@@ -8,20 +8,17 @@ class Form1_02Rules
     {
         return [
             'rules' => [
-                // Application Details
-                'date_of_exam' => ['nullable', 'date', 'before_or_equal:today'],
-                'rtg' => ['nullable', 'array'],
-                'amateur' => ['nullable', 'array'],
-                'rphn' => ['nullable', 'array'],
-                'rroc' => ['nullable', 'array'],
-
                 // Applicant Details
                 'last_name' => ['required', 'string', 'min:2'],
                 'first_name' => ['required', 'string', 'min:2'],
                 'middle_name' => ['required', 'string', 'min:2'],
+
+                // 3
                 'dob' => ['required', 'date', 'before_or_equal:today'],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
+
+                //8
                 'unit' => ['required', 'string'],
                 'street' => ['required', 'string'],
                 'barangay' => ['required', 'string'],
@@ -31,27 +28,21 @@ class Form1_02Rules
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
                 'email' => ['nullable', 'email'],
 
-                'needs_details' => ['required_if:needs,1', 'string', 'nullable'],
-
-                // Declaration
-                'signature_name' => ['nullable', 'string'],
-                'date_accomplished' => ['nullable', 'date'],
-                'or_no' => ['nullable', 'string'],
-                'or_date' => ['nullable', 'date'],
-                'or_amount' => ['nullable', 'numeric'],
-                'admit_name' => ['nullable', 'string'],
-                'mailing_address' => ['nullable', 'string'],
-                'exam_for' => ['nullable', 'string'],
-                'place_of_exam' => ['nullable', 'string'],
-                'admission_date' => ['nullable', 'date'],
-                'time_of_exam' => ['nullable', 'string'],
+                'height' => ['required', 'numeric'],
+                'weight' => ['required', 'numeric'],
+                'employment_status' => ['required', 'string'],
+                'employment_type' => ['required', 'string'],
+                'application_type' => ['required', 'string'],
+                'modification_reason' => ['nullable', 'string'],
+                'years' => ['required', 'integer'],
+                'certificate_type' => ['required', 'string'],
+                'exam_place' => ['required', 'string'],
+                'exam_date' => ['required', 'date', 'before_or_equal:today'],
+                'rating' => ['required', 'numeric'],
             ],
 
             'messages' => [
-                'needs.required' => 'Please select Yes or No',
-                'needs_details.required_if' => 'Please specify your needs',
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
-                'date_of_exam.before_or_equal' => 'Invalid date. Please enter correct date of exam',
                 'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
             ], // custom messages 
 

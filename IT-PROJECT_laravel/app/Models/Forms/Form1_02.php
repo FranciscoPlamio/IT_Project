@@ -10,21 +10,40 @@ class Form1_02 extends BaseForm
     protected $table = 'form1_02';
 
     // Database fields
-    protected $extraFields = [];
+    protected $extraFields = [
+        // 3 fields
+        'dob',
+        'sex',
+        'nationality',
+
+        // 8 fields
+        'unit',
+        'street',
+        'barangay',
+        'city',
+        'province',
+        'zip_code',
+        'contact_number',
+        'email',
+
+        'height',
+        'weight',
+        'employment_status',
+        'employment_type',
+        'application_type',
+        'modification_reason',
+        'years',
+        'certificate_type',
+
+        // exam fields
+        'exam_place',
+        'exam_date',
+        'rating',
+    ];
 
     // Fields data type
     protected $casts = [
         'dob' => 'date',
-        'rtg' => 'array',
-        'amateur' => 'array',
-        'rphn' => 'array',
-        'rroc' => 'array',
-        'date_of_exam' => 'date',
-        'date_accomplished' => 'date',
-        'or_date' => 'date',
-        'or_amount' => 'float',
-        'admission_date' => 'date',
-        'needs' => 'boolean',
     ];
 
     public function user()
