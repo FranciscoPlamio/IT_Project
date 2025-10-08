@@ -762,7 +762,7 @@
             } else if (activeForm === '1-26' && has126) {
                 render126();
             } else if (server101) {
-                renderFormData(server101, '1-01');
+                renderFormData(server101, @json($formType));
             } else if (has102) {
                 render102();
             } else if (has103) {

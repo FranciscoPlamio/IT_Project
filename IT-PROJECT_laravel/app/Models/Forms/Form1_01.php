@@ -11,9 +11,12 @@ class Form1_01 extends BaseForm
 
     // Database fields
     protected $extraFields = [
+        // 3 fields
         'dob',
         'sex',
         'nationality',
+
+        // 8 fields
         'unit',
         'street',
         'barangay',
@@ -22,6 +25,7 @@ class Form1_01 extends BaseForm
         'zip_code',
         'contact_number',
         'email',
+
         'school_attended',
         'course_taken',
         'year_graduated',
