@@ -107,7 +107,6 @@
                             <!-- address fields format -->
                             <x-forms.address-fields :form="$form ?? []" />
 
-                            <!-- -->
                             <div class="step-actions">
                                 <button type="button" class="btn-primary" data-next>Next</button>
                             </div>
@@ -123,39 +122,10 @@
                             @endphp
 
                             <div class="form-grid-2">
-                                <div class="form-field">
-                                    @error('application_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <label class="form-label">Type of Application</label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="new"
-                                            {{ $applicationType == 'new' ? 'checked' : '' }}>
-                                        NEW
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="renewal"
-                                            {{ $applicationType == 'renewal' ? 'checked' : '' }}>
-                                        RENEWAL</label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="modification"
-                                            {{ $applicationType == 'modification' ? 'checked' : '' }}>
-                                        MODIFICATION due to</label>
 
-                                    <input class="form1-01-input mt-4" type="text" name="modification_reason"
-                                        placeholder="Reason (if modification)"
-                                        value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
-                                    @error('modification_reason')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <!-- Application type fields -->
+                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
 
-                                    <label class="form-label">No. of Years</label>
-                                    <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
-                                        value="{{ old('years', $form['years'] ?? '') }}">
-                                    @error('years')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     @error('certificate_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -214,8 +184,18 @@
                         </fieldset>
                     </section>
 
-                    <!-- Exam fields -->
-                    <x-forms.exam-fields :form="$form ?? []" />
+                    <section class="step-content" id="step-exam">
+                        <fieldset class="fieldset-compact">
+                            <legend>Exam/Seminar Details</legend>
+
+                            <!-- Exam fields -->
+                            <div class="form-grid-3">
+                                <div class="form-field">
+                                    <label class="form-label">Place of Exam/Seminar</label>
+                                    <x-forms.exam-fields :form="$form ?? []" />
+
+                        </fieldset>
+                    </section>
 
                     <!-- Declaration fields component -->
                     <x-forms.declaration-field :form="$form ?? []" />
