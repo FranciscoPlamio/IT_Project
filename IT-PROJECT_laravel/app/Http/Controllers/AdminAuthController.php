@@ -52,7 +52,7 @@ public function login(Request $request)
 }
 
 
-   public function dashboard(Request $request)
+public function dashboard(Request $request)
 {
     // Optional: login session validation
     // if (!$request->session()->has('admin')) {
@@ -62,31 +62,56 @@ public function login(Request $request)
     // Get admin user info
     $user = User::find($request->session()->get('admin'));
 
-    // Fetch data from forms_transactions (lowercase status for MongoDB)
+    // Fetch data from forms_transactions (case-insensitive)
     $done = FormsTransactions::where('status', new Regex('^done$', 'i'))->count();
     $progress = FormsTransactions::where('status', new Regex('^in progress$', 'i'))->count();
-    $pending = FormsTransactions::where('status', new Regex('^pending$', 'i'))->count();
+    $cancel = FormsTransactions::where('status', new Regex('^cancel$', 'i'))->count();
 
-    $total = $done + $progress + $pending;
+    $total = $done + $progress + $cancel;
 
     $percentages = [
         'done'     => $total > 0 ? round(($done / $total) * 100, 2) : 0,
         'progress' => $total > 0 ? round(($progress / $total) * 100, 2) : 0,
-        'pending'  => $total > 0 ? round(($pending / $total) * 100, 2) : 0,
+        'cancel'   => $total > 0 ? round(($cancel / $total) * 100, 2) : 0,
     ];
 
-    // Get latest forms first (descending by created_at)
+    // Get latest forms (15 most recent)
     $recentApps = FormsTransactions::orderBy('created_at', 'desc')->take(15)->get();
 
+    // Normalize statuses and assign icons/classes
+    foreach ($recentApps as $app) {
+        $status = strtolower(trim($app->status ?? 'in progress')); // default = in progress
+        $app->normalized_status = $status;
+
+        switch ($status) {
+            case 'done':
+                $app->status_class = 'done';
+                $app->status_icon = 'Done.png';
+                break;
+
+            case 'cancel':
+                $app->status_class = 'cancel';
+                $app->status_icon = 'Cancel.png';
+                break;
+
+            default:
+                $app->status_class = 'progress';
+                $app->status_icon = 'In-prog.png';
+                break;
+        }
+    }
+
+    // Return everything to the dashboard view
     return view('adminside.dashboard', compact(
         'user',
         'percentages',
         'done',
         'progress',
-        'pending',
+        'cancel',
         'recentApps'
     ));
 }
+
 public function certRequest(Request $request)
 {
     // Optional: check session

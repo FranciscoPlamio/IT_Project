@@ -60,8 +60,8 @@
             </div>
 
             <div class="pie-card">
-                <div class="pie-circle pending" style="--percent: {{ $percentages['pending'] }}%;"></div>
-                <div><strong>{{ $percentages['pending'] }}%</strong><br>Pending ({{ $pending }})</div>
+                <div class="pie-circle cancel" style="--percent: {{ $percentages['cancel'] }}%;"></div>
+                <div><strong>{{ $percentages['cancel'] }}%</strong><br>Cancel ({{ $cancel }})</div>
             </div>
         </section>
 
@@ -87,8 +87,8 @@
                             <h5>{{ optional($app->created_at)->format('d F Y') }}</h5>
                         </div>
                         <div class="status {{ $cls }}">
-                            <img src="{{ asset('images/' . $icon) }}" alt="">
-                            <span>{{ ucfirst($app->status ?? 'Pending') }}</span>
+                            <img src="{{ asset('images/' . $app->status_icon) }}" alt="">
+                            <span>{{ ucfirst($app->normalized_status) }}</span>
                         </div>
                     </div>
                 </a>

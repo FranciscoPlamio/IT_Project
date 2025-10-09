@@ -134,7 +134,7 @@ body {
     border-radius: 50%;
     background: conic-gradient(var(--color, #000) 0% var(--percent, 0%), #d1d3d7 var(--percent, 0%) 100%);
 }
-.pie-circle.done { --color: #22c55e; } .pie-circle.progress { --color: #facc15; } .pie-circle.pending { --color: #ef4444; }
+.pie-circle.done { --color: #22c55e; } .pie-circle.progress { --color: #facc15; } .pie-circle.cancel { --color: #ef4444; }
 
 
 /* Certification Log */
