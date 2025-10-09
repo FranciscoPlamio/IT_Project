@@ -46,19 +46,19 @@
                             @endphp
                             <div class="form-field" data-require-one="input[type=checkbox]">
                                 <label><input type="checkbox" name="nature_service" value="cv_private"
-                                    {{ in_array('cv_private', $natureServiceValue) ? 'checked' : '' }}> CV
+                                        {{ in_array('cv_private', $natureServiceValue) ? 'checked' : '' }}> CV
                                     (PRIVATE)</label>
                                 <input class="form1-01-input" type="text" name="cv_private_details"
                                     placeholder="Details"
                                     value="{{ old('cv_private_details', $form['cv_private_details'] ?? '') }}">
                                 <label><input type="checkbox" name="nature_service" value="co_government"
-                                    {{ in_array('co_government', $natureServiceValue) ? 'checked' : '' }}> CO
+                                        {{ in_array('co_government', $natureServiceValue) ? 'checked' : '' }}> CO
                                     (GOVERNMENT)</label>
                                 <input class="form1-01-input" type="text" name="co_government_details"
                                     placeholder="Details"
                                     value="{{ old('co_government_details', $form['co_government_details'] ?? '') }}">
                                 <label><input type="checkbox" name="nature_service" value="cp_public"
-                                    {{ in_array('cp_public', $natureServiceValue) ? 'checked' : '' }}> CP (PUBLIC
+                                        {{ in_array('cp_public', $natureServiceValue) ? 'checked' : '' }}> CP (PUBLIC
                                     CORRESPONDENCE)</label>
                                 <input class="form1-01-input" type="text" name="cp_public_details"
                                     placeholder="Details"
@@ -83,49 +83,45 @@
                             <div class="form-grid-2" data-require-one="input[type=checkbox]">
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="rt"
-                                        {{ in_array('rt', $stationClassValue) ? 'checked' : '' }}> RT</label>
+                                            {{ in_array('rt', $stationClassValue) ? 'checked' : '' }}> RT</label>
                                     <input class="form1-01-input" type="text" name="rt_units" placeholder="Units"
                                         value="{{ old('rt_units', $form['rt_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="fx"
-                                        {{ in_array('fx', $stationClassValue) ? 'checked' : '' }}> FX</label>
+                                            {{ in_array('fx', $stationClassValue) ? 'checked' : '' }}> FX</label>
                                     <input class="form1-01-input" type="text" name="fx_units" placeholder="Units"
                                         value="{{ old('fx_units', $form['fx_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="fb"
-                                        {{ in_array('fb', $stationClassValue) ? 'checked' : '' }}> FB</label>
+                                            {{ in_array('fb', $stationClassValue) ? 'checked' : '' }}> FB</label>
                                     <input class="form1-01-input" type="text" name="fb_units" placeholder="Units"
                                         value="{{ old('fb_units', $form['fb_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="ml"
-                                        {{ in_array('ml', $stationClassValue) ? 'checked' : '' }}> ML</label>
+                                            {{ in_array('ml', $stationClassValue) ? 'checked' : '' }}> ML</label>
                                     <input class="form1-01-input" type="text" name="ml_units" placeholder="Units"
                                         value="{{ old('ml_units', $form['ml_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="p"
-                                        {{ in_array('p', $stationClassValue) ? 'checked' : '' }}> P</label>
+                                            {{ in_array('p', $stationClassValue) ? 'checked' : '' }}> P</label>
                                     <input class="form1-01-input" type="text" name="p_units" placeholder="Units"
                                         value="{{ old('p_units', $form['p_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="bc"
-                                        {{ in_array('bc', $stationClassValue) ? 'checked' : '' }}> BC</label>
-                                    <input class="form1-01-input" type="text" name="bc_units"
-                                        placeholder="Units"
+                                            {{ in_array('bc', $stationClassValue) ? 'checked' : '' }}> BC</label>
+                                    <input class="form1-01-input" type="text" name="bc_units" placeholder="Units"
                                         value="{{ old('bc_units', $form['bc_units'] ?? '') }}">
                                 </div>
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="fa"
-                                        {{ in_array('fa', $stationClassValue) ? 'checked' : '' }}> FA</label>
-                                    <input class="form1-01-input" type="text" name="fa_units"
-                                        placeholder="Units"
+                                            {{ in_array('fa', $stationClassValue) ? 'checked' : '' }}> FA</label>
+                                    <input class="form1-01-input" type="text" name="fa_units" placeholder="Units"
                                         value="{{ old('fa_units', $form['fa_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="ma"
-                                        {{ in_array('ma', $stationClassValue) ? 'checked' : '' }}> MA</label>
-                                    <input class="form1-01-input" type="text" name="ma_units"
-                                        placeholder="Units"
+                                            {{ in_array('ma', $stationClassValue) ? 'checked' : '' }}> MA</label>
+                                    <input class="form1-01-input" type="text" name="ma_units" placeholder="Units"
                                         value="{{ old('ma_units', $form['ma_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="tc"
-                                        {{ in_array('tc', $stationClassValue) ? 'checked' : '' }}> TC</label>
-                                    <input class="form1-01-input" type="text" name="tc_units"
-                                        placeholder="Units"
+                                            {{ in_array('tc', $stationClassValue) ? 'checked' : '' }}> TC</label>
+                                    <input class="form1-01-input" type="text" name="tc_units" placeholder="Units"
                                         value="{{ old('tc_units', $form['tc_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="others"
-                                        {{ in_array('others', $stationClassValue) ? 'checked' : '' }}> OTHERS,
+                                            {{ in_array('others', $stationClassValue) ? 'checked' : '' }}> OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_station_specify"
                                         placeholder="Type"
@@ -151,25 +147,25 @@
                             @endphp
                             <div class="form-field" data-require-one="input[type=checkbox]">
                                 <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"
-                                    {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
+                                        {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
                                     FIXED AND LAND MOBILE</label>
                                 <input class="form1-01-input" type="text" name="fixed_land_mobile_details"
                                     placeholder="Details"
                                     value="{{ old('fixed_land_mobile_details', $form['fixed_land_mobile_details'] ?? '') }}">
                                 <label><input type="checkbox" name="radio_service" value="aeronautical"
-                                    {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
+                                        {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
                                     AERONAUTICAL</label>
                                 <input class="form1-01-input" type="text" name="aeronautical_details"
                                     placeholder="Details"
                                     value="{{ old('aeronautical_details', $form['aeronautical_details'] ?? '') }}">
                                 <label><input type="checkbox" name="radio_service" value="broadcast"
-                                    {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
+                                        {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
                                     BROADCAST</label>
                                 <input class="form1-01-input" type="text" name="broadcast_details"
                                     placeholder="Details"
                                     value="{{ old('broadcast_details', $form['broadcast_details'] ?? '') }}">
                                 <label><input type="checkbox" name="radio_service" value="others"
-                                    {{ in_array('others', $radioServiceValue) ? 'checked' : '' }}> OTHERS,
+                                        {{ in_array('others', $radioServiceValue) ? 'checked' : '' }}> OTHERS,
                                     specify</label>
                                 <input class="form1-01-input" type="text" name="others_radio_specify"
                                     placeholder="Specify"
@@ -386,43 +382,8 @@
                                     data-next>Next</button></div>
                         </fieldset>
                     </section>
-                    <!-- Existing declaration section commented out (pj)-->
-                    <!-- <section class="step-content" id="step-declaration">
-                        <fieldset>
-                            <legend>DECLARATION</legend>
-                            <div class="form1-01-declaration">I hereby declare that all the above entries are true
-                                and correct. Under the Revised Penal Code, I shall be held liable for any willful
-                                false statement(s) or misrepresentation(s) made in this application form that may
-                                serve as a valid ground for the denial of this application and/or
-                                cancellation/revocation of the permit issued/granted. Further, I am freely giving
-                                full consent for the collection and processing of personal information in accordance
-                                with Republic Act No. 10173, Data Privacy Act of 2012.</div>
-                            <div class="form1-01-signature-row">
-                                <div class="form1-01-signature-col">
-                                    <input class="signature-line-input" type="text" name="signature_name"
-                                        placeholder="Signature over Printed Name of Applicant" />
-                                    <input class="form1-01-input" type="date" name="date_accomplished"
-                                        placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
-                                </div>
-                                <div class="form1-01-signature-col"
-                                    style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-                                    <input class="form1-01-input" type="text" name="or_no"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-                                    <input class="form1-01-input" type="date" name="or_date"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-                                    <input class="form1-01-input" type="text" name="or_amount"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
-                                </div>
-                            </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn14">Proceed to Validation</button></div>
-                        </fieldset>
-                    </section> -->
+                    <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" />
                 </div>
             </div>
         </form>

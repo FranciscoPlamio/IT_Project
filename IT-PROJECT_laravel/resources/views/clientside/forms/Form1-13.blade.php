@@ -8,8 +8,6 @@
                 value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">FORM D (FOR MODIFICATION)</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
-            <div class="form1-01-warning">
-
                 <div class="form-layout">
                     <aside class="steps-sidebar">
                         <div class="steps-sidebar-header">Individual Appointment</div>
@@ -239,7 +237,6 @@
                             </fieldset>
                         </section>
                     </div>
-                </div>
         </form>
 
         <script>
