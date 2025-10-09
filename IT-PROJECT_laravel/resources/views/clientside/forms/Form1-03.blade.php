@@ -189,7 +189,7 @@
 
                     <section class="step-content" id="step-equipment">
                         <fieldset>
-                            <legend>Particulars of Equipment (Use separate sheet/s, if necessary)</legend>
+                            <legend>Particulars of Equipment</legend>
                             <div class="table-container">
                                 <table class="form-table">
                                     <thead>
