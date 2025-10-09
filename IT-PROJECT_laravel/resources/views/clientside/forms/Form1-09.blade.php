@@ -19,7 +19,7 @@
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
                     <ul class="steps-list" id="stepsList09">
-                        <li class="step-item active" data-step="personal">Personal Information <span
+                        <li class="step-item active" data-step="personal">Applicant Details <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="application">Application Details <span
                                 class="step-status">&nbsp;</span></li>
@@ -144,53 +144,49 @@
 
                     <section class="step-content" id="step-application">
                         @php
-                            $applicationTypeValue = old('application_type', $form['application_type'] ?? []);
-                            if (!is_array($applicationTypeValue)) {
-                                $applicationTypeValue = [];
-                            }
+                            $applicationTypeValue = old('application_type', $form['application_type'] ?? '');
                         @endphp
                         <fieldset class="fieldset-compact">
                             <legend>Application Details</legend>
                             <div class="form-grid-2">
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field" data-require-one="input[type=radio]">
                                     <label class="form-label">Type of Application</label>
-                                    <label><input type="checkbox" name="application_type" value="purchase"
-                                            {{ in_array('purchase', $applicationTypeValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="application_type" value="purchase"
+                                            {{ $applicationTypeValue == 'purchase' ? 'checked' : '' }}>
                                         PURCHASE</label>
-                                    <label><input type="checkbox" name="application_type" value="possess"
-                                            {{ in_array('possess', $applicationTypeValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="application_type" value="possess"
+                                            {{ $applicationTypeValue == 'possess' ? 'checked' : '' }}>
                                         POSSESS</label>
-                                    <label><input type="checkbox" name="application_type" value="sell_transfer"
-                                            {{ in_array('sell_transfer', $applicationTypeValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="application_type" value="sell_transfer"
+                                            {{ $applicationTypeValue == 'sell_transfer' ? 'checked' : '' }}>
                                         SELL/TRANSFER</label>
                                     @error('application_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 @php
-                                    $radioServiceValue = old('radio_service', $form['radio_service'] ?? []);
-                                    if (!is_array($radioServiceValue)) {
-                                        $radioServiceValue = [];
-                                    }
+                                    $radioServiceValue = old('radio_service', $form['radio_service'] ?? '');
                                 @endphp
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field" data-require-one="input[type=radio]">
                                     <label class="form-label">Type of Radio Service</label>
-                                    <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"
-                                            {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="fixed_land_mobile"
+                                            {{ $radioServiceValue == 'fixed_land_mobile' ? 'checked' : '' }}>
                                         FIXED AND LAND MOBILE</label>
-                                    <label><input type="checkbox" name="radio_service" value="aeronautical"
-                                            {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="aeronautical"
+                                            {{ $radioServiceValue == 'aeronautical' ? 'checked' : '' }}>
                                         AERONAUTICAL</label>
-                                    <label><input type="checkbox" name="radio_service" value="maritime"
-                                            {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="maritime"
+                                            {{ $radioServiceValue == 'maritime' ? 'checked' : '' }}>
                                         MARITIME</label>
-                                    <label><input type="checkbox" name="radio_service" value="broadcast"
-                                            {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="broadcast"
+                                            {{ $radioServiceValue == 'broadcast' ? 'checked' : '' }}>
                                         BROADCAST</label>
-                                    <label><input type="checkbox" name="radio_service" value="amateur"
-                                            {{ in_array('amateur', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="amateur"
+                                            {{ $radioServiceValue == 'amateur' ? 'checked' : '' }}>
                                         AMATEUR</label>
-                                    <label>OTHERS, specify</label>
+                                    <label><input type="radio" name="radio_service" value="others"
+                                            {{ $radioServiceValue == 'others' ? 'checked' : '' }}>
+                                        OTHERS, specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
                                         value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
                                     @error('radio_service')
@@ -202,14 +198,23 @@
                                 </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                @php
+                                    $natureServiceValue = old('nature_service', $form['nature_service'] ?? '');
+                                @endphp
+                                <div class="form-field" data-require-one="input[type=radio]">
                                     <label class="form-label">Nature of Service</label>
-                                    <label><input type="checkbox" name="nature_service" value="cv_private"> CV
+                                    <label><input type="radio" name="nature_service" value="cv_private"
+                                            {{ $natureServiceValue == 'cv_private' ? 'checked' : '' }}> CV
                                         (PRIVATE)</label>
-                                    <label><input type="checkbox" name="nature_service" value="co_government"> CO
+                                    <label><input type="radio" name="nature_service" value="co_government"
+                                            {{ $natureServiceValue == 'co_government' ? 'checked' : '' }}> CO
                                         (GOVERNMENT)</label>
-                                    <label><input type="checkbox" name="nature_service" value="cp_public"> CP
+                                    <label><input type="radio" name="nature_service" value="cp_public"
+                                            {{ $natureServiceValue == 'cp_public' ? 'checked' : '' }}> CP
                                         (PUBLIC CORRESPONDENCE)</label>
+                                    @error('nature_service')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     <label class="form-label">Class of Station (indicate units)</label>
@@ -457,62 +462,8 @@
                         </fieldset>
                     </section>
 
-                    <section class="step-content" id="step-declaration">
-                        <fieldset>
-                            <legend>DECLARATION</legend>
-                            <div class="form1-01-declaration">I hereby declare that all the above entries are true
-                                and correct. Under the Revised Penal Code, I shall be held liable for any willful
-                                false statement(s) or misrepresentation(s) made in this application form that may
-                                serve as a valid ground for the denial of this application and/or
-                                cancellation/revocation of the permit issued/granted. Further, I am freely giving
-                                full consent for the collection and processing of personal information in accordance
-                                with Republic Act No. 10173, Data Privacy Act of 2012.</div>
-                            <div class="form1-01-signature-row">
-                                <div class="form1-01-signature-col">
-                                    <input class="signature-line-input" type="text" name="signature_name"
-                                        placeholder="Signature over Printed Name of Applicant"
-                                        value="{{ old('signature_name', $form['signature_name'] ?? '') }}" />
-                                    @error('signature_name')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <input class="form1-01-input" type="date" name="date_accomplished"
-                                        placeholder="Date Accomplished" style="max-width:180px;width:100%;"
-                                        value="{{ old('date_accomplished', $form['date_accomplished'] ?? '') }}" />
-                                    @error('date_accomplished')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form1-01-signature-col"
-                                    style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-                                    <input class="form1-01-input" type="text" name="or_no"
-                                        style="margin-bottom:6px;"
-                                        value="{{ old('or_no', $form['or_no'] ?? '') }}" />
-                                    @error('or_no')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-                                    <input class="form1-01-input" type="date" name="or_date"
-                                        style="margin-bottom:6px;"
-                                        value="{{ old('or_date', $form['or_date'] ?? '') }}" />
-                                    @error('or_date')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-                                    <input class="form1-01-input" type="text" name="or_amount"
-                                        style="margin-bottom:6px;"
-                                        value="{{ old('or_amount', $form['or_amount'] ?? '') }}" />
-                                    @error('or_amount')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
-                                </div>
-                            </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn09">Proceed to Validation</button></div>
-                        </fieldset>
-                    </section>
+                    <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" />
                 </div>
             </div>
         </form>
