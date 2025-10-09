@@ -11,9 +11,6 @@ abstract class BaseForm extends Model
     protected $fillable = [
         'form_token',
         'user_id',
-        'last_name',
-        'first_name',
-        'middle_name',
         'attachments'
     ];
 

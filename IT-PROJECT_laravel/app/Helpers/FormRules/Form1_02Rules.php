@@ -13,12 +13,12 @@ class Form1_02Rules
                 'first_name' => ['required', 'string', 'min:2'],
                 'middle_name' => ['required', 'string', 'min:2'],
 
-                // 3
+                // 3 
                 'dob' => ['required', 'date', 'before_or_equal:today'],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
-                //8
+                //8 Address fields
                 'unit' => ['required', 'string'],
                 'street' => ['required', 'string'],
                 'barangay' => ['required', 'string'],
@@ -28,6 +28,11 @@ class Form1_02Rules
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
                 'email' => ['nullable', 'email'],
 
+                // Exam fields
+                'exam_place' => ['required', 'string'],
+                'exam_date' => ['required', 'date', 'before_or_equal:today'],
+                'rating' => ['required', 'numeric'],
+
                 'height' => ['required', 'numeric'],
                 'weight' => ['required', 'numeric'],
                 'employment_status' => ['required', 'string'],
@@ -36,9 +41,9 @@ class Form1_02Rules
                 'modification_reason' => ['nullable', 'string'],
                 'years' => ['required', 'integer'],
                 'certificate_type' => ['required', 'string'],
-                'exam_place' => ['required', 'string'],
-                'exam_date' => ['required', 'date', 'before_or_equal:today'],
-                'rating' => ['required', 'numeric'],
+
+
+
             ],
 
             'messages' => [

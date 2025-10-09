@@ -4,12 +4,11 @@ namespace App\Models\Forms;
 
 use App\Models\User;
 
-class Form1_02 extends BaseForm
+class Form1_03 extends BaseForm
 {
     // Table name
-    protected $table = 'form1_02';
+    protected $table = 'form1_03';
 
-    // Database fields
     protected $extraFields = [
         // Applicant name fields
         'last_name',
@@ -31,38 +30,44 @@ class Form1_02 extends BaseForm
         'contact_number',
         'email',
 
-        //Application type fields
+        // Application type fields
         'application_type',
         'modification_reason',
         'years',
 
-
-        'height',
-        'weight',
-        'employment_status',
-        'employment_type',
-
-        'certificate_type',
-
-        // exam fields
+        // Exam fields
         'exam_place',
         'exam_date',
         'rating',
+
+        // License info
+        'atroc_arsl_no',
+        'call_sign',
+        'validity',
+        'station_class',
+        'permit_type',
+        'club_name',
+        'assigned_frequency',
+        'temporary_foreign',
+        'preferred_call_sign',
     ];
 
-    // Fields data type
+    // Casts for date fields
     protected $casts = [
         'dob' => 'date',
+        'exam_date' => 'date',
+        'validity' => 'date',
     ];
 
+    // Relationship with User
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Merge BaseForm fillable + extra fields
     public function __construct(array $attributes = [])
     {
-        // Merge BaseForm fillable with extra fields
         $this->fillable = array_merge($this->fillable ?? [], $this->extraFields);
         parent::__construct($attributes);
     }

@@ -18,7 +18,7 @@ class Form1_03Rules
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
-                //8
+                //8 Address fields
                 'unit' => ['required', 'string'],
                 'street' => ['required', 'string'],
                 'barangay' => ['required', 'string'],
@@ -28,17 +28,25 @@ class Form1_03Rules
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
                 'email' => ['nullable', 'email'],
 
-                'height' => ['required', 'numeric'],
-                'weight' => ['required', 'numeric'],
-                'employment_status' => ['required', 'string'],
-                'employment_type' => ['required', 'string'],
+                // Application type fields
                 'application_type' => ['required', 'string'],
                 'modification_reason' => ['nullable', 'string'],
                 'years' => ['required', 'integer'],
-                'certificate_type' => ['required', 'string'],
+
+                // Exam fields
                 'exam_place' => ['required', 'string'],
                 'exam_date' => ['required', 'date', 'before_or_equal:today'],
                 'rating' => ['required', 'numeric'],
+
+                'atroc_arsl_no'  => ['required', 'integer'],
+                'call_sign'  => ['required', 'string'],
+                'validity' => ['required', 'date', 'before_or_equal:today'],
+                'station_class'  => ['required', 'string'],
+                'permit_type'  => ['required', 'string'],
+                'club_name'  => ['required', 'string'],
+                'assigned_frequency'  => ['required', 'string'],
+                'temporary_foreign'  => ['required', 'string'],
+                'preferred_call_sign'  => ['required', 'string'],
             ],
 
             'messages' => [

@@ -11,6 +11,10 @@ class Form1_01 extends BaseForm
 
     // Database fields
     protected $extraFields = [
+        'last_name',
+        'first_name',
+        'middle_name',
+
         // 3 fields
         'dob',
         'sex',
