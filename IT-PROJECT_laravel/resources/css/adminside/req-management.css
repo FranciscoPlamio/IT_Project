@@ -98,15 +98,84 @@ body {
   margin-bottom: 25px;
 }
 
-.card {
-  max-height: 550px;
+/* Make the main card fill available width and height */
+.card.full-page {
+  width: 100%;
+  height: calc(100vh - 150px); /* full height minus header/sidebar padding */
+  display: flex;
+  flex-direction: column;
   background: #fff;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  margin-top: 20px;
-  margin-bottom: 55px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
 }
+
+/* Split the card evenly into two halves */
+/* Full height card layout */
+.card.full-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px); /* fills most of the screen minus header/padding */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Half section split vertically */
+.half-section {
+  flex: 1; /* makes each section take 50% height automatically */
+  display: flex;
+  flex-direction: column;
+  border-bottom: 2px solid #f1f1f1;
+  overflow: hidden; /* keeps internal scroll only */
+}
+
+/* Table container scrolls independently */
+.half-section .table-container,
+.half-section .table-container1 {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 8px;
+  border: 1px solid #eef2f7;
+}
+
+/* Make sure headers don’t shrink */
+.half-section .card-header {
+  flex-shrink: 0;
+  background: #fff;
+  z-index: 10;
+}
+
+/* Optional: smaller padding for inner sections */
+.half-section .card-header {
+  margin-bottom: 8px;
+}
+
+
+/* Scroll inside each table if overflow */
+.half-section .table-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Scrollbar inside each half */
+.half-section .table-container::-webkit-scrollbar {
+  width: 8px;
+}
+.half-section .table-container::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+/* Optional: better responsiveness */
+@media (max-height: 700px) {
+  .half-section {
+    flex: unset;
+    height: auto;
+  }
+}
+
 
 .card-header {
   display: flex;
@@ -204,9 +273,47 @@ body {
   font-size: 14px;
 }
 
+.table-container1 {
+  max-height: 450px;
+  overflow-y: auto;
+  border-radius: 8px;
+  border: 1px solid #eef2f7;
+}
+
+.table-container1 table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 700px;
+}
+
+.table-container1 thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #2a3545;
+  font-weight: 700;
+  background: #f3f5f9;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.table-container1 tbody tr {
+  border-bottom: 2px solid #eef2f7;
+}
+
+.table-container1 tbody tr:last-child {
+  border-bottom: none;
+}
+
+.table-container1 td {
+  padding: 14px 16px;
+  font-size: 14px;
+}
+
 /* See more */
 .see-more {
-  margin-top: 8px;
+  margin-top: 19px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -229,9 +336,8 @@ body {
     color: #007bff;
 }
 
-/* Upload File button with icon */
-.upload-btn {
-  margin-top: 5px;
+.see-more1 {
+  margin-top: 6px;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -245,14 +351,43 @@ body {
   padding: 0;
 }
 
+.see-more1 img {
+  width: 14px;
+  height: 14px;
+}
+
+.see-more1:hover {
+    color: #007bff;
+}
+/* Upload File button with icon */
+.upload-btn {
+  margin-top: 5px;
+  display: inline-flex;
+  flex-direction: column; /* ✅ icon on top of text */
+  align-items: center;
+  justify-content: center;
+  gap: 4px; /* space between icon and text */
+  color: #2a3545;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  transition: 0.2s ease;
+}
+
 .upload-btn img {
-  width: 18px;
-  height: 18px;
+  width: 22px;   /* slightly bigger for visibility */
+  height: 22px;
 }
 
 .upload-btn:hover {
   color: #007bff;
+  transform: translateY(-2px); /* subtle hover lift */
 }
+
 
 /* Clickable status badges styled as buttons */
 .badge-btn {
@@ -273,51 +408,60 @@ body {
   color: #fff;
 }
 
-.badge-btn.progress {
-  background: #ffcc00;
-  color: #333;
+.badge-btn.cancel {
+  background: #ef4444; 
+  color: #fff;
 }
+
 
 .badge-btn:hover {
   opacity: 0.9;
 }
 
 /* Card scrollable table */
-.table-container {
+.table-container,
+.table-container1 {
   max-height: 450px;     /* set height for scroll */
   overflow-y: scroll;    /* enable vertical scroll */
   overflow-x: hidden;
 }
 
 /* Scrollbar styling inside card */
-.table-container::-webkit-scrollbar {
+.table-container::-webkit-scrollbar,
+.table-container1::-webkit-scrollbar {
   width: 10px;
 }
 
-.table-container::-webkit-scrollbar-track {
+.table-container::-webkit-scrollbar-track,
+.table-container1::-webkit-scrollbar-track {
   background: #f1f1f100;
   border-radius: 10px;
 }
 
-.table-container::-webkit-scrollbar-thumb {
+.table-container::-webkit-scrollbar-thumb 
+,.table-container1::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
+.table-container::-webkit-scrollbar-thumb:hover,
+.table-container1::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
 /* Firefox support */
-.table-container {
+.table-container,
+.table-container1 {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f100;
 }
 
-.table-container table tbody tr:last-child td {
+.table-container table tbody tr:last-child td,
+.table-container1 table tbody tr:last-child td {
   border-bottom: none;
 }
-.table-container table td:first-child {
+.table-container table td:first-child,
+.table-container1 table td:first-child{
   font-family: 'Poppins-700', sans-serif; 
 }
 

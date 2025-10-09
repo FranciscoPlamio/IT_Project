@@ -95,9 +95,9 @@ Route::get('/', function () {
 
 Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
 
-Route::get('/adminside/req-management', function () {
-    return view('adminside.req-management');
-})->name('adminside.req-management');
+Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
+
+Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
 
 Route::get('/adminside/bill-pay', function () {
     return view('adminside.bill-pay');

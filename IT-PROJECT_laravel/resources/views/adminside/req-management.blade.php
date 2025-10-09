@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Certification Request</title>
 
   @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js', ])
@@ -49,21 +50,24 @@
 
   <!-- Main Content -->
   <div class="main">
-    <h1>Certification Request</h1>
+  <h1>Certification Request</h1>
 
-    <div class="card">
-  <div class="card-header">
-    <h2>Latest Request</h2>
-    <div class="actions">
-      <div class="search-bar">
-        <input type="text" placeholder="Search">
-        <img src="{{ asset ('images/search-icon.png') }}" alt="Search">
+  <div class="card full-page">
+    <!-- Latest Request -->
+    <section class="half-section">
+      <div class="card-header">
+        <h2>Latest Request</h2>
+        <div class="actions">
+          <div class="search-bar">
+            <input type="text" placeholder="Search">
+            <img src="{{ asset('images/search-icon.png') }}" alt="Search">
+          </div>
+          <div class="filter-bar">
+            <img src="{{ asset('images/filter-icon.png') }}" alt="Filter">
+          </div>
+        </div>
       </div>
-      <div class="filter-bar">
-        <img src="{{ asset ('images/filter-icon.png') }}" alt="Filter">
-      </div>
-    </div>
-  </div>
+
       <div class="table-container">
         <table class="styled-table">
           <thead>
@@ -77,51 +81,51 @@
             </tr>
           </thead>
           <tbody>
-            <?php 
-            // Example static data (replace with dynamic later)
-            $latest_requests = [
-              ["#128336470", "Maintenance", "14 Oct 2024"],
-              ["#128336483", "Maintenance", "14 Oct 2024"],
-              ["#128336443", "Maintenance", "14 Oct 2024"],
-            ];
-
-            foreach ($latest_requests as $req) { ?>
-              <tr>
-                <td><?php echo $req[0]; ?></td>
-                <td><?php echo $req[1]; ?></td>
-                <td><?php echo $req[2]; ?></td>
-                <td class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt="See"></td>
-                <td>
+          @foreach($latestRequests as $req)
+          <tr>
+              <td>{{ $req->_id }}</td>
+              <td>{{ $req->form_type ?? 'N/A' }}</td>
+              <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
+              <td class="see-more">
+                  See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
+              </td>
+              <td>
                   <button class="upload-btn" onclick="handleUpload()">
-                    <img src="{{ asset ('images/upload-icon.png') }}" alt="Upload"> Upload file
+                      <img src="{{ asset('images/upload-icon.png') }}" alt="Upload">
+                      Upload file
                   </button>
-                </td>
-                <td>
-                  <button class="badge-btn complete" onclick="handleComplete()">Complete</button>
-                  <button class="badge-btn progress" onclick="handleProgress()">In Progress</button>
-                </td>
-              </tr>
-            <?php } ?>
-          </tbody>
+              </td>
+              <td>
+                  <button class="badge-btn complete" onclick="updateStatus('{{ $req->_id }}', 'done')">
+                      Complete
+                  </button>
+                  <button class="badge-btn progress" style="background:#ef4444;" onclick="updateStatus('{{ $req->_id }}', 'cancel')">
+                      Cancel
+                  </button>
+              </td>
+          </tr>
+          @endforeach
+        </tbody>
         </table>
       </div>
     </section>
 
-    <!-- History Card -->
-    <section class="card">
+    <!-- History -->
+    <section class="half-section">
       <div class="card-header">
         <h2>History</h2>
         <div class="actions">
           <div class="search-bar">
-        <input type="text" placeholder="Search">
-        <img src="{{ asset ('images/search-icon.png') }}" alt="Search">
-      </div>
-      <div class="filter-bar">
-        <img src="{{ asset ('images/filter-icon.png') }}" alt="Filter">
-      </div>
+            <input type="text" placeholder="Search">
+            <img src="{{ asset('images/search-icon.png') }}" alt="Search">
+          </div>
+          <div class="filter-bar">
+            <img src="{{ asset('images/filter-icon.png') }}" alt="Filter">
+          </div>
         </div>
       </div>
-      <div class="table-container">
+
+      <div class="table-container1">
         <table class="styled-table">
           <thead>
             <tr>
@@ -133,22 +137,23 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
+         <tbody>
+          @foreach($historyRequests as $req)
             <tr>
-              <td>#12211321</td>
-              <td>Maintenance</td>
-              <td>05 Oct 2024</td>
-              <td>14 Oct 2024</td>
-              <td class="see-more">See more <img src="{{ asset ('images/see-icon.png') }}" alt="See"></td>
+              <td>#{{ $req->form_id }}</td>
+              <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
+              <td>{{ $req->formatted_date }}</td>
+              <td>{{ optional($req->updated_at)->format('d M Y') ?? 'N/A' }}</td>
+              <td class="see-more1">See more <img src="{{ asset('images/see-icon.png') }}" alt="See"></td>
               <td><span class="badge done">Done</span></td>
             </tr>
-          </tbody>
+          @endforeach
+        </tbody>
         </table>
       </div>
     </section>
-
+  </div>
+</div>
   </main>
-
-  <script src="javascript/req-management.js"></script>
 </body>
 </html>

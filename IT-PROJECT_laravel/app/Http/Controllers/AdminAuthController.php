@@ -134,4 +134,50 @@ public function certRequest(Request $request)
 
     return view('adminside.cert-request', compact('user', 'requests', 'highlight'));
 }
+
+public function requestManagement(Request $request)
+{
+    // Optional: check if admin is logged in
+    // if (!$request->session()->has('admin')) {
+    //     return redirect()->route('admin.login');
+    // }
+
+    $user = User::find($request->session()->get('admin'));
+
+    // Import MongoDB\BSON\Regex at the top of the file:
+    // use MongoDB\BSON\Regex;
+
+    // === Fetch Latest Requests (NOT "done", case-insensitive) ===
+     $latestRequests = FormsTransactions::where('status', '!=', 'done')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    $historyRequests = FormsTransactions::where('status', 'done')
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return view('adminside.req-management', compact('latestRequests', 'historyRequests'));
+}
+
+public function updateStatus(Request $request)
+{
+    try {
+        $form = \App\Models\Forms\FormsTransactions::where('_id', $request->form_id)->first();
+
+        if (!$form) {
+            return response()->json(['success' => false, 'message' => 'Form not found']);
+        }
+
+        $form->status = $request->status;
+        $form->save();
+
+        return response()->json(['success' => true, 'message' => 'Status updated']);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Server error: ' . $e->getMessage()
+        ]);
+    }
+}
+
 }

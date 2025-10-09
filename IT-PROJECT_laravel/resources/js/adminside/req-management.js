@@ -1,3 +1,5 @@
+console.log("req-management.js loaded");
+
 // Handle Upload button click
 function handleUpload() {
     const input = document.createElement('input');
@@ -62,3 +64,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+function updateStatus(formId, newStatus) {
+    console.log("Updating status for:", formId, "→", newStatus);
+
+    fetch('/admin/update-status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({
+            form_id: formId,
+            status: newStatus
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server response:", data);
+
+        if (data.success) {
+            alert(` Status updated to ${newStatus.toUpperCase()}`);
+            location.reload(); // refresh to reflect change
+        } else {
+            alert(` ${data.message || "Failed to update status."}`);
+        }
+    })
+    .catch(error => {
+        console.error(" AJAX error:", error);
+        alert("Something went wrong. Check the console.");
+    });
+}
+
+window.updateStatus = updateStatus;
+
