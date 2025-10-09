@@ -146,177 +146,98 @@
                         @php
                             $applicationTypeValue = old('application_type', $form['application_type'] ?? '');
                         @endphp
-                        <fieldset class="fieldset-compact">
-                            <legend>Application Details</legend>
-                            <div class="form-grid-2">
-                                <div class="form-field" data-require-one="input[type=radio]">
-                                    <fieldset class="sub-fieldset form-field">
-                                        <legend>Type of Application</legend>
-                                        <label><input type="radio" name="application_type" value="purchase"
-                                                {{ $applicationTypeValue == 'purchase' ? 'checked' : '' }}>
-                                            PURCHASE</label>
-                                        <label><input type="radio" name="application_type" value="possess"
-                                                {{ $applicationTypeValue == 'possess' ? 'checked' : '' }}>
-                                            POSSESS</label>
-                                        <label><input type="radio" name="application_type" value="sell_transfer"
-                                                {{ $applicationTypeValue == 'sell_transfer' ? 'checked' : '' }}>
-                                            SELL/TRANSFER</label>
-                                        @error('application_type')
-                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </fieldset>
-                                </div>
-                                @php
-                                    $radioServiceValue = old('radio_service', $form['radio_service'] ?? '');
-                                @endphp
-                                <div class="form-field" data-require-one="input[type=radio]">
-                                    <fieldset class="sub-fieldset form-field">
-                                        <legend>Type of Radio Service</legend>
-                                        <label><input type="radio" name="radio_service" value="fixed_land_mobile"
-                                                {{ $radioServiceValue == 'fixed_land_mobile' ? 'checked' : '' }}>
-                                            FIXED AND LAND MOBILE</label>
-                                        <label><input type="radio" name="radio_service" value="aeronautical"
-                                                {{ $radioServiceValue == 'aeronautical' ? 'checked' : '' }}>
-                                            AERONAUTICAL</label>
-                                        <label><input type="radio" name="radio_service" value="maritime"
-                                                {{ $radioServiceValue == 'maritime' ? 'checked' : '' }}>
-                                            MARITIME</label>
-                                        <label><input type="radio" name="radio_service" value="broadcast"
-                                                {{ $radioServiceValue == 'broadcast' ? 'checked' : '' }}>
-                                            BROADCAST</label>
-                                        <label><input type="radio" name="radio_service" value="amateur"
-                                                {{ $radioServiceValue == 'amateur' ? 'checked' : '' }}>
-                                            AMATEUR</label>
-                                        <label><input type="radio" name="radio_service" value="others"
-                                                {{ $radioServiceValue == 'others' ? 'checked' : '' }}>
-                                            OTHERS, specify</label>
-                                        <input class="form1-01-input" type="text" name="others_specify"
-                                            value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
-                                        @error('radio_service')
-                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                        @enderror
-                                        @error('others_specify')
-                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </fieldset>
-                                </div>
+
+                        <div class="form-grid-2">
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <fieldset class="sub-fieldset form-field">
+                                    <legend>Type of Application</legend>
+                                    <label><input type="radio" name="application_type" value="purchase"
+                                            {{ $applicationTypeValue == 'purchase' ? 'checked' : '' }}>
+                                        PURCHASE</label>
+                                    <label><input type="radio" name="application_type" value="possess"
+                                            {{ $applicationTypeValue == 'possess' ? 'checked' : '' }}>
+                                        POSSESS</label>
+                                    <label><input type="radio" name="application_type" value="sell_transfer"
+                                            {{ $applicationTypeValue == 'sell_transfer' ? 'checked' : '' }}>
+                                        SELL/TRANSFER</label>
+                                    @error('application_type')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </fieldset>
                             </div>
-                            <div class="form-grid-2">
-                                @php
-                                    $natureServiceValue = old('nature_service', $form['nature_service'] ?? '');
-                                @endphp
-                                <div class="form-field" data-require-one="input[type=radio]">
-                                    <fieldset class="sub-fieldset form-field">
-                                        <legend>Nature of Service</legend>
-                                        <label><input type="radio" name="nature_service" value="cv_private"
-                                                {{ $natureServiceValue == 'cv_private' ? 'checked' : '' }}> CV
-                                            (PRIVATE)</label>
-                                        <label><input type="radio" name="nature_service" value="co_government"
-                                                {{ $natureServiceValue == 'co_government' ? 'checked' : '' }}> CO
-                                            (GOVERNMENT)</label>
-                                        <label><input type="radio" name="nature_service" value="cp_public"
-                                                {{ $natureServiceValue == 'cp_public' ? 'checked' : '' }}> CP
-                                            (PUBLIC CORRESPONDENCE)</label>
-                                        @error('nature_service')
-                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                        @enderror
-                                    </fieldset>
-                                </div>
-                                <div class="form-field">
-                                    <fieldset class="sub-fieldset form-field">
-                                        <legend>Class of Station (indicate units)</legend>
-                                        <div class="form-grid-2">
-                                            <div class="form-field">
-                                                <label class="form-label">RT (Radio Telephone)</label>
-                                                <input class="form1-01-input" type="text" name="rt_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('rt_units', $form['rt_units'] ?? '') }}">
-                                            </div>
-                                            <div class="form-field">
-                                                <label class="form-label">FX (Fixed)</label>
-                                                <input class="form1-01-input" type="text" name="fx_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('fx_units', $form['fx_units'] ?? '') }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-grid-2">
-                                            <div class="form-field">
-                                                <label class="form-label">FB (Fixed Base)</label>
-                                                <input class="form1-01-input" type="text" name="fb_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('fb_units', $form['fb_units'] ?? '') }}">
-                                            </div>
-                                            <div class="form-field">
-                                                <label class="form-label">ML (Mobile Land)</label>
-                                                <input class="form1-01-input" type="text" name="ml_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('ml_units', $form['ml_units'] ?? '') }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-grid-2">
-                                            <div class="form-field">
-                                                <label class="form-label">P (Portable)</label>
-                                                <input class="form1-01-input" type="text" name="p_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('p_units', $form['p_units'] ?? '') }}">
-                                            </div>
-                                            <div class="form-field">
-                                                <label class="form-label">BC (Broadcast)</label>
-                                                <input class="form1-01-input" type="text" name="bc_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('bc_units', $form['bc_units'] ?? '') }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-grid-2">
-                                            <div class="form-field">
-                                                <label class="form-label">FC (Fixed Commercial)</label>
-                                                <input class="form1-01-input" type="text" name="fc_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('fc_units', $form['fc_units'] ?? '') }}">
-                                            </div>
-                                            <div class="form-field">
-                                                <label class="form-label">FA (Fixed Aeronautical)</label>
-                                                <input class="form1-01-input" type="text" name="fa_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('fa_units', $form['fa_units'] ?? '') }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-grid-2">
-                                            <div class="form-field">
-                                                <label class="form-label">MA (Mobile Aeronautical)</label>
-                                                <input class="form1-01-input" type="text" name="ma_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('ma_units', $form['ma_units'] ?? '') }}">
-                                            </div>
-                                            <div class="form-field">
-                                                <label class="form-label">TC (Temporary Commercial)</label>
-                                                <input class="form1-01-input" type="text" name="tc_units"
-                                                    placeholder="Units"
-                                                    value="{{ old('tc_units', $form['tc_units'] ?? '') }}">
-                                            </div>
-                                        </div>
-                                        <div class="form-field">
-                                            <label class="form-label">Others</label>
-                                            <input class="form1-01-input" type="text"
-                                                name="others_station_specify" placeholder="Specify type"
-                                                value="{{ old('others_station_specify', $form['others_station_specify'] ?? '') }}">
-                                            <input class="form1-01-input" type="text" name="others_station_units"
-                                                placeholder="Units"
-                                                value="{{ old('others_station_units', $form['others_station_units'] ?? '') }}">
-                                        </div>
-                                    </fieldset>
-                                </div>
+                            @php
+                                $radioServiceValue = old('radio_service', $form['radio_service'] ?? '');
+                            @endphp
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <fieldset class="sub-fieldset form-field">
+                                    <legend>Type of Radio Service</legend>
+                                    <label><input type="radio" name="radio_service" value="fixed_land_mobile"
+                                            {{ $radioServiceValue == 'fixed_land_mobile' ? 'checked' : '' }}>
+                                        FIXED AND LAND MOBILE</label>
+                                    <label><input type="radio" name="radio_service" value="aeronautical"
+                                            {{ $radioServiceValue == 'aeronautical' ? 'checked' : '' }}>
+                                        AERONAUTICAL</label>
+                                    <label><input type="radio" name="radio_service" value="maritime"
+                                            {{ $radioServiceValue == 'maritime' ? 'checked' : '' }}>
+                                        MARITIME</label>
+                                    <label><input type="radio" name="radio_service" value="broadcast"
+                                            {{ $radioServiceValue == 'broadcast' ? 'checked' : '' }}>
+                                        BROADCAST</label>
+                                    <label><input type="radio" name="radio_service" value="amateur"
+                                            {{ $radioServiceValue == 'amateur' ? 'checked' : '' }}>
+                                        AMATEUR</label>
+                                    <label><input type="radio" name="radio_service" value="others"
+                                            {{ $radioServiceValue == 'others' ? 'checked' : '' }}>
+                                        OTHERS, specify</label>
+                                    <input class="form1-01-input" type="text" name="others_specify"
+                                        value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
+                                    @error('radio_service')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                    @error('others_specify')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </fieldset>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
-                        </fieldset>
+                        </div>
+                        <div class="form-grid-2">
+                            @php
+                                $natureServiceValue = old('nature_service', $form['nature_service'] ?? '');
+                            @endphp
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <fieldset class="sub-fieldset form-field">
+                                    <legend>Nature of Service</legend>
+                                    <label><input type="radio" name="nature_service" value="cv_private"
+                                            {{ $natureServiceValue == 'cv_private' ? 'checked' : '' }}> CV
+                                        (PRIVATE)</label>
+                                    <label><input type="radio" name="nature_service" value="co_government"
+                                            {{ $natureServiceValue == 'co_government' ? 'checked' : '' }}> CO
+                                        (GOVERNMENT)</label>
+                                    <label><input type="radio" name="nature_service" value="cp_public"
+                                            {{ $natureServiceValue == 'cp_public' ? 'checked' : '' }}> CP
+                                        (PUBLIC CORRESPONDENCE)</label>
+                                    @error('nature_service')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </fieldset>
+                            </div>
+                            <div class="form-field">
+                                <fieldset class="sub-fieldset form-field">
+                                    <!-- Class of Station field -->
+                                    <x-forms.class-station-field :form="$form ?? []" />
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button type="button" class="btn-primary"
+                                data-next>Next</button></div>
+
                     </section>
 
                     <section class="step-content" id="step-station">
                         <fieldset class="fieldset-compact">
                             <legend>Particulars of Proposed Station/Equipment</legend>
-                            <div class="form-grid-3">
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Exact Location</label>
                                     <input class="form1-01-input" type="text" name="exact_location" required
@@ -326,34 +247,33 @@
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Longitude
-                                        (deg-min-sec)</label>
+                                    <label class="form-label">Longitude (deg-min-sec)</label>
                                     <input class="form1-01-input" type="text" name="longitude"
                                         value="{{ old('longitude', $form['longitude'] ?? '') }}">
                                     @error('longitude')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
-                                    <label class="form-label">Latitude
-                                        (deg-min-sec)</label>
+                                    <label class="form-label">Latitude (deg-min-sec)</label>
                                     <input class="form1-01-input" type="text" name="latitude"
                                         value="{{ old('latitude', $form['latitude'] ?? '') }}">
                                     @error('latitude')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-2">
                                 <div class="form-field">
-                                    <label class="form-label">Points of Comm/Service
-                                        Area</label>
+                                    <label class="form-label">Points of Comm/Service Area</label>
                                     <input class="form1-01-input" type="text" name="points_of_comm"
                                         value="{{ old('points_of_comm', $form['points_of_comm'] ?? '') }}">
                                     @error('points_of_comm')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Frequency</label>
                                     <input class="form1-01-input" type="text" name="frequency"
@@ -362,8 +282,6 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Make/Type/Model</label>
                                     <input class="form1-01-input" type="text" name="make_type_model"
@@ -372,6 +290,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Serial Number</label>
                                     <input class="form1-01-input" type="text" name="serial_number"
@@ -380,17 +300,16 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-3">
                                 <div class="form-field">
-                                    <label class="form-label">Bandwidth &
-                                        Emission</label>
+                                    <label class="form-label">Bandwidth & Emission</label>
                                     <input class="form1-01-input" type="text" name="bandwidth_emission"
                                         value="{{ old('bandwidth_emission', $form['bandwidth_emission'] ?? '') }}">
                                     @error('bandwidth_emission')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Power Output</label>
                                     <input class="form1-01-input" type="text" name="power_output"

@@ -222,6 +222,13 @@ textarea.form1-01-input {
     margin-top: 8px;
 }
 
+.form-grid-1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px 22px;
+    margin-bottom: 18px;
+}
+
 .form-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;

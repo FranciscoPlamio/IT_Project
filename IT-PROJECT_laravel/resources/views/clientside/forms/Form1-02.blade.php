@@ -123,8 +123,10 @@
 
                             <div class="form-grid-2">
 
-                                <!-- Application type fields -->
-                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                                <fieldset class="fieldset-compact">
+                                    <!-- Application type fields -->
+                                    <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                                </fieldset>
 
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     @error('certificate_type')

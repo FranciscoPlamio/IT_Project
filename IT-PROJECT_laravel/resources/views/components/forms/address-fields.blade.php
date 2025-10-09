@@ -27,7 +27,7 @@
         @enderror
     </div>
 </div>
-<div class="form-grid-3">
+<div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Barangay</label>
         <input class="form1-01-input" type="text" name="barangay"
@@ -43,6 +43,8 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
+</div>
+<div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Province</label>
         <input class="form1-01-input" type="text" name="province"
@@ -51,8 +53,6 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
-</div>
-<div class="form-grid-3">
     <div class="form-field">
         <label class="form-label">Zip Code</label>
         <input class="form1-01-input" type="text" name="zip_code"
@@ -61,6 +61,8 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
+</div>
+<div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Contact Number</label>
         <input class="form1-01-input" type="text" name="contact_number"

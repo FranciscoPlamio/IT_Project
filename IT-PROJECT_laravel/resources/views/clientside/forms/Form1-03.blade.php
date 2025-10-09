@@ -89,8 +89,12 @@
                         @endphp
 
                         <div class="form-grid-2">
-                            <!-- Application type fields -->
-                            <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                            <fieldset class="fieldset-compact">
+                                <legend>Type of Application</legend>
+                                <!-- Application type fields -->
+                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                            </fieldset>
+
 
                             <fieldset class="fieldset-compact">
                                 <legend>Type of Class of Station</legend>
@@ -116,41 +120,36 @@
                                                 {{ $stationClassValue == 'class_d' ? 'checked' : '' }}>
                                             Class D
                                         </label>
-                                        <label class="form-label">No. of Years</label>
-                                        <input class="form1-01-input" type="text" name="years"
-                                            placeholder="e.g., 2" value="{{ old('years', $form['years'] ?? '') }}">
-                                        @error('station_class')
-                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                        @enderror
                                     </div>
                                 </div>
-                                <div class="form-field" data-require-one="input[type=radio]">
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_a"
-                                            {{ $stationClassValue == 'class_a' ? 'checked' : '' }}>
-                                        Class A
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_b"
-                                            {{ $stationClassValue == 'class_b' ? 'checked' : '' }}>
-                                        Class B
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_c"
-                                            {{ $stationClassValue == 'class_c' ? 'checked' : '' }}>
-                                        Class C
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_d"
-                                            {{ $stationClassValue == 'class_d' ? 'checked' : '' }}>
-                                        Class D
-                                    </label>
-                                    <label class="form-label">No. of Years</label>
-                                    <input class="form1-01-input" type="text" name="years"
-                                        placeholder="e.g., 2" value="{{ old('years', $form['years'] ?? '') }}">
-                                    @error('station_class')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                        </div>
+                        </fieldset>
+
+                        <fieldset class="fieldset-compact">
+                            <legend>Type of Permit/License/Certificate </legend>
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <label>
+                                    <input type="radio" name="permit_type" value="amateur_operator"
+                                        {{ $permitTypeValue == 'amateur_operator' ? 'checked' : '' }}>
+                                    Amateur Radio Operator Certificate
+                                </label>
+                                <label>
+                                    <input type="radio" name="permit_type" value="amateur_station"
+                                        {{ $permitTypeValue == 'amateur_station' ? 'checked' : '' }}>
+                                    Amateur Radio Station License
+                                </label>
+                                <label>
+                                    <input type="radio" name="permit_type" value="club_station"
+                                        {{ $permitTypeValue == 'club_station' ? 'checked' : '' }}>
+                                    Club Radio Station License
+                                </label>
+                                <div style="margin-left:12px;margin-top:8px;">
+                                    <label class="form-label">Name of Club</label>
+                                    <input class="form1-01-input" type="text" name="club_name"
+                                        value="{{ old('club_name', $form['club_name'] ?? '') }}">
+                                    <label class="form-label">Assigned Freq.</label>
+                                    <input class="form1-01-input" type="text" name="assigned_frequency"
+                                        value="{{ old('assigned_frequency', $form['assigned_frequency'] ?? '') }}">
                                 </div>
                                 <label>
                                     <input type="radio" name="permit_type" value="temporary_foreign"
@@ -170,7 +169,9 @@
                                 @enderror
                             </div>
                         </fieldset>
-
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button type="button" class="btn-primary"
+                                data-next>Next</button></div>
                     </section>
 
                     <section class="step-content" id="step-exam">
@@ -312,6 +313,8 @@
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
                     let valid = true;
+
+                    // Get all required fields in the current section, regardless of fieldset
                     section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
                         if (el.type === 'radio') {
                             const name = el.name;
@@ -322,7 +325,10 @@
                             valid = false;
                         }
                     });
+
+                    // Validate groups anywhere in the section
                     if (!validateGroups(section)) valid = false;
+
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
                         li.classList.add('completed');
@@ -334,15 +340,21 @@
                     return valid;
                 }
 
+                // Handle step navigation via sidebar
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
                     showStep(li.dataset.step);
                 });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
-                    if (validateActiveStep()) go(1);
-                }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+                // Handle next/prev buttons anywhere in the form
+                document.addEventListener('click', (e) => {
+                    if (e.target.matches('[data-next]')) {
+                        if (validateActiveStep()) go(1);
+                    } else if (e.target.matches('[data-prev]')) {
+                        go(-1);
+                    }
+                });
 
                 const validateBtn = document.getElementById('validateBtn03');
                 if (validateBtn) {

@@ -43,56 +43,10 @@
                                 $applicationTypeValue = [];
                             }
                         @endphp
-                        <fieldset class="fieldset-compact">
-                            <legend>Type of Application</legend>
-                            <div class="form-grid-2">
-                                <div class="form-field" data-require-one="input[type=checkbox]">
-                                    <label><input type="checkbox" name="application_type" value="new"
-                                            {{ in_array('new', $applicationTypeValue) ? 'checked' : '' }}>
-                                        NEW</label>
-                                    <label><input type="checkbox" name="application_type" value="renewal"
-                                            {{ in_array('renewal', $applicationTypeValue) ? 'checked' : '' }}>
-                                        RENEWAL</label>
-                                    <label><input type="checkbox" name="application_type" value="modification"
-                                            {{ in_array('modification', $applicationTypeValue) ? 'checked' : '' }}>
-                                        MODIFICATION due to (USE FORM B)</label>
-                                    <input class="form1-01-input" type="text" name="modification_reason"
-                                        placeholder="Reason (if modification)"
-                                        value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
-                                    @error('application_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    @error('modification_reason')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                @php
-                                    $permitTypeValue = old('permit_type', $form['permit_type'] ?? []);
-                                    if (!is_array($permitTypeValue)) {
-                                        $permitTypeValue = [];
-                                    }
-                                @endphp
-                                <div class="form-field">
-                                    <label class="form-label">NO. OF YEARS</label>
-                                    <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
-                                        required value="{{ old('years', $form['years'] ?? '') }}">
-                                    @error('years')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <label class="form-label" style="margin-top:12px;">Permit Type</label>
-                                    <label><input type="checkbox" name="permit_type" value="construction_permit"
-                                            {{ in_array('construction_permit', $permitTypeValue) ? 'checked' : '' }}>
-                                        CONSTRUCTION PERMIT</label>
-                                    <label><input type="checkbox" name="permit_type" value="radio_station_license"
-                                            {{ in_array('radio_station_license', $permitTypeValue) ? 'checked' : '' }}>
-                                        RADIO STATION LICENSE</label>
-                                    @error('permit_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
-                            </div>
+                        <x-forms.application-type-fields :form="$form ?? []" :application-type="$applicationTypeValue" :show-permit="true" />
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button type="button" class="btn-primary"
+                                data-next>Next</button></div>
                         </fieldset>
                     </section>
 
@@ -105,24 +59,24 @@
                         @endphp
                         <fieldset class="fieldset-compact">
                             <legend>Type of Radio Service</legend>
-                            <div class="form-grid-2" data-require-one="input[type=checkbox]">
+                            <div class="form-grid-2" data-require-one="input[type=radio]">
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"
-                                            {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="fixed_land_mobile"
+                                            {{ $radioServiceValue == 'fixed_land_mobile' ? 'checked' : '' }}>
                                         FIXED AND LAND MOBILE</label>
-                                    <label><input type="checkbox" name="radio_service" value="aeronautical"
-                                            {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="aeronautical"
+                                            {{ $radioServiceValue == 'aeronautical' ? 'checked' : '' }}>
                                         AERONAUTICAL</label>
-                                    <label><input type="checkbox" name="radio_service" value="maritime"
-                                            {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}> MARITIME
+                                    <label><input type="radio" name="radio_service" value="maritime"
+                                            {{ $radioServiceValue == 'maritime' ? 'checked' : '' }}> MARITIME
                                         (Public/Private Coastal)</label>
                                 </div>
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="radio_service" value="broadcast"
-                                            {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
+                                    <label><input type="radio" name="radio_service" value="broadcast"
+                                            {{ $radioServiceValue == 'broadcast' ? 'checked' : '' }}>
                                         BROADCAST</label>
-                                    <label><input type="checkbox" name="radio_service" value="others"
-                                            {{ in_array('others', $radioServiceValue) ? 'checked' : '' }}> OTHERS,
+                                    <label><input type="radio" name="radio_service" value="others"
+                                            {{ $radioServiceValue == 'others' ? 'checked' : '' }}> OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
                                         placeholder="Specify"
@@ -146,66 +100,8 @@
                             }
                         @endphp
                         <fieldset class="fieldset-compact">
-                            <legend>Class of Station</legend>
-                            <div class="form-grid-2" data-require-one="input[type=checkbox]">
-                                <div class="form-field">
-                                    <label><input type="checkbox" name="station_class" value="rt"
-                                            {{ in_array('rt', $stationClassValue) ? 'checked' : '' }}> RT</label>
-                                    <input class="form1-01-input" type="text" name="rt_units" placeholder="Units"
-                                        value="{{ old('rt_units', $form['rt_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="fx"
-                                            {{ in_array('fx', $stationClassValue) ? 'checked' : '' }}> FX</label>
-                                    <input class="form1-01-input" type="text" name="fx_units" placeholder="Units"
-                                        value="{{ old('fx_units', $form['fx_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="fb"
-                                            {{ in_array('fb', $stationClassValue) ? 'checked' : '' }}> FB</label>
-                                    <input class="form1-01-input" type="text" name="fb_units" placeholder="Units"
-                                        value="{{ old('fb_units', $form['fb_units'] ?? '') }}">
-                                </div>
-                                <div class="form-field">
-                                    <label><input type="checkbox" name="station_class" value="ml"
-                                            {{ in_array('ml', $stationClassValue) ? 'checked' : '' }}> ML</label>
-                                    <input class="form1-01-input" type="text" name="ml_units" placeholder="Units"
-                                        value="{{ old('ml_units', $form['ml_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="p"
-                                            {{ in_array('p', $stationClassValue) ? 'checked' : '' }}> P</label>
-                                    <input class="form1-01-input" type="text" name="p_units" placeholder="Units"
-                                        value="{{ old('p_units', $form['p_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="bc"
-                                            {{ in_array('bc', $stationClassValue) ? 'checked' : '' }}> BC</label>
-                                    <input class="form1-01-input" type="text" name="bc_units" placeholder="Units"
-                                        value="{{ old('bc_units', $form['bc_units'] ?? '') }}">
-                                </div>
-                                <div class="form-field">
-                                    <label><input type="checkbox" name="station_class" value="fc"
-                                            {{ in_array('fc', $stationClassValue) ? 'checked' : '' }}> FC</label>
-                                    <input class="form1-01-input" type="text" name="fc_units" placeholder="Units"
-                                        value="{{ old('fc_units', $form['fc_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="fa"
-                                            {{ in_array('fa', $stationClassValue) ? 'checked' : '' }}> FA</label>
-                                    <input class="form1-01-input" type="text" name="fa_units" placeholder="Units"
-                                        value="{{ old('fa_units', $form['fa_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="ma"
-                                            {{ in_array('ma', $stationClassValue) ? 'checked' : '' }}> MA</label>
-                                    <input class="form1-01-input" type="text" name="ma_units" placeholder="Units"
-                                        value="{{ old('ma_units', $form['ma_units'] ?? '') }}">
-                                </div>
-                                <div class="form-field">
-                                    <label><input type="checkbox" name="station_class" value="tc"
-                                            {{ in_array('tc', $stationClassValue) ? 'checked' : '' }}> TC</label>
-                                    <input class="form1-01-input" type="text" name="tc_units" placeholder="Units"
-                                        value="{{ old('tc_units', $form['tc_units'] ?? '') }}">
-                                    <label><input type="checkbox" name="station_class" value="others_station"
-                                            {{ in_array('others_station', $stationClassValue) ? 'checked' : '' }}>
-                                        OTHERS, specify</label>
-                                    <input class="form1-01-input" type="text" name="others_station_specify"
-                                        placeholder="Type"
-                                        value="{{ old('others_station_specify', $form['others_station_specify'] ?? '') }}">
-                                    <input class="form1-01-input" type="text" name="others_station_units"
-                                        placeholder="Units"
-                                        value="{{ old('others_station_units', $form['others_station_units'] ?? '') }}">
-                                </div>
-                            </div>
+                            <!-- Class of Station field -->
+                            <x-forms.class-station-field :form="$form ?? []" />
                             @error('station_class')
                                 <p class="text-red text-sm mt-1">{{ $message }}</p>
                             @enderror
@@ -216,88 +112,20 @@
                     </section>
 
                     <section class="step-content" id="step-personal">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>Applicant Information</legend>
-                            <div class="form-grid-3">
+                            <div class="form-grid-1">
                                 <div class="form-field">
                                     <label class="form-label">Applicant</label>
-                                    <input class="form1-01-input" type="text" name="applicant" required
+                                    <input class="form1-01-input" type="text" name="applicant"
                                         value="{{ old('applicant', $form['applicant'] ?? '') }}">
                                     @error('applicant')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="form-field">
-                                    <label class="form-label">Contact No.</label>
-                                    <input class="form1-01-input" type="text" name="contact_number" required
-                                        value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
-                                    @error('contact_number')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email" required
-                                        value="{{ old('email', $form['email'] ?? '') }}">
-                                    @error('email')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Unit/Rm/Bldg No.</label>
-                                    <input class="form1-01-input" type="text" name="unit_no"
-                                        value="{{ old('unit_no', $form['unit_no'] ?? '') }}">
-                                    @error('unit_no')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Street</label>
-                                    <input class="form1-01-input" type="text" name="street"
-                                        value="{{ old('street', $form['street'] ?? '') }}">
-                                    @error('street')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Barangay</label>
-                                    <input class="form1-01-input" type="text" name="barangay"
-                                        value="{{ old('barangay', $form['barangay'] ?? '') }}">
-                                    @error('barangay')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">City/Municipality</label>
-                                    <input class="form1-01-input" type="text" name="city"
-                                        value="{{ old('city', $form['city'] ?? '') }}">
-                                    @error('city')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Province</label>
-                                    <input class="form1-01-input" type="text" name="province"
-                                        value="{{ old('province', $form['province'] ?? '') }}">
-                                    @error('province')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Zip Code</label>
-                                    <input class="form1-01-input" type="text" name="zip_code"
-                                        value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
-                                    @error('zip_code')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            <!-- address fields -->
+                            <x-forms.address-fields :form="$form ?? []" />
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
                                     data-next>Next</button></div>
@@ -307,7 +135,7 @@
                     <section class="step-content" id="step-particulars">
                         <fieldset>
                             <legend>Particulars of Station / Equipment / Antenna</legend>
-                            <div class="form-grid-3">
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Exact Location</label>
                                     <input class="form1-01-input" type="text" name="exact_location"
@@ -324,6 +152,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Lat (deg-min-sec)</label>
                                     <input class="form1-01-input" type="text" name="latitude"
@@ -332,17 +162,16 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-2">
                                 <div class="form-field">
-                                    <label class="form-label">Points of Comm/Service
-                                        Area</label>
+                                    <label class="form-label">Points of Comm/Service Area</label>
                                     <input class="form1-01-input" type="text" name="points_of_comm"
                                         value="{{ old('points_of_comm', $form['points_of_comm'] ?? '') }}">
                                     @error('points_of_comm')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Assigned Freq.</label>
                                     <input class="form1-01-input" type="text" name="assigned_freq"
@@ -351,8 +180,6 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-3">
                                 <div class="form-field">
                                     <label class="form-label">BW & Emission</label>
                                     <input class="form1-01-input" type="text" name="bw_emission"
@@ -361,6 +188,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Configuration</label>
                                     <input class="form1-01-input" type="text" name="configuration"
@@ -378,7 +207,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-grid-3">
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Call Sign</label>
                                     <input class="form1-01-input" type="text" name="call_sign"
@@ -395,6 +224,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Validity</label>
                                     <input class="form1-01-input" type="date" name="validity"
@@ -403,8 +234,6 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-3">
                                 <div class="form-field">
                                     <label class="form-label">Make/Type/Model</label>
                                     <input class="form1-01-input" type="text" name="make_type_model"
@@ -413,6 +242,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Serial Number</label>
                                     <input class="form1-01-input" type="text" name="serial_number"
@@ -448,7 +279,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-grid-3">
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Antenna Type</label>
                                     <input class="form1-01-input" type="text" name="antenna_type"
@@ -465,6 +296,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Gain (dB)</label>
                                     <input class="form1-01-input" type="text" name="antenna_gain"
@@ -473,8 +306,6 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="form-grid-3">
                                 <div class="form-field">
                                     <label class="form-label">Directivity</label>
                                     <input class="form1-01-input" type="text" name="antenna_directivity"
@@ -483,6 +314,8 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Polarization</label>
                                     <input class="form1-01-input" type="text" name="antenna_polarization"
@@ -502,8 +335,7 @@
                             </div>
                             <div class="form-grid-2">
                                 <div class="form-field">
-                                    <label class="form-label">Diameter (for
-                                        microwave)</label>
+                                    <label class="form-label">Diameter (for microwave)</label>
                                     <input class="form1-01-input" type="text" name="antenna_diameter"
                                         value="{{ old('antenna_diameter', $form['antenna_diameter'] ?? '') }}">
                                     @error('antenna_diameter')
