@@ -48,13 +48,13 @@
                             <div class="form-grid-2">
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     <label><input type="checkbox" name="application_type" value="new"
-                                        {{ in_array('new', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('new', $applicationTypeValue) ? 'checked' : '' }}>
                                         NEW</label>
                                     <label><input type="checkbox" name="application_type" value="renewal"
-                                        {{ in_array('renewal', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('renewal', $applicationTypeValue) ? 'checked' : '' }}>
                                         RENEWAL</label>
                                     <label><input type="checkbox" name="application_type" value="modification"
-                                        {{ in_array('modification', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('modification', $applicationTypeValue) ? 'checked' : '' }}>
                                         MODIFICATION due to (USE FORM B)</label>
                                     <input class="form1-01-input" type="text" name="modification_reason"
                                         placeholder="Reason (if modification)"
@@ -81,10 +81,10 @@
                                     @enderror
                                     <label class="form-label" style="margin-top:12px;">Permit Type</label>
                                     <label><input type="checkbox" name="permit_type" value="construction_permit"
-                                        {{ in_array('construction_permit', $permitTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('construction_permit', $permitTypeValue) ? 'checked' : '' }}>
                                         CONSTRUCTION PERMIT</label>
                                     <label><input type="checkbox" name="permit_type" value="radio_station_license"
-                                        {{ in_array('radio_station_license', $permitTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('radio_station_license', $permitTypeValue) ? 'checked' : '' }}>
                                         RADIO STATION LICENSE</label>
                                     @error('permit_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -108,21 +108,21 @@
                             <div class="form-grid-2" data-require-one="input[type=checkbox]">
                                 <div class="form-field">
                                     <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"
-                                        {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
                                         FIXED AND LAND MOBILE</label>
                                     <label><input type="checkbox" name="radio_service" value="aeronautical"
-                                        {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
                                         AERONAUTICAL</label>
                                     <label><input type="checkbox" name="radio_service" value="maritime"
-                                        {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}> MARITIME
+                                            {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}> MARITIME
                                         (Public/Private Coastal)</label>
                                 </div>
                                 <div class="form-field">
                                     <label><input type="checkbox" name="radio_service" value="broadcast"
-                                        {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
                                         BROADCAST</label>
                                     <label><input type="checkbox" name="radio_service" value="others"
-                                        {{ in_array('others', $radioServiceValue) ? 'checked' : '' }}> OTHERS,
+                                            {{ in_array('others', $radioServiceValue) ? 'checked' : '' }}> OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
                                         placeholder="Specify"
@@ -150,62 +150,53 @@
                             <div class="form-grid-2" data-require-one="input[type=checkbox]">
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="rt"
-                                        {{ in_array('rt', $stationClassValue) ? 'checked' : '' }}> RT</label>
-                                    <input class="form1-01-input" type="text" name="rt_units"
-                                        placeholder="Units"
+                                            {{ in_array('rt', $stationClassValue) ? 'checked' : '' }}> RT</label>
+                                    <input class="form1-01-input" type="text" name="rt_units" placeholder="Units"
                                         value="{{ old('rt_units', $form['rt_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="fx"
-                                        {{ in_array('fx', $stationClassValue) ? 'checked' : '' }}> FX</label>
-                                    <input class="form1-01-input" type="text" name="fx_units"
-                                        placeholder="Units"
+                                            {{ in_array('fx', $stationClassValue) ? 'checked' : '' }}> FX</label>
+                                    <input class="form1-01-input" type="text" name="fx_units" placeholder="Units"
                                         value="{{ old('fx_units', $form['fx_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="fb"
-                                        {{ in_array('fb', $stationClassValue) ? 'checked' : '' }}> FB</label>
-                                    <input class="form1-01-input" type="text" name="fb_units"
-                                        placeholder="Units"
+                                            {{ in_array('fb', $stationClassValue) ? 'checked' : '' }}> FB</label>
+                                    <input class="form1-01-input" type="text" name="fb_units" placeholder="Units"
                                         value="{{ old('fb_units', $form['fb_units'] ?? '') }}">
                                 </div>
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="ml"
-                                        {{ in_array('ml', $stationClassValue) ? 'checked' : '' }}> ML</label>
-                                    <input class="form1-01-input" type="text" name="ml_units"
-                                        placeholder="Units"
+                                            {{ in_array('ml', $stationClassValue) ? 'checked' : '' }}> ML</label>
+                                    <input class="form1-01-input" type="text" name="ml_units" placeholder="Units"
                                         value="{{ old('ml_units', $form['ml_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="p"
-                                        {{ in_array('p', $stationClassValue) ? 'checked' : '' }}> P</label>
+                                            {{ in_array('p', $stationClassValue) ? 'checked' : '' }}> P</label>
                                     <input class="form1-01-input" type="text" name="p_units" placeholder="Units"
                                         value="{{ old('p_units', $form['p_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="bc"
-                                        {{ in_array('bc', $stationClassValue) ? 'checked' : '' }}> BC</label>
-                                    <input class="form1-01-input" type="text" name="bc_units"
-                                        placeholder="Units"
+                                            {{ in_array('bc', $stationClassValue) ? 'checked' : '' }}> BC</label>
+                                    <input class="form1-01-input" type="text" name="bc_units" placeholder="Units"
                                         value="{{ old('bc_units', $form['bc_units'] ?? '') }}">
                                 </div>
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="fc"
-                                        {{ in_array('fc', $stationClassValue) ? 'checked' : '' }}> FC</label>
-                                    <input class="form1-01-input" type="text" name="fc_units"
-                                        placeholder="Units"
+                                            {{ in_array('fc', $stationClassValue) ? 'checked' : '' }}> FC</label>
+                                    <input class="form1-01-input" type="text" name="fc_units" placeholder="Units"
                                         value="{{ old('fc_units', $form['fc_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="fa"
-                                        {{ in_array('fa', $stationClassValue) ? 'checked' : '' }}> FA</label>
-                                    <input class="form1-01-input" type="text" name="fa_units"
-                                        placeholder="Units"
+                                            {{ in_array('fa', $stationClassValue) ? 'checked' : '' }}> FA</label>
+                                    <input class="form1-01-input" type="text" name="fa_units" placeholder="Units"
                                         value="{{ old('fa_units', $form['fa_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="ma"
-                                        {{ in_array('ma', $stationClassValue) ? 'checked' : '' }}> MA</label>
-                                    <input class="form1-01-input" type="text" name="ma_units"
-                                        placeholder="Units"
+                                            {{ in_array('ma', $stationClassValue) ? 'checked' : '' }}> MA</label>
+                                    <input class="form1-01-input" type="text" name="ma_units" placeholder="Units"
                                         value="{{ old('ma_units', $form['ma_units'] ?? '') }}">
                                 </div>
                                 <div class="form-field">
                                     <label><input type="checkbox" name="station_class" value="tc"
-                                        {{ in_array('tc', $stationClassValue) ? 'checked' : '' }}> TC</label>
-                                    <input class="form1-01-input" type="text" name="tc_units"
-                                        placeholder="Units"
+                                            {{ in_array('tc', $stationClassValue) ? 'checked' : '' }}> TC</label>
+                                    <input class="form1-01-input" type="text" name="tc_units" placeholder="Units"
                                         value="{{ old('tc_units', $form['tc_units'] ?? '') }}">
                                     <label><input type="checkbox" name="station_class" value="others_station"
-                                        {{ in_array('others_station', $stationClassValue) ? 'checked' : '' }}>
+                                            {{ in_array('others_station', $stationClassValue) ? 'checked' : '' }}>
                                         OTHERS, specify</label>
                                     <input class="form1-01-input" type="text" name="others_station_specify"
                                         placeholder="Type"
@@ -525,7 +516,7 @@
                                     data-next>Next</button></div>
                         </fieldset>
                     </section>
-                    
+
                     <!-- Existing declaration section commented out (pj)-->
                     <!-- <section class="step-content" id="step-declaration">
                         <fieldset>

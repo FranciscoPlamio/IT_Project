@@ -136,7 +136,8 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+                            <div class="step-actions"><button type="button" class="btn-primary"
+                                    data-next>Next</button>
                             </div>
                         </fieldset>
                     </section>
@@ -154,13 +155,13 @@
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     <label class="form-label">Type of Application</label>
                                     <label><input type="checkbox" name="application_type" value="purchase"
-                                        {{ in_array('purchase', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('purchase', $applicationTypeValue) ? 'checked' : '' }}>
                                         PURCHASE</label>
                                     <label><input type="checkbox" name="application_type" value="possess"
-                                        {{ in_array('possess', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('possess', $applicationTypeValue) ? 'checked' : '' }}>
                                         POSSESS</label>
                                     <label><input type="checkbox" name="application_type" value="sell_transfer"
-                                        {{ in_array('sell_transfer', $applicationTypeValue) ? 'checked' : '' }}>
+                                            {{ in_array('sell_transfer', $applicationTypeValue) ? 'checked' : '' }}>
                                         SELL/TRANSFER</label>
                                     @error('application_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -175,19 +176,19 @@
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     <label class="form-label">Type of Radio Service</label>
                                     <label><input type="checkbox" name="radio_service" value="fixed_land_mobile"
-                                        {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('fixed_land_mobile', $radioServiceValue) ? 'checked' : '' }}>
                                         FIXED AND LAND MOBILE</label>
                                     <label><input type="checkbox" name="radio_service" value="aeronautical"
-                                        {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('aeronautical', $radioServiceValue) ? 'checked' : '' }}>
                                         AERONAUTICAL</label>
                                     <label><input type="checkbox" name="radio_service" value="maritime"
-                                        {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('maritime', $radioServiceValue) ? 'checked' : '' }}>
                                         MARITIME</label>
                                     <label><input type="checkbox" name="radio_service" value="broadcast"
-                                        {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('broadcast', $radioServiceValue) ? 'checked' : '' }}>
                                         BROADCAST</label>
                                     <label><input type="checkbox" name="radio_service" value="amateur"
-                                        {{ in_array('amateur', $radioServiceValue) ? 'checked' : '' }}>
+                                            {{ in_array('amateur', $radioServiceValue) ? 'checked' : '' }}>
                                         AMATEUR</label>
                                     <label>OTHERS, specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
@@ -423,25 +424,25 @@
                             @endphp
                             <div class="form-field" data-require-one="input[type=checkbox]">
                                 <label><input type="checkbox" name="intended_use" value="new_radio_station"
-                                    {{ in_array('new_radio_station', $intendedUseValue) ? 'checked' : '' }}> New
+                                        {{ in_array('new_radio_station', $intendedUseValue) ? 'checked' : '' }}> New
                                     Radio Station</label>
                                 <label><input type="checkbox" name="intended_use" value="additional_radio_station"
-                                    {{ in_array('additional_radio_station', $intendedUseValue) ? 'checked' : '' }}>
+                                        {{ in_array('additional_radio_station', $intendedUseValue) ? 'checked' : '' }}>
                                     Additional Radio Station</label>
                                 <label><input type="checkbox" name="intended_use" value="change_equipment"
-                                    {{ in_array('change_equipment', $intendedUseValue) ? 'checked' : '' }}>
+                                        {{ in_array('change_equipment', $intendedUseValue) ? 'checked' : '' }}>
                                     Change of Equipment</label>
                                 <label><input type="checkbox" name="intended_use" value="additional_equipment"
-                                    {{ in_array('additional_equipment', $intendedUseValue) ? 'checked' : '' }}>
+                                        {{ in_array('additional_equipment', $intendedUseValue) ? 'checked' : '' }}>
                                     Additional Equipment</label>
                                 <label><input type="checkbox" name="intended_use" value="storage"
-                                    {{ in_array('storage', $intendedUseValue) ? 'checked' : '' }}> Storage
+                                        {{ in_array('storage', $intendedUseValue) ? 'checked' : '' }}> Storage
                                     at:</label>
                                 <input class="form1-01-input" type="text" name="storage_location"
                                     placeholder="Location"
                                     value="{{ old('storage_location', $form['storage_location'] ?? '') }}">
                                 <label><input type="checkbox" name="intended_use" value="others_use"
-                                    {{ in_array('others_use', $intendedUseValue) ? 'checked' : '' }}> Others,
+                                        {{ in_array('others_use', $intendedUseValue) ? 'checked' : '' }}> Others,
                                     specify</label>
                                 <input class="form1-01-input" type="text" name="others_use_specify"
                                     placeholder="Specify"
