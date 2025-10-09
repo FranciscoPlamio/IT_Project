@@ -107,7 +107,6 @@
                             <!-- address fields format -->
                             <x-forms.address-fields :form="$form ?? []" />
 
-                            <!-- -->
                             <div class="step-actions">
                                 <button type="button" class="btn-primary" data-next>Next</button>
                             </div>
@@ -123,39 +122,10 @@
                             @endphp
 
                             <div class="form-grid-2">
-                                <div class="form-field">
-                                    @error('application_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    <label class="form-label">Type of Application</label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="new"
-                                            {{ $applicationType == 'new' ? 'checked' : '' }}>
-                                        NEW
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="renewal"
-                                            {{ $applicationType == 'renewal' ? 'checked' : '' }}>
-                                        RENEWAL</label>
-                                    <label>
-                                        <input type="radio" name="application_type" value="modification"
-                                            {{ $applicationType == 'modification' ? 'checked' : '' }}>
-                                        MODIFICATION due to</label>
 
-                                    <input class="form1-01-input mt-4" type="text" name="modification_reason"
-                                        placeholder="Reason (if modification)"
-                                        value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
-                                    @error('modification_reason')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <!-- Application type fields -->
+                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
 
-                                    <label class="form-label">No. of Years</label>
-                                    <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
-                                        value="{{ old('years', $form['years'] ?? '') }}">
-                                    @error('years')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
                                 <div class="form-field" data-require-one="input[type=checkbox]">
                                     @error('certificate_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -214,49 +184,21 @@
                         </fieldset>
                     </section>
 
-                    <!-- Exam fields -->
-                    <x-forms.exam-fields :form="$form ?? []" />
+                    <section class="step-content" id="step-exam">
+                        <fieldset class="fieldset-compact">
+                            <legend>Exam/Seminar Details</legend>
 
-                    <section class="step-content" id="step-declaration">
-                        <fieldset>
-                            <legend>DECLARATION</legend>
-                            <div class="form1-01-declaration">
-                                I hereby declare that all the above entries are true and correct. Under the Revised
-                                Penal Code, I shall be held liable for any willful false statement(s) or
-                                misrepresentation(s) made in this application form that may serve as a valid ground
-                                for the denial of this application and/or cancellation/revocation of the permit
-                                issued/granted. Further, I am freely giving full consent for the collection and
-                                processing of personal information in accordance with Republic Act No. 10173, Data
-                                Privacy Act of 2012.
-                            </div>
-                            <div class="form1-01-signature-row">
-                                <div class="form1-01-signature-col">
-                                    <input class="signature-line-input" type="text" name="signature_name"
-                                        placeholder="Signature over Printed Name of Applicant" />
-                                    <input class="form1-01-input" type="date" name="date_accomplished"
-                                        placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
-                                </div>
-                                <div class="form1-01-signature-col"
-                                    style="border:1px dashed #aaa;padding:12px 8px;min-width:180px;">
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">OR No.:</div>
-                                    <input class="form1-01-input" type="text" name="or_no"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Date:</div>
-                                    <input class="form1-01-input" type="date" name="or_date"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Amount:</div>
-                                    <input class="form1-01-input" type="text" name="or_amount"
-                                        style="margin-bottom:6px;" />
-                                    <div style="font-size:0.97rem;margin-bottom:6px;">Collecting Officer</div>
-                                </div>
-                            </div>
-                            <div class="step-actions">
-                                <button type="button" class="btn-secondary" data-prev>Back</button>
-                                <button class="form1-01-btn" type="button" id="validateBtn02">Proceed to
-                                    Validation</button>
-                            </div>
+                            <!-- Exam fields -->
+                            <div class="form-grid-3">
+                                <div class="form-field">
+                                    <label class="form-label">Place of Exam/Seminar</label>
+                                    <x-forms.exam-fields :form="$form ?? []" />
+
                         </fieldset>
                     </section>
+
+                    <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" />
                 </div>
             </div>
         </form>

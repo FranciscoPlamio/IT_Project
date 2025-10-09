@@ -1,0 +1,95 @@
+Form1-03 Unique variables
+
+Personal Info
+- string Call sign
+- int ATROC/ARSL No
+- string Validity
+
+Type of Application - Existing from form 2
+
+class of station
+ - Club Licences Required (string NameClub, string AssignedFreq)
+ - Vanity Required (string CallSign)
+ - ClassofStation Required (int Number_years)
+
+Examination Details - Existing from form 2
+
+Equipment Particulars
+ - String Make
+ - String Type/Model
+ - int Serial Number
+ - String FreqRange
+
+Declaration - Existing from form 1,2
+
+
+
+
+Form1-09 Unique variables
+
+Applicant's Details
+- Applicant
+- CPC/CPCN/PA/RSL No.
+
+Application Details
+
+Type of Application (radio button)
+ - PURCHASE
+ - POSSESS
+ - SELL/TRANSFER
+
+Nature of Service (radio button)
+- CV (PRIVATE)
+- CO (GOVERNMENT)
+- CP (PUBLIC CORRESPONDENCE)
+
+Type of Radio Service
+ - FIXED AND LAND MOBILE
+ - AERONAUTICAL
+ - MARITIME
+ - BROADCAST
+ - AMATEUR
+ - TRSothers_specify
+
+Class of Station (indicate units)
+ RT (Radio Telephone)
+ FX (Fixed)
+ FB (Fixed Base)
+ ML (Mobile Land)
+ P (Portable)
+ BC (Broadcast)
+ FC (Fixed Commercial)
+ FA (Fixed Aeronautical)
+ MA (Mobile Aeronautical)
+ TC (Temporary Commercial)
+ COSothers_specify(string CStype, CSunit)
+
+Particulars of Proposed Station/Equipment
+- Exact Location (String)
+- string Longitude (since the client will provide DMS) 
+- string Latitude  (since the client will provide DMS)
+- string PC/SA (Points of Comm/Service Area)
+- int SerialNum (Particulars of Proposed Station/Equipment)
+- Make/Type/Model
+- string BE (Bandwidth & Emission)
+- string powerOutput
+- double freq
+- string freqRange
+
+Source of Equipment
+- string Dealer
+- string AuthSB
+- int OR_Invoice_num
+- int Permit_RSL_num
+
+Intended Use of Equipment
+- New Radio Station
+- Additional Radio Station
+- Change of Equipment
+- Additional Equipment
+- string storage_at
+- IUEothers_specify
+
+Declaration - existing
+
+
