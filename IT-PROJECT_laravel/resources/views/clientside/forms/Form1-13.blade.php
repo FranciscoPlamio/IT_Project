@@ -1,7 +1,11 @@
 <x-layout :title="'Form D (For Modification) (Form 1-13))'" :form-header="['formNo' => 'NTC 1-13', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
 
     <main>
-        <form class="form1-01-container" id="form113">
+        <form class="form1-01-container" id="form113" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+            <input type="hidden" name="form_token"
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">FORM D (FOR MODIFICATION)</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
             <div class="form1-01-warning">
@@ -24,8 +28,14 @@
                             <fieldset>
                                 <legend>Applicant</legend>
                                 <div class="form-grid-2">
-                                    <div class="form-field"><label class="form-label">Applicant</label><input
-                                            class="form1-01-input" type="text" name="applicant" required></div>
+                                    <div class="form-field">
+                                        <label class="form-label">Applicant</label>
+                                        <input class="form1-01-input" type="text" name="applicant" required
+                                            value="{{ old('applicant', $form['applicant'] ?? '') }}">
+                                        @error('applicant')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="step-actions"><button type="button" class="btn-primary"
                                         data-next>Next</button></div>
@@ -53,57 +63,73 @@
                                             <tr>
                                                 <td>EXACT LOCATION</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_exact_location"></td>
+                                                        name="authorized_exact_location"
+                                                        value="{{ old('authorized_exact_location', $form['authorized_exact_location'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_exact_location"></td>
+                                                        name="proposed_exact_location"
+                                                        value="{{ old('proposed_exact_location', $form['proposed_exact_location'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>LONGITUDE (deg-min-sec)</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_longitude"></td>
-                                                <td><input class="table-input" type="text" name="proposed_longitude">
+                                                        name="authorized_longitude"
+                                                        value="{{ old('authorized_longitude', $form['authorized_longitude'] ?? '') }}"></td>
+                                                <td><input class="table-input" type="text" name="proposed_longitude"
+                                                        value="{{ old('proposed_longitude', $form['proposed_longitude'] ?? '') }}">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>LATITUDE (deg-min-sec)</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_latitude"></td>
-                                                <td><input class="table-input" type="text" name="proposed_latitude">
+                                                        name="authorized_latitude"
+                                                        value="{{ old('authorized_latitude', $form['authorized_latitude'] ?? '') }}"></td>
+                                                <td><input class="table-input" type="text" name="proposed_latitude"
+                                                        value="{{ old('proposed_latitude', $form['proposed_latitude'] ?? '') }}">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>POINTS OF COMM/SERVICE AREA</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_points_of_comm"></td>
+                                                        name="authorized_points_of_comm"
+                                                        value="{{ old('authorized_points_of_comm', $form['authorized_points_of_comm'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_points_of_comm"></td>
+                                                        name="proposed_points_of_comm"
+                                                        value="{{ old('proposed_points_of_comm', $form['proposed_points_of_comm'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>ASSIGNED FREQ.</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_assigned_freq"></td>
+                                                        name="authorized_assigned_freq"
+                                                        value="{{ old('authorized_assigned_freq', $form['authorized_assigned_freq'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_assigned_freq"></td>
+                                                        name="proposed_assigned_freq"
+                                                        value="{{ old('proposed_assigned_freq', $form['proposed_assigned_freq'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>BW & EMISSION</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_bw_emission"></td>
+                                                        name="authorized_bw_emission"
+                                                        value="{{ old('authorized_bw_emission', $form['authorized_bw_emission'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_bw_emission"></td>
+                                                        name="proposed_bw_emission"
+                                                        value="{{ old('proposed_bw_emission', $form['proposed_bw_emission'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>CONFIGURATION</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_configuration"></td>
+                                                        name="authorized_configuration"
+                                                        value="{{ old('authorized_configuration', $form['authorized_configuration'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_configuration"></td>
+                                                        name="proposed_configuration"
+                                                        value="{{ old('proposed_configuration', $form['proposed_configuration'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>DATA RATE</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_data_rate"></td>
-                                                <td><input class="table-input" type="text" name="proposed_data_rate">
+                                                        name="authorized_data_rate"
+                                                        value="{{ old('authorized_data_rate', $form['authorized_data_rate'] ?? '') }}"></td>
+                                                <td><input class="table-input" type="text" name="proposed_data_rate"
+                                                        value="{{ old('proposed_data_rate', $form['proposed_data_rate'] ?? '') }}">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -114,30 +140,38 @@
                                             <tr>
                                                 <td>MAKE/TYPE/MODEL</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_make_type_model"></td>
+                                                        name="authorized_make_type_model"
+                                                        value="{{ old('authorized_make_type_model', $form['authorized_make_type_model'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_make_type_model"></td>
+                                                        name="proposed_make_type_model"
+                                                        value="{{ old('proposed_make_type_model', $form['proposed_make_type_model'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>SERIAL NO.</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_serial_no"></td>
-                                                <td><input class="table-input" type="text" name="proposed_serial_no">
+                                                        name="authorized_serial_no"
+                                                        value="{{ old('authorized_serial_no', $form['authorized_serial_no'] ?? '') }}"></td>
+                                                <td><input class="table-input" type="text" name="proposed_serial_no"
+                                                        value="{{ old('proposed_serial_no', $form['proposed_serial_no'] ?? '') }}">
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>POWER OUTPUT</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_power_output"></td>
+                                                        name="authorized_power_output"
+                                                        value="{{ old('authorized_power_output', $form['authorized_power_output'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_power_output"></td>
+                                                        name="proposed_power_output"
+                                                        value="{{ old('proposed_power_output', $form['proposed_power_output'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>FREQ. RANGE</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_freq_range"></td>
+                                                        name="authorized_freq_range"
+                                                        value="{{ old('authorized_freq_range', $form['authorized_freq_range'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_freq_range"></td>
+                                                        name="proposed_freq_range"
+                                                        value="{{ old('proposed_freq_range', $form['proposed_freq_range'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td class="table-field-label" colspan="3">
@@ -147,23 +181,29 @@
                                             <tr>
                                                 <td>OTHERS 1</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_others_1"></td>
+                                                        name="authorized_others_1"
+                                                        value="{{ old('authorized_others_1', $form['authorized_others_1'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_others_1"></td>
+                                                        name="proposed_others_1"
+                                                        value="{{ old('proposed_others_1', $form['proposed_others_1'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>OTHERS 2</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_others_2"></td>
+                                                        name="authorized_others_2"
+                                                        value="{{ old('authorized_others_2', $form['authorized_others_2'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_others_2"></td>
+                                                        name="proposed_others_2"
+                                                        value="{{ old('proposed_others_2', $form['proposed_others_2'] ?? '') }}"></td>
                                             </tr>
                                             <tr>
                                                 <td>OTHERS 3</td>
                                                 <td><input class="table-input" type="text"
-                                                        name="authorized_others_3"></td>
+                                                        name="authorized_others_3"
+                                                        value="{{ old('authorized_others_3', $form['authorized_others_3'] ?? '') }}"></td>
                                                 <td><input class="table-input" type="text"
-                                                        name="proposed_others_3"></td>
+                                                        name="proposed_others_3"
+                                                        value="{{ old('proposed_others_3', $form['proposed_others_3'] ?? '') }}"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -180,9 +220,17 @@
                                 <div class="form1-01-signature-row">
                                     <div class="form1-01-signature-col">
                                         <input class="signature-line-input" type="text" name="signature_name"
-                                            placeholder="Signature over Printed Name of Applicant" />
+                                            placeholder="Signature over Printed Name of Applicant"
+                                            value="{{ old('signature_name', $form['signature_name'] ?? '') }}" />
+                                        @error('signature_name')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
                                         <input class="form1-01-input" type="date" name="date_accomplished"
-                                            placeholder="Date Accomplished" style="max-width:180px;width:100%;" />
+                                            placeholder="Date Accomplished" style="max-width:180px;width:100%;"
+                                            value="{{ old('date_accomplished', $form['date_accomplished'] ?? '') }}" />
+                                        @error('date_accomplished')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="step-actions"><button type="button" class="btn-secondary"
@@ -249,19 +297,53 @@
 
                 const validateBtn = document.getElementById('validateBtn13');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', () => {
-                        if (!validateActiveStep()) return;
+                    validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) entries[key] = value.name || '';
-                            else entries[key] = value;
-                        }
-                        localStorage.setItem('form1-13-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-13');
-                        if (validationLink13) {
-                            window.location.href = validationLink13.href;
-                        }
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        form.submit();
+
+                        // -- commented AJAX for now--
+                        // -- uncomment if fixed -Richmond
+
+                        //const formData = new FormData(form);
+                        // try {
+                        //     const res = await fetch(form.action, {
+                        //         method: 'POST',
+                        //         headers: {
+                        //             'Content-Type': 'application/json',
+                        //             'Accept': 'application/json'
+                        //         },
+                        //         body: formData
+                        //     });
+                        //     const text = await res.text();
+                        //     console.log(text);
+                        //     let json = null;
+                        //     try {
+                        //         json = JSON.parse(text);
+                        //     } catch (e) {}
+                        //     if (res.ok) {
+                        //         if (json.form_token) {
+                        //             localStorage.setItem('form_token', json.form_token);
+                        //         }
+                        //         localStorage.setItem('active-form', '1-13');
+                        //         if (validationLink13) {
+                        //             const token = json && json.form_token ? json.form_token : (localStorage
+                        //                 .getItem('form_token') || '');
+                        //             const url = new URL(validationLink13.href, window.location.origin);
+                        //             if (token) url.searchParams.set('token', token);
+                        //             window.location.href = url.toString();
+                        //         }
+                        //     } else {
+                        //         console.error('Save failed payload:', json || text);
+                        //         alert('Failed to save. Details logged to console.');
+                        //     }
+                        // } catch (e) {
+                        //     console.error('Network error:', e);
+                        //     alert('Network error. Please try again.');
+                        // }
                     });
                 }
                 showStep(stepsOrder[0]);
