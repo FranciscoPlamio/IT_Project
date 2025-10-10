@@ -282,7 +282,7 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn02');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', () => {
                         if (!validateActiveStep()) return;

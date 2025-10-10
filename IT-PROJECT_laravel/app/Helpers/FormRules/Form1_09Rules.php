@@ -2,7 +2,7 @@
 
 namespace App\Helpers\FormRules;
 
-class Form1_03Rules
+class Form1_09Rules
 {
     public static function rules(): array
     {
@@ -25,32 +25,32 @@ class Form1_03Rules
                 //Application Details
                 'application_type' => ['required', 'string'],
                 'radio_service' => ['required', 'string'],
-                'others_specify' => ['required', 'string'],
+                'others_specify' => ['nullable', 'string'],
                 'nature_service' => ['required', 'string'],
-                'rt_units' => ['required', 'integer'],
-                'fx_units' => ['required', 'integer'],
-                'fb_units' => ['required', 'integer'],
-                'ml_units' => ['required', 'integer'],
-                'p_units' => ['required', 'integer'],
-                'bc_units' => ['required', 'integer'],
-                'fc_units' => ['required', 'integer'],
-                'fa_units' => ['required', 'integer'],
-                'ma_units' => ['required', 'integer'],
-                'tc_units' => ['required', 'integer'],
-                'others_station_specify' => ['required', 'string'],
-                'others_station_units' => ['required', 'integer'],
+                'rt_units' => ['nullable', 'integer'],
+                'fx_units' => ['nullable', 'integer'],
+                'fb_units' => ['nullable', 'integer'],
+                'ml_units' => ['nullable', 'integer'],
+                'p_units' => ['nullable', 'integer'],
+                'bc_units' => ['nullable', 'integer'],
+                'fc_units' => ['nullable', 'integer'],
+                'fa_units' => ['nullable', 'integer'],
+                'ma_units' => ['nullable', 'integer'],
+                'tc_units' => ['nullable', 'integer'],
+                'others_station_specify' => ['nullable', 'string'],
+                'others_station_units' => ['nullable', 'integer'],
 
                 //Station Equipment
                 'exact_location' => ['required', 'string'],
                 'longitude' => ['required', 'string'],
                 'latitude' => ['required', 'string'],
                 'points_of_comm' => ['required', 'string'],
-                'frequency' => ['required', 'string'],
+                'frequency' => ['required', 'numeric'],
                 'make_type_model' => ['required', 'string'],
                 'serial_number' => ['required', 'string'],
                 'bandwidth_emission' => ['required', 'string'],
                 'power_output' => ['required', 'string'],
-                'frequency_range' => ['required', 'string'],
+                'frequency_range' => ['required', 'numeric'],
 
                 // Source of Equipment
                 'dealer_name' => ['required', 'string'],
@@ -60,8 +60,8 @@ class Form1_03Rules
 
                 // Inteded Use
                 'intended_use' => ['required', 'string'],
-                'others_use_specify' => ['required', 'string'],
-                'storage_location' => ['required', 'string'],
+                'others_use_specify' => ['nullable', 'string'],
+                'storage_location' => ['nullable', 'string'],
             ],
 
             'messages' => [

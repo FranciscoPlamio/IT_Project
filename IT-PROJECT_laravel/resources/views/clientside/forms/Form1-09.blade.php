@@ -64,80 +64,10 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Unit/Rm/Bldg No.</label>
-                                    <input class="form1-01-input" type="text" name="unit_no"
-                                        value="{{ old('unit_no', $form['unit_no'] ?? '') }}">
-                                    @error('unit_no')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Street</label>
-                                    <input class="form1-01-input" type="text" name="street"
-                                        value="{{ old('street', $form['street'] ?? '') }}">
-                                    @error('street')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Barangay</label>
-                                    <input class="form1-01-input" type="text" name="barangay"
-                                        value="{{ old('barangay', $form['barangay'] ?? '') }}">
-                                    @error('barangay')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">City/Municipality</label>
-                                    <input class="form1-01-input" type="text" name="city"
-                                        value="{{ old('city', $form['city'] ?? '') }}">
-                                    @error('city')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Province</label>
-                                    <input class="form1-01-input" type="text" name="province"
-                                        value="{{ old('province', $form['province'] ?? '') }}">
-                                    @error('province')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Zip Code</label>
-                                    <input class="form1-01-input" type="text" name="zip_code"
-                                        value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
-                                    @error('zip_code')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Contact Number</label>
-                                    <input class="form1-01-input" type="text" name="contact_number" required
-                                        value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
-                                    @error('contact_number')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email" required
-                                        value="{{ old('email', $form['email'] ?? '') }}">
-                                    @error('email')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="step-actions"><button type="button" class="btn-primary"
-                                    data-next>Next</button>
+                            <!-- address fields format -->
+                            <x-forms.address-fields :form="$form ?? []" />
+
+                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
                             </div>
                         </fieldset>
                     </section>
@@ -189,11 +119,11 @@
                                     <label><input type="radio" name="radio_service" value="others"
                                             {{ $radioServiceValue == 'others' ? 'checked' : '' }}>
                                         OTHERS, specify</label>
-                                    <input class="form1-01-input" type="text" name="others_specify"
-                                        value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
                                     @error('radio_service')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
+                                    <input class="form1-01-input" type="text" name="others_specify"
+                                        value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
                                     @error('others_specify')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -382,6 +312,9 @@
                     <section class="step-content" id="step-intended">
                         <fieldset class="fieldset-compact">
                             <legend>Intended Use of Equipment</legend>
+                            @error('intended_use')
+                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                            @enderror
                             @php
                                 $intendedUseValue = old('intended_use', $form['intended_use'] ?? '');
                             @endphp
@@ -404,15 +337,20 @@
                                 <input class="form1-01-input" type="text" name="storage_location"
                                     placeholder="Location"
                                     value="{{ old('storage_location', $form['storage_location'] ?? '') }}">
+                                @error('storage_location')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                                 <label><input type="radio" name="intended_use" value="others_use"
                                         {{ $intendedUseValue == 'others_use' ? 'checked' : '' }}> Others,
                                     specify</label>
+
                                 <input class="form1-01-input" type="text" name="others_use_specify"
                                     placeholder="Specify"
                                     value="{{ old('others_use_specify', $form['others_use_specify'] ?? '') }}">
-                                @error('intended_use')
+                                @error('others_use_specify')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
+
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -499,7 +437,7 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn09');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);

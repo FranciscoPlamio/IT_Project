@@ -56,6 +56,6 @@
             </div>
         </div>
         <div class="step-actions"><button type="button" class="btn-secondary" data-prev>Back</button><button
-                class="form1-01-btn" type="button" id="validateBtn03">Proceed to Validation</button></div>
+                class="form1-01-btn" type="button" id="validateBtn">Proceed to Validation</button></div>
     </fieldset>
 </section>

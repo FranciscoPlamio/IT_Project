@@ -120,6 +120,9 @@
                                                 {{ $stationClassValue == 'class_d' ? 'checked' : '' }}>
                                             Class D
                                         </label>
+                                        @error('station_class')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
                         </div>
@@ -127,6 +130,9 @@
 
                         <fieldset class="fieldset-compact">
                             <legend>Type of Permit/License/Certificate </legend>
+                            @error('permit_type')
+                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                            @enderror
                             <div class="form-field" data-require-one="input[type=radio]">
                                 <label>
                                     <input type="radio" name="permit_type" value="amateur_operator"
@@ -164,9 +170,7 @@
                                 <label class="form-label">Preferred Call Sign/s</label>
                                 <input class="form1-01-input" type="text" name="preferred_call_sign"
                                     value="{{ old('preferred_call_sign', $form['preferred_call_sign'] ?? '') }}">
-                                @error('permit_type')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                @enderror
+
                             </div>
                         </fieldset>
                         <div class="step-actions"><button type="button" class="btn-secondary"
@@ -274,7 +278,7 @@
 
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'class', 'exam', 'equipment', 'declaration'];
+                const stepsOrder = ['personal', 'application', 'exam', 'equipment', 'declaration'];
                 const stepsList = document.getElementById('stepsList03');
                 const form = document.getElementById('form103');
                 const validationLink03 = document.getElementById('validationLink03');
@@ -350,13 +354,14 @@
                 // Handle next/prev buttons anywhere in the form
                 document.addEventListener('click', (e) => {
                     if (e.target.matches('[data-next]')) {
-                        if (validateActiveStep()) go(1);
+                        go(1)
+                        if (validateActiveStep());
                     } else if (e.target.matches('[data-prev]')) {
                         go(-1);
                     }
                 });
 
-                const validateBtn = document.getElementById('validateBtn03');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);

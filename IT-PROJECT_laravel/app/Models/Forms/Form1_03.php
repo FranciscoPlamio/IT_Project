@@ -48,7 +48,6 @@ class Form1_03 extends BaseForm
         'permit_type',
         'club_name',
         'assigned_frequency',
-        'temporary_foreign',
         'preferred_call_sign',
     ];
 

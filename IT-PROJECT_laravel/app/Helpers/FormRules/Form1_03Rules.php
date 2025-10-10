@@ -43,10 +43,9 @@ class Form1_03Rules
                 'validity' => ['required', 'date', 'before_or_equal:today'],
                 'station_class'  => ['required', 'string'],
                 'permit_type'  => ['required', 'string'],
-                'club_name'  => ['required', 'string'],
-                'assigned_frequency'  => ['required', 'string'],
-                'temporary_foreign'  => ['required', 'string'],
-                'preferred_call_sign'  => ['required', 'string'],
+                'club_name'  => ['nullable', 'string'],
+                'assigned_frequency'  => ['nullable', 'string'],
+                'preferred_call_sign'  => ['nullable', 'string'],
             ],
 
             'messages' => [
