@@ -200,6 +200,16 @@ textarea.form1-01-input {
     font-size: 0.98rem;
 }
 
+.child-note {
+    background: #e8f3ff;
+    border: 1px solid #cfe3ff;
+    color:#1f3b66;
+    padding: 10px 10px;
+    border-radius: 4px;
+    margin: 8px 0 12px 0;
+    font-size: 0.80rem;
+}
+
 .form1-01-warning {
     background: #fff5f5;
     border: 1px solid #f3c2c2;

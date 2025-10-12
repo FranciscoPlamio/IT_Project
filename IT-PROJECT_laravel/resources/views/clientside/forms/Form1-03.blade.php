@@ -92,7 +92,8 @@
                             <fieldset class="fieldset-compact">
                                 <legend>Type of Application</legend>
                                 <!-- Application type fields -->
-                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType"
+                                    :show-years="false" />
                             </fieldset>
 
 
