@@ -155,7 +155,7 @@ class FormsController extends Controller
         // Gets rules of a form
         // App\Helpers\FormManager
         $rules = FormManager::getValidationRules($formType);
-
+        // dd($rules);
         // Validate fields of a form, if there are invalid it will print error messages
         try {
             $validated = $request->validate(

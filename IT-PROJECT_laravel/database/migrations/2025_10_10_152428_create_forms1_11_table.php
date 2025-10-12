@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::connection('mongodb')->create('form1_09', function (Blueprint $collection) {
+        Schema::connection('mongodb')->create('form1_11', function (Blueprint $collection) {
             $collection->unique('form_token'); // unique index for updateOrCreate
             $collection->index('user_id');  // add index for user_id
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::connection('mongodb')->dropIfExists('form1_09');
+        Schema::connection('mongodb')->dropIfExists('form1_11');
     }
 };

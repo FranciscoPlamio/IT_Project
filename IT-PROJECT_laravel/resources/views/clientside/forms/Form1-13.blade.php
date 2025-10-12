@@ -62,27 +62,45 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_exact_location"
                                                     value="{{ old('authorized_exact_location', $form['authorized_exact_location'] ?? '') }}">
+                                                @error('authorized_exact_location')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_exact_location"
                                                     value="{{ old('proposed_exact_location', $form['proposed_exact_location'] ?? '') }}">
+                                                @error('proposed_exact_location')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>LONGITUDE (deg-min-sec)</td>
                                             <td><input class="table-input" type="text" name="authorized_longitude"
                                                     value="{{ old('authorized_longitude', $form['authorized_longitude'] ?? '') }}">
+                                                @error('authorized_longitude')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_longitude"
                                                     value="{{ old('proposed_longitude', $form['proposed_longitude'] ?? '') }}">
+                                                @error('proposed_longitude')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>LATITUDE (deg-min-sec)</td>
                                             <td><input class="table-input" type="text" name="authorized_latitude"
                                                     value="{{ old('authorized_latitude', $form['authorized_latitude'] ?? '') }}">
+                                                @error('authorized_latitude')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_latitude"
                                                     value="{{ old('proposed_latitude', $form['proposed_latitude'] ?? '') }}">
+                                                @error('proposed_latitude')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -90,9 +108,15 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_points_of_comm"
                                                     value="{{ old('authorized_points_of_comm', $form['authorized_points_of_comm'] ?? '') }}">
+                                                @error('authorized_points_of_comm')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_points_of_comm"
                                                     value="{{ old('proposed_points_of_comm', $form['proposed_points_of_comm'] ?? '') }}">
+                                                @error('proposed_points_of_comm')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -100,18 +124,30 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_assigned_freq"
                                                     value="{{ old('authorized_assigned_freq', $form['authorized_assigned_freq'] ?? '') }}">
+                                                @error('authorized_assigned_freq')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_assigned_freq"
                                                     value="{{ old('proposed_assigned_freq', $form['proposed_assigned_freq'] ?? '') }}">
+                                                @error('proposed_assigned_freq')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>BW & EMISSION</td>
                                             <td><input class="table-input" type="text" name="authorized_bw_emission"
                                                     value="{{ old('authorized_bw_emission', $form['authorized_bw_emission'] ?? '') }}">
+                                                @error('authorized_bw_emission')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_bw_emission"
                                                     value="{{ old('proposed_bw_emission', $form['proposed_bw_emission'] ?? '') }}">
+                                                @error('proposed_bw_emission')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -119,18 +155,31 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_configuration"
                                                     value="{{ old('authorized_configuration', $form['authorized_configuration'] ?? '') }}">
+                                                @error('authorized_configuration')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
-                                            <td><input class="table-input" type="text" name="proposed_configuration"
+                                            <td><input class="table-input" type="text"
+                                                    name="proposed_configuration"
                                                     value="{{ old('proposed_configuration', $form['proposed_configuration'] ?? '') }}">
+                                                @error('proposed_configuration')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>DATA RATE</td>
                                             <td><input class="table-input" type="text" name="authorized_data_rate"
                                                     value="{{ old('authorized_data_rate', $form['authorized_data_rate'] ?? '') }}">
+                                                @error('authorized_data_rate')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_data_rate"
                                                     value="{{ old('proposed_data_rate', $form['proposed_data_rate'] ?? '') }}">
+                                                @error('proposed_data_rate')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -143,19 +192,31 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_make_type_model"
                                                     value="{{ old('authorized_make_type_model', $form['authorized_make_type_model'] ?? '') }}">
+                                                @error('authorized_exact_location')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text"
                                                     name="proposed_make_type_model"
                                                     value="{{ old('proposed_make_type_model', $form['proposed_make_type_model'] ?? '') }}">
+                                                @error('proposed_make_type_model')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>SERIAL NO.</td>
                                             <td><input class="table-input" type="text" name="authorized_serial_no"
                                                     value="{{ old('authorized_serial_no', $form['authorized_serial_no'] ?? '') }}">
+                                                @error('authorized_serial_no')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_serial_no"
                                                     value="{{ old('proposed_serial_no', $form['proposed_serial_no'] ?? '') }}">
+                                                @error('proposed_serial_no')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -163,10 +224,16 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_power_output"
                                                     value="{{ old('authorized_power_output', $form['authorized_power_output'] ?? '') }}">
+                                                @error('authorized_power_output')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text"
                                                     name="proposed_power_output"
                                                     value="{{ old('proposed_power_output', $form['proposed_power_output'] ?? '') }}">
+                                                @error('proposed_power_output')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -174,9 +241,15 @@
                                             <td><input class="table-input" type="text"
                                                     name="authorized_freq_range"
                                                     value="{{ old('authorized_freq_range', $form['authorized_freq_range'] ?? '') }}">
+                                                @error('authorized_freq_range')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_freq_range"
                                                     value="{{ old('proposed_freq_range', $form['proposed_freq_range'] ?? '') }}">
+                                                @error('proposed_freq_range')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -188,27 +261,45 @@
                                             <td>OTHERS 1</td>
                                             <td><input class="table-input" type="text" name="authorized_others_1"
                                                     value="{{ old('authorized_others_1', $form['authorized_others_1'] ?? '') }}">
+                                                @error('authorized_others_1')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_others_1"
                                                     value="{{ old('proposed_others_1', $form['proposed_others_1'] ?? '') }}">
+                                                @error('proposed_others_1')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>OTHERS 2</td>
                                             <td><input class="table-input" type="text" name="authorized_others_2"
                                                     value="{{ old('authorized_others_2', $form['authorized_others_2'] ?? '') }}">
+                                                @error('authorized_others_2')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_others_2"
                                                     value="{{ old('proposed_others_2', $form['proposed_others_2'] ?? '') }}">
+                                                @error('proposed_others_2')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>OTHERS 3</td>
                                             <td><input class="table-input" type="text" name="authorized_others_3"
                                                     value="{{ old('authorized_others_3', $form['authorized_others_3'] ?? '') }}">
+                                                @error('authorized_others_3')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td><input class="table-input" type="text" name="proposed_others_3"
                                                     value="{{ old('proposed_others_3', $form['proposed_others_3'] ?? '') }}">
+                                                @error('proposed_others_3')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                     </tbody>

@@ -22,10 +22,6 @@
                     <ul class="steps-list" id="stepsList11">
                         <li class="step-item active" data-step="application">Application Details <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="service">Radio Service <span class="step-status">&nbsp;</span>
-                        </li>
-                        <li class="step-item" data-step="station">Class of Station <span
-                                class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="personal">Applicant Information <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="particulars">Station/Equipment/Antenna <span
@@ -37,77 +33,69 @@
 
                 <div>
                     <section class="step-content active" id="step-application">
-                        @php
-                            $applicationTypeValue = old('application_type', $form['application_type'] ?? []);
-                            if (!is_array($applicationTypeValue)) {
-                                $applicationTypeValue = [];
-                            }
-                        @endphp
-                        <x-forms.application-type-fields :form="$form ?? []" :application-type="$applicationTypeValue" :show-permit="true" />
-                        <div class="step-actions"><button type="button" class="btn-secondary"
-                                data-prev>Back</button><button type="button" class="btn-primary"
-                                data-next>Next</button></div>
-                        </fieldset>
-                    </section>
+                        <div class="form-grid-2">
+                            <fieldset class="fieldset-compact">
 
-                    <section class="step-content" id="step-service">
-                        @php
-                            $radioServiceValue = old('radio_service', $form['radio_service'] ?? []);
-                            if (!is_array($radioServiceValue)) {
-                                $radioServiceValue = [];
-                            }
-                        @endphp
+                                <legend>Type of Application</legend>
+                                <!-- Application type fields -->
+                                <x-forms.application-type-fields :form="$form ?? []" :show-permit="true" />
+                            </fieldset>
+
+                            @php
+                                $stationClassValue = old('station_class', $form['station_class'] ?? []);
+                                if (!is_array($stationClassValue)) {
+                                    $stationClassValue = [];
+                                }
+                            @endphp
+                            <fieldset class="fieldset-compact">
+                                <!-- Class of Station field -->
+                                <x-forms.class-station-field :form="$form ?? []" />
+                                @error('station_class')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
+                            </fieldset>
+                        </div>
+
                         <fieldset class="fieldset-compact">
                             <legend>Type of Radio Service</legend>
                             <div class="form-grid-2" data-require-one="input[type=radio]">
                                 <div class="form-field">
                                     <label><input type="radio" name="radio_service" value="fixed_land_mobile"
-                                            {{ $radioServiceValue == 'fixed_land_mobile' ? 'checked' : '' }}>
+                                            {{ old('radio_service', $form['radio_service'] ?? '') === 'fixed_land_mobile' ? 'checked' : '' }}>
                                         FIXED AND LAND MOBILE</label>
                                     <label><input type="radio" name="radio_service" value="aeronautical"
-                                            {{ $radioServiceValue == 'aeronautical' ? 'checked' : '' }}>
+                                            {{ old('radio_service', $form['radio_service'] ?? '') === 'aeronautical' ? 'checked' : '' }}>
                                         AERONAUTICAL</label>
                                     <label><input type="radio" name="radio_service" value="maritime"
-                                            {{ $radioServiceValue == 'maritime' ? 'checked' : '' }}> MARITIME
+                                            {{ old('radio_service', $form['radio_service'] ?? '') === 'maritime' ? 'checked' : '' }}>
+                                        MARITIME
                                         (Public/Private Coastal)</label>
                                 </div>
                                 <div class="form-field">
                                     <label><input type="radio" name="radio_service" value="broadcast"
-                                            {{ $radioServiceValue == 'broadcast' ? 'checked' : '' }}>
+                                            {{ old('radio_service', $form['radio_service'] ?? '') === 'broadcast' ? 'checked' : '' }}>
                                         BROADCAST</label>
                                     <label><input type="radio" name="radio_service" value="others"
-                                            {{ $radioServiceValue == 'others' ? 'checked' : '' }}> OTHERS,
+                                            {{ old('radio_service', $form['radio_service'] ?? '') === 'others' ? 'checked' : '' }}>
+                                        OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
                                         placeholder="Specify"
                                         value="{{ old('others_specify', $form['others_specify'] ?? '') }}">
+                                    @error('others_specify')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             @error('radio_service')
                                 <p class="text-red text-sm mt-1">{{ $message }}</p>
                             @enderror
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
-                        </fieldset>
-                    </section>
 
-                    <section class="step-content" id="step-station">
-                        @php
-                            $stationClassValue = old('station_class', $form['station_class'] ?? []);
-                            if (!is_array($stationClassValue)) {
-                                $stationClassValue = [];
-                            }
-                        @endphp
-                        <fieldset class="fieldset-compact">
-                            <!-- Class of Station field -->
-                            <x-forms.class-station-field :form="$form ?? []" />
-                            @error('station_class')
-                                <p class="text-red text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                        </fieldset>
+
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button type="button" class="btn-primary"
+                                data-next>Next</button></div>
                         </fieldset>
                     </section>
 
@@ -182,9 +170,9 @@
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">BW & Emission</label>
-                                    <input class="form1-01-input" type="text" name="bw_emission"
-                                        value="{{ old('bw_emission', $form['bw_emission'] ?? '') }}">
-                                    @error('bw_emission')
+                                    <input class="form1-01-input" type="text" name="bandwidth_emission"
+                                        value="{{ old('bandwidth_emission', $form['bandwidth_emission'] ?? '') }}">
+                                    @error('bandwidth_emission')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
@@ -357,7 +345,7 @@
 
         <script>
             (function() {
-                const stepsOrder = ['application', 'service', 'station', 'personal', 'particulars', 'declaration'];
+                const stepsOrder = ['application', 'personal', 'particulars', 'declaration'];
                 const stepsList = document.getElementById('stepsList11');
                 const form = document.getElementById('form111');
                 const validationLink11 = document.getElementById('validationLink11');
@@ -424,11 +412,12 @@
                     showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
-                    if (validateActiveStep()) go(1);
+                    // if (validateActiveStep()) go(1);
+                    go(1);
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn11');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
