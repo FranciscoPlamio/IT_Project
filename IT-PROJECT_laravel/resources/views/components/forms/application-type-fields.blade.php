@@ -6,6 +6,7 @@
     'applicationType' => '',
     'permitTypeValue' => [],
     'showPermit' => false,
+    'showYears' => true,
 ])
 
 <div class="form-field">
@@ -41,11 +42,12 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     @endif
-    <label class="form-label">No. of Years</label>
-    <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
-        value="{{ old('years', $form['years'] ?? '') }}">
-    @error('years')
-        <p class="text-red text-sm mt-1">{{ $message }}</p>
-    @enderror
-
+    @if ($showYears)
+        <label class="form-label">No. of Years</label>
+        <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
+            value="{{ old('years', $form['years'] ?? '') }}">
+        @error('years')
+            <p class="text-red text-sm mt-1">{{ $message }}</p>
+        @enderror
+    @endif
 </div>

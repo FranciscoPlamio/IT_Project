@@ -1,7 +1,11 @@
 <x-layout :title="'Application for Certificate of Registration (Form 1-19)'" :form-header="['formNo' => 'NTC 1-19', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
 
     <main>
-        <form class="form1-01-container" id="form119">
+        <form class="form1-01-container" id="form119" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+            <input type="hidden" name="form_token"
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
             <div class="form1-01-warning">
@@ -30,17 +34,28 @@
                     <section class="step-content active" id="step-equipment">
                         <fieldset class="fieldset-compact">
                             <legend>Type of Equipment/Device</legend>
-                            <div class="form-field" data-require-one="input[type=checkbox]">
-                                <label><input type="checkbox" name="equipment_type" value="wdn_indoor"> WIRELESS
+                            @php
+                                $equipmentTypeValue = old('equipment_type', $form['equipment_type'] ?? '');
+                            @endphp
+                            <div class="form-field">
+                                <label><input type="radio" name="equipment_type" value="wdn_indoor"
+                                        {{ $equipmentTypeValue == 'wdn_indoor' ? 'checked' : '' }}> WIRELESS
                                     DATA NETWORK (WDN) DEVICES - INDOOR</label>
-                                <label><input type="checkbox" name="equipment_type" value="srd"> SHORT RANGE
+                                <label><input type="radio" name="equipment_type" value="srd"
+                                        {{ $equipmentTypeValue == 'srd' ? 'checked' : '' }}> SHORT RANGE
                                     DEVICES (SRD)</label>
-                                <label><input type="checkbox" name="equipment_type" value="rfid"> RADIO FREQUENCY
+                                <label><input type="radio" name="equipment_type" value="rfid"
+                                        {{ $equipmentTypeValue == 'rfid' ? 'checked' : '' }}> RADIO FREQUENCY
                                     IDENTIFICATION (RFID) DEVICES</label>
-                                <label><input type="checkbox" name="equipment_type" value="srrs"> SHORT RANGE
+                                <label><input type="radio" name="equipment_type" value="srrs"
+                                        {{ $equipmentTypeValue == 'srrs' ? 'checked' : '' }}> SHORT RANGE
                                     RADIO SERVICE (SRRS) DEVICES</label>
-                                <label><input type="checkbox" name="equipment_type" value="public_trunked"> PUBLIC
+                                <label><input type="radio" name="equipment_type" value="public_trunked"
+                                        {{ $equipmentTypeValue == 'public_trunked' ? 'checked' : '' }}> PUBLIC
                                     TRUNKED RADIO EQUIPMENT (MOBILE/PORTABLE)</label>
+                                @error('equipment_type')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
                             </div>
@@ -50,43 +65,120 @@
                         <fieldset>
                             <legend>Applicant's Details</legend>
                             <div class="form-grid-3">
-                                <div class="form-field"><label class="form-label">Applicant</label><input
-                                        class="form1-01-input" type="text" name="applicant" required></div>
-                                <div class="form-field"><label class="form-label">Email Address</label><input
-                                        class="form1-01-input" type="email" name="email" required></div>
-                                <div class="form-field"><label class="form-label">Contact Number</label><input
-                                        class="form1-01-input" type="text" name="contact_number" required></div>
+                                <div class="form-field">
+                                    <label class="form-label">Applicant</label>
+                                    <input class="form1-01-input" type="text" name="applicant" required
+                                        value="{{ old('applicant', $form['applicant'] ?? '') }}">
+                                    @error('applicant')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Email Address</label>
+                                    <input class="form1-01-input" type="email" name="email" required
+                                        value="{{ old('email', $form['email'] ?? '') }}">
+                                    @error('email')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Contact Number</label>
+                                    <input class="form1-01-input" type="text" name="contact_number" required
+                                        value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
+                                    @error('contact_number')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input
-                                        class="form1-01-input" type="text" name="unit_no"></div>
-                                <div class="form-field"><label class="form-label">Street</label><input
-                                        class="form1-01-input" type="text" name="street"></div>
+                                <div class="form-field">
+                                    <label class="form-label">Unit/Rm/Bldg No.</label>
+                                    <input class="form1-01-input" type="text" name="unit_no"
+                                        value="{{ old('unit_no', $form['unit_no'] ?? '') }}">
+                                    @error('unit_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Street</label>
+                                    <input class="form1-01-input" type="text" name="street"
+                                        value="{{ old('street', $form['street'] ?? '') }}">
+                                    @error('street')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Barangay</label><input
-                                        class="form1-01-input" type="text" name="barangay"></div>
-                                <div class="form-field"><label class="form-label">City/Municipality</label><input
-                                        class="form1-01-input" type="text" name="city"></div>
+                                <div class="form-field">
+                                    <label class="form-label">Barangay</label>
+                                    <input class="form1-01-input" type="text" name="barangay"
+                                        value="{{ old('barangay', $form['barangay'] ?? '') }}">
+                                    @error('barangay')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">City/Municipality</label>
+                                    <input class="form1-01-input" type="text" name="city"
+                                        value="{{ old('city', $form['city'] ?? '') }}">
+                                    @error('city')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Province</label><input
-                                        class="form1-01-input" type="text" name="province"></div>
-                                <div class="form-field"><label class="form-label">Zip Code</label><input
-                                        class="form1-01-input" type="text" name="zip_code"></div>
+                                <div class="form-field">
+                                    <label class="form-label">Province</label>
+                                    <input class="form1-01-input" type="text" name="province"
+                                        value="{{ old('province', $form['province'] ?? '') }}">
+                                    @error('province')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Zip Code</label>
+                                    <input class="form1-01-input" type="text" name="zip_code"
+                                        value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
+                                    @error('zip_code')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-3">
-                                <div class="form-field"><label class="form-label">Validity</label><input
-                                        class="form1-01-input" type="date" name="validity"></div>
-                                <div class="form-field"><label class="form-label">Permit to Import
-                                        No.</label><input class="form1-01-input" type="text"
-                                        name="permit_import_no"></div>
-                                <div class="form-field"><label class="form-label">Invoice No.</label><input
-                                        class="form1-01-input" type="text" name="invoice_no"></div>
+                                <div class="form-field">
+                                    <label class="form-label">Validity</label>
+                                    <input class="form1-01-input" type="date" name="validity"
+                                        value="{{ old('validity', $form['validity'] ?? '') }}">
+                                    @error('validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Permit to Import No.</label>
+                                    <input class="form1-01-input" type="text" name="permit_import_no"
+                                        value="{{ old('permit_import_no', $form['permit_import_no'] ?? '') }}">
+                                    @error('permit_import_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Invoice No.</label>
+                                    <input class="form1-01-input" type="text" name="invoice_no"
+                                        value="{{ old('invoice_no', $form['invoice_no'] ?? '') }}">
+                                    @error('invoice_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">CPCN/PA/RSL No.</label><input
-                                        class="form1-01-input" type="text" name="cpcn_pa_rsl_no"></div>
+                                <div class="form-field">
+                                    <label class="form-label">CPCN/PA/RSL No.</label>
+                                    <input class="form1-01-input" type="text" name="cpcn_pa_rsl_no"
+                                        value="{{ old('cpcn_pa_rsl_no', $form['cpcn_pa_rsl_no'] ?? '') }}">
+                                    @error('cpcn_pa_rsl_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -107,51 +199,72 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><input class="table-input" type="text" name="equipment1_make">
+                                            <td><input class="table-input" type="text" name="equipment1_make"
+                                                    value="{{ old('equipment1_make', $form['equipment1_make'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="number" name="equipment1_quantity">
+                                            <td><input class="table-input" type="number" name="equipment1_quantity"
+                                                    value="{{ old('equipment1_quantity', $form['equipment1_quantity'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="text" name="equipment1_serial">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment2_make">
-                                            </td>
-                                            <td><input class="table-input" type="number" name="equipment2_quantity">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment2_serial">
+                                            <td><input class="table-input" type="text" name="equipment1_serial"
+                                                    value="{{ old('equipment1_serial', $form['equipment1_serial'] ?? '') }}">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><input class="table-input" type="text" name="equipment3_make">
+                                            <td><input class="table-input" type="text" name="equipment2_make"
+                                                    value="{{ old('equipment2_make', $form['equipment2_make'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="number" name="equipment3_quantity">
+                                            <td><input class="table-input" type="number" name="equipment2_quantity"
+                                                    value="{{ old('equipment2_quantity', $form['equipment2_quantity'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="text" name="equipment3_serial">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment4_make">
-                                            </td>
-                                            <td><input class="table-input" type="number" name="equipment4_quantity">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment4_serial">
+                                            <td><input class="table-input" type="text" name="equipment2_serial"
+                                                    value="{{ old('equipment2_serial', $form['equipment2_serial'] ?? '') }}">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><input class="table-input" type="text" name="equipment5_make">
+                                            <td><input class="table-input" type="text" name="equipment3_make"
+                                                    value="{{ old('equipment3_make', $form['equipment3_make'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="number" name="equipment5_quantity">
+                                            <td><input class="table-input" type="number" name="equipment3_quantity"
+                                                    value="{{ old('equipment3_quantity', $form['equipment3_quantity'] ?? '') }}">
                                             </td>
-                                            <td><input class="table-input" type="text" name="equipment5_serial">
+                                            <td><input class="table-input" type="text" name="equipment3_serial"
+                                                    value="{{ old('equipment3_serial', $form['equipment3_serial'] ?? '') }}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="table-input" type="text" name="equipment4_make"
+                                                    value="{{ old('equipment4_make', $form['equipment4_make'] ?? '') }}">
+                                            </td>
+                                            <td><input class="table-input" type="number" name="equipment4_quantity"
+                                                    value="{{ old('equipment4_quantity', $form['equipment4_quantity'] ?? '') }}">
+                                            </td>
+                                            <td><input class="table-input" type="text" name="equipment4_serial"
+                                                    value="{{ old('equipment4_serial', $form['equipment4_serial'] ?? '') }}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><input class="table-input" type="text" name="equipment5_make"
+                                                    value="{{ old('equipment5_make', $form['equipment5_make'] ?? '') }}">
+                                            </td>
+                                            <td><input class="table-input" type="number" name="equipment5_quantity"
+                                                    value="{{ old('equipment5_quantity', $form['equipment5_quantity'] ?? '') }}">
+                                            </td>
+                                            <td><input class="table-input" type="text" name="equipment5_serial"
+                                                    value="{{ old('equipment5_serial', $form['equipment5_serial'] ?? '') }}">
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="form-grid-2" style="margin-top:12px;">
-                                <div class="form-field"><label class="form-label">TOTAL</label><input
-                                        class="form1-01-input" type="number" name="total_quantity"></div>
+                                <div class="form-field">
+                                    <label class="form-label">TOTAL</label>
+                                    <input class="form1-01-input" type="number" name="total_quantity"
+                                        value="{{ old('total_quantity', $form['total_quantity'] ?? '') }}">
+                                    @error('total_quantity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -238,33 +351,55 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn');
+                const validateBtn = document.getElementById('validateBtn19');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', () => {
-                        if (!validateActiveStep()) return;
+                    validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) {
-                                // Save the file name if a file is selected, otherwise empty string
-                                entries[key] = value.name || '';
-                            } else {
-                                if (entries[key]) {
-                                    if (Array.isArray(entries[key])) {
-                                        entries[key].push(value);
-                                    } else {
-                                        entries[key] = [entries[key], value];
-                                    }
-                                } else {
-                                    entries[key] = value;
-                                }
-                            }
-                        }
-                        localStorage.setItem('form1-19-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-19');
-                        if (validationLink19) {
-                            window.location.href = validationLink19.href;
-                        }
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        form.submit();
+
+                        // -- commented AJAX for now--
+                        // -- uncomment if fixed -Richmond
+
+                        //const formData = new FormData(form);
+                        // try {
+                        //     const res = await fetch(form.action, {
+                        //         method: 'POST',
+                        //         headers: {
+                        //             'Content-Type': 'application/json',
+                        //             'Accept': 'application/json'
+                        //         },
+                        //         body: formData
+                        //     });
+                        //     const text = await res.text();
+                        //     console.log(text);
+                        //     let json = null;
+                        //     try {
+                        //         json = JSON.parse(text);
+                        //     } catch (e) {}
+                        //     if (res.ok) {
+                        //         if (json.form_token) {
+                        //             localStorage.setItem('form_token', json.form_token);
+                        //         }
+                        //         localStorage.setItem('active-form', '1-19');
+                        //         if (validationLink19) {
+                        //             const token = json && json.form_token ? json.form_token : (localStorage
+                        //                 .getItem('form_token') || '');
+                        //             const url = new URL(validationLink19.href, window.location.origin);
+                        //             if (token) url.searchParams.set('token', token);
+                        //             window.location.href = url.toString();
+                        //         }
+                        //     } else {
+                        //         console.error('Save failed payload:', json || text);
+                        //         alert('Failed to save. Details logged to console.');
+                        //     }
+                        // } catch (e) {
+                        //     console.error('Network error:', e);
+                        //     alert('Network error. Please try again.');
+                        // }
                     });
                 }
 
