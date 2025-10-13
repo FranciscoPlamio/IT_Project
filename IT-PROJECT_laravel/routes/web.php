@@ -61,7 +61,9 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('1-25/text-message', fn() => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
     Route::get('{formType}', [FormsController::class, 'show'])->name('show');
     Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
+    Route::get('{formType}/preview', [FormsController::class, 'showPreview'])->name('preview');
     Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');
+    Route::get('{formType}/pdf', [FormsController::class, 'generatePDF'])->name('pdf');
 
     Route::post('{formType}/preview', [FormsController::class, 'preview'])->name('preview');
     Route::post('{formType}/submit', [FormsController::class, 'storeAll'])->name('submit');

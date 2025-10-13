@@ -29,9 +29,9 @@
             <dl class="validation-list" id="validationList"></dl>
             <div class="validation-btns">
                 <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-                <a class="form1-01-btn" id="proceedPayment" href="">Proceed to
-                    Payment</a>
-                <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
+                <a class="form1-01-btn" id="proceedPreview" href="">Proceed to
+                    Preview</a>
+                <form id="previewForm" action="{{ route('forms.preview', ['formType' => $formType]) }}" method="GET"
                     style="display:none;">
                     @csrf
                 </form>
@@ -709,8 +709,8 @@
                 }
             })();
 
-            const link = document.getElementById('proceedPayment');
-            const form = document.getElementById('paymentForm');
+            const link = document.getElementById('proceedPreview');
+            const form = document.getElementById('previewForm');
 
             // Get token from URL
             const urlParams = new URLSearchParams(window.location.search);
@@ -720,7 +720,7 @@
                 // Create hidden input dynamically
                 const input = document.createElement('input');
                 input.type = 'hidden';
-                input.name = 'form_token';
+                input.name = 'token';
                 input.value = token;
                 form.appendChild(input);
             }
