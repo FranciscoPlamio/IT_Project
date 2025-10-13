@@ -165,7 +165,7 @@ class FormsController extends Controller
             );
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
-            // dd('Validation failed:', $e->errors(), $e->getMessage());
+            dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // or log it instead of dumping:
             // \Log::error('Validation failed', ['errors' => $e->errors()]);
