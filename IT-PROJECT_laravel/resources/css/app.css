@@ -190,6 +190,91 @@ textarea.form1-01-input {
     width: 100%;
 }
 
+/* Address dropdown specific styles */
+.address-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.address-select:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.address-select option {
+    padding: 8px 12px;
+    background-color: #fff;
+    color: #333;
+}
+
+.address-select option:hover {
+    background-color: #f8f9fa;
+}
+
+/* Loading state for address selects */
+.address-select.loading {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3ccircle cx='12' cy='12' r='10'%3e%3c/circle%3e%3cpath d='M12 6v6l4 2'%3e%3c/path%3e%3c/svg%3e");
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Address error styling */
+.address-error {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+    padding: 12px 16px;
+    margin: 16px 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Address field loading indicator */
+.address-field-loading {
+    position: relative;
+}
+
+.address-field-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive adjustments for address selects */
+@media (max-width: 768px) {
+    .address-select {
+        background-position: right 10px center;
+        background-size: 14px;
+        padding-right: 36px;
+    }
+    
+    .address-error {
+        padding: 10px 12px;
+        margin: 12px 0;
+        font-size: 0.85rem;
+    }
+}
+
 .form1-01-note {
     background: #e8f3ff;
     border: 1px solid #cfe3ff;
