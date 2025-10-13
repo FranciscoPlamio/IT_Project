@@ -122,215 +122,231 @@
 
                     <section class="step-content" id="step-particulars">
                         <fieldset>
-                            <legend>Particulars of Station / Equipment / Antenna</legend>
+                            <legend>PARTICULARS OF STATION / EQUIPMENT / ANTENNA (FOR MULTIPLE
+                                STATIONS/EQUIPMENT/ANTENNA, USE FORM C)</legend>
+
+                            <!-- STATION and EQUIPMENT sections side by side -->
                             <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Exact Location</label>
-                                    <input class="form1-01-input" type="text" name="exact_location"
-                                        value="{{ old('exact_location', $form['exact_location'] ?? '') }}">
-                                    @error('exact_location')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <!-- STATION Section (Left Column) -->
+                                <div class="station-section">
+                                    <div class="section-header">STATION</div>
+                                    <div class="form-field">
+                                        <label class="form-label">Exact Location</label>
+                                        <input class="form1-01-input" type="text" name="exact_location"
+                                            value="{{ old('exact_location', $form['exact_location'] ?? '') }}">
+                                        @error('exact_location')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-grid-2">
+                                        <div class="form-field">
+                                            <label class="form-label">Long (deg-min-sec)</label>
+                                            <input class="form1-01-input" type="text" name="longitude"
+                                                value="{{ old('longitude', $form['longitude'] ?? '') }}">
+                                            @error('longitude')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label">Lat (deg-min-sec)</label>
+                                            <input class="form1-01-input" type="text" name="latitude"
+                                                value="{{ old('latitude', $form['latitude'] ?? '') }}">
+                                            @error('latitude')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Points of Comm/Service Area</label>
+                                        <input class="form1-01-input" type="text" name="points_of_comm"
+                                            value="{{ old('points_of_comm', $form['points_of_comm'] ?? '') }}">
+                                        @error('points_of_comm')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Assigned Freq.</label>
+                                        <input class="form1-01-input" type="text" name="assigned_freq"
+                                            value="{{ old('assigned_freq', $form['assigned_freq'] ?? '') }}">
+                                        @error('assigned_freq')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">BW & Emission</label>
+                                        <input class="form1-01-input" type="text" name="bandwidth_emission"
+                                            value="{{ old('bandwidth_emission', $form['bandwidth_emission'] ?? '') }}">
+                                        @error('bandwidth_emission')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Configuration</label>
+                                        <input class="form1-01-input" type="text" name="configuration"
+                                            value="{{ old('configuration', $form['configuration'] ?? '') }}">
+                                        @error('configuration')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-grid-2">
+                                        <div class="form-field">
+                                            <label class="form-label">Data Rate</label>
+                                            <input class="form1-01-input" type="text" name="data_rate"
+                                                value="{{ old('data_rate', $form['data_rate'] ?? '') }}">
+                                            @error('data_rate')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="form-label">Call Sign</label>
+                                            <input class="form1-01-input" type="text" name="call_sign"
+                                                value="{{ old('call_sign', $form['call_sign'] ?? '') }}">
+                                            @error('call_sign')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">RSL No.</label>
+                                        <input class="form1-01-input" type="text" name="rsl_no"
+                                            value="{{ old('rsl_no', $form['rsl_no'] ?? '') }}">
+                                        @error('rsl_no')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Validity (mm/dd/yy)</label>
+                                        <input class="form1-01-input" type="date" name="validity"
+                                            value="{{ old('validity', $form['validity'] ?? '') }}">
+                                        @error('validity')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Others, specify</label>
+                                        <input class="form1-01-input" type="text" name="others_station"
+                                            value="{{ old('others_station', $form['others_station'] ?? '') }}">
+                                        @error('others_station')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="form-field">
-                                    <label class="form-label">Long (deg-min-sec)</label>
-                                    <input class="form1-01-input" type="text" name="longitude"
-                                        value="{{ old('longitude', $form['longitude'] ?? '') }}">
-                                    @error('longitude')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+
+                                <!-- EQUIPMENT Section (Right Column) -->
+                                <div class="equipment-section">
+                                    <div class="section-header">EQUIPMENT</div>
+                                    <div class="form-field">
+                                        <label class="form-label">Make/Type/Model</label>
+                                        <input class="form1-01-input" type="text" name="make_type_model"
+                                            value="{{ old('make_type_model', $form['make_type_model'] ?? '') }}">
+                                        @error('make_type_model')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Serial Number</label>
+                                        <input class="form1-01-input" type="text" name="serial_number"
+                                            value="{{ old('serial_number', $form['serial_number'] ?? '') }}">
+                                        @error('serial_number')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Power Output</label>
+                                        <input class="form1-01-input" type="text" name="power_output"
+                                            value="{{ old('power_output', $form['power_output'] ?? '') }}">
+                                        @error('power_output')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Frequency Range</label>
+                                        <input class="form1-01-input" type="text" name="frequency_range"
+                                            value="{{ old('frequency_range', $form['frequency_range'] ?? '') }}">
+                                        @error('frequency_range')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Lat (deg-min-sec)</label>
-                                    <input class="form1-01-input" type="text" name="latitude"
-                                        value="{{ old('latitude', $form['latitude'] ?? '') }}">
-                                    @error('latitude')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+
+                            <!-- ANTENNA Section (Full Width) -->
+                            <div class="antenna-section">
+                                <div class="section-header">ANTENNA</div>
+                                <div class="form-grid-2">
+                                    <div class="form-field">
+                                        <label class="form-label">Type</label>
+                                        <input class="form1-01-input" type="text" name="antenna_type"
+                                            value="{{ old('antenna_type', $form['antenna_type'] ?? '') }}">
+                                        @error('antenna_type')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Height (m)</label>
+                                        <input class="form1-01-input" type="text" name="antenna_height"
+                                            value="{{ old('antenna_height', $form['antenna_height'] ?? '') }}">
+                                        @error('antenna_height')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="form-field">
-                                    <label class="form-label">Points of Comm/Service Area</label>
-                                    <input class="form1-01-input" type="text" name="points_of_comm"
-                                        value="{{ old('points_of_comm', $form['points_of_comm'] ?? '') }}">
-                                    @error('points_of_comm')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <div class="form-grid-2">
+                                    <div class="form-field">
+                                        <label class="form-label">Gain (dB)</label>
+                                        <input class="form1-01-input" type="text" name="antenna_gain"
+                                            value="{{ old('antenna_gain', $form['antenna_gain'] ?? '') }}">
+                                        @error('antenna_gain')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Directivity</label>
+                                        <input class="form1-01-input" type="text" name="antenna_directivity"
+                                            value="{{ old('antenna_directivity', $form['antenna_directivity'] ?? '') }}">
+                                        @error('antenna_directivity')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Assigned Freq.</label>
-                                    <input class="form1-01-input" type="text" name="assigned_freq"
-                                        value="{{ old('assigned_freq', $form['assigned_freq'] ?? '') }}">
-                                    @error('assigned_freq')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <div class="form-grid-2">
+                                    <div class="form-field">
+                                        <label class="form-label">Polarization</label>
+                                        <input class="form1-01-input" type="text" name="antenna_polarization"
+                                            value="{{ old('antenna_polarization', $form['antenna_polarization'] ?? '') }}">
+                                        @error('antenna_polarization')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Beamwidth</label>
+                                        <input class="form1-01-input" type="text" name="antenna_beamwidth"
+                                            value="{{ old('antenna_beamwidth', $form['antenna_beamwidth'] ?? '') }}">
+                                        @error('antenna_beamwidth')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="form-field">
-                                    <label class="form-label">BW & Emission</label>
-                                    <input class="form1-01-input" type="text" name="bandwidth_emission"
-                                        value="{{ old('bandwidth_emission', $form['bandwidth_emission'] ?? '') }}">
-                                    @error('bandwidth_emission')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Configuration</label>
-                                    <input class="form1-01-input" type="text" name="configuration"
-                                        value="{{ old('configuration', $form['configuration'] ?? '') }}">
-                                    @error('configuration')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Data Rate</label>
-                                    <input class="form1-01-input" type="text" name="data_rate"
-                                        value="{{ old('data_rate', $form['data_rate'] ?? '') }}">
-                                    @error('data_rate')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Call Sign</label>
-                                    <input class="form1-01-input" type="text" name="call_sign"
-                                        value="{{ old('call_sign', $form['call_sign'] ?? '') }}">
-                                    @error('call_sign')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">RSL No.</label>
-                                    <input class="form1-01-input" type="text" name="rsl_no"
-                                        value="{{ old('rsl_no', $form['rsl_no'] ?? '') }}">
-                                    @error('rsl_no')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Validity</label>
-                                    <input class="form1-01-input" type="date" name="validity"
-                                        value="{{ old('validity', $form['validity'] ?? '') }}">
-                                    @error('validity')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Make/Type/Model</label>
-                                    <input class="form1-01-input" type="text" name="make_type_model"
-                                        value="{{ old('make_type_model', $form['make_type_model'] ?? '') }}">
-                                    @error('make_type_model')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                <div class="form-grid-2">
+                                    <div class="form-field">
+                                        <label class="form-label">Diameter (for microwave)</label>
+                                        <input class="form1-01-input" type="text" name="antenna_diameter"
+                                            value="{{ old('antenna_diameter', $form['antenna_diameter'] ?? '') }}">
+                                        @error('antenna_diameter')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">Others</label>
+                                        <input class="form1-01-input" type="text" name="antenna_others"
+                                            value="{{ old('antenna_others', $form['antenna_others'] ?? '') }}">
+                                        @error('antenna_others')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Serial Number</label>
-                                    <input class="form1-01-input" type="text" name="serial_number"
-                                        value="{{ old('serial_number', $form['serial_number'] ?? '') }}">
-                                    @error('serial_number')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Power Output</label>
-                                    <input class="form1-01-input" type="text" name="power_output"
-                                        value="{{ old('power_output', $form['power_output'] ?? '') }}">
-                                    @error('power_output')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Frequency Range</label>
-                                    <input class="form1-01-input" type="text" name="frequency_range"
-                                        value="{{ old('frequency_range', $form['frequency_range'] ?? '') }}">
-                                    @error('frequency_range')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Others, specify</label>
-                                    <input class="form1-01-input" type="text" name="others_station"
-                                        value="{{ old('others_station', $form['others_station'] ?? '') }}">
-                                    @error('others_station')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Antenna Type</label>
-                                    <input class="form1-01-input" type="text" name="antenna_type"
-                                        value="{{ old('antenna_type', $form['antenna_type'] ?? '') }}">
-                                    @error('antenna_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Height (m)</label>
-                                    <input class="form1-01-input" type="text" name="antenna_height"
-                                        value="{{ old('antenna_height', $form['antenna_height'] ?? '') }}">
-                                    @error('antenna_height')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Gain (dB)</label>
-                                    <input class="form1-01-input" type="text" name="antenna_gain"
-                                        value="{{ old('antenna_gain', $form['antenna_gain'] ?? '') }}">
-                                    @error('antenna_gain')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Directivity</label>
-                                    <input class="form1-01-input" type="text" name="antenna_directivity"
-                                        value="{{ old('antenna_directivity', $form['antenna_directivity'] ?? '') }}">
-                                    @error('antenna_directivity')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Polarization</label>
-                                    <input class="form1-01-input" type="text" name="antenna_polarization"
-                                        value="{{ old('antenna_polarization', $form['antenna_polarization'] ?? '') }}">
-                                    @error('antenna_polarization')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Beamwidth</label>
-                                    <input class="form1-01-input" type="text" name="antenna_beamwidth"
-                                        value="{{ old('antenna_beamwidth', $form['antenna_beamwidth'] ?? '') }}">
-                                    @error('antenna_beamwidth')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Diameter (for microwave)</label>
-                                    <input class="form1-01-input" type="text" name="antenna_diameter"
-                                        value="{{ old('antenna_diameter', $form['antenna_diameter'] ?? '') }}">
-                                    @error('antenna_diameter')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
                                     data-next>Next</button></div>

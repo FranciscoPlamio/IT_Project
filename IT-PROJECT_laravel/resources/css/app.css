@@ -1204,6 +1204,34 @@ footer {
     }
 }
 
+/* Section Headers for Station/Equipment/Antenna */
+.section-header {
+    background: #4a5568;
+    color: white;
+    text-align: center;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.station-section,
+.equipment-section,
+.antenna-section {
+    background: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.antenna-section {
+    margin-top: 16px;
+}
+
 /* Enhanced Responsive Design */
 
 /* Large Desktop (1200px and up) */
