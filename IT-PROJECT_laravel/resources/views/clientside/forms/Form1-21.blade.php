@@ -1,5 +1,4 @@
 <x-layout :title="'Application for Duplicate of Permit/License/Certificate (Form 1-21)'" :form-header="['formNo' => 'NTC 1-21', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
-
     <main>
         <form class="form1-01-container" id="form121" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -56,10 +55,17 @@
                                         No.</label><input class="form1-01-input" type="text"
                                         name="permit_license_certificate_no" required
                                         value="{{ old('permit_license_certificate_no', $form['permit_license_certificate_no'] ?? '') }}">
+                                    @error('permit_license_certificate_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field"><label class="form-label">Validity</label><input
                                         class="form1-01-input" type="date" name="validity"
-                                        value="{{ old('validity', $form['validity'] ?? '') }}"></div>
+                                        value="{{ old('validity', $form['validity'] ?? '') }}">
+                                    @error('validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -76,6 +82,9 @@
                                     placeholder="Please provide detailed explanation of how the permit/license/certificate was lost or mutilated..."
                                     required>{{ old('circumstances', $form['circumstances'] ?? '') }}</textarea>
                             </div>
+                            @error('circumstances')
+                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                            @enderror
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
                                     data-next>Next</button></div>

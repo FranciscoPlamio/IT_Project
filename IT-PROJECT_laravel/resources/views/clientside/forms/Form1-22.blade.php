@@ -58,6 +58,9 @@
                                         {{ old('license_type', $form['license_type'] ?? '') === 'catv_station' ? 'checked' : '' }}>
                                     CATV STATION
                                     LICENSE</label>
+                                @error('license_type')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </fieldset>
                         <fieldset class="fieldset-compact">
@@ -71,6 +74,9 @@
                                     <label><input type="radio" name="applicant_classification" value="non_commercial"
                                             {{ old('applicant_classification', $form['applicant_classification'] ?? '') === 'non_commercial' ? 'checked' : '' }}>
                                         NON-COMMERCIAL</label>
+                                    @error('applicant_classification')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field" data-require-one="input[type=radio]">
                                     <div class="form-label">Service Type</div>
@@ -84,9 +90,15 @@
                                             {{ old('service_type', $form['service_type'] ?? '') === 'others' ? 'checked' : '' }}>
                                         OTHERS,
                                         specify</label>
+                                    @error('service_type')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                     <input class="form1-01-input" type="text" name="others_service"
                                         placeholder="Specify"
                                         value="{{ old('others_service', $form['others_service'] ?? '') }}">
+                                    @error('others_service')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-field">
@@ -94,6 +106,9 @@
                                 <input class="form1-01-input" type="number" name="no_of_years"
                                     placeholder="Number of years"
                                     value="{{ old('no_of_years', $form['no_of_years'] ?? '') }}">
+                                @error('no_of_years')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
                             </div>
@@ -120,11 +135,17 @@
                                     <label class="form-label">Validity</label><input class="form1-01-input"
                                         type="date" name="validity"
                                         value="{{ old('validity', $form['validity'] ?? '') }}">
+                                    @error('validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">PA/CA No.</label><input class="form1-01-input"
                                         type="text" name="pa_ca_no"
                                         value="{{ old('pa_ca_no', $form['pa_ca_no'] ?? '') }}">
+                                    @error('pa_ca_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-grid-2">
@@ -132,12 +153,18 @@
                                     <label class="form-label">Service Area</label><input class="form1-01-input"
                                         type="text" name="service_area"
                                         value="{{ old('service_area', $form['service_area'] ?? '') }}">
+                                    @error('service_area')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Exact Location of TVRO
                                         System</label><input class="form1-01-input" type="text"
                                         name="exact_location"
                                         value="{{ old('exact_location', $form['exact_location'] ?? '') }}">
+                                    @error('exact_location')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-grid-2">
@@ -146,12 +173,18 @@
                                         (deg-min-sec)
                                     </label><input class="form1-01-input" type="text" name="longitude"
                                         value="{{ old('longitude', $form['longitude'] ?? '') }}">
+                                    @error('longitude')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Latitude
                                         (deg-min-sec)
                                     </label><input class="form1-01-input" type="text" name="latitude"
                                         value="{{ old('latitude', $form['latitude'] ?? '') }}">
+                                    @error('latitude')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                         </fieldset>

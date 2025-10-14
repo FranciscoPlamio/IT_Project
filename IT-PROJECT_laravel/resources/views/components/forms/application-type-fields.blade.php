@@ -20,9 +20,6 @@
         <input type="radio" name="application_type" value="renewal"
             {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
         RENEWAL</label>
-    @error('application_type')
-        <p class="text-red text-sm mt-1">{{ $message }}</p>
-    @enderror
 
     @if ($showModification)
         <label>
@@ -30,6 +27,9 @@
                 {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>
             MODIFICATION (Use form B)
         </label>
+        @error('application_type')
+            <p class="text-red text-sm mt-1">{{ $message }}</p>
+        @enderror
         <input class="form1-01-input mt-4" type="text" name="modification_reason" placeholder="Use form B"
             value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
         @error('modification_reason')
@@ -41,6 +41,9 @@
                 {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>MODIFICATION
             due to
         </label>
+        @error('application_type')
+            <p class="text-red text-sm mt-1">{{ $message }}</p>
+        @enderror
         <input class="form1-01-input mt-4" type="text" name="modification_reason"
             placeholder="Reason (if modification)"
             value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
@@ -48,9 +51,8 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     @endif
-    @error('application_type')
-        <p class="text-red text-sm mt-1">{{ $message }}</p>
-    @enderror
+
+
 
     @if ($showPermit)
         <label class="form-label" style="margin-top:12px;">Permit Type</label>

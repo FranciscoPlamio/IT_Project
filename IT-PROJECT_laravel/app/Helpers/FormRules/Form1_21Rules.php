@@ -2,18 +2,12 @@
 
 namespace App\Helpers\FormRules;
 
-class Form1_20Rules
+class Form1_21Rules
 {
     public static function rules(): array
     {
         return [
             'rules' => [
-
-                //Application Details
-                'application_type' => ['required', 'string'],
-                'modification_reason' => ['nullable', 'string'],
-                'service_category' => ['required', 'string'],
-
                 // Applicant Details
                 'applicant' => ['required', 'string'],
                 'unit' => ['required', 'string'],
@@ -24,16 +18,13 @@ class Form1_20Rules
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
                 'email' => ['nullable', 'email'],
-                'cpcn_pa_ca_no' => ['required', 'string'],
-                'cpcn_validity' => ['required', 'string'],
-                'cor_no' => ['required', 'string'],
-                'cor_validity' => ['required', 'string'],
-                'known_by_another_name' => ['required', 'string'],
-                'former_name' => ['required', 'string'],
 
-                // Value added service
-                'vas_services' => ['required', 'string'],
-                'others_vas' => ['required', 'string'],
+                //Permit License Details
+                'permit_license_certificate_no' => ['required', 'string'],
+                'validity' => ['required', 'string'],
+
+                //Circumstances
+                'circumstances' => ['required', 'string'],
 
             ],
 
