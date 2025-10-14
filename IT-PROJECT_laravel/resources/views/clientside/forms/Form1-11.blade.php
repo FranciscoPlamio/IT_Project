@@ -11,9 +11,9 @@
                 a minor.</div>
             <div class="form1-01-warning">
                 <div class="form1-01-warning-title">WARNING:</div> Ensure that all details in identification fields
-                are correct. Incorrect entries may require a new appointment.<div class="form1-01-agree">
-                    <label><input type="checkbox" /> I agree / Malinaw sa akin</label>
-                </div>
+                are correct. Incorrect entries may require a new appointment.
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
 
             <div class="form-layout">
@@ -365,8 +365,35 @@
                 const stepsList = document.getElementById('stepsList11');
                 const form = document.getElementById('form111');
                 const validationLink11 = document.getElementById('validationLink11');
+                const warningCheckbox = document.getElementById('warning-agreement');
+
+                // Function to disable/enable all form fields
+                function toggleFormFields(enabled) {
+                    const formFields = form.querySelectorAll('input, select, textarea, button');
+                    formFields.forEach(field => {
+                        // Skip the warning checkbox itself and hidden inputs
+                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                            return;
+                        }
+                        field.disabled = !enabled;
+                    });
+                }
+
+                // Initially disable all form fields
+                toggleFormFields(false);
+
+                // Add event listener to warning checkbox
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleFormFields(this.checked);
+                    });
+                }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'personal') {
+                        return;
+                    }
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -425,17 +452,33 @@
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
+
+                    // Only allow navigation to personal step if checkbox not checked
+                    if (!warningCheckbox.checked && li.dataset.step !== 'personal') {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
                     // if (validateActiveStep()) go(1);
                     go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);
