@@ -152,6 +152,7 @@ class FormsController extends Controller
 
     public function preview(Request $request, $formType)
     {
+
         // Gets rules of a form
         // App\Helpers\FormManager
         $rules = FormManager::getValidationRules($formType);
@@ -165,7 +166,7 @@ class FormsController extends Controller
             );
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
-            dd('Validation failed:', $e->errors(), $e->getMessage());
+            // dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // or log it instead of dumping:
             // \Log::error('Validation failed', ['errors' => $e->errors()]);
