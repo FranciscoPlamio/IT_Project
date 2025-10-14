@@ -40,6 +40,7 @@ class FormsController extends Controller
                                 License'],
             ['number' => '1-24', 'title' => 'Affidavit of Ownership and Loss with Undertaking'],
             ['number' => '1-25', 'title' => 'Complaint Form'],
+            ['number' => '1-26', 'title' => 'Complaint on Text Message'],
         ];
 
         return view('FormsList', compact('forms'));

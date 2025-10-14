@@ -33,15 +33,17 @@
                     <section class="step-content active" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-2">
-                                <label class="form-label">Applicant</label>
-                                <input class="form1-01-input" type="text" name="applicant" required
-                                    value="{{ old('applicant', $form['applicant'] ?? '') }}">
-                                @error('applicant')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                @enderror
+                            <div class="form-grid-1">
+                                <div class="form-field">
+                                    <label class="form-label">Applicant</label>
+                                    <input class="form1-01-input" type="text" name="applicant" required
+                                        value="{{ old('applicant', $form['applicant'] ?? '') }}">
+                                    @error('applicant')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
-                            <!-- address fields format -->
+                            <!-- address fields -->
                             <x-forms.address-fields :form="$form ?? []" />
                         </fieldset>
                     </section>
