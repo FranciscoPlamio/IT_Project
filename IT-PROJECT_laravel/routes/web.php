@@ -93,6 +93,46 @@ Route::get('/', function () {
     return view('homepage');
 })->name('homepage');
 
+// Serve Philippine address data JSON files
+Route::get('/philippine_provinces_cities_municipalities_and_barangays_2019v2.json', function () {
+    $filePath = base_path('philippine_provinces_cities_municipalities_and_barangays_2019v2.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Province data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('address.province-data');
+
+Route::get('/ph-zipcodes.json', function () {
+    $filePath = base_path('ph-zipcodes.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Zip code data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('address.zipcode-data');
+
+Route::get('/nationalities.json', function () {
+    $filePath = base_path('nationalities.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Nationalities data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('nationalities.data');
+
 Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
 
 Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
