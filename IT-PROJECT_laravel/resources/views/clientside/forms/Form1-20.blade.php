@@ -1,5 +1,4 @@
 <x-layout :title="'Application for Certificate of Registration - Value Added Services (Form 1-20)'" :form-header="['formNo' => 'NTC 1-20', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
-
     <main>
         <form class="form1-01-container" id="form120" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -33,45 +32,73 @@
                 <div>
                     <section class="step-content active" id="step-categories">
                         <fieldset class="fieldset-compact">
-                            <legend>Application Type / Service Categories</legend>
-                            <div class="form-grid-2">
+                            <legend>Application Type</legend>
+                            <div class="form-grid-1">
                                 <div class="form-field" data-require-one="input[type=radio]">
-                                    <div class="form-label">Application Type</div>
                                     <x-forms.application-type-fields :form="$form ?? []" :showPermit="false"
                                         :showYears="false" />
                                 </div>
-                                <div class="form-field" data-require-one="input[type=radio]">
-                                    <div class="form-label">Service Categories</div>
-                                    <label><input type="radio" name="service_category" value="vas_provider"
-                                            {{ old('service_category', $form['service_category'] ?? '') === 'vas_provider' ? 'checked' : '' }}>
-                                        VALUE-ADDED SERVICE (VAS) PROVIDER</label>
-                                    <label><input type="radio" name="service_category" value="pcsotsp"
-                                            {{ old('service_category', $form['service_category'] ?? '') === 'pcsotsp' ? 'checked' : '' }}>
-                                        PUBLIC
-                                        CALLING STATION/OFFICE / TELECENTER SERVICE PROVIDER (PCSOTSP)</label>
-                                    <label><input type="radio" name="service_category" value="voip" id="voip_radio"
-                                            {{ old('service_category', $form['service_category'] ?? '') === 'voip' ? 'checked' : '' }}>
-                                        VOICE OVER
-                                        INTERNET PROTOCOL (VOIP)</label>
-                                    <div style="margin-left:12px;" id="voip_options" class="hidden">
-                                        <label><input type="radio" name="voip_type" value="voip_provider"
-                                                {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_provider' ? 'checked' : '' }}>
-                                            PROVIDER</label>
-                                        <br>
-                                        <label><input type="radio" name="voip_type" value="voip_reseller"
-                                                {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_reseller' ? 'checked' : '' }}>
-                                            RESELLER</label>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+                        </fieldset class="fieldset-compact">
+
+                        <fieldset>
+                            <legend>Service Categories</legend>
+
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <label>
+                                    <input type="radio" name="service_category" value="vas_provider"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'vas_provider' ? 'checked' : '' }}
+                                        onclick="updateServiceCategory('vas_provider')">
+                                    VALUE-ADDED SERVICE (VAS) PROVIDER
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="service_category" value="pcsotsp"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'pcsotsp' ? 'checked' : '' }}
+                                        onclick="updateServiceCategory('pcsotsp')">
+                                    PUBLIC CALLING STATION/OFFICE / TELECENTER SERVICE PROVIDER (PCSOTSP)
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="service_category" value="voip" id="voip_radio"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'voip' ? 'checked' : '' }}
+                                        onclick="toggleVoipOptions(true); updateServiceCategory('voip')">
+                                    VOICE OVER INTERNET PROTOCOL (VOIP)
+                                </label>
+
+                                <div style="margin-left:12px;" id="voip_options"
+                                    class="{{ old('service_category', $form['service_category'] ?? '') === 'voip' ? '' : 'hidden' }}">
+                                    <label>
+                                        <input type="radio" name="voip_type" value="voip_provider"
+                                            {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_provider' ? 'checked' : '' }}
+                                            onclick="updateServiceCategory('voip_provider')">
+                                        PROVIDER
+                                    </label>
+                                    <br>
+                                    <label>
+                                        <input type="radio" name="voip_type" value="voip_reseller"
+                                            {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_reseller' ? 'checked' : '' }}
+                                            onclick="updateServiceCategory('voip_reseller')">
+                                        RESELLER
+                                    </label>
+                                </div>
+                                @error('service_category')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
+
+                                <!-- Hidden field to store the final chosen value -->
+                                <input type="hidden" name="service_category_final" id="serviceCategoryFinal"
+                                    value="{{ old('service_category_final', $form['service_category_final'] ?? '') }}">
                             </div>
                         </fieldset>
+                        <div class="step-actions">
+                            <button type="button" class="btn-primary" data-next>Next</button>
+                        </div>
                     </section>
                     <section class="step-content" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-2">
+                            <div class="form-grid-1">
                                 <div class="form-field">
                                     <label class="form-label">Applicant</label>
                                     <input class="form1-01-input" type="text" name="applicant" required
@@ -86,32 +113,56 @@
                             <div class="form-grid-3">
                                 <div class="form-field"><label class="form-label">CPCN/PA/CA No.</label><input
                                         class="form1-01-input" type="text" name="cpcn_pa_ca_no"
-                                        value="{{ old('cpcn_pa_ca_no', $form['cpcn_pa_ca_no'] ?? '') }}"></div>
-                                <div class="form-field"><label class="form-label">CPCN Validity</label><input
-                                        class="form1-01-input" type="date" name="cpcn_validity"
-                                        value="{{ old('cpcn_validity', $form['cpcn_validity'] ?? '') }}"></div>
-                                <div class="form-field"><label class="form-label">COR No.</label><input
-                                        class="form1-01-input" type="text" name="cor_no"
-                                        value="{{ old('cor_no', $form['cor_no'] ?? '') }}"></div>
+                                        value="{{ old('cpcn_pa_ca_no', $form['cpcn_pa_ca_no'] ?? '') }}">
+                                    @error('cpcn_pa_ca_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field"><label class="form-label">CPCN Validity</label>
+                                    <input class="form1-01-input" type="date" name="cpcn_validity"
+                                        value="{{ old('cpcn_validity', $form['cpcn_validity'] ?? '') }}">
+                                    @error('cpcn_validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field"><label class="form-label">COR No.</label>
+                                    <input class="form1-01-input" type="text" name="cor_no"
+                                        value="{{ old('cor_no', $form['cor_no'] ?? '') }}">
+                                    @error('cor_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">COR Validity</label><input
-                                        class="form1-01-input" type="date" name="cor_validity"
-                                        value="{{ old('cor_validity', $form['cor_validity'] ?? '') }}"></div>
+                                <div class="form-field"><label class="form-label">COR Validity</label>
+                                    <input class="form1-01-input" type="date" name="cor_validity"
+                                        value="{{ old('cor_validity', $form['cor_validity'] ?? '') }}">
+                                    @error('cor_validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                                 <div class="form-field"><label class="form-label">Is applicant known by another
                                         name?</label>
                                     <div class="inline-radio">
-                                        <label><input type="radio" name="known_by_another_name" value="yes"
+                                        <label>
+                                            <input type="radio" name="known_by_another_name" value="yes"
                                                 {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'checked' : '' }}>
                                             Yes</label>
                                         <br>
-                                        <label><input type="radio" name="known_by_another_name" value="no"
+                                        <label>
+                                            <input type="radio" name="known_by_another_name" value="no"
                                                 {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'no' ? 'checked' : '' }}>
                                             No</label>
                                     </div>
+                                    @error('known_by_another_name')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                     <input class="form1-01-input" type="text" name="former_name"
                                         placeholder="Former name if Yes"
                                         value="{{ old('former_name', $form['former_name'] ?? '') }}">
+                                    @error('former_name')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -171,7 +222,13 @@
                                     <input class="form1-01-input" type="text" name="others_vas"
                                         placeholder="Specify"
                                         value="{{ old('others_vas', $form['others_vas'] ?? '') }}">
+                                    @error('others_vas')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
+                                @error('vas_services')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -286,6 +343,14 @@
                         }
                     });
                 });
+
+                function updateServiceCategory(value) {
+                    document.getElementById('serviceCategoryFinal').value = value;
+                }
+
+                function toggleVoipOptions(show) {
+                    document.getElementById('voip_options').classList.toggle('hidden', !show);
+                }
             });
         </script>
     </main>
