@@ -22,19 +22,19 @@
     </div>
 
     <!-- Log Out Confirmation Modal -->
-    <div id="logout-modal" class="modal">
-      <div class="modal-content">
-        <h3>Are you sure you want to log out?</h3>
-        <div class="modal-buttons">
-          <form id="logout-form" method="POST" action="{{ route('admin.logout') }}">
-            @csrf
-            <button type="submit" id="confirm-logout" class="confirm-btn">Yes</button>
-            <button type="button" id="cancel-logout" class="cancel-btn">No</button>
-          </form>
+        <div id="logout-modal" class="modal">
+            <div class="modal-content">
+                <h3>Are you sure you want to log out?</h3>
+                <div class="modal-buttons">
+                    <button id="confirm-logout" class="confirm-btn">Yes</button>
+                    <button id="cancel-logout" class="cancel-btn">No</button>
+                </div>
+            </div>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
         </div>
-      </div>
-    </div>
-  </aside>
+    </aside>
 
   <!-- Main Content -->
   <div class="main">
@@ -66,16 +66,27 @@
               <th>Status</th>
             </tr>
           </thead>
-          <tbody>
-            <tr><td>#0123456789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="done">Done</td></tr>
-            <tr><td>#0123456779</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="done">Done</td></tr>
-            <tr><td>#0123456889</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="done">Done</td></tr>
-            <tr><td>#0123456289</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="done">Done</td></tr>
-            <tr><td>#0123451789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="done">Done</td></tr>
-            <tr><td>#0123454789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="pending">Pending</td></tr>
-            <tr><td>#0123436789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="pending">Pending</td></tr>
-            <tr><td>#0123756789</td><td>Certification</td><td>05 Oct 2024</td><td><span class="see-more">See more <img src="{{ asset('images/see-icon.png') }}" alt=""></span></td><td class="pending">Pending</td></tr>
-          </tbody>
+         <tbody>
+          @forelse($payments as $p)
+            <tr>
+              <td>#{{ $p->form_id ?? $p->_id }}</td>
+              <td>{{ ucfirst($p->form_type ?? 'N/A') }}</td>
+              <td>{{ $p->formatted_date }}</td>
+              <td>
+                <span class="see-more">
+                  See more <img src="{{ asset('images/see-icon.png') }}" alt="">
+                </span>
+              </td>
+              <td class="{{ strtolower($p->payment_status ?? 'pending') }}">
+                {{ ucfirst($p->payment_status ?? 'Pending') }}
+              </td>
+            </tr>
+          @empty
+            <tr>
+              <td colspan="5" style="text-align:center; color:#888;">No payment records found.</td>
+            </tr>
+          @endforelse
+        </tbody>
         </table>
       </div>
     </div>

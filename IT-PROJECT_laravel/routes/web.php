@@ -99,9 +99,8 @@ Route::get('/adminside/req-management', [AdminAuthController::class, 'requestMan
 
 Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
 
-Route::get('/adminside/bill-pay', function () {
-    return view('adminside.bill-pay');
-})->name('adminside.bill-pay');
+Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
+
 
 Route::prefix('adminside')
     ->middleware(\App\Http\Middleware\BlockMobileDevices::class)

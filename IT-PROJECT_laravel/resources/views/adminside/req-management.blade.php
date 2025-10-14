@@ -99,7 +99,7 @@
                   <button class="badge-btn complete" onclick="updateStatus('{{ $req->_id }}', 'done')">
                       Complete
                   </button>
-                  <button class="badge-btn progress" style="background:#ef4444;" onclick="updateStatus('{{ $req->_id }}', 'cancel')">
+                  <button class="badge-btn progress"  onclick="updateStatus('{{ $req->_id }}', 'cancel')">
                       Cancel
                   </button>
               </td>

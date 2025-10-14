@@ -408,14 +408,14 @@ body {
   color: #fff;
 }
 
-.badge-btn.cancel {
+.badge-btn.progress {
   background: #ef4444; 
   color: #fff;
 }
 
 
 .badge-btn:hover {
-  opacity: 0.9;
+  background-color: #5a5a5a;
 }
 
 /* Card scrollable table */
@@ -501,7 +501,7 @@ body {
 }
 
 .confirm-btn {
-  background: #ef4444;
+  background: #22c55e;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -511,8 +511,8 @@ body {
 }
 
 .cancel-btn {
-  background: #ccc;
-  color: #333;
+  background: #ef4444;
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 12px;
@@ -521,9 +521,9 @@ body {
 }
 
 .confirm-btn:hover {
-  background: #9b1818;
+  background: #199145;
 }
 
 .cancel-btn:hover {
-  background: #757575;
+  background: #9b1818;
 }

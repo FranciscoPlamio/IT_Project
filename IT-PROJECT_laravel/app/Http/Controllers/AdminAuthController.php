@@ -180,4 +180,23 @@ public function updateStatus(Request $request)
     }
 }
 
+public function billPay()
+{
+    // Fetch only payments with 'paid' or 'pending' status
+    $payments = \App\Models\Forms\FormsTransactions::whereIn('payment_status', ['paid', 'pending', 'unpaid']) //fix unpaid
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // Format the created_at for display
+    foreach ($payments as $p) {
+        $p->formatted_date = $p->created_at
+            ? \Carbon\Carbon::parse($p->created_at)->format('M d Y')
+            : 'N/A';
+    }
+
+    // Pass data to the view
+    return view('adminside.bill-pay', compact('payments'));
+}
+
+
 }

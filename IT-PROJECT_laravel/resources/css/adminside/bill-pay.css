@@ -271,14 +271,21 @@ td strong {
 }
 
 /* Status colors */
-.done {
-  color: #333;
+td.paid {
+  color: #00c49a;
+  font-weight: 600;
 }
 
-.pending {
-  color: #d94c4c;
-  font-weight: bold;
+td.pending {
+  color: #ffcc00;
+  font-weight: 600;
 }
+
+td.failed {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 
 /* Modal overlay */
 .modal {
