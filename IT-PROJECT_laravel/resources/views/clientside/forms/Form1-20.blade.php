@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Certificate of Registration - Value Added Services (Form 1-20)'" :form-header="['formNo' => 'NTC 1-20', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Certificate of Registration - Value Added Services (Form 1-20)'" :form-header="['formNo' => 'NTC 1-20', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
     <main>
         <form class="form1-01-container" id="form120" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">

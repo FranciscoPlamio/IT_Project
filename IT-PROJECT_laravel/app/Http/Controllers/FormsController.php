@@ -43,7 +43,7 @@ class FormsController extends Controller
             ['number' => '1-26', 'title' => 'Complaint on Text Message'],
         ];
 
-        return view('FormsList', compact('forms'));
+        return view('formsList', compact('forms'));
     }
 
 

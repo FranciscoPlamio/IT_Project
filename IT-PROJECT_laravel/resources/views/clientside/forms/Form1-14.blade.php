@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Temporary Permit to Propagate/Demonstrate (Form 1-14)'" :form-header="['formNo' => 'NTC 1-14', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Temporary Permit to Propagate/Demonstrate (Form 1-14)'" :form-header="['formNo' => 'NTC 1-14', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form114" method="POST"

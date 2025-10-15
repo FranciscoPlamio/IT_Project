@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation (Form 1-18)'" :form-header="['formNo' => 'NTC 1-18', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation (Form 1-18)'" :form-header="['formNo' => 'NTC 1-18', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form118" method="POST"

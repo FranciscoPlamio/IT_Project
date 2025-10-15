@@ -17,8 +17,8 @@ Route::get('/', function () {
 Route::get('/forms-list', [FormsController::class, 'index'])->name('forms.list')->middleware('email.verified');
 
 // Forms showcase gallery
-Route::get('/Displayforms', function () {
-    return view('Displayforms');
+Route::get('/display-forms', function () {
+    return view('displayForms');
 })->name('forms.display');
 
 // Payment method selection page

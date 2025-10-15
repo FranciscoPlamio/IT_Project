@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Duplicate of Permit/License/Certificate (Form 1-21)'" :form-header="['formNo' => 'NTC 1-21', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
+<x-layout :title="'Application for Duplicate of Permit/License/Certificate (Form 1-21)'" :form-header="['formNo' => 'NTC 1-21', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']">
     <main>
         <form class="form1-01-container" id="form121" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">

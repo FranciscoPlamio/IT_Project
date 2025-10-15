@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Certificate of Registration (Form 1-19)'" :form-header="['formNo' => 'NTC 1-19', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Certificate of Registration (Form 1-19)'" :form-header="['formNo' => 'NTC 1-19', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form119" method="POST"

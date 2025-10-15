@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
     <main>
         <form class="form1-01-container" id="form102" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">

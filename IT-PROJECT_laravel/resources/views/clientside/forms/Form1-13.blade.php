@@ -1,4 +1,4 @@
-<x-layout :title="'Form D (For Modification) (Form 1-13))'" :form-header="['formNo' => 'NTC 1-13', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
+<x-layout :title="'Form D (For Modification) (Form 1-13))'" :form-header="['formNo' => 'NTC 1-13', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']">
 
     <main>
         <form class="form1-01-container" id="form113" method="POST"

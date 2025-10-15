@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Construction Permit/Radio Station License (Form 1-11)'" :form-header="['formNo' => 'NTC 1-11', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Construction Permit/Radio Station License (Form 1-11)'" :form-header="['formNo' => 'NTC 1-11', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form111" method="POST"

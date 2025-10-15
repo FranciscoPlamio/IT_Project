@@ -1,4 +1,4 @@
-<x-layout :title="'Application for TVRO Registration Certificate/TVRO Station License/CATV Station License (Form 1-22)'" :form-header="['formNo' => 'NTC 1-22', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for TVRO Registration Certificate/TVRO Station License/CATV Station License (Form 1-22)'" :form-header="['formNo' => 'NTC 1-22', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form122" method="POST"

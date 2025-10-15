@@ -1,4 +1,4 @@
-<x-layout :title="'Affidavit of Ownership and Loss with Undertaking (Form 1-24)'" :form-header="['formNo' => 'NTC 1-24', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Affidavit of Ownership and Loss with Undertaking (Form 1-24)'" :form-header="['formNo' => 'NTC 1-24', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form124" method="POST"
