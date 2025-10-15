@@ -84,7 +84,7 @@
           @foreach($latestRequests as $req)
           <tr>
               <td>{{ $req->_id }}</td>
-              <td>{{ $req->form_type ?? 'N/A' }}</td>
+              <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
               <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
               <td class="see-more">
                   See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
