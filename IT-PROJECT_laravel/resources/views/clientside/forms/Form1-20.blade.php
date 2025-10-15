@@ -1,7 +1,10 @@
 <x-layout :title="'Application for Certificate of Registration - Value Added Services (Form 1-20)'" :form-header="['formNo' => 'NTC 1-20', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
-
     <main>
-        <form class="form1-01-container" id="form120">
+        <form class="form1-01-container" id="form120" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+            <input type="hidden" name="form_token"
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR CERTIFICATE OF REGISTRATION</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
             <div class="form1-01-warning">
@@ -29,88 +32,137 @@
                 <div>
                     <section class="step-content active" id="step-categories">
                         <fieldset class="fieldset-compact">
-                            <legend>Application Type / Service Categories</legend>
-                            <div class="form-grid-2">
-                                <div class="form-field" data-require-one="input[type=checkbox]">
-                                    <div class="form-label">Application Type</div>
-                                    <label><input type="checkbox" name="application_type" value="new">
-                                        NEW</label>
-                                    <label><input type="checkbox" name="application_type" value="renewal">
-                                        RENEWAL</label>
-                                    <label><input type="checkbox" name="application_type" value="modification">
-                                        MODIFICATION due to</label>
-                                    <input class="form1-01-input" type="text" name="modification_reason"
-                                        placeholder="Reason (if modification)">
-                                </div>
-                                <div class="form-field" data-require-one="input[type=checkbox]">
-                                    <div class="form-label">Service Categories</div>
-                                    <label><input type="checkbox" name="service_category" value="vas_provider">
-                                        VALUE-ADDED SERVICE (VAS) PROVIDER</label>
-                                    <label><input type="checkbox" name="service_category" value="pcsotsp"> PUBLIC
-                                        CALLING STATION/OFFICE / TELECENTER SERVICE PROVIDER (PCSOTSP)</label>
-                                    <label><input type="checkbox" name="service_category" value="voip"> VOICE OVER
-                                        INTERNET PROTOCOL (VOIP)</label>
-                                    <div style="margin-left:12px;">
-                                        <label><input type="checkbox" name="voip_type" value="voip_provider">
-                                            PROVIDER</label>
-                                        <label><input type="checkbox" name="voip_type" value="voip_reseller">
-                                            RESELLER</label>
-                                    </div>
+                            <legend>Application Type</legend>
+                            <div class="form-grid-1">
+                                <div class="form-field" data-require-one="input[type=radio]">
+                                    <x-forms.application-type-fields :form="$form ?? []" :showPermit="false"
+                                        :showYears="false" />
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+                        </fieldset class="fieldset-compact">
+
+                        <fieldset>
+                            <legend>Service Categories</legend>
+
+                            <div class="form-field" data-require-one="input[type=radio]">
+                                <label>
+                                    <input type="radio" name="service_category" value="vas_provider"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'vas_provider' ? 'checked' : '' }}
+                                        onclick="updateServiceCategory('vas_provider')">
+                                    VALUE-ADDED SERVICE (VAS) PROVIDER
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="service_category" value="pcsotsp"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'pcsotsp' ? 'checked' : '' }}
+                                        onclick="updateServiceCategory('pcsotsp')">
+                                    PUBLIC CALLING STATION/OFFICE / TELECENTER SERVICE PROVIDER (PCSOTSP)
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="service_category" value="voip" id="voip_radio"
+                                        {{ old('service_category', $form['service_category'] ?? '') === 'voip' ? 'checked' : '' }}
+                                        onclick="toggleVoipOptions(true); updateServiceCategory('voip')">
+                                    VOICE OVER INTERNET PROTOCOL (VOIP)
+                                </label>
+
+                                <div style="margin-left:12px;" id="voip_options"
+                                    class="{{ old('service_category', $form['service_category'] ?? '') === 'voip' ? '' : 'hidden' }}">
+                                    <label>
+                                        <input type="radio" name="voip_type" value="voip_provider"
+                                            {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_provider' ? 'checked' : '' }}
+                                            onclick="updateServiceCategory('voip_provider')">
+                                        PROVIDER
+                                    </label>
+                                    <br>
+                                    <label>
+                                        <input type="radio" name="voip_type" value="voip_reseller"
+                                            {{ old('voip_type', $form['voip_type'] ?? '') === 'voip_reseller' ? 'checked' : '' }}
+                                            onclick="updateServiceCategory('voip_reseller')">
+                                        RESELLER
+                                    </label>
+                                </div>
+                                @error('service_category')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
+
+                                <!-- Hidden field to store the final chosen value -->
+                                <input type="hidden" name="service_category_final" id="serviceCategoryFinal"
+                                    value="{{ old('service_category_final', $form['service_category_final'] ?? '') }}">
                             </div>
                         </fieldset>
+                        <div class="step-actions">
+                            <button type="button" class="btn-primary" data-next>Next</button>
+                        </div>
                     </section>
                     <section class="step-content" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-3">
-                                <div class="form-field"><label class="form-label">Applicant</label><input
-                                        class="form1-01-input" type="text" name="applicant" required></div>
-                                <div class="form-field"><label class="form-label">Email Address</label><input
-                                        class="form1-01-input" type="email" name="email" required></div>
-                                <div class="form-field"><label class="form-label">Contact Number</label><input
-                                        class="form1-01-input" type="text" name="contact_number" required></div>
+                            <div class="form-grid-1">
+                                <div class="form-field">
+                                    <label class="form-label">Applicant</label>
+                                    <input class="form1-01-input" type="text" name="applicant" required
+                                        value="{{ old('applicant', $form['applicant'] ?? '') }}">
+                                    @error('applicant')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input
-                                        class="form1-01-input" type="text" name="unit_no"></div>
-                                <div class="form-field"><label class="form-label">Street</label><input
-                                        class="form1-01-input" type="text" name="street"></div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Barangay</label><input
-                                        class="form1-01-input" type="text" name="barangay"></div>
-                                <div class="form-field"><label class="form-label">City/Municipality</label><input
-                                        class="form1-01-input" type="text" name="city"></div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Province</label><input
-                                        class="form1-01-input" type="text" name="province"></div>
-                                <div class="form-field"><label class="form-label">Zip Code</label><input
-                                        class="form1-01-input" type="text" name="zip_code"></div>
-                            </div>
+                            <!-- address fields format -->
+                            <x-forms.address-fields :form="$form ?? []" />
                             <div class="form-grid-3">
                                 <div class="form-field"><label class="form-label">CPCN/PA/CA No.</label><input
-                                        class="form1-01-input" type="text" name="cpcn_pa_ca_no"></div>
-                                <div class="form-field"><label class="form-label">CPCN Validity</label><input
-                                        class="form1-01-input" type="date" name="cpcn_validity"></div>
-                                <div class="form-field"><label class="form-label">COR No.</label><input
-                                        class="form1-01-input" type="text" name="cor_no"></div>
+                                        class="form1-01-input" type="text" name="cpcn_pa_ca_no"
+                                        value="{{ old('cpcn_pa_ca_no', $form['cpcn_pa_ca_no'] ?? '') }}">
+                                    @error('cpcn_pa_ca_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field"><label class="form-label">CPCN Validity</label>
+                                    <input class="form1-01-input" type="date" name="cpcn_validity"
+                                        value="{{ old('cpcn_validity', $form['cpcn_validity'] ?? '') }}">
+                                    @error('cpcn_validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field"><label class="form-label">COR No.</label>
+                                    <input class="form1-01-input" type="text" name="cor_no"
+                                        value="{{ old('cor_no', $form['cor_no'] ?? '') }}">
+                                    @error('cor_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">COR Validity</label><input
-                                        class="form1-01-input" type="date" name="cor_validity"></div>
-                                <div class="form-field"><label class="form-label">Known by another name?</label>
+                                <div class="form-field"><label class="form-label">COR Validity</label>
+                                    <input class="form1-01-input" type="date" name="cor_validity"
+                                        value="{{ old('cor_validity', $form['cor_validity'] ?? '') }}">
+                                    @error('cor_validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field"><label class="form-label">Is applicant known by another
+                                        name?</label>
                                     <div class="inline-radio">
-                                        <label><input type="radio" name="known_by_another_name" value="yes">
+                                        <label>
+                                            <input type="radio" name="known_by_another_name" value="yes"
+                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'checked' : '' }}>
                                             Yes</label>
-                                        <label><input type="radio" name="known_by_another_name" value="no">
+                                        <br>
+                                        <label>
+                                            <input type="radio" name="known_by_another_name" value="no"
+                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'no' ? 'checked' : '' }}>
                                             No</label>
                                     </div>
+                                    @error('known_by_another_name')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                     <input class="form1-01-input" type="text" name="former_name"
-                                        placeholder="Former name if Yes">
+                                        placeholder="Former name if Yes"
+                                        value="{{ old('former_name', $form['former_name'] ?? '') }}">
+                                    @error('former_name')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -121,42 +173,62 @@
                     <section class="step-content" id="step-vas">
                         <fieldset class="fieldset-compact">
                             <legend>List of Value Added Services</legend>
-                            <div class="form-grid-2" data-require-one="input[type=checkbox]">
+                            <div class="form-grid-2" data-require-one="input[type=radio]">
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="vas_services" value="messaging">
+                                    <label><input type="radio" name="vas_services" value="messaging"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'messaging' ? 'checked' : '' }}>
                                         Messaging service</label>
-                                    <label><input type="checkbox" name="vas_services" value="audio_conferencing">
+                                    <label><input type="radio" name="vas_services" value="audio_conferencing"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'audio_conferencing' ? 'checked' : '' }}>
                                         Audio conferencing</label>
-                                    <label><input type="checkbox" name="vas_services"
-                                            value="audio_video_conferencing"> Audio and Video Conferencing</label>
-                                    <label><input type="checkbox" name="vas_services" value="voice_mail"> Voice
-                                        mail service</label>
-                                    <label><input type="checkbox" name="vas_services" value="electronic_mail">
+                                    <label><input type="radio" name="vas_services" value="audio_video_conferencing"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'audio_video_conferencing' ? 'checked' : '' }}>
+                                        Audio and Video Conferencing</label>
+                                    <label><input type="radio" name="vas_services" value="voice_mail"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'voice_mail' ? 'checked' : '' }}>
+                                        Voice mail service</label>
+                                    <label><input type="radio" name="vas_services" value="electronic_mail"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'electronic_mail' ? 'checked' : '' }}>
                                         Electronic mail service</label>
-                                    <label><input type="checkbox" name="vas_services" value="information_service">
+                                    <label><input type="radio" name="vas_services" value="information_service"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'information_service' ? 'checked' : '' }}>
                                         Information service</label>
-                                    <label><input type="checkbox" name="vas_services" value="application_service">
+                                    <label><input type="radio" name="vas_services" value="application_service"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'application_service' ? 'checked' : '' }}>
                                         Application service</label>
                                 </div>
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="vas_services" value="content_program">
+                                    <label><input type="radio" name="vas_services" value="content_program"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'content_program' ? 'checked' : '' }}>
                                         Content and Program service</label>
-                                    <label><input type="checkbox" name="vas_services" value="audiotext">
+                                    <label><input type="radio" name="vas_services" value="audiotext"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'audiotext' ? 'checked' : '' }}>
                                         Audiotext service</label>
-                                    <label><input type="checkbox" name="vas_services" value="facsimile">
+                                    <label><input type="radio" name="vas_services" value="facsimile"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'facsimile' ? 'checked' : '' }}>
                                         Facsimile service</label>
-                                    <label><input type="checkbox" name="vas_services"
-                                            value="virtual_private_network"> Virtual Private Network
-                                        service</label>
-                                    <label><input type="checkbox" name="vas_services" value="hosting"> Hosting
-                                        service</label>
-                                    <label><input type="checkbox" name="vas_services" value="electronic_gaming">
+                                    <label><input type="radio" name="vas_services" value="virtual_private_network"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'virtual_private_network' ? 'checked' : '' }}>
+                                        Virtual Private Network service</label>
+                                    <label><input type="radio" name="vas_services" value="hosting"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'hosting' ? 'checked' : '' }}>
+                                        Hosting service</label>
+                                    <label><input type="radio" name="vas_services" value="electronic_gaming"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'electronic_gaming' ? 'checked' : '' }}>
                                         Electronic Gaming Services, except gambling</label>
-                                    <label><input type="checkbox" name="vas_services" value="others"> Others,
-                                        specify</label>
+                                    <label><input type="radio" name="vas_services" value="others"
+                                            {{ old('vas_services', $form['vas_services'] ?? '') === 'others' ? 'checked' : '' }}>
+                                        Others, specify</label>
                                     <input class="form1-01-input" type="text" name="others_vas"
-                                        placeholder="Specify">
+                                        placeholder="Specify"
+                                        value="{{ old('others_vas', $form['others_vas'] ?? '') }}">
+                                    @error('others_vas')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
+                                @error('vas_services')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -234,30 +306,52 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn20');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', () => {
-                        if (!validateActiveStep()) return;
+                    validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) entries[key] = value.name || '';
-                            else {
-                                if (entries[key]) {
-                                    if (Array.isArray(entries[key])) entries[key].push(value);
-                                    else entries[key] = [entries[key], value];
-                                } else entries[key] = value;
-                            }
-                        }
-                        localStorage.setItem('form1-20-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-20');
-                        if (validationLink20) {
-                            window.location.href = validationLink20.href;
-                        }
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        form.submit();
                     });
                 }
                 showStep(stepsOrder[0]);
             })();
+
+
+            //child radio button trigger when parent radio button clicked script
+            document.addEventListener('DOMContentLoaded', function() {
+                const voipRadio = document.getElementById('voip_radio');
+                const voipOptions = document.getElementById('voip_options');
+                const serviceCategoryRadios = document.getElementsByName('service_category');
+
+                // Initial check
+                voipOptions.style.display = voipRadio.checked ? 'block' : 'none';
+
+                // Add listeners to all service category radios
+                serviceCategoryRadios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        voipOptions.style.display = voipRadio.checked ? 'block' : 'none';
+
+                        // Clear voip_type selection when VOIP is not selected
+                        if (!voipRadio.checked) {
+                            document.getElementsByName('voip_type').forEach(radio => {
+                                radio.checked = false;
+                            });
+                        }
+                    });
+                });
+
+                function updateServiceCategory(value) {
+                    document.getElementById('serviceCategoryFinal').value = value;
+                }
+
+                function toggleVoipOptions(show) {
+                    document.getElementById('voip_options').classList.toggle('hidden', !show);
+                }
+            });
         </script>
     </main>
 </x-layout>

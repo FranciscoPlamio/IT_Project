@@ -96,7 +96,7 @@
                     <section class="step-content" id="step-personal">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-3">
+                            <div class="form-grid-1">
                                 <div class="form-field">
                                     <label class="form-label">Applicant</label>
                                     <input class="form1-01-input" type="text" name="applicant" required

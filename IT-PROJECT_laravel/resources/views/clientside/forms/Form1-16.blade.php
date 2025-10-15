@@ -127,24 +127,25 @@
                                                 <div class="table-field-label"><strong>Serial No.:</strong></div>
                                                 <input class="table-input" type="text" name="equipment1_serial"
                                                     value="{{ old('equipment1_serial', $form['equipment1_serial'] ?? '') }}">
-                                                @error('applicant')
+                                                @error('equipment1_serial')
                                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                                    @enderror @error('applicant')
-                                                </td>
-                                                <td>
-                                                    <div class="table-field-label"><strong>Make/Type/Model:</strong>
-                                                    </div>
-                                                    <input class="table-input" type="text" name="equipment2_make"
-                                                        value="{{ old('equipment2_make', $form['equipment2_make'] ?? '') }}">
-                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                                    <div class="table-field-label"><strong>Serial No.:</strong></div>
-                                                    <input class="table-input" type="text" name="equipment2_serial"
-                                                        value="{{ old('equipment2_serial', $form['equipment2_serial'] ?? '') }}">
-
-                                                    @error('equipment2_make')
-                                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                                    @enderror
                                                 @enderror
+                                            </td>
+                                            <td>
+                                                <div class="table-field-label"><strong>Make/Type/Model:</strong>
+                                                </div>
+                                                <input class="table-input" type="text" name="equipment2_make"
+                                                    value="{{ old('equipment2_make', $form['equipment2_make'] ?? '') }}">
+                                                @error('equipment2_make')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                                <div class="table-field-label"><strong>Serial No.:</strong></div>
+                                                <input class="table-input" type="text" name="equipment2_serial"
+                                                    value="{{ old('equipment2_serial', $form['equipment2_serial'] ?? '') }}">
+                                                @error('equipment2_serial')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+
                                             </td>
                                             <td>
                                                 <div class="table-field-label"><strong>Make/Type/Model:</strong>

@@ -22,8 +22,7 @@
                     <ul class="steps-list" id="stepsList18">
                         <li class="step-item active" data-step="application">Type of Application <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="categories">Application Categories <span
-                                class="step-status">&nbsp;</span></li>
+
                         <li class="step-item" data-step="applicant">Applicant Details <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="personnel">Personnel Required <span
@@ -44,11 +43,7 @@
                             <x-forms.application-type-fields :form="$form101 ?? []" :applicationType="$applicationType" :permitTypeValue="$permitTypeValue"
                                 :show-years="false" />
                         </fieldset>
-                        <div class="step-actions"><button type="button" class="btn-secondary"
-                                data-prev>Back</button><button type="button" class="btn-primary"
-                                data-next>Next</button></div>
-                    </section>
-                    <section class="step-content" id="step-categories">
+
                         <fieldset class="fieldset-compact">
                             <legend>Application Categories</legend>
                             @php
@@ -77,90 +72,122 @@
                             @endphp
                             <div class="form-grid-1">
                                 <div class="form-field" data-require-one="input[type=radio]">
-                                    <label><input type="radio" name="category" value="rce"
-                                            {{ $categoryValue == 'rce' ? 'checked' : '' }}> Radio Communications
-                                        Equipment
-                                        (RCE)</label>
+                                    {{-- RCE --}}
+                                    <label>
+                                        <input type="radio" name="category" value="rce"
+                                            {{ $categoryValue == 'rce' ? 'checked' : '' }}
+                                            onclick="updateFinalCategory('rce')">
+                                        Radio Communications Equipment (RCE)
+                                    </label>
 
                                     <div style="margin-left: 20px;">
-                                        <label><input type="radio" name="rce_category" value="dealer"
-                                                class="dealer-radio"
+                                        <label>
+                                            <input type="radio" name="rce_category" value="dealer"
                                                 {{ $rceCategoryValue == 'dealer' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}> Dealer</label>
+                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('dealer')">
+                                            Dealer
+                                        </label>
 
                                         <div class="dealer-options" style="margin-left: 40px;">
                                             <label style="display: block; margin-bottom: 8px;">
                                                 <input type="radio" name="dealer_type" value="radio_transmitter"
                                                     {{ $dealerTypeValue == 'radio_transmitter' ? 'checked' : '' }}
-                                                    {{ $categoryValue != 'rce' || $rceCategoryValue != 'dealer' ? 'disabled' : '' }}>
+                                                    {{ $categoryValue != 'rce' || $rceCategoryValue != 'dealer' ? 'disabled' : '' }}
+                                                    onclick="updateFinalCategory('radio_transmitter')">
                                                 Radio Transmitter/Transceiver
                                             </label>
                                             <label style="display: block;">
                                                 <input type="radio" name="dealer_type" value="wdn_indoor"
                                                     {{ $dealerTypeValue == 'wdn_indoor' ? 'checked' : '' }}
-                                                    {{ $categoryValue != 'rce' || $rceCategoryValue != 'dealer' ? 'disabled' : '' }}>
+                                                    {{ $categoryValue != 'rce' || $rceCategoryValue != 'dealer' ? 'disabled' : '' }}
+                                                    onclick="updateFinalCategory('wdn_indoor')">
                                                 WDN Indoor/SRD/RFID
                                             </label>
                                         </div>
 
-                                        <label><input type="radio" name="rce_category" value="manufacturer"
+                                        <label>
+                                            <input type="radio" name="rce_category" value="manufacturer"
                                                 {{ $rceCategoryValue == 'manufacturer' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}> Manufacturer</label>
-                                        <br>
-                                        <label><input type="radio" name="rce_category" value="service_center"
+                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('manufacturer')">
+                                            Manufacturer
+                                        </label><br>
+
+                                        <label>
+                                            <input type="radio" name="rce_category" value="service_center"
                                                 {{ $rceCategoryValue == 'service_center' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}> Service Center</label>
+                                                {{ $categoryValue != 'rce' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('service_center')">
+                                            Service Center
+                                        </label>
                                     </div>
+
                                     <br>
-                                    <label><input type="radio" name="category" value="mobile"
-                                            {{ $categoryValue == 'mobile' ? 'checked' : '' }}> Mobile Phone</label>
+
+                                    {{-- MOBILE --}}
+                                    <label>
+                                        <input type="radio" name="category" value="mobile"
+                                            {{ $categoryValue == 'mobile' ? 'checked' : '' }}
+                                            onclick="updateFinalCategory('mobile')">
+                                        Mobile Phone
+                                    </label>
 
                                     <div style="margin-left: 20px;">
-                                        <label><input type="radio" name="mobile_category" value="dealer_mpdp"
+                                        <label>
+                                            <input type="radio" name="mobile_category" value="dealer_mpdp"
                                                 {{ $mobileCategoryValue == 'dealer_mpdp' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}> Dealer
-                                            (MPDP)</label>
-                                        <br>
-                                        <label><input type="radio" name="mobile_category" value="retailer_reseller"
+                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('dealer_mpdp')">
+                                            Dealer (MPDP)
+                                        </label><br>
+
+                                        <label>
+                                            <input type="radio" name="mobile_category" value="retailer_reseller"
                                                 {{ $mobileCategoryValue == 'retailer_reseller' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}> Retailer/Reseller
-                                            (MPRR)</label>
-                                        <br>
+                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('retailer_reseller')">
+                                            Retailer/Reseller (MPRR)
+                                        </label><br>
+
                                         <label>
                                             <input type="radio" name="mobile_category" value="service_center_mpscp"
                                                 {{ $mobileCategoryValue == 'service_center_mpscp' ? 'checked' : '' }}
-                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}>
+                                                {{ $categoryValue != 'mobile' ? 'disabled' : '' }}
+                                                onclick="updateFinalCategory('service_center_mpscp')">
                                             Service Center (MPSCP)
                                         </label>
                                     </div>
-                                    <br>
-                                    <label><input type="radio" name="category" value="cpe"
-                                            {{ $categoryValue == 'cpe' ? 'checked' : '' }}> Customer Premises Equipment
-                                        (CPE)
-                                        Supplier Accreditation</label>
 
-                                    @error('category')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    @error('rce_category')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    @error('dealer_type')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    @error('mobile_category')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                    @error('cpe_category')
+                                    <br>
+
+                                    {{-- CPE --}}
+                                    <label>
+                                        <input type="radio" name="category" value="cpe"
+                                            {{ $categoryValue == 'cpe' ? 'checked' : '' }}
+                                            onclick="updateFinalCategory('cpe')">
+                                        Customer Premises Equipment (CPE) Supplier Accreditation
+                                    </label>
+
+                                    <!-- Single field for the final selected value -->
+                                    <input type="hidden" name="application_category" id="categoryFinal" value="">
+
+                                    @error('application_category')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+
                         </fieldset>
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button type="button" class="btn-primary"
+                                data-next>Next</button></div>
                     </section>
+
+                    <section class="step-content" id="step-categories">
+
+                    </section>
+
                     <section class="step-content" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
@@ -298,7 +325,7 @@
 
         <script>
             (function() {
-                const stepsOrder = ['application', 'categories', 'applicant', 'personnel', 'declaration'];
+                const stepsOrder = ['application', 'applicant', 'personnel', 'declaration'];
                 const stepsList = document.getElementById('stepsList18');
                 const form = document.getElementById('form118');
 
@@ -485,7 +512,7 @@
                 // Initialize on page load
                 othersInput.disabled = !othersRadio.checked;
 
-                const validateBtn = document.getElementById('validateBtn18');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
@@ -538,6 +565,10 @@
                 }
                 showStep(stepsOrder[0]);
             })();
+
+            function updateFinalCategory(value) {
+                document.getElementById('categoryFinal').value = value;
+            }
         </script>
     </main>
 </x-layout>

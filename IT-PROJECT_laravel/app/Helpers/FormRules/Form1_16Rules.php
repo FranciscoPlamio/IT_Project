@@ -29,8 +29,8 @@ class Form1_16Rules
                 // Proposed Equipment
                 'equipment1_make' => ['required', 'string'],
                 'equipment1_serial' => ['required', 'string'],
-                // 'equipment2_make' => ['required', 'string'],
-                // 'equipment2_serial' => ['required', 'string'],
+                'equipment2_make' => ['required', 'string'],
+                'equipment2_serial' => ['required', 'string'],
                 'equipment3_make' => ['required', 'string'],
                 'equipment3_serial' => ['required', 'string'],
 

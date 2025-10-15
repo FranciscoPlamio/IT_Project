@@ -57,8 +57,6 @@ Route::post('/email-auth/clear', [EmailController::class, 'clearEmailVerificatio
 Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(function () {
 
     // GET routes to render form views
-
-    Route::get('1-25/text-message', fn() => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
     Route::get('{formType}', [FormsController::class, 'show'])->name('show');
     Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
     Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');
