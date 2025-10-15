@@ -26,8 +26,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="assistance">Request for Assistance <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -254,13 +254,13 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button>
+                            </div>
                         </fieldset>
                     </section>
 
-                    <section class="step-content" id="step-declaration">
+                    {{-- <section class="step-content" id="step-declaration">
                         <fieldset>
                             <legend>DECLARATION</legend>
                             <div class="form1-01-declaration">
@@ -352,13 +352,8 @@
                                 <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR
                                     SALE AND CAN BE REPRODUCED</div>
                             </fieldset>
-
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button>
-                            </div>
                         </fieldset>
-                    </section>
+                    </section> --}}
                 </div>
             </div>
         </form>

@@ -21,7 +21,7 @@ class Form1_21Rules
 
                 //Permit License Details
                 'permit_license_certificate_no' => ['required', 'string'],
-                'validity' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
 
                 //Circumstances
                 'circumstances' => ['required', 'string'],

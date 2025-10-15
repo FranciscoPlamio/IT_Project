@@ -25,8 +25,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="particulars">Station/Equipment <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -223,20 +223,19 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
         <script>
             (function() {
-                const stepsOrder = ['nature', 'class', 'service', 'personal', 'particulars', 'declaration'];
+                const stepsOrder = ['nature', 'personal', 'particulars']; // declaration removed
                 const stepsList = document.getElementById('stepsList14');
                 const form = document.getElementById('form114');
                 const validationLink14 = document.getElementById('validationLink14');

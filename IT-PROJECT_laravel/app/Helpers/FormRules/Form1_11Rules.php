@@ -27,7 +27,7 @@ class Form1_11Rules
                 'email' => ['nullable', 'email'],
 
                 'applicant' => ['required', 'string'],
-                'validity' => ['required', 'date', 'before_or_equal:today'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
 
                 //Application Details
                 'application_type' => ['required', 'string'],

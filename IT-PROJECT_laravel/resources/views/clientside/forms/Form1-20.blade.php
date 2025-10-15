@@ -24,8 +24,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="vas">Value Added Services <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -146,20 +146,23 @@
                                     <div class="inline-radio">
                                         <label>
                                             <input type="radio" name="known_by_another_name" value="yes"
-                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'checked' : '' }}>
+                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'checked' : '' }}
+                                                onclick="toggleFormerName('yes')">
                                             Yes</label>
                                         <br>
                                         <label>
                                             <input type="radio" name="known_by_another_name" value="no"
-                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'no' ? 'checked' : '' }}>
+                                                {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'no' ? 'checked' : '' }}
+                                                onclick="toggleFormerName('no')">
                                             No</label>
                                     </div>
                                     @error('known_by_another_name')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
-                                    <input class="form1-01-input" type="text" name="former_name"
+                                    <input class="form1-01-input" type="text" name="former_name" id="former_name"
                                         placeholder="Former name if Yes"
-                                        value="{{ old('former_name', $form['former_name'] ?? '') }}">
+                                        value="{{ old('former_name', $form['former_name'] ?? '') }}"
+                                        style="display: {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'block' : 'none' }}">
                                     @error('former_name')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -230,20 +233,19 @@
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
         <script>
             (function() {
-                const stepsOrder = ['categories', 'applicant', 'vas', 'declaration'];
+                const stepsOrder = ['categories', 'applicant', 'vas']; // Declaration removed
                 const stepsList = document.getElementById('stepsList20');
                 const form = document.getElementById('form120');
 
@@ -350,6 +352,23 @@
 
                 function toggleVoipOptions(show) {
                     document.getElementById('voip_options').classList.toggle('hidden', !show);
+                }
+            });
+
+            // toggle former name input
+            function toggleFormerName(value) {
+                const formerNameInput = document.getElementById('former_name');
+                formerNameInput.style.display = value === 'yes' ? 'block' : 'none';
+                if (value === 'no') {
+                    formerNameInput.value = '';
+                }
+            }
+
+            // Initialize on page load
+            document.addEventListener('DOMContentLoaded', function() {
+                const selectedValue = document.querySelector('input[name="known_by_another_name"]:checked')?.value;
+                if (selectedValue) {
+                    toggleFormerName(selectedValue);
                 }
             });
         </script>
