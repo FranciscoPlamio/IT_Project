@@ -60,3 +60,91 @@ document.addEventListener("DOMContentLoaded", () => {
             highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("searchInput");
+  const tableRows = document.querySelectorAll("#requestsTable tbody tr");
+  const filterIcon = document.querySelector(".filter-bar img");
+  const filterDropdown = document.getElementById("filterDropdown");
+  const dateFilter = document.getElementById("dateFilter");
+  const formFilter = document.getElementById("formFilter");
+  const applyBtn = document.getElementById("applyFilter");
+
+  // 🔍 Search Functionality
+  if (searchInput) {
+    searchInput.addEventListener("keyup", function () {
+      const filter = searchInput.value.toLowerCase();
+      tableRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(filter) && filter !== "") {
+          row.style.display = "";
+          row.classList.add("highlight-gray");
+        } else if (filter === "") {
+          row.style.display = "";
+          row.classList.remove("highlight-gray");
+        } else {
+          row.style.display = "none";
+          row.classList.remove("highlight-gray");
+        }
+      });
+    });
+  }
+
+  // ⚙️ Toggle Filter Dropdown
+  filterIcon.addEventListener("click", () => {
+    filterDropdown.style.display =
+      filterDropdown.style.display === "block" ? "none" : "block";
+  });
+
+  // 🗓️ Apply Filter
+  applyBtn.addEventListener("click", () => {
+    const selectedDate = dateFilter.value;
+    const selectedForm = formFilter.value.toLowerCase();
+    const now = new Date();
+
+    tableRows.forEach(row => {
+      const dateText = row.children[2].textContent.trim();
+      const formType = row.children[1].textContent.toLowerCase();
+
+      let showRow = true;
+
+      // --- Date filtering ---
+      if (selectedDate !== "all") {
+        const rowDate = new Date(dateText);
+        const diffDays = (now - rowDate) / (1000 * 60 * 60 * 24);
+
+        if (
+          (selectedDate === "week" && diffDays > 7) ||
+          (selectedDate === "month" && diffDays > 30) ||
+          (selectedDate === "3months" && diffDays > 90) ||
+          (selectedDate === "6months" && diffDays > 180) ||
+          (selectedDate === "year" && diffDays > 365)
+        ) {
+          showRow = false;
+        }
+      }
+
+      // --- Form filtering ---
+      if (selectedForm !== "all") {
+        // normalize both sides for consistent matching
+        const formCode = formType.replace(/\s+/g, '').toLowerCase(); // e.g. "form1-01"
+        if (!formCode.includes(selectedForm.toLowerCase())) {
+          showRow = false;
+        }
+      }
+
+
+      // Apply visibility
+      row.style.display = showRow ? "" : "none";
+    });
+
+    filterDropdown.style.display = "none"; // close after apply
+  });
+
+  // ✅ Click outside dropdown closes it
+  document.addEventListener("click", (e) => {
+    if (!filterDropdown.contains(e.target) && !filterIcon.contains(e.target)) {
+      filterDropdown.style.display = "none";
+    }
+  });
+});
