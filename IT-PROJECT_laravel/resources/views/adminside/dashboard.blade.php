@@ -83,7 +83,7 @@
                 style="text-decoration:none; color:inherit;">
                     <div class="log-item">
                         <div>
-                            <h3>#{{ ($app->form_id) }} | {{ strtoupper($app->form_type) }}</h3><br>
+                            <h3>#{{ ($app->form_id) }} | {{ ucfirst($app->form_type) }}</h3><br>
                             <h5>{{ optional($app->created_at)->format('d F Y') }}</h5>
                         </div>
                         <div class="status {{ $cls }}">

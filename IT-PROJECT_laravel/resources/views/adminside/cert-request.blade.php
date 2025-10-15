@@ -80,7 +80,7 @@
           @forelse($requests as $req)
               <tr class="request-row {{ isset($highlight) && $highlight == $req->form_id ? 'highlighted' : '' }}">
                   <td>#{{ $req->form_id }}</td>
-                  <td>{{ strtoupper($req->form_type ?? 'N/A') }}</td>
+                  <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
                   <td>{{ $req->formatted_date ?? 'N/A' }}</td>
                   <td>
                       <span class="see-more">
