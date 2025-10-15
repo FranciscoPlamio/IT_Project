@@ -27,7 +27,7 @@ class Form1_22Rules
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
                 'email' => ['nullable', 'email'],
-                'validity' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
                 'pa_ca_no' => ['required', 'string'],
                 'service_area' => ['required', 'string'],
                 'exact_location' => ['required', 'string'],

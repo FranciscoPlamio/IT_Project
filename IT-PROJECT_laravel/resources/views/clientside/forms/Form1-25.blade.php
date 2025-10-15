@@ -1,4 +1,4 @@
-<x-layout :title="'Complaint Form (Form 1-25)'" :form-header="['formNo' => 'NTC 1-25', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Complaint Form (Form 1-25)'" :form-header="['formNo' => 'NTC 1-25', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form125" method="POST"

@@ -27,7 +27,3 @@
     @enderror
 </div>
 </div>
-<div class="step-actions">
-    <button type="button" class="btn-secondary" data-prev>Back</button>
-    <button type="button" class="btn-primary" data-next>Next</button>
-</div>

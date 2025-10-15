@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
     <main>
         <form class="form1-01-container" id="form102" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -27,8 +27,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="exam">Exam/Seminar Details <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -195,19 +195,23 @@
                                 <div class="form-field">
                                     <label class="form-label">Place of Exam/Seminar</label>
                                     <x-forms.exam-fields :form="$form ?? []" />
-
+                                    <div class="step-actions"><button class="form1-01-btn" type="button"
+                                            id="validateBtn">Proceed to Validation</button>
+                                    </div>
+                                </div>
+                            </div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'exam', 'declaration'];
+                const stepsOrder = ['personal', 'application', 'exam', ]; // declaration removed
                 const stepsList = document.getElementById('stepsList02');
                 const form = document.getElementById('form102');
                 const validationLink02 = document.getElementById('validationLink02');

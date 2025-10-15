@@ -16,7 +16,7 @@ class Form1_18Rules
                 //Applicant Details
                 'applicant' => ['required', 'string'],
                 'permit_no' => ['required', 'string'],
-                'validity' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
                 'entity_type' => ['required', 'string'],
                 'others_entity' => ['nullable', 'string'],
                 // 8 Address
@@ -32,11 +32,10 @@ class Form1_18Rules
                 //Personell Required
                 'supervising_engineer_name' => ['required', 'string'],
                 'supervising_engineer_pece' => ['required', 'string'],
-                'supervising_engineer_validity' => ['required', 'string'],
+                'supervising_engineer_validity' => ['required', 'date', 'after_or_equal:today'],
                 'technician_name' => ['required', 'string'],
                 'technician_certificate' => ['required', 'string'],
-                'technician_validity' => ['required', 'string'],
-                'technician_validity' => ['required', 'string'],
+                'technician_validity' => ['required', 'date', 'after_or_equal:today'],
             ],
 
             'messages' => [

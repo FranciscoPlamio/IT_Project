@@ -19,7 +19,7 @@ class Form1_09Rules
                 'email' => ['nullable', 'email'],
 
                 'applicant' => ['required', 'string'],
-                'validity' => ['required', 'date', 'before_or_equal:today'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
                 'cpc_cpcn_pa_rsl_no' => ['required', 'integer'],
 
                 //Application Details
