@@ -7,12 +7,30 @@
 
             <h3 class="forms-gallery-section">Operator Certification & Exams</h3>
             <div class="forms-gallery-grid">
-                <a class="form-card" href="{{ asset('forms/Form-No.-NTC-1-01.pdf') }}" target="_blank" rel="noopener">
+                <div class="form-card">
                     <img src="{{ asset('images/Form1-01_image.png') }}"
-                        alt="Form No. NTC 1-01 — Application for Radio Operator Examination">
-                    <div class="form-card-caption"><span class="form-card-title">Form No. NTC 1-01 — Application for
-                            Radio Operator Examination</span></div>
-                </a>
+                        alt="Form No. NTC 1-01 — Application for Radio Operator Examination"
+                        style="display:block;width:100%;height:auto;">
+                    <div class="form-card-caption">
+                        <span class="form-card-title" style="pointer-events:none">Form No. NTC 1-01 — Application for
+                            Radio Operator
+                            Examination</span>
+                        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                            <a href="{{ asset('forms/Form-No.-NTC-1-01.pdf') }}" target="_blank" rel="noopener"
+                                style="background:#0d6efd;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
+                                View PDF
+                            </a>
+                            <a href="{{ route('forms.show', ['formType' => '1-01']) }}"
+                                style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
+                                Sign up
+                            </a>
+                            <a href="{{ route('requirements') }}"
+                                style="background:#6c757d;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
+                                Requirements
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <a class="form-card" href="{{ asset('forms/Form-No.-NTC-1-02.pdf') }}" target="_blank" rel="noopener">
                     <img src="{{ asset('images/Form1-02_image.png') }}"
                         alt="Form No. NTC 1-02 — Application for Radio Operator Certificate">
