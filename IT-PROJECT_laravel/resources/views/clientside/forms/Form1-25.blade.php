@@ -119,6 +119,9 @@
                                     <label><input type="radio" name="complaint_type" value="fair_use"
                                             {{ old('complaint_type', $form['complaint_type'] ?? '') == 'fair_use' ? 'checked' : '' }}>
                                         Fair Use</label>
+                                    @error('complaint_type')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label><input type="radio" name="complaint_type" value="poor_service"
@@ -133,6 +136,9 @@
                                     <input class="form1-01-input" type="text" name="complaint_type_others"
                                         placeholder="Specify other complaint type"
                                         value="{{ old('complaint_type_others', $form['complaint_type_others'] ?? '') }}">
+                                    @error('complaint_type_others')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-grid-2">
@@ -200,7 +206,7 @@
                             </fieldset>
                         </fieldset>
                         <div class="step-actions">
-                            <button class="form1-01-btn" type="button" id="validateBtn25">Proceed to
+                            <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
                                 Validation</button>
                         </div>
                     </section>
@@ -281,6 +287,7 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        alert(1);
                         form.submit();
                     });
                 }

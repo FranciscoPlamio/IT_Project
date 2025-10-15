@@ -68,14 +68,23 @@
                                                 <input class="table-input" type="datetime-local"
                                                     name="message1_datetime"
                                                     value="{{ old('message1_datetime', $form['message1_datetime'] ?? '') }}">
+                                                @error('message1_datetime')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td>
                                                 <input class="table-input" type="text" name="message1_phone"
                                                     placeholder="Cell phone number"
                                                     value="{{ old('message1_phone', $form['message1_phone'] ?? '') }}">
+                                                @error('message1_phone')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                             <td>
                                                 <textarea class="table-input" name="message1_content" rows="3" placeholder="Message content">{{ old('message1_content', $form['message1_content'] ?? '') }}</textarea>
+                                                @error('message1_content')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
                                             </td>
                                         </tr>
                                         <tr>
@@ -247,12 +256,15 @@
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
+
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);
                         });
-                        if (!validateActiveStep()) return;
                         form.submit();
+                        if (!validateActiveStep()) return;
+
+
                     });
                 }
                 showStep(stepsOrder[0]);
