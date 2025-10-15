@@ -55,9 +55,9 @@ public function login(Request $request)
 public function dashboard(Request $request)
 {
     // Optional: login session validation
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     // Get admin user info
     $user = User::find($request->session()->get('admin'));
@@ -115,9 +115,9 @@ public function dashboard(Request $request)
 public function certRequest(Request $request)
 {
     // Optional: check session
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     $user = User::find($request->session()->get('admin'));
 
@@ -138,9 +138,9 @@ public function certRequest(Request $request)
 public function requestManagement(Request $request)
 {
     // Optional: check if admin is logged in
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     $user = User::find($request->session()->get('admin'));
 
@@ -180,8 +180,11 @@ public function updateStatus(Request $request)
     }
 }
 
-public function billPay()
+public function billPay(Request $request)
 {
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
     // Fetch only payments with 'paid' or 'pending' status
     $payments = \App\Models\Forms\FormsTransactions::whereIn('payment_status', ['paid', 'pending', 'unpaid']) //fix unpaid
         ->orderBy('created_at', 'desc')

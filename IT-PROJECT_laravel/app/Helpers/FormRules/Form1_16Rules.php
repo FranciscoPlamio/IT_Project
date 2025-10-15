@@ -16,7 +16,7 @@ class Form1_16Rules
 
                 // Applicantion Information
                 'applicant' => ['required', 'string'],
-                'validity' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
                 'permit_rsl_no' => ['required', 'string'],
                 'unit' => ['required', 'string'],
                 'street' => ['required', 'string'],

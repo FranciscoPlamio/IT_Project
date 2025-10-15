@@ -12,20 +12,19 @@
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
                     <ul class="steps-list" id="stepsList13">
-                        <li class="step-item active" data-step="applicant">Applicant <span
+                        <li class="step-item" data-step="particulars">Application Details<span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="particulars">Particulars <span
-                                class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="sign">Signature <span class="step-status">&nbsp;</span>
                         </li>
                     </ul>
                 </aside>
 
                 <div>
-                    <section class="step-content active" id="step-applicant">
+
+                    <section class="step-content" id="step-particulars">
                         <fieldset>
-                            <legend>Applicant</legend>
+                            <legend>Particulars</legend>
                             <div class="form-grid-1">
+                                <label class="form-label">Applicant</label>
                                 <div class="form-field">
                                     <input class="form1-01-input" type="text" name="applicant"
                                         value="{{ old('applicant', $form['applicant'] ?? '') }}">
@@ -34,14 +33,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
-                            </div>
-                        </fieldset>
-                    </section>
-
-                    <section class="step-content" id="step-particulars">
-                        <fieldset>
-                            <legend>Particulars</legend>
                             <div class="table-container">
                                 <table class="form-table">
                                     <thead>
@@ -159,8 +150,7 @@
                                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                                 @enderror
                                             </td>
-                                            <td><input class="table-input" type="text"
-                                                    name="proposed_configuration"
+                                            <td><input class="table-input" type="text" name="proposed_configuration"
                                                     value="{{ old('proposed_configuration', $form['proposed_configuration'] ?? '') }}">
                                                 @error('proposed_configuration')
                                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -305,13 +295,12 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <section class="step-content" id="step-sign">
+                    {{-- <section class="step-content" id="step-sign">
                         <fieldset>
                             <legend>Signature and Date</legend>
                             <div class="form1-01-signature-row">
@@ -334,13 +323,13 @@
                                     data-prev>Back</button><button class="form1-01-btn" type="button"
                                     id="validateBtn13">Proceed to Validation</button></div>
                         </fieldset>
-                    </section>
+                    </section> --}}
                 </div>
         </form>
 
         <script>
             (function() {
-                const stepsOrder = ['applicant', 'particulars', 'sign'];
+                const stepsOrder = ['particulars']; // sign, applicant removed
                 const stepsList = document.getElementById('stepsList13');
                 const form = document.getElementById('form113');
                 const validationLink13 = document.getElementById('validationLink13');

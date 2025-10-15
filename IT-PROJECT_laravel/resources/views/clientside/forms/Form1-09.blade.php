@@ -29,8 +29,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="intended">Intended Use <span class="step-status">&nbsp;</span>
                         </li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -158,10 +158,11 @@
                                 </fieldset>
                             </div>
                         </div>
-                        <div class="step-actions"><button type="button" class="btn-secondary"
-                                data-prev>Back</button><button type="button" class="btn-primary"
-                                data-next>Next</button></div>
-
+                        <div class="form-field">
+                            <div class="step-actions"><button type="button" class="btn-secondary"
+                                    data-prev>Back</button><button type="button" class="btn-primary"
+                                    data-next>Next</button></div>
+                        </div>
                     </section>
 
                     <section class="step-content" id="step-station">
@@ -350,23 +351,21 @@
                                 @error('others_use_specify')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
-
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended', 'declaration'];
+                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended']; // declaration removed
                 const stepsList = document.getElementById('stepsList09');
                 const form = document.getElementById('form109');
                 const validationLink09 = document.getElementById('validationLink09');
