@@ -62,18 +62,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 document.addEventListener("DOMContentLoaded", function () {
-  const searchInput = document.getElementById("searchInput");
-  const tableRows = document.querySelectorAll("#requestsTable tbody tr");
+  const searchInput = document.querySelector("#searchInput");
+  const tableRows = document.querySelectorAll(".table-container table tbody tr");
   const filterIcon = document.querySelector(".filter-bar img");
   const filterDropdown = document.getElementById("filterDropdown");
   const dateFilter = document.getElementById("dateFilter");
   const formFilter = document.getElementById("formFilter");
   const applyBtn = document.getElementById("applyFilter");
 
-  // 🔍 Search Functionality
+  // 🔍 SEARCH BAR FUNCTIONALITY
   if (searchInput) {
     searchInput.addEventListener("keyup", function () {
       const filter = searchInput.value.toLowerCase();
+
       tableRows.forEach(row => {
         const text = row.textContent.toLowerCase();
         if (text.includes(filter) && filter !== "") {
@@ -90,61 +91,111 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ⚙️ Toggle Filter Dropdown
+  // ⚙️ TOGGLE FILTER DROPDOWN
   filterIcon.addEventListener("click", () => {
     filterDropdown.style.display =
       filterDropdown.style.display === "block" ? "none" : "block";
   });
 
-  // 🗓️ Apply Filter
+  // 🗓️ APPLY FILTER
   applyBtn.addEventListener("click", () => {
     const selectedDate = dateFilter.value;
     const selectedForm = formFilter.value.toLowerCase();
     const now = new Date();
 
+    let startDate = null;
+    let endDate = new Date(now); // always ends at today
+
+    if (selectedDate === "week") {
+      // Sunday → Saturday
+      const day = now.getDay(); // 0 = Sunday
+      startDate = new Date(now);
+      startDate.setDate(now.getDate() - day);
+      endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
+    } else if (selectedDate === "month") {
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    } else if (selectedDate === "3months") {
+      const startMonth = now.getMonth() - 2;
+      startDate = new Date(now.getFullYear(), startMonth, 1);
+    } else if (selectedDate === "6months") {
+      const startMonth = now.getMonth() - 5;
+      startDate = new Date(now.getFullYear(), startMonth, 1);
+    } else if (selectedDate === "year") {
+      startDate = new Date(now.getFullYear(), 0, 1);
+      endDate = new Date(now.getFullYear(), 11, 31);
+    }
+
     tableRows.forEach(row => {
       const dateText = row.children[2].textContent.trim();
       const formType = row.children[1].textContent.toLowerCase();
-
       let showRow = true;
 
-      // --- Date filtering ---
-      if (selectedDate !== "all") {
-        const rowDate = new Date(dateText);
-        const diffDays = (now - rowDate) / (1000 * 60 * 60 * 24);
-
-        if (
-          (selectedDate === "week" && diffDays > 7) ||
-          (selectedDate === "month" && diffDays > 30) ||
-          (selectedDate === "3months" && diffDays > 90) ||
-          (selectedDate === "6months" && diffDays > 180) ||
-          (selectedDate === "year" && diffDays > 365)
-        ) {
+      // Parse date
+      const rowDate = new Date(dateText);
+      if (selectedDate !== "all" && startDate) {
+        if (rowDate < startDate || rowDate > endDate) {
           showRow = false;
         }
       }
 
-      // --- Form filtering ---
+      // Form filter (recognize "Form1-01")
       if (selectedForm !== "all") {
-        // normalize both sides for consistent matching
-        const formCode = formType.replace(/\s+/g, '').toLowerCase(); // e.g. "form1-01"
+        const formCode = formType.replace(/\s+/g, '').toLowerCase();
         if (!formCode.includes(selectedForm.toLowerCase())) {
           showRow = false;
         }
       }
 
-
-      // Apply visibility
       row.style.display = showRow ? "" : "none";
     });
 
-    filterDropdown.style.display = "none"; // close after apply
+    filterDropdown.style.display = "none"; // close after applying
   });
 
-  // ✅ Click outside dropdown closes it
+  // ✅ CLOSE FILTER DROPDOWN WHEN CLICKING OUTSIDE
   document.addEventListener("click", (e) => {
     if (!filterDropdown.contains(e.target) && !filterIcon.contains(e.target)) {
       filterDropdown.style.display = "none";
     }
   });
+
+  // ✅ HIGHLIGHT ROW FROM DASHBOARD
+  const highlighted = document.querySelector(".highlighted");
+  if (highlighted) {
+    highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  // ✅ "SEE MORE" POPUP (placeholder)
+  const seeMoreLinks = document.querySelectorAll(".see-more");
+  seeMoreLinks.forEach(link => {
+    link.addEventListener("click", function () {
+      alert("More details coming soon...");
+    });
+  });
+
+  // ✅ LOGOUT MODAL FUNCTIONALITY
+  const logoutLink = document.querySelector(".bottom-links .menu-item");
+  const modal = document.getElementById("logout-modal");
+  const confirmBtn = document.getElementById("confirm-logout");
+  const cancelBtn = document.getElementById("cancel-logout");
+  const logoutForm = document.getElementById("logout-form");
+
+  if (logoutLink) {
+    logoutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.style.display = "flex";
+    });
+  }
+
+  confirmBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    logoutForm.submit();
+  });
+
+  cancelBtn?.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
 });

@@ -74,7 +74,7 @@
         <option value="month">This Month</option>
         <option value="3months">Last 3 Months</option>
         <option value="6months">Last 6 Months</option>
-        <option value="year">Last Year</option>
+        <option value="year">This Year</option>
       </select>
 
      <label for="formFilter">Form Type</label>
