@@ -126,7 +126,7 @@ body {
   flex: 1; /* makes each section take 50% height automatically */
   display: flex;
   flex-direction: column;
-  border-bottom: 2px solid #f1f1f1;
+  margin-bottom: 10px;
   overflow: hidden; /* keeps internal scroll only */
 }
 
@@ -526,4 +526,106 @@ body {
 
 .cancel-btn:hover {
   background: #9b1818;
+}
+
+/* Highlighted row (when coming from dashboard) */
+.request-row.highlighted {
+  background-color: #d3d3d3;
+  transition: background-color 0.5s ease;
+}
+
+.request-row.highlighted:hover {
+  background-color: #bfbfbf;
+}
+
+/* =======================
+   FILTER DROPDOWN STYLES
+   ======================= */
+
+.filter-bar {
+  position: relative;
+  cursor: pointer;
+}
+
+.filter-bar img {
+  width: 22px;
+  height: 22px;
+}
+
+/* Generic filter dropdown box */
+.filter-dropdown {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 240px;
+  padding: 15px;
+  z-index: 10;
+}
+
+.filter-dropdown h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #2a3545;
+}
+
+.filter-dropdown label {
+  display: block;
+  font-size: 13px;
+  margin: 6px 0 3px;
+  color: #555;
+}
+
+.filter-dropdown select {
+  width: 100%;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* Scrollable form list inside dropdown */
+.form-list select {
+  height: 100px;
+  overflow-y: auto;
+}
+
+/* Apply button for all filters */
+#applyFilter,
+#applyLatestFilter,
+#applyFilterLatest {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-radius: 6px;
+  background-color: #2a3545;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#applyFilter:hover,
+#applyLatestFilter:hover,
+#applyFilterLatest:hover {
+  background-color: #1c2431;
+}
+
+/* Highlighted search result rows */
+.highlight-gray {
+  background-color: #e5e7eb !important;
+  transition: background 0.3s ease;
+}
+
+/* Ensures dropdown stays above table */
+.actions {
+  position: relative;
+  z-index: 11;
 }

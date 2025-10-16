@@ -144,20 +144,19 @@ public function requestManagement(Request $request)
 
     $user = User::find($request->session()->get('admin'));
 
-    // Import MongoDB\BSON\Regex at the top of the file:
-    // use MongoDB\BSON\Regex;
-
-    // === Fetch Latest Requests (NOT "done", case-insensitive) ===
-     $latestRequests = FormsTransactions::where('status', '!=', 'done')
+    // === Fetch Latest Requests (exclude "done" and "cancel") ===
+    $latestRequests = FormsTransactions::whereNotIn('status', ['done', 'cancel'])
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $historyRequests = FormsTransactions::where('status', 'done')
-        ->orderBy('created_at', 'desc')
+    // === Fetch History (include only "done" or "cancel") ===
+    $historyRequests = FormsTransactions::whereIn('status', ['done', 'cancel'])
+        ->orderBy('updated_at', 'desc')
         ->get();
 
-    return view('adminside.req-management', compact('latestRequests', 'historyRequests'));
+    return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests'));
 }
+
 
 public function updateStatus(Request $request)
 {
@@ -168,10 +167,27 @@ public function updateStatus(Request $request)
             return response()->json(['success' => false, 'message' => 'Form not found']);
         }
 
-        $form->status = $request->status;
+        // ✅ Make sure status is explicitly set (cancel or done)
+        $newStatus = strtolower(trim($request->status));
+
+        if (!in_array($newStatus, ['done', 'cancel'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid status value'
+            ]);
+        }
+
+        // ✅ Update status and timestamp
+        $form->status = $newStatus;
+        $form->updated_at = now();
         $form->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
+        return response()->json([
+            'success' => true,
+            'message' => "Status updated to {$newStatus}",
+            'status' => $form->status,
+            'updated_at' => $form->updated_at
+        ]);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
