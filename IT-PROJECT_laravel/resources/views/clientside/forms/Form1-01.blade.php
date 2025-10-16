@@ -19,7 +19,7 @@
             <div class="form-layout">
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
-                    <ul class="steps-list" id="stepsList01">
+                    <ul class="steps-list" id="stepsList01" style="pointer-events: none;">
                         <li class="step-item active" data-step="application">Application Details <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="applicant">Applicant Details <span
@@ -128,7 +128,7 @@
                         <div class="form-grid-3">
                             <fieldset class="fieldset-compact">
                                 <legend>Radiotelephony</legend>
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field">
                                     <label>
                                         <input type="radio" name="exam_type" value="1phn_e1234"
                                             {{ $examTypeValue == '1phn_e1234' ? 'checked' : '' }}>
@@ -149,7 +149,7 @@
                             </fieldset>
                             <fieldset class="fieldset-compact">
                                 <legend>Restricted Radiotelephone</legend>
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field">
                                     <label>
                                         <input type="radio" name="exam_type" value="rroc_aircraft_e1"
                                             {{ $examTypeValue == 'rroc_aircraft_e1' ? 'checked' : '' }}>
@@ -164,8 +164,6 @@
                                     value="{{ isset($form['date_of_exam']) ? $form['date_of_exam'] : '' }}">
                             </div>
                         </div>
-
-
                         <div class="step-actions">
                             @error('exam_type')
                                 <p class="text-red text-lg text-center w-full">{{ $message }}</p>
@@ -254,6 +252,7 @@
                                     @enderror
                                 </div>
                             </div>
+                            <!-- CAPTCHA fields -->
                             <div class="form-field"
                                 style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
                                 <div class="g-recaptcha"
@@ -368,7 +367,7 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['application', 'applicant', 'assistance', 'declaration'];
+                const stepsOrder = ['application', 'applicant', 'assistance']; // declaration removed
                 const stepsList = document.getElementById('stepsList01');
                 const form = document.getElementById('form101');
                 const validationLink = document.getElementById('validationLink');
@@ -409,6 +408,8 @@
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
                     let valid = true;
+
+                    // Check required fields
                     section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
                         if (el.type === 'radio') {
                             const name = el.name;
@@ -419,7 +420,16 @@
                             valid = false;
                         }
                     });
-                    if (!validateGroups(section)) valid = false;
+
+                    // Special validation for exam type selection in application step
+                    if (step === 'application') {
+                        const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
+                        if (!examTypeSelected) {
+                            valid = false;
+                        }
+                    }
+
+                    // Note: All exam types are now in a single radio group, so no group validation needed
 
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
@@ -439,7 +449,25 @@
                 });
 
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
-                    if (validateActiveStep()) go(1);
+                    if (validateActiveStep()) {
+                        go(1);
+                    } else {
+                        // Show validation error for current step
+                        const currentStepName = currentStep();
+                        let errorMessage = 'Please complete all required fields before proceeding.';
+
+                        if (currentStepName === 'application') {
+                            errorMessage = 'Please select an exam type before proceeding.';
+                        }
+
+                        const errorDiv = document.createElement('p');
+                        errorDiv.className = 'text-red text-sm mt-1';
+                        errorDiv.textContent = errorMessage;
+                        const existingError = document.querySelector(
+                            `#step-${currentStepName} .step-actions .text-red`);
+                        if (existingError) existingError.remove();
+                        document.querySelector(`#step-${currentStepName} .step-actions`).appendChild(errorDiv);
+                    }
                 }));
                 document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
 
@@ -450,7 +478,16 @@
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);
                         });
-                        if (!validateActiveStep()) return;
+                        if (!validateActiveStep()) {
+                            // Show validation error message
+                            const errorDiv = document.createElement('p');
+                            errorDiv.className = 'text-red text-sm mt-1';
+                            errorDiv.textContent = 'Please complete all required fields before proceeding.';
+                            const existingError = document.querySelector('.step-actions .text-red');
+                            if (existingError) existingError.remove();
+                            document.querySelector('.step-actions').appendChild(errorDiv);
+                            return;
+                        }
                         try {
                             if (window.grecaptcha) {
                                 const captchaResponse = window.grecaptcha.getResponse();

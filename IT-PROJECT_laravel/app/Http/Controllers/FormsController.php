@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Http;
 
 class FormsController extends Controller
 {
@@ -154,6 +155,12 @@ class FormsController extends Controller
     public function preview(Request $request, $formType)
     {
 
+        // Verify Google reCAPTCHA first
+        if (!$this->verifyRecaptcha($request)) {
+            return back()->with('captcha_error', 'Please verify that you are not a robot.')
+                ->withInput();
+        }
+
         // Gets rules of a form
         // App\Helpers\FormManager
         $rules = FormManager::getValidationRules($formType);
@@ -239,5 +246,24 @@ class FormsController extends Controller
             throw new \Exception('User not found in the database. Please authenticate your email again');
         }
         return $user;
+    }
+
+    public function verifyRecaptcha(Request $request)
+    {
+        $token = $request->input('g-recaptcha-response');
+
+        if (!$token) {
+            return false; // No token means CAPTCHA was not completed
+        }
+
+        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            'response' => $token,
+            'remoteip' => $request->ip(),
+        ]);
+
+        $result = $response->json();
+
+        return isset($result['success']) && $result['success'] === true;
     }
 }

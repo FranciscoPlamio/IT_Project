@@ -16,7 +16,7 @@
                     <label><input type="checkbox" /> I agree / Malinaw sa akin</label>
                 </div>
             </div>
-
+            {{-- style="pointer-events: none; --}}
             <div class="form-layout">
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
@@ -195,6 +195,7 @@
                                 <div class="form-field">
                                     <label class="form-label">Place of Exam/Seminar</label>
                                     <x-forms.exam-fields :form="$form ?? []" />
+                                    <!-- CAPTCHA fields -->
                                     <div class="form-field"
                                         style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
                                         <div class="g-recaptcha"
