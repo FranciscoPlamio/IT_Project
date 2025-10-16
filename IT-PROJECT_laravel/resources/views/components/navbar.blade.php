@@ -2,7 +2,7 @@
     <button class="menu-toggle" id="menuToggle">☰</button>
     <ul id="navList">
         <li class="{{ Route::is('homepage') ? 'active' : '' }}">
-            <a href="/">Home</a>
+            <a href="{{ url('/') }}">Home</a>
         </li>
         {{-- {{ dd(Route::currentRouteName()) }} --}}
         <li class="{{ Route::is('forms.display') ? 'active' : '' }}">
