@@ -16,13 +16,16 @@ class EmailVerified
     public function handle(Request $request, Closure $next): Response
     {
         if (!session('email_verified')) {
+            // Save the intended URL so we can redirect back after verification
+            session(['intended_url' => $request->fullUrl()]);
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'message' => 'Email verification required.',
                     'redirect' => route('email-auth')
                 ], 403);
             }
-            
+
             return redirect()->route('email-auth')->with('error', 'Please verify your email address to access this page.');
         }
 

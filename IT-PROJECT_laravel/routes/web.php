@@ -9,9 +9,10 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FormsController;
 use App\Http\Middleware\BlockMobileDevices;
 
+// Default index route
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('homepage');
+})->name('homepage');
 
 // Forms list page
 Route::get('/forms-list', [FormsController::class, 'index'])->name('forms.list')->middleware('email.verified');
@@ -86,10 +87,6 @@ Route::post('/adminside/logout', [AdminAuthController::class, 'logout'])->name('
 //     return redirect()->route('adminside.index');
 // });
 
-// Default route (optional) (Uncomment to make the default url to homepage only 1 can be used)
-Route::get('/', function () {
-    return view('homepage');
-})->name('homepage');
 
 // Serve Philippine address data JSON files
 Route::get('/philippine_provinces_cities_municipalities_and_barangays_2019v2.json', function () {
