@@ -257,7 +257,6 @@
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-                alert(1);
                 const email = emailInput.value.trim();
                 if (!email) {
                     showError('Please enter your email address.');
