@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const formFilter = document.getElementById("formFilter");
   const applyBtn = document.getElementById("applyFilter");
 
-  // 🔍 SEARCH BAR FUNCTIONALITY
+  // SEARCH BAR FUNCTIONALITY
   if (searchInput) {
     searchInput.addEventListener("keyup", function () {
       const filter = searchInput.value.toLowerCase();
@@ -91,13 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ⚙️ TOGGLE FILTER DROPDOWN
+  // TOGGLE FILTER DROPDOWN
   filterIcon.addEventListener("click", () => {
     filterDropdown.style.display =
       filterDropdown.style.display === "block" ? "none" : "block";
   });
 
-  // 🗓️ APPLY FILTER
+  // APPLY FILTER
   applyBtn.addEventListener("click", () => {
     const selectedDate = dateFilter.value;
     const selectedForm = formFilter.value.toLowerCase();
@@ -154,14 +154,14 @@ document.addEventListener("DOMContentLoaded", function () {
     filterDropdown.style.display = "none"; // close after applying
   });
 
-  // ✅ CLOSE FILTER DROPDOWN WHEN CLICKING OUTSIDE
+  // CLOSE FILTER DROPDOWN WHEN CLICKING OUTSIDE
   document.addEventListener("click", (e) => {
     if (!filterDropdown.contains(e.target) && !filterIcon.contains(e.target)) {
       filterDropdown.style.display = "none";
     }
   });
 
-  // ✅ HIGHLIGHT ROW FROM DASHBOARD
+  // HIGHLIGHT ROW FROM DASHBOARD
   const highlighted = document.querySelector(".highlighted");
   if (highlighted) {
     highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -199,3 +199,19 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const highlighted = document.querySelector(".highlighted");
+
+  if (highlighted) {
+    highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // ✅ Remove highlight when clicking anywhere
+    document.addEventListener("click", (e) => {
+      if (!highlighted.contains(e.target)) {
+        highlighted.classList.remove("highlighted");
+      }
+    });
+  }
+});
+

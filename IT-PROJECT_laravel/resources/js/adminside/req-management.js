@@ -313,3 +313,18 @@ if (latestSearch) {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const highlighted = document.querySelector(".highlighted");
+
+  if (highlighted) {
+    highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    // ✅ Remove highlight when clicking anywhere
+    document.addEventListener("click", (e) => {
+      if (!highlighted.contains(e.target)) {
+        highlighted.classList.remove("highlighted");
+      }
+    });
+  }
+});

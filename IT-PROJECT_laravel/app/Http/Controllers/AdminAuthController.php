@@ -115,14 +115,15 @@ public function dashboard(Request $request)
 
 public function certRequest(Request $request)
 {
-    // Optional: check session
     if (!$request->session()->has('admin')) {
         return redirect()->route('admin.login');
     }
 
     $user = User::find($request->session()->get('admin'));
 
-    $requests = FormsTransactions::orderBy('created_at', 'desc')->get();
+    $requests = \App\Models\Forms\FormsTransactions::whereRaw("LOWER(status) = 'in progress'")
+        ->orderBy('created_at', 'desc')
+        ->get();
 
     foreach ($requests as $req) {
         $req->formatted_date = $req->created_at
@@ -130,7 +131,6 @@ public function certRequest(Request $request)
             : 'No date';
     }
 
-    // Get the ID to highlight
     $highlight = $request->query('highlight');
 
     return view('adminside.cert-request', compact('user', 'requests', 'highlight'));
@@ -138,24 +138,26 @@ public function certRequest(Request $request)
 
 public function requestManagement(Request $request)
 {
-    // Optional: check if admin is logged in
     if (!$request->session()->has('admin')) {
         return redirect()->route('admin.login');
     }
 
     $user = User::find($request->session()->get('admin'));
 
-    // === Fetch Latest Requests (exclude "done" and "cancel") ===
-    $latestRequests = FormsTransactions::whereNotIn('status', ['done', 'cancel'])
+    //  Latest (not done or cancel)
+    $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancel'])
         ->orderBy('created_at', 'desc')
         ->get();
 
-    // === Fetch History (include only "done" or "cancel") ===
-    $historyRequests = FormsTransactions::whereIn('status', ['done', 'cancel'])
+    //  History (done or cancel)
+    $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel'])
         ->orderBy('updated_at', 'desc')
         ->get();
 
-    return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests'));
+    $highlight = $request->query('highlight');
+    $section = $request->query('section', 'latest'); // 'history' or 'latest'
+
+    return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests', 'highlight', 'section'));
 }
 
 
