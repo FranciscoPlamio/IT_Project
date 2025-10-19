@@ -120,7 +120,7 @@ function updateStatus(formId, newStatus) {
 window.updateStatus = updateStatus;
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("Request Management JS Loaded ✅");
+  console.log("Request Management JS Loaded");
 
   /* ========== LATEST REQUEST SEARCH & FILTER ========== */
   const latestSearch = document.getElementById("latestSearch");
@@ -140,10 +140,10 @@ if (latestSearch) {
 
       if (text.includes(filter) && filter !== "") {
         row.style.display = "";
-        row.classList.add("highlight-gray");  // ✅ add gray background
+        row.classList.add("highlight-gray");  
       } else if (filter === "") {
         row.style.display = "";
-        row.classList.remove("highlight-gray"); // ✅ remove highlight when cleared
+        row.classList.remove("highlight-gray"); 
       } else {
         row.style.display = "none";
         row.classList.remove("highlight-gray");
@@ -320,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (highlighted) {
     highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // ✅ Remove highlight when clicking anywhere
+    //  Remove highlight when clicking anywhere
     document.addEventListener("click", (e) => {
       if (!highlighted.contains(e.target)) {
         highlighted.classList.remove("highlighted");

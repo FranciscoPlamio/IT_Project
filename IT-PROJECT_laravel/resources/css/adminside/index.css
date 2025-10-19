@@ -169,7 +169,7 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative; /* needed for pseudo-element */
+    position: relative;
     overflow: hidden;
 }
 
@@ -177,7 +177,7 @@ button:hover {
 .right::before {
     content: "";
     position: absolute;
-    left: -20px; /* slightly outside */
+    left: -20px; 
     top: 0;
     height: 100%;
     width: 20px;
@@ -188,9 +188,9 @@ button:hover {
 /* Initial hidden state */
 .form-container {
     width: 60%;
-    transform: translateX(-50px); /* start slightly to the left */
-    opacity: 0; /* invisible at start */
-    transition: all 0.7s ease-out; /* smooth animation */
+    transform: translateX(-50px); 
+    opacity: 0; 
+    transition: all 0.7s ease-out; 
 }
 
 /* Active state: slide into view */

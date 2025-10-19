@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.querySelector("#searchInput");
     const tableRows = document.querySelectorAll(".table-container table tbody tr");
 
-    // ✅ Search filter
+    // Search filter
     if (searchInput) {
         searchInput.addEventListener("keyup", function () {
             const filter = searchInput.value.toLowerCase();
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ✅ Add click event to "See more"
+    // Add click event to "See more"
     const seeMoreLinks = document.querySelectorAll(".see-more");
     seeMoreLinks.forEach(link => {
         link.addEventListener("click", function () {
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  // ✅ "SEE MORE" POPUP (placeholder)
+  // "SEE MORE" POPUP (placeholder)
   const seeMoreLinks = document.querySelectorAll(".see-more");
   seeMoreLinks.forEach(link => {
     link.addEventListener("click", function () {
@@ -206,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (highlighted) {
     highlighted.scrollIntoView({ behavior: "smooth", block: "center" });
 
-    // ✅ Remove highlight when clicking anywhere
+    // Remove highlight when clicking anywhere
     document.addEventListener("click", (e) => {
       if (!highlighted.contains(e.target)) {
         highlighted.classList.remove("highlighted");
