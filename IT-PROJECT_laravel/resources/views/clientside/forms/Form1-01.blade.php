@@ -157,12 +157,12 @@
                                     </label>
                                 </div>
                             </fieldset>
-                            <div class="form-field">
+                            {{-- <div class="form-field">
                                 <label class="form-label">DATE OF EXAM (mm/dd/yy)</label>
                                 <input class="form1-01-input" type="date" name="date_of_exam"
                                     max="{{ date('Y-m-d') }}"
                                     value="{{ isset($form['date_of_exam']) ? $form['date_of_exam'] : '' }}">
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="step-actions">
                             @error('exam_type')
