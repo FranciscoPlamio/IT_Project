@@ -121,7 +121,8 @@ public function certRequest(Request $request)
 
     $user = User::find($request->session()->get('admin'));
 
-    $requests = \App\Models\Forms\FormsTransactions::whereRaw("LOWER(status) = 'in progress'")
+    // ✅ Use case-insensitive regex instead of whereRaw
+    $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^in progress$', 'i'))
         ->orderBy('created_at', 'desc')
         ->get();
 
