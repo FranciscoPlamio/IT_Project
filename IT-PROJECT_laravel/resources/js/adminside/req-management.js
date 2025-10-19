@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const searchInput = document.querySelector("#searchInput");
     const tableRows = document.querySelectorAll(".table-container table tbody tr");
 
-    // ✅ Search filter
+    // Search filter
     if (searchInput) {
         searchInput.addEventListener("keyup", function () {
             const filter = searchInput.value.toLowerCase();
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ✅ Add click event to "See more"
+    //Add click event to "See more"
     const seeMoreLinks = document.querySelectorAll(".see-more");
     seeMoreLinks.forEach(link => {
         link.addEventListener("click", function () {
@@ -131,8 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const latestFormFilter = document.getElementById("latestFormFilter");
   const applyLatest = document.getElementById("applyLatestFilter");
 
-  // 🔍 Search for Latest Requests
-// 🔍 Search for Latest Requests (with highlight)
+// Search for Latest Requests (with highlight)
 if (latestSearch) {
   latestSearch.addEventListener("keyup", function () {
     const filter = latestSearch.value.toLowerCase();
@@ -154,7 +153,7 @@ if (latestSearch) {
 }
 
 
-  // ⚙️ Toggle Filter Dropdown (Latest)
+  //Toggle Filter Dropdown (Latest)
   if (latestFilterIcon) {
     latestFilterIcon.addEventListener("click", () => {
       latestDropdown.style.display =
@@ -162,7 +161,7 @@ if (latestSearch) {
     });
   }
 
-  // 🗓️ Apply Filter for Latest
+  //Apply Filter for Latest
   if (applyLatest) {
     applyLatest.addEventListener("click", () => {
       const selectedDate = latestDateFilter.value;
@@ -217,39 +216,32 @@ if (latestSearch) {
   const historyRows = document.querySelectorAll(".table-container1 tbody tr");
   const historyFilterIcon = document.querySelector(".half-section:last-of-type .filter-bar img");
   const historyDropdown = document.getElementById("filterDropdownLatest");
+  const historyDateType = document.getElementById("historyDateType");
   const historyDateFilter = document.getElementById("dateFilterLatest");
   const historyFormFilter = document.getElementById("formFilterLatest");
   const applyHistory = document.getElementById("applyFilterLatest");
 
-  // 🔍 Search for History Table
-// 🔍 Search for History Table (with highlight)
-if (historySearch) {
-  historySearch.addEventListener("keyup", function () {
-    const filter = historySearch.value.toLowerCase();
-    const selectedDateType = document.getElementById("historyDateType").value;
-
-    historyRows.forEach(row => {
-    // Use column index depending on selection
-    const dateText = selectedDateType === "release"
-        ? row.children[3].textContent.trim() // Release Date column
-        : row.children[2].textContent.trim(); // Request Date column
-
-
-      if (text.includes(filter) && filter !== "") {
-        row.style.display = "";
-        row.classList.add("highlight-gray");  // ✅ highlight when matched
-      } else if (filter === "") {
-        row.style.display = "";
-        row.classList.remove("highlight-gray");
-      } else {
-        row.style.display = "none";
-        row.classList.remove("highlight-gray");
-      }
+  // Search with Highlight 
+  if (historySearch) {
+    historySearch.addEventListener("keyup", function () {
+      const filter = historySearch.value.toLowerCase();
+      historyRows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(filter) && filter !== "") {
+          row.style.display = "";
+          row.classList.add("highlight-gray");
+        } else if (filter === "") {
+          row.style.display = "";
+          row.classList.remove("highlight-gray");
+        } else {
+          row.style.display = "none";
+          row.classList.remove("highlight-gray");
+        }
+      });
     });
-  });
-}
+  }
 
-  // ⚙️ Toggle Filter Dropdown (History)
+  // Toggle Filter Dropdown (History)
   if (historyFilterIcon) {
     historyFilterIcon.addEventListener("click", () => {
       historyDropdown.style.display =
@@ -257,63 +249,61 @@ if (historySearch) {
     });
   }
 
-  // 🗓️ Apply Filter for History
-if (applyHistory) {
-  applyHistory.addEventListener("click", () => {
-    const selectedDateType = document.getElementById("historyDateType").value;
-    const selectedDate = historyDateFilter.value;
-    const selectedForm = historyFormFilter.value.toLowerCase();
-    const now = new Date();
+  // Apply Filter for History
+  if (applyHistory) {
+    applyHistory.addEventListener("click", () => {
+      const selectedDateType = historyDateType.value;
+      const selectedDate = historyDateFilter.value;
+      const selectedForm = historyFormFilter.value.toLowerCase();
+      const now = new Date();
 
-    let startDate = null;
-    let endDate = new Date(now);
+      let startDate = null;
+      let endDate = new Date(now);
 
-    if (selectedDate === "week") {
-      const day = now.getDay();
-      startDate = new Date(now);
-      startDate.setDate(now.getDate() - day);
-      endDate = new Date(startDate);
-      endDate.setDate(startDate.getDate() + 6);
-    } else if (selectedDate === "month") {
-      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    } else if (selectedDate === "3months") {
-      startDate = new Date(now.getFullYear(), now.getMonth() - 2, 1);
-    } else if (selectedDate === "6months") {
-      startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1);
-    } else if (selectedDate === "year") {
-      startDate = new Date(now.getFullYear(), 0, 1);
-      endDate = new Date(now.getFullYear(), 11, 31);
-    }
-
-    historyRows.forEach(row => {
-      // Choose which date column to filter by
-      const dateText = selectedDateType === "release"
-        ? row.children[3].textContent.trim() // Release Date
-        : row.children[2].textContent.trim(); // Request Date
-
-      const formType = row.children[1].textContent.toLowerCase();
-      let showRow = true;
-
-      const rowDate = new Date(dateText);
-      if (selectedDate !== "all" && startDate) {
-        if (rowDate < startDate || rowDate > endDate) showRow = false;
+      if (selectedDate === "week") {
+        const day = now.getDay();
+        startDate = new Date(now);
+        startDate.setDate(now.getDate() - day);
+        endDate = new Date(startDate);
+        endDate.setDate(startDate.getDate() + 6);
+      } else if (selectedDate === "month") {
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      } else if (selectedDate === "3months") {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 2, 1);
+      } else if (selectedDate === "6months") {
+        startDate = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+      } else if (selectedDate === "year") {
+        startDate = new Date(now.getFullYear(), 0, 1);
+        endDate = new Date(now.getFullYear(), 11, 31);
       }
 
-      if (selectedForm !== "all") {
-        const formCode = formType.replace(/\s+/g, '').toLowerCase();
-        if (!formCode.includes(selectedForm)) showRow = false;
-      }
+      historyRows.forEach(row => {
+        const dateText = selectedDateType === "release"
+          ? row.children[3].textContent.trim()
+          : row.children[2].textContent.trim();
 
-      row.style.display = showRow ? "" : "none";
+        const formType = row.children[1].textContent.toLowerCase();
+        const rowDate = new Date(dateText);
+        let showRow = true;
+
+        if (selectedDate !== "all" && startDate) {
+          if (rowDate < startDate || rowDate > endDate) showRow = false;
+        }
+
+        if (selectedForm !== "all") {
+          const formCode = formType.replace(/\s+/g, "").toLowerCase();
+          if (!formCode.includes(selectedForm)) showRow = false;
+        }
+
+        row.style.display = showRow ? "" : "none";
+      });
+
+      historyDropdown.style.display = "none";
     });
+  }
 
-    historyDropdown.style.display = "none";
-  });
-}
-
-
-  // ✅ Close any dropdown when clicking outside
+  // Close any dropdown when clicking outside
   document.addEventListener("click", (e) => {
     if (!latestDropdown.contains(e.target) && !latestFilterIcon.contains(e.target)) {
       latestDropdown.style.display = "none";

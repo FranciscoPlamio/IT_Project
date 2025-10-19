@@ -167,7 +167,7 @@ public function updateStatus(Request $request)
             return response()->json(['success' => false, 'message' => 'Form not found']);
         }
 
-        // ✅ Make sure status is explicitly set (cancel or done)
+        // Make sure status is explicitly set (cancel or done)
         $newStatus = strtolower(trim($request->status));
 
         if (!in_array($newStatus, ['done', 'cancel'])) {
@@ -177,7 +177,7 @@ public function updateStatus(Request $request)
             ]);
         }
 
-        // ✅ Update status and timestamp
+        // Update status and timestamp
         $form->status = $newStatus;
         $form->updated_at = now();
         $form->save();

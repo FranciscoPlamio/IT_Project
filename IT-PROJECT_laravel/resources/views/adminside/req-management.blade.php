@@ -121,7 +121,7 @@
           <tbody>
           @foreach($latestRequests as $req)
           <tr class="request-row {{ isset($highlight) && $highlight == $req->form_id ? 'highlighted' : '' }}">
-              <td>{{ $req->_id }}</td>
+              <td>#{{ $req->_id }}</td>
               <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
               <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
               <td class="see-more">
