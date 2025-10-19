@@ -115,7 +115,7 @@
               <th>Request Date</th>
               <th>Attachment</th>
               <th>Certificate</th>
-              <th>Decision</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -134,12 +134,14 @@
                   </button>
               </td>
               <td>
+                @if($req->payment_status === 'paid')
                   <button class="badge-btn complete" onclick="updateStatus('{{ $req->_id }}', 'done')">
                       Complete
                   </button>
-                  <button class="badge-btn progress"  onclick="updateStatus('{{ $req->_id }}', 'cancel')">
-                      Cancel
-                  </button>
+                @endif
+                <button class="badge-btn progress" onclick="updateStatus('{{ $req->_id }}', 'cancel')">
+                    Cancel
+                </button>
               </td>
           </tr>
           @endforeach

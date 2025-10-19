@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Forms\Form1_01;
 use App\Models\Forms\FormsTransactions;
 use MongoDB\BSON\Regex;
+use MongoDB\BSON\ObjectId;
 use Carbon\Carbon;
 
 class AdminAuthController extends Controller   // <-- rename this
@@ -217,5 +218,47 @@ public function billPay(Request $request)
     return view('adminside.bill-pay', compact('payments'));
 }
 
+public function setPaid(Request $request)
+{
+    $formId = $request->input('form_id');
+
+    if (!$formId) {
+        return response()->json(['success' => false, 'message' => 'Missing form id'], 400);
+    }
+
+    // Try to find the form record. Supports both string _id and ObjectId.
+    $form = FormsTransactions::where('_id', $formId)->first();
+
+    if (!$form) {
+        // Try ObjectId lookup if the driver stores as BSON ObjectId
+        try {
+            $maybeOid = new ObjectId($formId);
+            $form = FormsTransactions::where('_id', $maybeOid)->first();
+        } catch (\Throwable $e) {
+            // ignore
+        }
+    }
+
+    if (!$form) {
+        return response()->json(['success' => false, 'message' => 'Form not found'], 404);
+    }
+
+    $current = strtolower((string) ($form->payment_status ?? 'pending'));
+    if ($current === 'paid') {
+        return response()->json(['success' => false, 'message' => 'Already paid'], 400);
+    }
+
+    // Update
+    $form->payment_status = 'paid';
+    $form->updated_at = now();
+    $form->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Payment marked as paid',
+        'payment_status' => $form->payment_status,
+        'updated_at' => $form->updated_at,
+    ]);
+}
 
 }

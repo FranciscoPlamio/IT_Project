@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Payment Monitoring</title>
 @vite(['resources/css/adminside/bill-pay.css', 'resources/js/adminside/bill-pay.js'])
 </head>
@@ -64,11 +65,12 @@
               <th>Payment Date</th>
               <th>Attachment</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
          <tbody>
           @forelse($payments as $p)
-            <tr>
+            <tr data-id="{{ $p->_id }}">
               <td>#{{ $p->form_id ?? $p->_id }}</td>
               <td>{{ ucfirst($p->form_type ?? 'N/A') }}</td>
               <td>{{ $p->formatted_date }}</td>
@@ -77,13 +79,21 @@
                   See more <img src="{{ asset('images/see-icon.png') }}" alt="">
                 </span>
               </td>
-              <td class="{{ strtolower($p->payment_status ?? 'pending') }}">
+
+              <td class="payment-status {{ strtolower($p->payment_status ?? 'pending') }}">
                 {{ ucfirst($p->payment_status ?? 'Pending') }}
+              </td>
+              <td class="action-cell">
+                @if(strtolower($p->payment_status ?? 'pending') === 'pending')
+                  <button class="badge-btn paid" onclick="setPaid('{{ (string)$p->_id }}', this)">Paid</button>
+                @else
+                  <span style="color:gray"></span>
+                @endif
               </td>
             </tr>
           @empty
             <tr>
-              <td colspan="5" style="text-align:center; color:#888;">No payment records found.</td>
+              <td colspan="6">No payment records found.</td>
             </tr>
           @endforelse
         </tbody>

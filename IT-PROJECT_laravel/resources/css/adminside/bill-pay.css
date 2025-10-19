@@ -349,3 +349,25 @@ td.failed {
 .cancel-btn:hover {
   background: #757575;
 }
+
+.badge-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.badge-btn.paid {
+  background: #00c49a;
+  color: #fff;
+}
+
+.badge-btn.paid:hover {
+  background-color: #5a5a5a;
+}
