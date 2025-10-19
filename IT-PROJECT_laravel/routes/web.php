@@ -136,7 +136,7 @@ Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus']
 
 Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
 
-Route::post('/admin/set-paid', [AdminAuthController::class, 'setPaid'])->name('admin.setPaid');
+Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
 
 Route::prefix('adminside')
     ->middleware(\App\Http\Middleware\BlockMobileDevices::class)

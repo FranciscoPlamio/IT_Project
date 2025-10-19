@@ -205,19 +205,21 @@ public function billPay(Request $request)
     if (!$request->session()->has('admin')) {
         return redirect()->route('admin.login');
     }
-    // Fetch only payments with 'paid' or 'pending' status
-    $payments = \App\Models\Forms\FormsTransactions::whereIn('payment_status', ['paid', 'pending', 'unpaid']) //fix unpaid
+
+    // Fetch records with paid, pending, or unpaid statuses
+    $payments = \App\Models\Forms\FormsTransactions::whereIn('payment_status', ['paid', 'pending', 'unpaid'])
         ->orderBy('created_at', 'desc')
         ->get();
 
-    // Format the created_at for display
+    // Format display date: show only if paid
     foreach ($payments as $p) {
-        $p->formatted_date = $p->created_at
-            ? \Carbon\Carbon::parse($p->created_at)->format('M d Y')
-            : 'N/A';
+        if (strtolower($p->payment_status ?? '') === 'paid' && !empty($p->payment_date)) {
+            $p->formatted_date = \Carbon\Carbon::parse($p->payment_date)->format('M d Y');
+        } else {
+            $p->formatted_date = ''; // empty if not paid
+        }
     }
 
-    // Pass data to the view
     return view('adminside.bill-pay', compact('payments'));
 }
 
@@ -229,16 +231,14 @@ public function setPaid(Request $request)
         return response()->json(['success' => false, 'message' => 'Missing form id'], 400);
     }
 
-    // Try to find the form record. Supports both string _id and ObjectId.
     $form = FormsTransactions::where('_id', $formId)->first();
 
     if (!$form) {
-        // Try ObjectId lookup if the driver stores as BSON ObjectId
         try {
-            $maybeOid = new ObjectId($formId);
+            $maybeOid = new \MongoDB\BSON\ObjectId($formId);
             $form = FormsTransactions::where('_id', $maybeOid)->first();
         } catch (\Throwable $e) {
-            // ignore
+            // ignored
         }
     }
 
@@ -246,13 +246,14 @@ public function setPaid(Request $request)
         return response()->json(['success' => false, 'message' => 'Form not found'], 404);
     }
 
-    $current = strtolower((string) ($form->payment_status ?? 'pending'));
+    $current = strtolower((string)($form->payment_status ?? 'pending'));
     if ($current === 'paid') {
         return response()->json(['success' => false, 'message' => 'Already paid'], 400);
     }
 
-    // Update
+    // ✅ Update both status and payment_date
     $form->payment_status = 'paid';
+    $form->payment_date = now(); // record payment time
     $form->updated_at = now();
     $form->save();
 
@@ -260,7 +261,7 @@ public function setPaid(Request $request)
         'success' => true,
         'message' => 'Payment marked as paid',
         'payment_status' => $form->payment_status,
-        'updated_at' => $form->updated_at,
+        'payment_date' => $form->payment_date->format('M d Y'),
     ]);
 }
 

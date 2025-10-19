@@ -73,7 +73,7 @@
             <tr data-id="{{ $p->_id }}">
               <td>#{{ $p->form_id ?? $p->_id }}</td>
               <td>{{ ucfirst($p->form_type ?? 'N/A') }}</td>
-              <td>{{ $p->formatted_date }}</td>
+              <td class="payment-date">{{ $p->formatted_date }}</td>
               <td>
                 <span class="see-more">
                   See more <img src="{{ asset('images/see-icon.png') }}" alt="">
@@ -83,6 +83,7 @@
               <td class="payment-status {{ strtolower($p->payment_status ?? 'pending') }}">
                 {{ ucfirst($p->payment_status ?? 'Pending') }}
               </td>
+
               <td class="action-cell">
                 @if(strtolower($p->payment_status ?? 'pending') === 'pending')
                   <button class="badge-btn paid" onclick="setPaid('{{ (string)$p->_id }}', this)">Paid</button>
@@ -92,9 +93,7 @@
               </td>
             </tr>
           @empty
-            <tr>
-              <td colspan="6">No payment records found.</td>
-            </tr>
+            <tr><td colspan="6">No payment records found.</td></tr>
           @endforelse
         </tbody>
         </table>
