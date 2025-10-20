@@ -157,6 +157,7 @@ class FormsController extends Controller
 
         // Verify Google reCAPTCHA first
         if (!$this->verifyRecaptcha($request)) {
+            // dd($request); // for debugging
             return back()->with('captcha_error', 'Please verify that you are not a robot.')
                 ->withInput();
         }
@@ -173,11 +174,11 @@ class FormsController extends Controller
                 $rules['attributes']
             );
         } catch (ValidationException $e) {
-            //  Dump the validation errors (for debugging)
+            // //  Dump the validation errors (for debugging)
             // dd('Validation failed:', $e->errors(), $e->getMessage());
 
-            // or log it instead of dumping:
-            // \Log::error('Validation failed', ['errors' => $e->errors()]);
+            // // or log it instead of dumping:
+            // Log::error('Validation failed', ['errors' => $e->errors()]);
 
             // or redirect back manually:
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -261,9 +262,10 @@ class FormsController extends Controller
             'response' => $token,
             'remoteip' => $request->ip(),
         ]);
+        // dd($response); // for debugging (security checking eg. Local IP address on handlerstats)
 
         $result = $response->json();
-
+        // dd($result); // for debugging (whether the CAPTCHA was successful or not)
         return isset($result['success']) && $result['success'] === true;
     }
 }

@@ -312,6 +312,15 @@
                                     @enderror
                                 </div>
                             </div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
                             <div class="step-actions"><button class="form1-01-btn" type="button"
                                     id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
@@ -322,6 +331,7 @@
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
                 const stepsOrder = ['application', 'applicant', 'personnel']; // declaration removed
@@ -361,7 +371,10 @@
                         // Check if sub-categories are selected based on main category
                         const rceRadio = document.querySelector('input[name="category"][value="rce"]');
                         const mobileRadio = document.querySelector('input[name="category"][value="mobile"]');
+                        const cpeRadio = document.querySelector('input[name="category"][value="cpe"]');
 
+                        // Only validate sub-categories if RCE or Mobile is selected
+                        // CPE doesn't have sub-categories, so no additional validation needed
                         if (rceRadio && rceRadio.checked) {
                             const rceCategoryRadios = document.querySelectorAll('input[name="rce_category"]');
                             const anyRceCategoryChecked = Array.from(rceCategoryRadios).some(radio => radio
@@ -393,6 +406,9 @@
                                 ok = false;
                             }
                         }
+
+                        // CPE is a standalone category with no sub-categories
+                        // No additional validation needed for CPE
                     });
                     return ok;
                 }
@@ -519,6 +535,18 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
 
                         // -- commented AJAX for now--

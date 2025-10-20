@@ -628,6 +628,15 @@
                             <div style="text-align:center;font-size:1.1rem;font-weight:bold;margin-top:16px;">
                                 NOTARY PUBLIC
                             </div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button class="form1-01-btn" type="button"
                                     id="validateBtn">Proceed to Validation</button></div>
@@ -637,6 +646,7 @@
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
                 const stepsOrder = ['affiant', 'handset', 'sim', 'documents', 'incident', 'signature'];
@@ -710,6 +720,18 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
                     });
                 }
