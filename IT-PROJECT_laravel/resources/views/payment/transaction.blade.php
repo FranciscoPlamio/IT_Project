@@ -29,7 +29,7 @@
                 <li><a href="{{ url('/') }}">Home</a></li>
                 <li><a href="https://car.ntc.gov.ph/category/announcements/news-and-updates/" target="_blank"
                         rel="noopener">News</a></li>
-                <li><a href="{{ route('forms.display') }}">Forms</a></li>
+                <li><a href="{{ route('display.forms') }}">Forms</a></li>
                 <li><a id="navApplyLink" href="{{ route('email-auth') }}">Apply</a></li>
                 <li><a href="https://car.ntc.gov.ph/i-announcements-and-news/mandate-mission-vision/" target="_blank"
                         rel="noopener">About us</a></li>
@@ -196,7 +196,7 @@
                                             <div class="maps-container">
                                                 <iframe
                                                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.1691931618943!2d120.61167997460701!3d16.416231330056114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a1543cf37fcf%3A0x643f8ec7f155d470!2sNational%20Telecommunications%20Commission!5e0!3m2!1sen!2sph!4v1761151402669!5m2!1sen!2sph"
-                                                    width="100%" height="300" style="border:0;"
+                                                    width="100%" height="375" style="border:0;"
                                                     allowfullscreen="" loading="lazy"
                                                     referrerpolicy="no-referrer-when-downgrade">
                                                 </iframe>
@@ -208,22 +208,23 @@
 
                             <div class="cash-bottom-section">
                                 <div class="payment-instructions">
-                                    <h4>How to Pay</h4>
+                                    <h4 style="text-align: center;">How to Pay</h4>
                                     <ul class="instruction-list" style="list-style-type: bullet;">
-                                        <li>Bring a valid ID and required documents</li>
-                                        <li>Show your reference number</li>
-                                        <li>Pay the required amount</li>
-                                        <li>Get your receipt</li>
-                                        <li>Keep the receipt for your records</li>
+                                        <li>Please bring a valid identification card along with all required documents.
+                                        </li>
+                                        <li>Present your reference number upon arrival.</li>
+                                        <li>Pay the required amount.</li>
+                                        <li>Obtain your official receipt.</li>
                                     </ul>
                                 </div>
 
                                 <div class="important-notes">
-                                    <h4>Note</h4>
+                                    <h4 style="text-align: center;">Reminders</h4>
                                     <ul class="notes-list" style="list-style-type: bullet;">
-                                        <li>Come at least 30 minutes before closing</li>
-                                        <li>Your application is processed after payment</li>
-                                        <li>Contact us if you have questions</li>
+                                        <li>Arrive at least 30 minutes prior to closing time.</li>
+                                        <li>Your application will be processed only after the payment has been
+                                            completed.</li>
+                                        <li>For any inquiries, please do not hesitate to contact us.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -234,7 +235,7 @@
 
             <!-- Action Buttons -->
             <div class="transaction-actions">
-                <a href="{{ route('forms.display') }}" class="btn-primary">Continue to Forms</a>
+                <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
             </div>
         </div>
     </main>
@@ -245,7 +246,7 @@
                 // In a real application, this would make an API call to cancel the transaction
                 alert('Transaction has been cancelled.');
                 // Redirect back to payment method selection
-                window.location.href = '{{ route('forms.display') }}';
+                window.location.href = '{{ route('display.forms') }}';
             }
         }
 
