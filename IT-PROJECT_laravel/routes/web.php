@@ -38,8 +38,9 @@ Route::get('/payment/cash', function () {
 })->name('payment.cash');
 
 // Transaction details page
-Route::get('/payment/transaction', function () {
-    return view('payment.transaction');
+Route::get('/payment/transaction', function (Request $request) {
+    $paymentMethod = $request->get('payment_method', 'cash');
+    return view('payment.transaction', compact('paymentMethod'));
 })->name('payment.transaction');
 
 // Requirements page

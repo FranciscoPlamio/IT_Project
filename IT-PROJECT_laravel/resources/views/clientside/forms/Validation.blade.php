@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Validation - Application for Radio Operator Examination (Form 1-01)</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -27,10 +28,37 @@
             <div class="form1-01-header">Validation Phase: Review Your Application</div>
             <div class="validation-section-title">Please review your details before final submission:</div>
             <dl class="validation-list" id="validationList"></dl>
+
+            {{-- Payment Method Selection --}}
+            <div class="payment-method-container">
+                <h2>Choose Payment Method</h2>
+                <p>Select your preferred payment method to proceed with your application.</p>
+
+                <div class="payment-options">
+                    <div class="payment-option" data-method="cash" id="cashOption">
+                        <div class="payment-option-check">✓</div>
+                        <div class="payment-option-icon cash-icon">₱</div>
+                        <div>
+                            <h3 class="payment-option-title">Cash Payment</h3>
+                            <p class="payment-option-description">Pay in cash at our office during business hours</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" data-method="gcash" id="gcashOption">
+                        <div class="payment-option-check">✓</div>
+                        <div class="payment-option-icon gcash-icon">G</div>
+                        <div>
+                            <h3 class="payment-option-title">GCash Payment</h3>
+                            <p class="payment-option-description">Pay securely online using your GCash account</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
             <div class="validation-btns">
                 <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-                <a class="form1-01-btn" id="proceedPayment" href="">Proceed to
-                    Payment</a>
+                <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
                 <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
                     style="display:none;">
                     @csrf
@@ -727,8 +755,84 @@
 
             link.addEventListener('click', function(event) {
                 event.preventDefault(); // prevent normal link behavior
-                form.submit(); // submit the hidden form
+
+                // Check if payment method is selected
+                if (!selectedPaymentMethod) {
+                    alert('Please select a payment method before proceeding.');
+                    return;
+                }
+
+                // Redirect to transaction page with payment method
+                window.location.href = '{{ route('payment.transaction') }}?payment_method=' + selectedPaymentMethod;
             });
+
+            // Payment Method Selection JavaScript
+            const cashOption = document.getElementById('cashOption');
+            const gcashOption = document.getElementById('gcashOption');
+            const proceedPaymentBtn = document.getElementById('proceedPayment');
+
+            let selectedPaymentMethod = null;
+
+            // Payment option click handlers
+            if (cashOption) {
+                cashOption.addEventListener('click', function() {
+                    selectPaymentMethod('cash');
+                });
+            }
+
+            if (gcashOption) {
+                gcashOption.addEventListener('click', function() {
+                    selectPaymentMethod('gcash');
+                });
+            }
+
+            function selectPaymentMethod(method) {
+                // Remove previous selection
+                document.querySelectorAll('.payment-option').forEach(option => {
+                    option.classList.remove('selected');
+                });
+
+                // Add selection to clicked option
+                if (method === 'cash' && cashOption) {
+                    cashOption.classList.add('selected');
+                } else if (method === 'gcash' && gcashOption) {
+                    gcashOption.classList.add('selected');
+                }
+
+                selectedPaymentMethod = method;
+                if (proceedPaymentBtn) {
+                    proceedPaymentBtn.removeAttribute('disabled');
+                    proceedPaymentBtn.style.opacity = '1';
+                    proceedPaymentBtn.style.cursor = 'pointer';
+                }
+            }
+
+            // Add keyboard navigation support for payment options
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    if (document.activeElement === cashOption || document.activeElement === gcashOption) {
+                        document.activeElement.click();
+                    }
+                }
+            });
+
+            // Make payment options focusable for keyboard navigation
+            if (cashOption) cashOption.setAttribute('tabindex', '0');
+            if (gcashOption) gcashOption.setAttribute('tabindex', '0');
+
+            // Add focus styles for payment options
+            const paymentStyle = document.createElement('style');
+            paymentStyle.textContent = `
+                .payment-option:focus {
+                    outline: 2px solid #3b82f6;
+                    outline-offset: 2px;
+                }
+                #proceedPayment:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+            `;
+            document.head.appendChild(paymentStyle);
 
             // Show only the active form (fallback to whichever has data)
             if (activeForm === '1-01' && server101) {
