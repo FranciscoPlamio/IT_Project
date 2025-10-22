@@ -5,11 +5,8 @@
             <a href="{{ url('/') }}">Home</a>
         </li>
         {{-- {{ dd(Route::currentRouteName()) }} --}}
-        <li class="{{ Route::is('forms.display') ? 'active' : '' }}">
-            <a href="{{ route('forms.display') }}">Forms</a>
-        </li>
-        <li class="{{ Request::is('email-auth*') ? 'active' : '' }}">
-            <a id="navApplyLink" href="{{ route('email-auth') }}">Apply</a>
+        <li class="{{ Route::is('display.forms') ? 'active' : '' }}">
+            <a href="{{ route('display.forms') }}">Apply</a>
         </li>
         <li>
             <a href="https://car.ntc.gov.ph/category/announcements/news-and-updates/" target="_blank"

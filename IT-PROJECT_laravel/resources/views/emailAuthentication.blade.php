@@ -68,7 +68,7 @@
             <span id="resendCountdown" style="display:none; color:#6c757d; font-size:14px;"></span>
             <div id="auth-success" style="display:none; margin-top:24px;">
                 <p style="color:#22b573;font-weight:600;">Email authenticated! Proceed to the forms list:</p>
-                <a href="{{ route('forms.list') }}" class="email-auth-btn"
+                <a href="{{ route('display.forms') }}" class="email-auth-btn"
                     style="display:inline-block;width:auto;padding:10px 32px;">Go to Forms List</a>
             </div>
             <div id="auth-error" style="display:none; margin-top:24px;">
