@@ -47,6 +47,112 @@ class FormsController extends Controller
         return view('formsList', compact('forms'));
     }
 
+    public function index2()
+    {
+        $forms = [
+            [ //0
+                'formType' => '1-01',
+                'title' => 'Form No. NTC 1-01 - Application for Radio Operator Examination',
+                'image' => 'images/Form1-01_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-01.pdf',
+            ],
+            [ //1
+                'formType' => '1-02',
+                'title' => 'Form No. NTC 1-02 - Application for Radio Operator Certificate',
+                'image' => 'images/Form1-02_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-02.pdf',
+            ],
+            [ //2
+                'formType' => '1-03',
+                'title' => 'Form No. NTC 1-03 - Application for Amateur Radio Operator Certificate/AmateurRadio Station License',
+                'image' => 'images/Form1-03_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-03.pdf',
+            ],
+            [ //3
+                'formType' => '1-09',
+                'title' => 'Form No. NTC 1-09 - Aplication for Permit to Purchase/Possess/Sell/Transfer',
+                'image' => 'images/Form1-09_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-09.pdf',
+            ],
+            [ //4
+                'formType' => '1-11',
+                'title' => 'Form No. NTC 1-11 - Application for Construction Permit/Radio Station License',
+                'image' => 'images/Form1-11_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-11.pdf',
+            ],
+            [ //5
+                'formType' => '1-13',
+                'title' => 'Form No. NTC 1-13 - Form D (For Modification)',
+                'image' => 'images/Form1-13_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-13.pdf',
+            ],
+            [ //6
+                'formType' => '1-14',
+                'title' => 'Form No. NTC 1-14 - Application for Temporary Permit to Propagate/Demonstrate',
+                'image' => 'images/Form1-14_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-14.pdf',
+            ],
+            [ //7
+                'formType' => '1-16',
+                'title' => 'Form No. NTC 1-16 - Application for Permit to Transport Radio Transmitter/Transceiver',
+                'image' => 'images/Form1-16_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-16.pdf',
+            ],
+            [ //8
+                'formType' => '1-18',
+                'title' => 'Form No. NTC 1-18 - Application for Dealer/Manufacturer/Service/Center/Retailer/Reseller/Permit/CPE
+                                Supplier Accreditation',
+                'image' => 'images/Form1-18_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-18.pdf',
+            ],
+            [ //9
+                'formType' => '1-19',
+                'title' => 'Form No. NTC 1-19 - Application for Certificate of Registration (WDN/SRD/RFID/SRRS/Public Trunk Radio)',
+                'image' => 'images/Form1-19_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-19.pdf',
+            ],
+            [ //10
+                'formType' => '1-20',
+                'title' => 'Form No. NTC 1-20 - Application for Certificate of Registration - Value Added Services',
+                'image' => 'images/Form1-20_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-20.pdf',
+            ],
+            [ //11
+                'formType' => '1-21',
+                'title' => 'Form No. NTC 1-21 - Application for Duplicate of Permit/License/Certificate',
+                'image' => 'images/Form1-21_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-21.pdf',
+            ],
+            [ //12
+                'formType' => '1-22',
+                'title' => 'Form No. NTC 1-22 - Application for TVRO Registration Certificate/TVRO/Station License/CATV Station
+                                License',
+                'image' => 'images/Form1-22_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-22.pdf',
+            ],
+            [ //13
+                'formType' => '1-24',
+                'title' => 'Form No. NTC 1-24 - Affidavit of Ownership and Loss with Undertaking',
+                'image' => 'images/Form1-24_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-24.pdf',
+            ],
+            [ //14
+                'formType' => '1-25',
+                'title' => 'Form No. NTC 1-25 - Complaint Form',
+                'image' => 'images/Form1-25_image.png',
+                'pdf' => 'forms/Form-No.-NTC-1-25.pdf',
+            ],
+            [ //15
+                'formType' => '1-26',
+                'title' => 'Form No. NTC 1-25 - Complaint on Text Message',
+                'image' => 'images/Form1-25-text-message.png',
+                'pdf' => 'forms/Form-No.-NTC-1-25-text-message.pdf',
+            ],
+        ];
+
+        return view('displayForms', compact('forms'));
+    }
+
 
     public function show($formType)
     {
