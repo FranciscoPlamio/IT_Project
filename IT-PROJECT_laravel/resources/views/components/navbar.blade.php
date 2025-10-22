@@ -20,5 +20,12 @@
             <a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/"
                 target="_blank" rel="noopener">Contact us</a>
         </li>
+        <!-- temp menu -->
+        <li class="{{ request()->routeIs('admin.login') ? 'active' : '' }}">
+            <a id="navAdmin" href="{{ route('admin.login') }}">Adminside</a>
+        </li>
+
+
+
     </ul>
 </nav>
