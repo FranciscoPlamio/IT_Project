@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Forms\FormsTransactions;
+use Illuminate\Support\Str;
 
 class FormManager
 {
@@ -54,9 +55,9 @@ class FormManager
             'form_type' => $formType,
             'user_id' => $userId,
             'status' => $transactionData['status'] ?? 'pending',
-            'payment_status' => $transactionData['payment_status'] ?? 'unpaid',
+            'payment_status' => $transactionData['payment_status'] ?? 'pending',
             'payment_method' => $transactionData['payment_method'] ?? null,
-            'payment_reference' => $transactionData['payment_reference'] ?? null,
+            'payment_reference' => self::generateReferenceNumber(),
             'payment_amount' => $transactionData['payment_amount'] ?? null,
             'payment_date' => $transactionData['payment_date'] ?? null,
             'remarks' => $transactionData['remarks'] ?? null,
@@ -93,5 +94,10 @@ class FormManager
     public static function convertType(string $formType)
     {
         return ucfirst(str_replace('-', '_', $formType));
+    }
+
+    public static function generateReferenceNumber($length = 10)
+    {
+        return strtoupper(Str::random($length));
     }
 }

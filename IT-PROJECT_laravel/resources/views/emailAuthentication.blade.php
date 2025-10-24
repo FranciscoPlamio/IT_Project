@@ -56,6 +56,8 @@
                 <p style="color:#28a745;font-weight:600;">Authentication email sent! Please check your inbox or spam
                     folder and click the verification link.</p>
             </div>
+
+            <!-- Form -->
             <form class="email-auth-form" id="emailAuthForm" data-redirect-url="{{ route('forms.list') }}">
                 <label class="email-auth-label" for="email">Email address</label>
                 <input class="email-auth-input" type="email" id="email" name="email"
@@ -66,7 +68,7 @@
             <span id="resendCountdown" style="display:none; color:#6c757d; font-size:14px;"></span>
             <div id="auth-success" style="display:none; margin-top:24px;">
                 <p style="color:#22b573;font-weight:600;">Email authenticated! Proceed to the forms list:</p>
-                <a href="{{ route('forms.list') }}" class="email-auth-btn"
+                <a href="{{ route('display.forms') }}" class="email-auth-btn"
                     style="display:inline-block;width:auto;padding:10px 32px;">Go to Forms List</a>
             </div>
             <div id="auth-error" style="display:none; margin-top:24px;">
@@ -255,7 +257,6 @@
 
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
-
                 const email = emailInput.value.trim();
                 if (!email) {
                     showError('Please enter your email address.');
@@ -298,6 +299,7 @@
                     })
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         hideLoading();
 
                         if (data.success) {

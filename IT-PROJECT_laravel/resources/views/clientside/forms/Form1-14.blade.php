@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Temporary Permit to Propagate/Demonstrate (Form 1-14)'" :form-header="['formNo' => 'NTC 1-14', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Temporary Permit to Propagate/Demonstrate (Form 1-14)'" :form-header="['formNo' => 'NTC 1-14', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form114" method="POST"
@@ -26,8 +26,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="particulars">Station/Equipment <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -97,7 +97,7 @@
                     <section class="step-content" id="step-personal">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-3">
+                            <div class="form-grid-1">
                                 <div class="form-field">
                                     <label class="form-label">Applicant</label>
                                     <input class="form1-01-input" type="text" name="applicant" required
@@ -106,77 +106,9 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
-                                <div class="form-field">
-                                    <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email" required
-                                        value="{{ old('email', $form['email'] ?? '') }}">
-                                    @error('email')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Contact Number</label>
-                                    <input class="form1-01-input" type="text" name="contact_number" required
-                                        value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
-                                    @error('contact_number')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Unit/Rm/Bldg No.</label>
-                                    <input class="form1-01-input" type="text" name="unit_no"
-                                        value="{{ old('unit_no', $form['unit_no'] ?? '') }}">
-                                    @error('unit_no')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Street</label>
-                                    <input class="form1-01-input" type="text" name="street"
-                                        value="{{ old('street', $form['street'] ?? '') }}">
-                                    @error('street')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Barangay</label>
-                                    <input class="form1-01-input" type="text" name="barangay"
-                                        value="{{ old('barangay', $form['barangay'] ?? '') }}">
-                                    @error('barangay')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">City/Municipality</label>
-                                    <input class="form1-01-input" type="text" name="city"
-                                        value="{{ old('city', $form['city'] ?? '') }}">
-                                    @error('city')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field">
-                                    <label class="form-label">Province</label>
-                                    <input class="form1-01-input" type="text" name="province"
-                                        value="{{ old('province', $form['province'] ?? '') }}">
-                                    @error('province')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="form-field">
-                                    <label class="form-label">Zip Code</label>
-                                    <input class="form1-01-input" type="text" name="zip_code"
-                                        value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
-                                    @error('zip_code')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                            </div>
+                            <!-- address fields -->
+                            <x-forms.address-fields :form="$form ?? []" />
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
                                     data-next>Next</button></div>
@@ -292,20 +224,29 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['nature', 'class', 'service', 'personal', 'particulars', 'declaration'];
+                const stepsOrder = ['nature', 'personal', 'particulars']; // declaration removed
                 const stepsList = document.getElementById('stepsList14');
                 const form = document.getElementById('form114');
                 const validationLink14 = document.getElementById('validationLink14');
@@ -414,7 +355,7 @@
                     go(-1);
                 }));
 
-                const validateBtn = document.getElementById('validateBtn14');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         if (!warningCheckbox.checked) {
@@ -427,6 +368,18 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
 
                         // -- commented AJAX for now--

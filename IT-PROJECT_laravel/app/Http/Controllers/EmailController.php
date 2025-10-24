@@ -17,8 +17,58 @@ class EmailController extends Controller
      */
     public function showEmailAuth()
     {
+        if (session()->has('email_verified')) {
+            return redirect()->route('forms.list');
+        }
         return view('emailAuthentication');
     }
+
+    public function test(Request $request)
+    {
+        try {
+            $validated = Validator::make($request->all(), [
+                'email' => 'required|email|max:255'
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Email is valid!',
+                'data' => $validated,
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    //     try {
+    //     $validated = $request->validate([
+    //         'email' => 'required|email|max:255',
+    //     ]);
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Email is valid!',
+    //         'data' => $validated,
+    //     ]);
+    // } catch (\Illuminate\Validation\ValidationException $e) {
+    //     return response()->json([
+    //         'success' => false,
+    //         'errors' => $e->errors(),
+    //     ], 422);
+    // } catch (\Exception $e) {
+    //     return response()->json([
+    //         'success' => false,
+    //         'message' => $e->getMessage(),
+    //     ], 500);
+    // }
 
     /**
      * Send authentication email
@@ -111,17 +161,22 @@ class EmailController extends Controller
             ], 500);
         }
 
+        // Retrieve intended URL from session
+        $redirectUrl = session('intended_url', route('forms.list'));
+        session()->forget('intended_url'); // Clean up after use
+
+
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Email verified successfully!',
                 'email' => $email,
-                'redirect_url' => route('forms.list')
+                'redirect_url' => $redirectUrl
             ]);
         }
 
         // Redirect to forms list for direct browser requests
-        return redirect()->route('forms.list')->with('success', 'Email verified successfully!');
+        return redirect($redirectUrl)->with('success', 'Email verified successfully!');
     }
 
     /**

@@ -1,7 +1,10 @@
-<x-layout :title="'Application for Duplicate of Permit/License/Certificate (Form 1-21)'" :form-header="['formNo' => 'NTC 1-21', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
-
+<x-layout :title="'Application for Duplicate of Permit/License/Certificate (Form 1-21)'" :form-header="['formNo' => 'NTC 1-21', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']">
     <main>
-        <form class="form1-01-container" id="form121">
+        <form class="form1-01-container" id="form121" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+            <input type="hidden" name="form_token"
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR DUPLICATE OF PERMIT/LICENSE/CERTIFICATE</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
             <div class="form1-01-warning">
@@ -21,8 +24,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="circumstances">Circumstances <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -30,34 +33,21 @@
                     <section class="step-content active" id="step-applicant">
                         <fieldset>
                             <legend>Applicant's Details</legend>
-                            <div class="form-grid-3">
-                                <div class="form-field"><label class="form-label">Applicant</label><input
-                                        class="form1-01-input" type="text" name="applicant" required></div>
-                                <div class="form-field"><label class="form-label">Email Address</label><input
-                                        class="form1-01-input" type="email" name="email" required></div>
-                                <div class="form-field"><label class="form-label">Contact Number</label><input
-                                        class="form1-01-input" type="text" name="contact_number" required></div>
+                            <div class="form-grid-1">
+                                <div class="form-field">
+                                    <label class="form-label">Applicant</label>
+                                    <input class="form1-01-input" type="text" name="applicant" required
+                                        value="{{ old('applicant', $form['applicant'] ?? '') }}">
+                                    @error('applicant')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Unit/Rm/Bldg No.</label><input
-                                        class="form1-01-input" type="text" name="unit_no"></div>
-                                <div class="form-field"><label class="form-label">Street</label><input
-                                        class="form1-01-input" type="text" name="street"></div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Barangay</label><input
-                                        class="form1-01-input" type="text" name="barangay"></div>
-                                <div class="form-field"><label class="form-label">Municipality/City</label><input
-                                        class="form1-01-input" type="text" name="city"></div>
-                            </div>
-                            <div class="form-grid-2">
-                                <div class="form-field"><label class="form-label">Province</label><input
-                                        class="form1-01-input" type="text" name="province"></div>
-                                <div class="form-field"><label class="form-label">Zip Code</label><input
-                                        class="form1-01-input" type="text" name="zip_code"></div>
-                            </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
-                            </div>
+                            <!-- address fields -->
+                            <x-forms.address-fields :form="$form ?? []" />
+                            <div class="step-actions"><button type="button" class="btn-secondary"
+                                    data-prev>Back</button><button type="button" class="btn-primary"
+                                    data-next>Next</button></div>
                         </fieldset>
                     </section>
 
@@ -67,9 +57,19 @@
                             <div class="form-grid-2">
                                 <div class="form-field"><label class="form-label">Permit/License/Certificate
                                         No.</label><input class="form1-01-input" type="text"
-                                        name="permit_license_certificate_no" required></div>
+                                        name="permit_license_certificate_no" required
+                                        value="{{ old('permit_license_certificate_no', $form['permit_license_certificate_no'] ?? '') }}">
+                                    @error('permit_license_certificate_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                                 <div class="form-field"><label class="form-label">Validity</label><input
-                                        class="form1-01-input" type="date" name="validity"></div>
+                                        class="form1-01-input" type="date" name="validity"
+                                        value="{{ old('validity', $form['validity'] ?? '') }}">
+                                    @error('validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -82,26 +82,37 @@
                             <legend>State Briefly Circumstances Relating to the Lost/Mutilation of
                                 Permit/License/Certificate</legend>
                             <div class="form-field">
-                                <textarea class="form1-01-input" name="circumstances" rows="6"
-                                    style="resize:vertical;width:100%;max-width:none;"
+                                <textarea class="form1-01-input" name="circumstances" rows="6" style="resize:vertical;width:100%;max-width:none;"
                                     placeholder="Please provide detailed explanation of how the permit/license/certificate was lost or mutilated..."
-                                    required></textarea>
+                                    required>{{ old('circumstances', $form['circumstances'] ?? '') }}</textarea>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            @error('circumstances')
+                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['applicant', 'permit', 'circumstances', 'declaration'];
+                const stepsOrder = ['applicant', 'permit', 'circumstances']; // declaration removed
                 const stepsList = document.getElementById('stepsList21');
                 const form = document.getElementById('form121');
                 const warningCheckbox = document.getElementById('warning-agreement');
@@ -203,30 +214,27 @@
                     go(-1);
                 }));
 
-                const validateBtn = document.getElementById('validateBtn21');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', () => {
-                        if (!warningCheckbox.checked) {
-                            alert('Please check the agreement checkbox first before proceeding.');
-                            return;
-                        }
-                        if (!validateActiveStep()) return;
+                    validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) entries[key] = value.name || '';
-                            else {
-                                if (entries[key]) {
-                                    if (Array.isArray(entries[key])) entries[key].push(value);
-                                    else entries[key] = [entries[key], value];
-                                } else entries[key] = value;
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
                             }
-                        }
-                        localStorage.setItem('form1-21-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-21');
-                        if (validationLink21) {
-                            window.location.href = validationLink21.href;
-                        }
+                        } catch (e) {}
+                        form.submit();
                     });
                 }
                 showStep(stepsOrder[0]);

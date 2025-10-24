@@ -74,21 +74,22 @@
         @else
             @foreach($recentApps as $app)
                 @php
-                    $cls = $app->status === 'In Progress' ? 'progress' : strtolower(str_replace(' ', '-', $app->status));
-                    $icon = $app->status === 'Done' ? 'Done.png' : ($app->status === 'In Progress' ? 'In-prog.png' : 'Pending.png');
+                    $status = strtolower(trim($app->status ?? 'in progress'));
+                    $isInProgress = $status === 'in progress';
+                    $targetRoute = $isInProgress 
+                        ? route('adminside.cert-request', ['highlight' => $app->form_id])
+                        : route('adminside.req-management', ['highlight' => $app->form_id, 'section' => 'history']);
                 @endphp
 
-                <a href="{{ route('adminside.cert-request', ['highlight' => $app->form_id]) }}" 
-                class="log-item-link" 
-                style="text-decoration:none; color:inherit;">
+                <a href="{{ $targetRoute }}" class="log-item-link" style="text-decoration:none; color:inherit;">
                     <div class="log-item">
                         <div>
-                            <h3>#{{ ($app->form_id) }} | {{ strtoupper($app->form_type) }}</h3><br>
+                            <h3>#{{ $app->form_id }} | {{ ucfirst($app->form_type) }}</h3><br>
                             <h5>{{ optional($app->created_at)->format('d F Y') }}</h5>
                         </div>
-                        <div class="status {{ $cls }}">
+                        <div class="status {{ $app->status_class }}">
                             <img src="{{ asset('images/' . $app->status_icon) }}" alt="">
-                            <span>{{ ucfirst($app->normalized_status) }}</span>
+                            <span>{{ ucfirst($status) }}</span>
                         </div>
                     </div>
                 </a>

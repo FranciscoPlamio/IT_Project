@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Forms\Form1_01;
 use App\Models\Forms\FormsTransactions;
 use MongoDB\BSON\Regex;
+use MongoDB\BSON\ObjectId;
 use Carbon\Carbon;
 
 class AdminAuthController extends Controller   // <-- rename this
@@ -55,9 +56,9 @@ public function login(Request $request)
 public function dashboard(Request $request)
 {
     // Optional: login session validation
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     // Get admin user info
     $user = User::find($request->session()->get('admin'));
@@ -114,14 +115,16 @@ public function dashboard(Request $request)
 
 public function certRequest(Request $request)
 {
-    // Optional: check session
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     $user = User::find($request->session()->get('admin'));
 
-    $requests = FormsTransactions::orderBy('created_at', 'desc')->get();
+    // ✅ Use case-insensitive regex instead of whereRaw
+    $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^in progress$', 'i'))
+        ->orderBy('created_at', 'desc')
+        ->get();
 
     foreach ($requests as $req) {
         $req->formatted_date = $req->created_at
@@ -129,7 +132,6 @@ public function certRequest(Request $request)
             : 'No date';
     }
 
-    // Get the ID to highlight
     $highlight = $request->query('highlight');
 
     return view('adminside.cert-request', compact('user', 'requests', 'highlight'));
@@ -137,27 +139,28 @@ public function certRequest(Request $request)
 
 public function requestManagement(Request $request)
 {
-    // Optional: check if admin is logged in
-    // if (!$request->session()->has('admin')) {
-    //     return redirect()->route('admin.login');
-    // }
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
 
     $user = User::find($request->session()->get('admin'));
 
-    // Import MongoDB\BSON\Regex at the top of the file:
-    // use MongoDB\BSON\Regex;
-
-    // === Fetch Latest Requests (NOT "done", case-insensitive) ===
-     $latestRequests = FormsTransactions::where('status', '!=', 'done')
+    //  Latest (not done or cancel)
+    $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancel'])
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $historyRequests = FormsTransactions::where('status', 'done')
-        ->orderBy('created_at', 'desc')
+    //  History (done or cancel)
+    $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel'])
+        ->orderBy('updated_at', 'desc')
         ->get();
 
-    return view('adminside.req-management', compact('latestRequests', 'historyRequests'));
+    $highlight = $request->query('highlight');
+    $section = $request->query('section', 'latest'); // 'history' or 'latest'
+
+    return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests', 'highlight', 'section'));
 }
+
 
 public function updateStatus(Request $request)
 {
@@ -168,16 +171,98 @@ public function updateStatus(Request $request)
             return response()->json(['success' => false, 'message' => 'Form not found']);
         }
 
-        $form->status = $request->status;
+        // Make sure status is explicitly set (cancel or done)
+        $newStatus = strtolower(trim($request->status));
+
+        if (!in_array($newStatus, ['done', 'cancel'])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid status value'
+            ]);
+        }
+
+        // Update status and timestamp
+        $form->status = $newStatus;
+        $form->updated_at = now();
         $form->save();
 
-        return response()->json(['success' => true, 'message' => 'Status updated']);
+        return response()->json([
+            'success' => true,
+            'message' => "Status updated to {$newStatus}",
+            'status' => $form->status,
+            'updated_at' => $form->updated_at
+        ]);
     } catch (\Exception $e) {
         return response()->json([
             'success' => false,
             'message' => 'Server error: ' . $e->getMessage()
         ]);
     }
+}
+
+public function billPay(Request $request)
+{
+    if (!$request->session()->has('admin')) {
+        return redirect()->route('admin.login');
+    }
+
+    // Fetch records with paid, pending, or unpaid statuses
+    $payments = \App\Models\Forms\FormsTransactions::whereIn('payment_status', ['paid', 'pending', 'unpaid'])
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // Format display date: show only if paid
+    foreach ($payments as $p) {
+        if (strtolower($p->payment_status ?? '') === 'paid' && !empty($p->payment_date)) {
+            $p->formatted_date = \Carbon\Carbon::parse($p->payment_date)->format('M d Y');
+        } else {
+            $p->formatted_date = ''; // empty if not paid
+        }
+    }
+
+    return view('adminside.bill-pay', compact('payments'));
+}
+
+public function setPaid(Request $request)
+{
+    $formId = $request->input('form_id');
+
+    if (!$formId) {
+        return response()->json(['success' => false, 'message' => 'Missing form id'], 400);
+    }
+
+    $form = FormsTransactions::where('_id', $formId)->first();
+
+    if (!$form) {
+        try {
+            $maybeOid = new \MongoDB\BSON\ObjectId($formId);
+            $form = FormsTransactions::where('_id', $maybeOid)->first();
+        } catch (\Throwable $e) {
+            // ignored
+        }
+    }
+
+    if (!$form) {
+        return response()->json(['success' => false, 'message' => 'Form not found'], 404);
+    }
+
+    $current = strtolower((string)($form->payment_status ?? 'pending'));
+    if ($current === 'paid') {
+        return response()->json(['success' => false, 'message' => 'Already paid'], 400);
+    }
+
+    // ✅ Update both status and payment_date
+    $form->payment_status = 'paid';
+    $form->payment_date = now(); // record payment time
+    $form->updated_at = now();
+    $form->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Payment marked as paid',
+        'payment_status' => $form->payment_status,
+        'payment_date' => $form->payment_date->format('M d Y'),
+    ]);
 }
 
 }

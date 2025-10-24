@@ -1,7 +1,11 @@
-<x-layout :title="'Complaint Form (Form 1-25)'" :form-header="['formNo' => 'NTC 1-25', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Complaint Form (Form 1-25)'" :form-header="['formNo' => 'NTC 1-25', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
-        <form class="form1-01-container" id="form125">
+        <form class="form1-01-container" id="form125" method="POST"
+            action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            @csrf
+            <input type="hidden" name="form_token"
+                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">COMPLAINT FORM</div>
             <div class="form1-01-note"><strong>NOTE:</strong> Indicate "N/A" for items not applicable.</div>
 
@@ -19,31 +23,45 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="documents">Supporting Documents <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="signature">Signature & Date <span
-                                class="step-status">&nbsp;</span></li>
                     </ul>
                 </aside>
 
                 <div>
                     <section class="step-content active" id="step-complainant">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>Complainant's Details</legend>
                             <div class="form-field">
                                 <label class="form-label">Name</label>
-                                <input class="form1-01-input" type="text" name="complainant_name" required>
+                                <input class="form1-01-input" type="text" name="complainant_name" required
+                                    value="{{ old('complainant_name', $form['complainant_name'] ?? '') }}">
+                                @error('complainant_name')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-field">
                                 <label class="form-label">Postal Address</label>
-                                <input class="form1-01-input" type="text" name="postal_address" required>
+                                <input class="form1-01-input" type="text" name="postal_address" required
+                                    value="{{ old('postal_address', $form['postal_address'] ?? '') }}">
+                                @error('postal_address')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Email Address</label>
-                                    <input class="form1-01-input" type="email" name="email_address">
+                                    <input class="form1-01-input" type="email" name="email_address"
+                                        value="{{ old('email_address', $form['email_address'] ?? '') }}">
+                                    @error('email_address')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Contact Number</label>
-                                    <input class="form1-01-input" type="text" name="contact_number">
+                                    <input class="form1-01-input" type="text" name="contact_number"
+                                        value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
+                                    @error('contact_number')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
@@ -52,19 +70,31 @@
                     </section>
 
                     <section class="step-content" id="step-provider">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>Particulars of Service Provider</legend>
                             <div class="form-field">
                                 <label class="form-label">Business Name</label>
-                                <input class="form1-01-input" type="text" name="business_name" required>
+                                <input class="form1-01-input" type="text" name="business_name" required
+                                    value="{{ old('business_name', $form['business_name'] ?? '') }}">
+                                @error('business_name')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-field">
                                 <label class="form-label">Business Address</label>
-                                <input class="form1-01-input" type="text" name="business_address" required>
+                                <input class="form1-01-input" type="text" name="business_address" required
+                                    value="{{ old('business_address', $form['business_address'] ?? '') }}">
+                                @error('business_address')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="form-field">
                                 <label class="form-label">Contact Number</label>
-                                <input class="form1-01-input" type="text" name="provider_contact_number">
+                                <input class="form1-01-input" type="text" name="provider_contact_number"
+                                    value="{{ old('provider_contact_number', $form['provider_contact_number'] ?? '') }}">
+                                @error('provider_contact_number')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -73,37 +103,60 @@
                     </section>
 
                     <section class="step-content" id="step-complaint">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>Nature of Complaint</legend>
-                            <div class="form-grid-2" data-require-one="input[type=checkbox]">
+                            <div class="form-grid-2" data-require-one="input[type=radio]">
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="complaint_type" value="billing"> Billing
-                                        Complaint</label>
-                                    <label><input type="checkbox" name="complaint_type" value="spam"> Spam</label>
-                                    <label><input type="checkbox" name="complaint_type" value="scam">
+                                    <label><input type="radio" name="complaint_type" value="billing"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'billing' ? 'checked' : '' }}>
+                                        Billing Complaint</label>
+                                    <label><input type="radio" name="complaint_type" value="spam"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'spam' ? 'checked' : '' }}>
+                                        Spam</label>
+                                    <label><input type="radio" name="complaint_type" value="scam"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'scam' ? 'checked' : '' }}>
                                         Scam</label>
-                                    <label><input type="checkbox" name="complaint_type" value="fair_use"> Fair
-                                        Use</label>
+                                    <label><input type="radio" name="complaint_type" value="fair_use"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'fair_use' ? 'checked' : '' }}>
+                                        Fair Use</label>
+                                    @error('complaint_type')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label><input type="checkbox" name="complaint_type" value="poor_service">
+                                    <label><input type="radio" name="complaint_type" value="poor_service"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'poor_service' ? 'checked' : '' }}>
                                         Poor Service (Technical Service/Customer Service)</label>
-                                    <label><input type="checkbox" name="complaint_type" value="denial_subscription">
+                                    <label><input type="radio" name="complaint_type" value="denial_subscription"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'denial_subscription' ? 'checked' : '' }}>
                                         Denial of Subscription Plan</label>
-                                    <label><input type="checkbox" name="complaint_type" value="others"> Others,
-                                        please specify:</label>
+                                    <label><input type="radio" name="complaint_type" value="others"
+                                            {{ old('complaint_type', $form['complaint_type'] ?? '') == 'others' ? 'checked' : '' }}>
+                                        Others, please specify:</label>
                                     <input class="form1-01-input" type="text" name="complaint_type_others"
-                                        placeholder="Specify other complaint type">
+                                        placeholder="Specify other complaint type"
+                                        value="{{ old('complaint_type_others', $form['complaint_type_others'] ?? '') }}">
+                                    @error('complaint_type_others')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="form-grid-2">
                                 <div class="form-field">
                                     <label class="form-label">Date of incident/transaction</label>
-                                    <input class="form1-01-input" type="date" name="incident_date" required>
+                                    <input class="form1-01-input" type="date" name="incident_date" required
+                                        value="{{ old('incident_date', $form['incident_date'] ?? '') }}">
+                                    @error('incident_date')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                                 <div class="form-field">
                                     <label class="form-label">Time of incident/transaction</label>
-                                    <input class="form1-01-input" type="time" name="incident_time">
+                                    <input class="form1-01-input" type="time" name="incident_time"
+                                        value="{{ old('incident_time', $form['incident_time'] ?? '') }}">
+                                    @error('incident_time')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -113,12 +166,15 @@
                     </section>
 
                     <section class="step-content" id="step-details">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>State Briefly the Details of Complaint</legend>
                             <div class="form-field">
                                 <textarea class="form1-01-input" name="complaint_details" rows="6"
                                     style="resize:vertical;width:100%;max-width:none;"
-                                    placeholder="Please provide detailed information about your complaint..." required></textarea>
+                                    placeholder="Please provide detailed information about your complaint..." required>{{ old('complaint_details', $form['complaint_details'] ?? '') }}</textarea>
+                                @error('complaint_details')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="step-actions"><button type="button" class="btn-secondary"
                                     data-prev>Back</button><button type="button" class="btn-primary"
@@ -127,12 +183,15 @@
                     </section>
 
                     <section class="step-content" id="step-documents">
-                        <fieldset>
+                        <fieldset class="fieldset-compact">
                             <legend>Attached Proof/Supporting Documents</legend>
                             <div class="form-field">
                                 <textarea class="form1-01-input" name="supporting_documents" rows="4"
                                     style="resize:vertical;width:100%;max-width:none;"
-                                    placeholder="Please list all supporting documents attached to this complaint..."></textarea>
+                                    placeholder="Please list all supporting documents attached to this complaint...">{{ old('supporting_documents', $form['supporting_documents'] ?? '') }}</textarea>
+                                @error('supporting_documents')
+                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <fieldset style="margin-top:16px;">
                                 <legend>Note</legend>
@@ -145,33 +204,26 @@
                                     only in matters relative to the complaint.
                                 </div>
                             </fieldset>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
                         </fieldset>
-                    </section>
-
-                    <section class="step-content" id="step-signature">
-                        <fieldset>
-                            <legend>Signature and Date</legend>
-                            <div class="form1-01-signature-row">
-                                <div class="form1-01-signature-col">
-                                    <input class="signature-line-input" type="text" name="signature_name"
-                                        placeholder="Signature over Printed Name of Applicant" />
-                                    <input class="form1-01-input" type="date" name="date_accomplished"
-                                        placeholder="Date Accomplished" style="max-width:180px;width:100%;"
-                                        required />
-                                </div>
+                        <!-- CAPTCHA fields -->
+                        <div class="form-field"
+                            style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                            <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}">
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn25">Proceed to Validation</button></div>
-                        </fieldset>
+                            @if (session('captcha_error'))
+                                <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                            @endif
+                        </div>
+                        <div class="step-actions">
+                            <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
+                                Validation</button>
+                        </div>
                     </section>
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
                 const stepsOrder = ['complainant', 'provider', 'complaint', 'details', 'documents', 'signature'];
@@ -237,26 +289,27 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn25');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', () => {
-                        if (!validateActiveStep()) return;
+                    validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
-                        const entries = {};
-                        for (const [key, value] of formData.entries()) {
-                            if (value instanceof File) entries[key] = value.name || '';
-                            else {
-                                if (entries[key]) {
-                                    if (Array.isArray(entries[key])) entries[key].push(value);
-                                    else entries[key] = [entries[key], value];
-                                } else entries[key] = value;
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
                             }
-                        }
-                        localStorage.setItem('form1-25-data', JSON.stringify(entries));
-                        localStorage.setItem('active-form', '1-25');
-                        if (validationLink25) {
-                            window.location.href = validationLink25.href;
-                        }
+                        } catch (e) {}
+                        form.submit();
                     });
                 }
                 showStep(stepsOrder[0]);

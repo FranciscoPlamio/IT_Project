@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']">
 
     <main>
 
@@ -20,15 +20,15 @@
             <div class="form-layout">
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
-                    <ul class="steps-list" id="stepsList01">
+                    <ul class="steps-list" id="stepsList01" style="pointer-events: none;">
                         <li class="step-item active" data-step="application">Application Details <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="applicant">Applicant Details <span
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="assistance">Request for Assistance <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -129,7 +129,7 @@
                         <div class="form-grid-3">
                             <fieldset class="fieldset-compact">
                                 <legend>Radiotelephony</legend>
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field">
                                     <label>
                                         <input type="radio" name="exam_type" value="1phn_e1234"
                                             {{ $examTypeValue == '1phn_e1234' ? 'checked' : '' }}>
@@ -150,7 +150,7 @@
                             </fieldset>
                             <fieldset class="fieldset-compact">
                                 <legend>Restricted Radiotelephone</legend>
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field">
                                     <label>
                                         <input type="radio" name="exam_type" value="rroc_aircraft_e1"
                                             {{ $examTypeValue == 'rroc_aircraft_e1' ? 'checked' : '' }}>
@@ -158,15 +158,13 @@
                                     </label>
                                 </div>
                             </fieldset>
-                            <div class="form-field">
+                            {{-- <div class="form-field">
                                 <label class="form-label">DATE OF EXAM (mm/dd/yy)</label>
                                 <input class="form1-01-input" type="date" name="date_of_exam"
                                     max="{{ date('Y-m-d') }}"
                                     value="{{ isset($form['date_of_exam']) ? $form['date_of_exam'] : '' }}">
-                            </div>
+                            </div> --}}
                         </div>
-
-
                         <div class="step-actions">
                             @error('exam_type')
                                 <p class="text-red text-lg text-center w-full">{{ $message }}</p>
@@ -255,13 +253,22 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button>
+                            </div>
                         </fieldset>
                     </section>
 
-                    <section class="step-content" id="step-declaration">
+                    {{-- <section class="step-content" id="step-declaration">
                         <fieldset>
                             <legend>DECLARATION</legend>
                             <div class="form1-01-declaration">
@@ -353,19 +360,15 @@
                                 <div style="text-align:center;font-size:0.97rem;margin-top:8px;">THIS FORM IS NOT FOR
                                     SALE AND CAN BE REPRODUCED</div>
                             </fieldset>
-
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button>
-                            </div>
                         </fieldset>
-                    </section>
+                    </section> --}}
                 </div>
             </div>
         </form>
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['application', 'applicant', 'assistance', 'declaration'];
+                const stepsOrder = ['application', 'applicant', 'assistance']; // declaration removed
                 const stepsList = document.getElementById('stepsList01');
                 const form = document.getElementById('form101');
                 const validationLink = document.getElementById('validationLink');
@@ -434,6 +437,8 @@
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
                     let valid = true;
+
+                    // Check required fields
                     section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
                         if (el.type === 'radio') {
                             const name = el.name;
@@ -444,7 +449,16 @@
                             valid = false;
                         }
                     });
-                    if (!validateGroups(section)) valid = false;
+
+                    // Special validation for exam type selection in application step
+                    if (step === 'application') {
+                        const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
+                        if (!examTypeSelected) {
+                            valid = false;
+                        }
+                    }
+
+                    // Note: All exam types are now in a single radio group, so no group validation needed
 
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
@@ -471,11 +485,25 @@
                 });
 
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
+                    if (validateActiveStep()) {
+                        go(1);
+                    } else {
+                        // Show validation error for current step
+                        const currentStepName = currentStep();
+                        let errorMessage = 'Please complete all required fields before proceeding.';
+
+                        if (currentStepName === 'application') {
+                            errorMessage = 'Please select an exam type before proceeding.';
+                        }
+
+                        const errorDiv = document.createElement('p');
+                        errorDiv.className = 'text-red text-sm mt-1';
+                        errorDiv.textContent = errorMessage;
+                        const existingError = document.querySelector(
+                            `#step-${currentStepName} .step-actions .text-red`);
+                        if (existingError) existingError.remove();
+                        document.querySelector(`#step-${currentStepName} .step-actions`).appendChild(errorDiv);
                     }
-                    if (validateActiveStep()) go(1);
                 }));
                 document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
                     if (!warningCheckbox.checked) {
@@ -497,7 +525,28 @@
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);
                         });
-                        if (!validateActiveStep()) return;
+                        if (!validateActiveStep()) {
+                            // Show validation error message
+                            const errorDiv = document.createElement('p');
+                            errorDiv.className = 'text-red text-sm mt-1';
+                            errorDiv.textContent = 'Please complete all required fields before proceeding.';
+                            const existingError = document.querySelector('.step-actions .text-red');
+                            if (existingError) existingError.remove();
+                            document.querySelector('.step-actions').appendChild(errorDiv);
+                            return;
+                        }
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
 
                         // -- commented AJAX for now--

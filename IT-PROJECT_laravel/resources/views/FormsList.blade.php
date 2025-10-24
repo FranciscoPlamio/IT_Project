@@ -60,13 +60,6 @@
                                 </td>
                             </tr>
                         @endforeach
-                        <tr>
-                            <td>Form No. NTC 1-25</td>
-                            <td>Complaint on Text Message</td>
-                            <td><a class="forms-signup-btn" href="{{ route('forms.1-25-text-message') }}">Sign
-                                    up</a></td>
-                        </tr>
-
                     </tbody>
                 </table>
             </div>

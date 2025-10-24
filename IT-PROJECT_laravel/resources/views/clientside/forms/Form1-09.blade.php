@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Permit to Purchase/Possess/Sell/Transfer (Form 1-09)'" :form-header="['formNo' => 'NTC 1-09', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Permit to Purchase/Possess/Sell/Transfer (Form 1-09)'" :form-header="['formNo' => 'NTC 1-09', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form109" method="POST"
@@ -30,8 +30,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="intended">Intended Use <span class="step-status">&nbsp;</span>
                         </li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -159,10 +159,11 @@
                                 </fieldset>
                             </div>
                         </div>
-                        <div class="step-actions"><button type="button" class="btn-secondary"
-                                data-prev>Back</button><button type="button" class="btn-primary"
-                                data-next>Next</button></div>
-
+                        <div class="form-field">
+                            <div class="step-actions"><button type="button" class="btn-secondary"
+                                    data-prev>Back</button><button type="button" class="btn-primary"
+                                    data-next>Next</button></div>
+                        </div>
                     </section>
 
                     <section class="step-content" id="step-station">
@@ -351,23 +352,31 @@
                                 @error('others_use_specify')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
-
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended', 'declaration'];
+                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended']; // declaration removed
                 const stepsList = document.getElementById('stepsList09');
                 const form = document.getElementById('form109');
                 const validationLink09 = document.getElementById('validationLink09');
@@ -486,11 +495,18 @@
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
-                        if (!warningCheckbox.checked) {
-                            alert('Please check the agreement checkbox first before proceeding.');
-                            return;
-                        }
-
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);

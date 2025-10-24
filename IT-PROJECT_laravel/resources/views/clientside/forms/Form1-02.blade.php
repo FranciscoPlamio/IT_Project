@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
     <main>
         <form class="form1-01-container" id="form102" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -15,7 +15,7 @@
                 <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
                         akin</label></div>
             </div>
-
+            {{-- style="pointer-events: none; --}}
             <div class="form-layout">
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
@@ -26,8 +26,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="exam">Exam/Seminar Details <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -194,19 +194,33 @@
                                 <div class="form-field">
                                     <label class="form-label">Place of Exam/Seminar</label>
                                     <x-forms.exam-fields :form="$form ?? []" />
-
+                                    <!-- CAPTCHA fields -->
+                                    <div class="form-field"
+                                        style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                        <div class="g-recaptcha"
+                                            data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                        @if (session('captcha_error'))
+                                            <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                        @endif
+                                    </div>
+                                    <div class="step-actions"><button class="form1-01-btn" type="button"
+                                            id="validateBtn">Proceed to Validation</button>
+                                    </div>
+                                </div>
+                            </div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'exam', 'declaration'];
+                const stepsOrder = ['personal', 'application', 'exam', ]; // declaration removed
                 const stepsList = document.getElementById('stepsList02');
                 const form = document.getElementById('form102');
                 const validationLink02 = document.getElementById('validationLink02');
@@ -329,10 +343,19 @@
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', () => {
-                        if (!warningCheckbox.checked) {
-                            alert('Please check the agreement checkbox first before proceeding.');
-                            return;
-                        }
+                        if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);

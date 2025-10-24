@@ -1,4 +1,4 @@
-<x-layout :title="'Form D (For Modification) (Form 1-13))'" :form-header="['formNo' => 'NTC 1-13', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']" :show-navbar="false">
+<x-layout :title="'Form D (For Modification) (Form 1-13))'" :form-header="['formNo' => 'NTC 1-13', 'revisionNo' => '01', 'revisionDate' => '03/31/2021']">
 
     <main>
         <form class="form1-01-container" id="form113" method="POST"
@@ -12,20 +12,19 @@
                 <aside class="steps-sidebar">
                     <div class="steps-sidebar-header">Individual Appointment</div>
                     <ul class="steps-list" id="stepsList13">
-                        <li class="step-item active" data-step="applicant">Applicant <span
+                        <li class="step-item" data-step="particulars">Application Details<span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="particulars">Particulars <span
-                                class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="sign">Signature <span class="step-status">&nbsp;</span>
                         </li>
                     </ul>
                 </aside>
 
                 <div>
-                    <section class="step-content active" id="step-applicant">
+
+                    <section class="step-content" id="step-particulars">
                         <fieldset>
-                            <legend>Applicant</legend>
+                            <legend>Particulars</legend>
                             <div class="form-grid-1">
+                                <label class="form-label">Applicant</label>
                                 <div class="form-field">
                                     <input class="form1-01-input" type="text" name="applicant"
                                         value="{{ old('applicant', $form['applicant'] ?? '') }}">
@@ -34,14 +33,6 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
-                            </div>
-                        </fieldset>
-                    </section>
-
-                    <section class="step-content" id="step-particulars">
-                        <fieldset>
-                            <legend>Particulars</legend>
                             <div class="table-container">
                                 <table class="form-table">
                                     <thead>
@@ -159,8 +150,7 @@
                                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                                 @enderror
                                             </td>
-                                            <td><input class="table-input" type="text"
-                                                    name="proposed_configuration"
+                                            <td><input class="table-input" type="text" name="proposed_configuration"
                                                     value="{{ old('proposed_configuration', $form['proposed_configuration'] ?? '') }}">
                                                 @error('proposed_configuration')
                                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -305,13 +295,21 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <section class="step-content" id="step-sign">
+                    {{-- <section class="step-content" id="step-sign">
                         <fieldset>
                             <legend>Signature and Date</legend>
                             <div class="form1-01-signature-row">
@@ -334,13 +332,14 @@
                                     data-prev>Back</button><button class="form1-01-btn" type="button"
                                     id="validateBtn13">Proceed to Validation</button></div>
                         </fieldset>
-                    </section>
+                    </section> --}}
                 </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['applicant', 'particulars', 'sign'];
+                const stepsOrder = ['particulars']; // sign, applicant removed
                 const stepsList = document.getElementById('stepsList13');
                 const form = document.getElementById('form113');
                 const validationLink13 = document.getElementById('validationLink13');
@@ -391,7 +390,7 @@
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
 
-                const validateBtn = document.getElementById('validateBtn13');
+                const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
                         const formData = new FormData(form);
@@ -399,6 +398,18 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
 
                         // -- commented AJAX for now--

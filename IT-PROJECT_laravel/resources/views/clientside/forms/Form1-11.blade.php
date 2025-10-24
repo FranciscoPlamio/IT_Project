@@ -1,4 +1,4 @@
-<x-layout :title="'Application for Construction Permit/Radio Station License (Form 1-11)'" :form-header="['formNo' => 'NTC 1-11', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']" :show-navbar="false">
+<x-layout :title="'Application for Construction Permit/Radio Station License (Form 1-11)'" :form-header="['formNo' => 'NTC 1-11', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
         <form class="form1-01-container" id="form111" method="POST"
@@ -26,8 +26,8 @@
                                 class="step-status">&nbsp;</span></li>
                         <li class="step-item" data-step="particulars">Station/Equipment/Antenna <span
                                 class="step-status">&nbsp;</span></li>
-                        <li class="step-item" data-step="declaration">Declaration <span
-                                class="step-status">&nbsp;</span></li>
+                        {{-- <li class="step-item" data-step="declaration">Declaration <span
+                                class="step-status">&nbsp;</span></li> --}}
                     </ul>
                 </aside>
 
@@ -346,22 +346,30 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button type="button" class="btn-primary"
-                                    data-next>Next</button></div>
+                            <!-- CAPTCHA fields -->
+                            <div class="form-field"
+                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                <div class="g-recaptcha"
+                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                @if (session('captcha_error'))
+                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                @endif
+                            </div>
+                            <div class="step-actions"><button class="form1-01-btn" type="button"
+                                    id="validateBtn">Proceed to Validation</button></div>
                         </fieldset>
                     </section>
 
-                    <!-- Declaration fields component -->
-                    <x-forms.declaration-field :form="$form ?? []" />
+                    {{-- <!-- Declaration fields component -->
+                    <x-forms.declaration-field :form="$form ?? []" /> --}}
                 </div>
             </div>
         </form>
 
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['application', 'personal', 'particulars', 'declaration'];
+                const stepsOrder = ['application', 'personal', 'particulars']; // declaration removed
                 const stepsList = document.getElementById('stepsList11');
                 const form = document.getElementById('form111');
                 const validationLink11 = document.getElementById('validationLink11');
@@ -484,6 +492,18 @@
                             console.log(`${key}: ${value}`);
                         });
                         if (!validateActiveStep()) return;
+                        try {
+                            if (window.grecaptcha) {
+                                const captchaResponse = window.grecaptcha.getResponse();
+                                if (!captchaResponse) {
+                                    const errorDiv = document.createElement('p');
+                                    errorDiv.className = 'text-red text-sm mt-1';
+                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    return;
+                                }
+                            }
+                        } catch (e) {}
                         form.submit();
 
                         // -- commented AJAX for now--

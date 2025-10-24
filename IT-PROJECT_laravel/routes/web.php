@@ -9,17 +9,16 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FormsController;
 use App\Http\Middleware\BlockMobileDevices;
 
+// Default index route
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('homepage');
+})->name('homepage');
 
 // Forms list page
 Route::get('/forms-list', [FormsController::class, 'index'])->name('forms.list')->middleware('email.verified');
 
 // Forms showcase gallery
-Route::get('/Displayforms', function () {
-    return view('Displayforms');
-})->name('forms.display');
+Route::get('/display-forms', [FormsController::class, 'index2'])->name('display.forms');
 
 // Payment method selection page
 Route::get('/payment/method', function () {
@@ -37,8 +36,9 @@ Route::get('/payment/cash', function () {
 })->name('payment.cash');
 
 // Transaction details page
-Route::get('/payment/transaction', function () {
-    return view('payment.transaction');
+Route::get('/payment/transaction', function (Request $request) {
+    $paymentMethod = $request->get('payment_method', 'cash');
+    return view('payment.transaction', compact('paymentMethod'));
 })->name('payment.transaction');
 
 // Requirements page
@@ -57,8 +57,6 @@ Route::post('/email-auth/clear', [EmailController::class, 'clearEmailVerificatio
 Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(function () {
 
     // GET routes to render form views
-
-    Route::get('1-25/text-message', fn() => view('clientside.forms.Form1-25(TextMessage)'))->name('1-25-text-message');
     Route::get('{formType}', [FormsController::class, 'show'])->name('show');
     Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
     Route::get('{formType}/preview', [FormsController::class, 'showPreview'])->name('preview');
@@ -90,10 +88,46 @@ Route::post('/adminside/logout', [AdminAuthController::class, 'logout'])->name('
 //     return redirect()->route('adminside.index');
 // });
 
-// Default route (optional) (Uncomment to make the default url to homepage only 1 can be used)
-Route::get('/', function () {
-    return view('homepage');
-})->name('homepage');
+
+// Serve Philippine address data JSON files
+Route::get('/philippine_provinces_cities_municipalities_and_barangays_2019v2.json', function () {
+    $filePath = base_path('philippine_provinces_cities_municipalities_and_barangays_2019v2.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Province data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('address.province-data');
+
+Route::get('/ph-zipcodes.json', function () {
+    $filePath = base_path('ph-zipcodes.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Zip code data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('address.zipcode-data');
+
+Route::get('/nationalities.json', function () {
+    $filePath = base_path('nationalities.json');
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Nationalities data file not found');
+    }
+
+    return response()->file($filePath, [
+        'Content-Type' => 'application/json',
+        'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
+    ]);
+})->name('nationalities.data');
 
 Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
 
@@ -101,9 +135,9 @@ Route::get('/adminside/req-management', [AdminAuthController::class, 'requestMan
 
 Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
 
-Route::get('/adminside/bill-pay', function () {
-    return view('adminside.bill-pay');
-})->name('adminside.bill-pay');
+Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
+
+Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
 
 Route::prefix('adminside')
     ->middleware(\App\Http\Middleware\BlockMobileDevices::class)

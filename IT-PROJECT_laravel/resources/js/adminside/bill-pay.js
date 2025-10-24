@@ -61,3 +61,66 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+/* SET PAYMENT AS PAID */
+function setPaid(formId, btn) {
+    if (!confirm("Mark this payment as Paid?")) return;
+
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    btn.disabled = true;
+    btn.textContent = "Working...";
+
+    fetch("/adminside/set-paid", {  
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": token,
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({ form_id: formId }),
+    })
+        .then(async (res) => {
+            const data = await res.json().catch(() => null);
+            if (!res.ok) throw new Error(data?.message || "Server error");
+            return data;
+        })
+        .then((data) => {
+            const row = btn.closest("tr");
+            if (!row) return;
+
+            const statusCell = row.querySelector(".payment-status");
+            const dateCell = row.querySelector(".payment-date");
+
+            if (statusCell) {
+                statusCell.textContent = "Paid";
+                statusCell.classList.remove("pending", "unpaid");
+                statusCell.classList.add("paid");
+            }
+
+            // Update payment date if provided
+            if (dateCell && data.payment_date) {
+                dateCell.textContent = data.payment_date;
+            }
+
+            // Replace button with a gray dash
+            const actionCell = row.querySelector(".action-cell");
+            if (actionCell) {
+                actionCell.innerHTML = '<span style="color:gray"></span>';
+            }
+
+            // Visual feedback
+            row.style.transition = "background 0.5s";
+            row.style.background = "#e6ffef";
+            setTimeout(() => (row.style.background = ""), 1100);
+        })
+        .catch((err) => {
+            console.error("setPaid error:", err);
+            alert("Failed to mark as paid: " + (err.message || err));
+            btn.disabled = false;
+            btn.textContent = "Paid";
+        });
+}
+
+// export for debugging/scope
+window.setPaid = setPaid;

@@ -35,12 +35,12 @@ class Form1_03Rules
 
                 // Exam fields
                 'exam_place' => ['required', 'string'],
-                'exam_date' => ['required', 'date', 'before_or_equal:today'],
+                'exam_date' => ['required', 'date', 'after_or_equal:today'],
                 'rating' => ['required', 'numeric'],
 
                 'atroc_arsl_no'  => ['required', 'integer'],
                 'call_sign'  => ['required', 'string'],
-                'validity' => ['required', 'date', 'before_or_equal:today'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
                 'station_class'  => ['required', 'string'],
                 'permit_type'  => ['required', 'string'],
                 'club_name'  => ['nullable', 'string'],
