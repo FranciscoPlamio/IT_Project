@@ -2942,12 +2942,18 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, cursor 0.2s ease;
     cursor: pointer;
+    filter: brightness(1.05) contrast(1.05);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .charter-image:hover {
     transform: scale(1.02);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1) contrast(1.1);
 }
+
+
 
 /* Fullscreen Modal Styles */
 .fullscreen-modal {
