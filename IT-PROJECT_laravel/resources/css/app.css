@@ -1366,6 +1366,24 @@ nav {
     }
 }
 
+
+.footer-main {
+    margin-left: -180px; 
+}
+
+@media (max-width: 1200px) {
+    .footer-main {
+        margin-left: -30px; 
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        margin-left: 0; 
+    }
+}
+
+
 .card:hover {
     transform: translateY(-6px) scale(1.03);
     box-shadow: 0 8px 32px rgba(59, 130, 246, 0.18);
