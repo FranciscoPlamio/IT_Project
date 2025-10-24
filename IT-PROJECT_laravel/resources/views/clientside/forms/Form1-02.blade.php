@@ -224,6 +224,10 @@
                 const stepsOrder = ['personal', 'application', 'exam', ]; // declaration removed
                 const stepsList = document.getElementById('stepsList02');
                 const form = document.getElementById('form102');
+                if (form) {
+                    // per-form handler: stop fallback summary since this form renders its own UI
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
                 const validationLink02 = document.getElementById('validationLink02');
 
                 function showStep(step) {
@@ -339,5 +343,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form102'])
     </main>
 </x-layout>

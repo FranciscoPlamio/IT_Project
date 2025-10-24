@@ -224,6 +224,9 @@
                 const stepsOrder = ['equipment', 'applicant', 'particulars']; // declaration removed
                 const stepsList = document.getElementById('stepsList19');
                 const form = document.getElementById('form119');
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
 
                 function showStep(step) {
                     stepsList.querySelectorAll('.step-item').forEach(li => {
@@ -362,5 +365,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form119'])
     </main>
 </x-layout>

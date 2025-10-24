@@ -337,6 +337,9 @@
                 const stepsOrder = ['application', 'applicant', 'personnel']; // declaration removed
                 const stepsList = document.getElementById('stepsList18');
                 const form = document.getElementById('form118');
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
 
                 function showStep(step) {
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
@@ -597,5 +600,6 @@
                 document.getElementById('categoryFinal').value = value;
             }
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form118'])
     </main>
 </x-layout>

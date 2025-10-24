@@ -114,6 +114,9 @@
                 const stepsOrder = ['applicant', 'permit', 'circumstances']; // declaration removed
                 const stepsList = document.getElementById('stepsList21');
                 const form = document.getElementById('form121');
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
 
                 function showStep(step) {
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
@@ -200,5 +203,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form121'])
     </main>
 </x-layout>

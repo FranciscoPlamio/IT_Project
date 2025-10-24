@@ -378,6 +378,9 @@
                 const stepsOrder = ['personal', 'application', 'station', 'source', 'intended']; // declaration removed
                 const stepsList = document.getElementById('stepsList09');
                 const form = document.getElementById('form109');
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
                 const validationLink09 = document.getElementById('validationLink09');
 
                 function showStep(step) {
@@ -512,5 +515,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form109'])
     </main>
 </x-layout>

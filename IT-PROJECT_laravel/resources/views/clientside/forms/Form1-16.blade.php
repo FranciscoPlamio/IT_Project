@@ -190,6 +190,9 @@
                 const stepsOrder = ['transport', 'personal', 'equipment']; //'ntc', declaration removed
                 const stepsList = document.getElementById('stepsList16');
                 const form = document.getElementById('form116');
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                }
                 const validationLink16 = document.getElementById('validationLink16');
 
                 function showStep(step) {
@@ -304,5 +307,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form116'])
     </main>
 </x-layout>
