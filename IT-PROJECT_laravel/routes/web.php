@@ -7,6 +7,7 @@ use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\FormsController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\BlockMobileDevices;
 
 // Default index route
@@ -45,6 +46,11 @@ Route::get('/payment/transaction', function (Request $request) {
 Route::get('/requirements', function () {
     return view('requirements');
 })->name('requirements');
+
+
+// Transactions
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index')->middleware('email.verified');
+
 
 // Email Authentication routes
 Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');

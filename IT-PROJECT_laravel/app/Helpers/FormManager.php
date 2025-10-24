@@ -30,6 +30,7 @@ class FormManager
      * @param array $formData
      * @param array $transactionData Optional: status, payment, remarks, etc.
      * @param string $userId
+     * @param string $paymentMethod
      * @return array ['form' => ..., 'meta' => ...]
      */
     public static function saveForm(
@@ -37,7 +38,8 @@ class FormManager
         string $formToken,
         array $formData,
         string $userId,
-        array $transactionData = []
+        string $paymentMethod,
+        array $transactionData = [],
     ) {
         // Gets the Model of Form
         $formModel = self::getFormModel($formType);
@@ -56,7 +58,7 @@ class FormManager
             'user_id' => $userId,
             'status' => $transactionData['status'] ?? 'pending',
             'payment_status' => $transactionData['payment_status'] ?? 'pending',
-            'payment_method' => $transactionData['payment_method'] ?? null,
+            'payment_method' => $paymentMethod,
             'payment_reference' => self::generateReferenceNumber(),
             'payment_amount' => $transactionData['payment_amount'] ?? null,
             'payment_date' => $transactionData['payment_date'] ?? null,

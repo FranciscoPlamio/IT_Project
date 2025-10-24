@@ -42,62 +42,73 @@
     <main>
         <div class="form1-01-container">
             <div class="form1-01-header">TRANSACTION DETAILS</div>
-
-            <!-- Transaction Table -->
             <div class="transaction-table-container">
-                <table class="transaction-table">
-                    <thead>
-                        <tr class="transaction-table-header">
-                            <th class="ref-number-header">Reference Number</th>
-                            <th class="details-header">Details</th>
-                            <th class="actions-header">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="transaction-row">
-                            <td class="ref-number-cell">
-                                <span
-                                    class="reference-number">NTC-TXN-{{ date('Y') }}-{{ str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT) }}</span>
-                            </td>
-                            <td class="details-cell">
-                                <div class="transaction-details">
-                                    <div class="detail-row">
-                                        <span class="detail-label">Status:</span>
-                                        <span class="status-badge pending">Pending</span>
+                @if (!$transactions)
+                    <p>No Transactions.</p>
+                @else
+                    <!-- Transaction Table -->
+                    <table class="transaction-table">
+                        <thead>
+                            <tr class="transaction-table-header">
+                                <th class="ref-number-header">Reference Number</th>
+                                <th class="details-header">Details</th>
+                                <th class="actions-header">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="transaction-row">
+                                <td class="ref-number-cell">
+                                    <span class="reference-number">{{ $transactions->payment_reference }}</span>
+                                </td>
+                                <td class="details-cell">
+                                    <div class="transaction-details">
+                                        <div class="detail-row">
+                                            <span class="detail-label">Status:</span>
+                                            <span
+                                                class="status-badge pending">{{ $transactions->payment_status }}</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Purpose:</span>
+                                            <span class="purpose-text">MULTI-PURPOSE CLEARANCE PROCESSING</span>
+                                        </div>
+                                        <div class="detail-row">
+                                            <span class="detail-label">Transaction Date:</span>
+                                            <span
+                                                class="date-text">{{ $transactions->created_at->format('F d, Y H:i:s') }}</span>
+                                        </div>
+
+                                        @if ($transactions->payment_method === 'gcash')
+                                            <div class="detail-row">
+                                                <span class="detail-label">Payment Amount:</span>
+                                                <span class="date-text">-</span>
+                                            </div>
+                                        @endif
+
+                                        <div class="detail-row">
+                                            <span class="detail-label">Payment Due Date:</span>
+                                            <span
+                                                class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
+                                        </div>
                                     </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Purpose:</span>
-                                        <span class="purpose-text">MULTI-PURPOSE CLEARANCE PROCESSING</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Transaction Date:</span>
-                                        <span class="date-text">{{ date('F d, Y H:i:s') }}</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Payment Date:</span>
-                                        <span class="date-text">-</span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="detail-label">Appointment Date:</span>
-                                        <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                            {{-- delete feature db forms_transaction --}}
-                            <td class="actions-cell">
-                                <button class="cancel-btn" onclick="cancelTransaction()">
-                                    <span class="cancel-icon">✕</span>
-                                    <span class="cancel-text">CANCEL</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                {{-- delete feature db forms_transaction --}}
+                                <td class="actions-cell">
+                                    <button class="cancel-btn" onclick="cancelTransaction()">
+                                        <span class="cancel-icon">✕</span>
+                                        <span class="cancel-text">CANCEL</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                @endif
+
+
             </div>
 
             <!-- Payment Method Section -->
             <div class="payment-method-section">
-                @if ($paymentMethod === 'gcash')
+                @if ($transactions->payment_method === 'gcash')
                     <!-- GCash Payment Interface -->
                     <div class="gcash-payment-interface">
                         <!-- GCash Header -->
@@ -154,7 +165,8 @@
                                 <div class="success-icon">✓</div>
                                 <div class="header-content">
                                     <h2>Cash Payment Selected</h2>
-                                    <p>You have chosen to pay in cash. Please visit our office during business hours to
+                                    <p>You have chosen to pay in cash. Please visit our office during business hours
+                                        to
                                         complete your payment.</p>
                                 </div>
                             </div>
@@ -210,7 +222,8 @@
                                 <div class="payment-instructions">
                                     <h4 style="text-align: center;">How to Pay</h4>
                                     <ul class="instruction-list" style="list-style-type: bullet;">
-                                        <li>Please bring a valid identification card along with all required documents.
+                                        <li>Please bring a valid identification card along with all required
+                                            documents.
                                         </li>
                                         <li>Present your reference number upon arrival.</li>
                                         <li>Pay the required amount.</li>

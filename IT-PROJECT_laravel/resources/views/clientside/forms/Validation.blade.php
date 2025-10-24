@@ -62,6 +62,7 @@
                 <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
                     style="display:none;">
                     @csrf
+                    <input type="hidden" name="payment_method" id="paymentMethodInput">
                 </form>
             </div>
         </div>
@@ -763,7 +764,7 @@
                 }
 
                 // Redirect to transaction page with payment method
-                window.location.href = '{{ route('payment.transaction') }}?payment_method=' + selectedPaymentMethod;
+                form.submit();
             });
 
             // Payment Method Selection JavaScript
@@ -785,18 +786,21 @@
                     selectPaymentMethod('gcash');
                 });
             }
+            const paymentInput = document.getElementById('paymentMethodInput');
 
             function selectPaymentMethod(method) {
                 // Remove previous selection
                 document.querySelectorAll('.payment-option').forEach(option => {
                     option.classList.remove('selected');
                 });
-
+                console.log(method);
                 // Add selection to clicked option
                 if (method === 'cash' && cashOption) {
                     cashOption.classList.add('selected');
+                    paymentInput.value = method;
                 } else if (method === 'gcash' && gcashOption) {
                     gcashOption.classList.add('selected');
+                    paymentInput.value = method;
                 }
 
                 selectedPaymentMethod = method;

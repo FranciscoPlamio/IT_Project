@@ -223,6 +223,7 @@ class FormsController extends Controller
     public function storeAll(Request $request, $formType)
     {
         $formToken = $request->input('form_token');
+        $paymentMethod = $request->input('payment_method');
 
         // Form
         $validated = session('form_' . $formType . '_' . $request->input('form_token'));
@@ -237,7 +238,7 @@ class FormsController extends Controller
         // $transactionData = ['status' => $status];
 
         // Save using FormManager
-        $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id);
+        $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
         // if ($status === 'submitted') {
         //     session()->forget("form101_" . $formToken);
@@ -253,14 +254,11 @@ class FormsController extends Controller
             ]);
         }
 
-        return redirect()->route('payment.method')->with([
-            'status' => 'Form 1-01 saved',
-        ]);
+        return redirect()->route('transactions.index')->with('success', 'Form submitted successfully!');
     }
 
     public function preview(Request $request, $formType)
     {
-
         // Verify Google reCAPTCHA first
         if (!$this->verifyRecaptcha($request)) {
             // dd($request); // for debugging
