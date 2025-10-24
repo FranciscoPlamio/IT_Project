@@ -962,6 +962,167 @@ nav {
     flex-direction: row;
 }
 
+/* Footer Styles */
+.footer {
+    background: #1e3a8a;
+    color: #ffffff;
+    margin-top: 4rem;
+    position: relative;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.footer-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.footer-text-content {
+    flex: 1;
+    order: 2;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-separator {
+    border: none;
+    height: 1px;
+    background: #475569;
+    margin: 0;
+}
+
+.footer-copyright {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.footer-copyright p {
+    margin: 0;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-logo-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    
+    .footer-logo {
+        width: 100px;
+        height: 100px;
+        order: 1;
+    }
+    
+    .footer-text-content {
+        order: 2;
+    }
+    
+    .footer-title {
+        font-size: 1.3rem;
+    }
+    
+    .footer-description {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        padding: 1.5rem 1rem;
+        gap: 1.5rem;
+    }
+    
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .footer-copyright {
+        padding: 1rem;
+    }
+}
+
 .card:hover {
     transform: translateY(-6px) scale(1.03);
     box-shadow: 0 8px 32px rgba(59, 130, 246, 0.18);
