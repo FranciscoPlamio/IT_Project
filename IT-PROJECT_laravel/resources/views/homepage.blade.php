@@ -41,7 +41,8 @@
                 <p>Schedules</p>
             </div>
         </a>
-        <a id="applyLink" href="{{ route('email-auth') }}" class="card" style="text-decoration:none;color:inherit;">
+        <a id="applyLink" href="{{ route('display.forms') }}" class="card"
+            style="text-decoration:none;color:inherit;">
             <img src="{{ asset('images/icon-forms.png') }}" alt="Forms Icon" />
             <p>Apply</p>
         </a>

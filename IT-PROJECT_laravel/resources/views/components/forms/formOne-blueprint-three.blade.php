@@ -9,9 +9,8 @@
 <div class="form-grid-3">
     <div class="form-field">
         <label class="form-label">Date of Birth
-            (mm/dd/yy)
         </label>
-        <input class="form1-01-input" type="date" name="dob" max="{{ date('Y-m-d') }}"
+        <input class="form1-01-input" type="date" name="dob" max="{{ date('Y-m-d', strtotime('-18 years')) }}"
             value="{{ old('dob', $form['dob'] ?? '') }}">
         @error('dob')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
