@@ -14,9 +14,10 @@
 
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Province</label>
-        <select class="form1-01-input address-select" name="province" id="provinceSelect"
-            data-old-value="{{ old('province', $form['province'] ?? '') }}">
+        <label class="form-label">Province <span class="required-asterisk">*</span></label>
+        <select class="form1-01-input address-select" name="province" id="provinceSelect" required
+            data-old-value="{{ old('province', $form['province'] ?? '') }}"
+            data-validation="select">
             <option value="">Select Province</option>
         </select>
         @error('province')
@@ -24,9 +25,10 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">City/Municipality</label>
-        <select class="form1-01-input address-select" name="city" id="citySelect" disabled
-            data-old-value="{{ old('city', $form['city'] ?? '') }}">
+        <label class="form-label">City/Municipality <span class="required-asterisk">*</span></label>
+        <select class="form1-01-input address-select" name="city" id="citySelect" disabled required
+            data-old-value="{{ old('city', $form['city'] ?? '') }}"
+            data-validation="select">
             <option value="">Select City/Municipality</option>
         </select>
         @error('city')
@@ -36,9 +38,10 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Barangay</label>
-        <select class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled
-            data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}">
+        <label class="form-label">Barangay <span class="required-asterisk">*</span></label>
+        <select class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled required
+            data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}"
+            data-validation="select">
             <option value="">Select Barangay</option>
         </select>
         @error('barangay')
@@ -46,10 +49,11 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Zip Code</label>
-        <select class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled
-            data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
-            <option value="">Select Zip Code</option>
+        <label class="form-label">ZIP Code <span class="required-asterisk">*</span></label>
+        <select class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled required
+            data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}"
+            data-validation="select">
+            <option value="">Select ZIP Code</option>
         </select>
         @error('zip_code')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -59,14 +63,20 @@
 <div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Unit/Rm/House/Bldg No.</label>
-        <input class="form1-01-input" type="text" name="unit" value="{{ old('unit', $form['unit'] ?? '') }}">
+        <input class="form1-01-input" type="text" name="unit" 
+            value="{{ old('unit', $form['unit'] ?? '') }}"
+            placeholder="Unit number (optional)"
+            data-validation="text">
         @error('unit')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
     <div class="form-field">
         <label class="form-label">Street</label>
-        <input class="form1-01-input" type="text" name="street" value="{{ old('street', $form['street'] ?? '') }}">
+        <input class="form1-01-input" type="text" name="street" 
+            value="{{ old('street', $form['street'] ?? '') }}"
+            placeholder="Street name (optional)"
+            data-validation="text">
         @error('street')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -74,16 +84,21 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Contact Number</label>
-        <input class="form1-01-input" type="text" name="contact_number"
-            value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
+        <label class="form-label">Contact Number <span class="required-asterisk">*</span></label>
+        <input class="form1-01-input" type="tel" name="contact_number" required
+            value="{{ old('contact_number', $form['contact_number'] ?? '') }}"
+            placeholder="e.g., 09123456789 or +639123456789"
+            data-validation="phone">
         @error('contact_number')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Email Address</label>
-        <input class="form1-01-input" type="email" name="email" value="{{ old('email', $form['email'] ?? '') }}">
+        <label class="form-label">Email Address <span class="required-asterisk">*</span></label>
+        <input class="form1-01-input" type="email" name="email" required
+            value="{{ old('email', $form['email'] ?? '') }}"
+            placeholder="Enter your email address"
+            data-validation="email">
         @error('email')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -193,10 +208,6 @@
                 this.barangaySelect.addEventListener('change', (e) => {
                     this.onBarangayChange(e.target.value);
                 });
-
-                this.zipCodeSelect.addEventListener('change', (e) => {
-                    // Zip code selection doesn't cascade to other fields
-                });
             }
 
             populateProvinces() {
@@ -232,7 +243,7 @@
                 // Reset dependent fields
                 this.citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
                 this.barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-                this.zipCodeSelect.innerHTML = '<option value="">Select Zip Code</option>';
+                this.zipCodeSelect.innerHTML = '<option value="">Select ZIP Code</option>';
 
                 if (!provinceName) {
                     this.citySelect.disabled = true;
@@ -278,7 +289,7 @@
 
                 // Reset dependent fields
                 this.barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-                this.zipCodeSelect.innerHTML = '<option value="">Select Zip Code</option>';
+                this.zipCodeSelect.innerHTML = '<option value="">Select ZIP Code</option>';
 
                 if (!cityName || !this.currentProvince) {
                     this.barangaySelect.disabled = true;
@@ -288,7 +299,7 @@
 
                 // Enable barangay select and populate barangays
                 this.barangaySelect.disabled = false;
-                this.zipCodeSelect.disabled = false;
+                this.zipCodeSelect.disabled = true;
 
                 // Find barangays in the selected city
                 if (this.provinceData) {
@@ -320,7 +331,7 @@
                 }
 
                 // Populate zip codes for the selected city
-                this.populateZipCodes(cityName);
+                this.suggestZipCode(cityName);
             }
 
             onBarangayChange(barangayName) {
@@ -328,8 +339,8 @@
                 // Barangay selection doesn't cascade to other fields
             }
 
-            populateZipCodes(cityName) {
-                if (!this.zipCodeData) return;
+            suggestZipCode(cityName) {
+                if (!this.zipCodeData || !this.zipCodeSelect) return;
 
                 const matchingZipCodes = [];
 
@@ -339,46 +350,31 @@
                         areas.forEach(area => {
                             if (area.toLowerCase().includes(cityName.toLowerCase()) ||
                                 cityName.toLowerCase().includes(area.toLowerCase())) {
-                                matchingZipCodes.push({
-                                    zipCode,
-                                    area
-                                });
+                                matchingZipCodes.push(zipCode);
                             }
                         });
                     } else if (typeof areas === 'string') {
                         if (areas.toLowerCase().includes(cityName.toLowerCase()) ||
                             cityName.toLowerCase().includes(areas.toLowerCase())) {
-                            matchingZipCodes.push({
-                                zipCode,
-                                area: areas
-                            });
+                            matchingZipCodes.push(zipCode);
                         }
                     }
                 });
 
-                // Sort matching zip codes alphabetically by zip code
-                matchingZipCodes.sort((a, b) => a.zipCode.localeCompare(b.zipCode));
-
-                // Add zip codes to select
-                matchingZipCodes.forEach(({
-                    zipCode,
-                    area
-                }) => {
-                    const option = document.createElement('option');
-                    option.value = zipCode;
-                    option.textContent = zipCode; // Show only zip code number
-                    this.zipCodeSelect.appendChild(option);
-                });
-
-                // If no specific matches found, show all zip codes as fallback
-                if (matchingZipCodes.length === 0) {
-                    const allZipCodes = Object.keys(this.zipCodeData).sort();
-                    allZipCodes.forEach(zipCode => {
+                // If we found matching zip codes, populate the select
+                if (matchingZipCodes.length > 0) {
+                    this.zipCodeSelect.innerHTML = '<option value="">Select ZIP Code</option>';
+                    matchingZipCodes.sort();
+                    matchingZipCodes.forEach(zipCode => {
                         const option = document.createElement('option');
                         option.value = zipCode;
                         option.textContent = zipCode;
                         this.zipCodeSelect.appendChild(option);
                     });
+                    this.zipCodeSelect.disabled = false;
+                } else {
+                    this.zipCodeSelect.innerHTML = '<option value="">No matching ZIP codes found</option>';
+                    this.zipCodeSelect.disabled = true;
                 }
             }
 
@@ -404,14 +400,12 @@
                                     this.onBarangayChange(oldBarangay);
                                 }, 100);
                             }
-
-                            if (oldZipCode && oldZipCode.trim() !== '') {
-                                setTimeout(() => {
-                                    this.zipCodeSelect.value = oldZipCode;
-                                }, 100);
-                            }
                         }, 100);
                     }
+                }
+                if (oldZipCode && oldZipCode.trim() !== '') {
+                    this.zipCodeSelect.value = oldZipCode;
+                    this.suggestZipCode(this.currentCity); // Re-suggest based on current city
                 }
             }
 

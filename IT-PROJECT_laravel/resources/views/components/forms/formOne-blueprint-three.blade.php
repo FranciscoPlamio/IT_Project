@@ -8,25 +8,29 @@
 
 <div class="form-grid-3">
     <div class="form-field">
-        <label class="form-label">Date of Birth
-            (mm/dd/yy)
+        <label class="form-label">Date of Birth <span class="required-asterisk">*</span>
+            <small class="field-hint">(mm/dd/yy)</small>
         </label>
-        <input class="form1-01-input" type="date" name="dob" max="{{ date('Y-m-d') }}"
-            value="{{ old('dob', $form['dob'] ?? '') }}">
+        <input class="form1-01-input" type="date" name="dob" required max="{{ date('Y-m-d') }}"
+            value="{{ old('dob', $form['dob'] ?? '') }}"
+            data-validation="date">
         @error('dob')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
-    <div class="form-field"><label class="form-label">Sex</label>
+    <div class="form-field">
+        <label class="form-label">Sex <span class="required-asterisk">*</span></label>
         <div class="inline-radio">
             <label>
-                <input type="radio" name="sex" value="male"
-                    {{ old('sex', $form['sex'] ?? '') === 'male' ? 'checked' : '' }}>
+                <input type="radio" name="sex" value="male" required
+                    {{ old('sex', $form['sex'] ?? '') === 'male' ? 'checked' : '' }}
+                    data-validation="radio">
                 Male
             </label>
             <label>
-                <input type="radio" name="sex" value="female"
-                    {{ old('sex', $form['sex'] ?? '') === 'female' ? 'checked' : '' }}>
+                <input type="radio" name="sex" value="female" required
+                    {{ old('sex', $form['sex'] ?? '') === 'female' ? 'checked' : '' }}
+                    data-validation="radio">
                 Female
             </label>
         </div>
@@ -36,9 +40,10 @@
     </div>
 
     <div class="form-field">
-        <label class="form-label">Nationality</label>
-        <select class="form1-01-input address-select" name="nationality" id="nationalitySelect"
-            data-old-value="{{ old('nationality', $form['nationality'] ?? '') }}">
+        <label class="form-label">Nationality <span class="required-asterisk">*</span></label>
+        <select class="form1-01-input address-select" name="nationality" id="nationalitySelect" required
+            data-old-value="{{ old('nationality', $form['nationality'] ?? '') }}"
+            data-validation="select">
             <option value="">Select Nationality</option>
         </select>
         @error('nationality')

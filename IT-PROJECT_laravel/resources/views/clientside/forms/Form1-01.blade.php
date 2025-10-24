@@ -187,26 +187,33 @@
 
 
                             <div class="form-field">
-                                <label class="form-label">School Attended</label>
-                                <input class="form1-01-input" type="text" name="school_attended"
-                                    value="{{ old('school_attended', $form['school_attended'] ?? '') }}">
+                                <label class="form-label">School Attended <span class="required-asterisk">*</span></label>
+                                <input class="form1-01-input" type="text" name="school_attended" required
+                                    value="{{ old('school_attended', $form['school_attended'] ?? '') }}"
+                                    placeholder="Enter the name of your school"
+                                    data-validation="text">
                                 @error('school_attended')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-grid-3">
                                 <div class="form-field">
-                                    <label class="form-label">Course Taken</label>
-                                    <input class="form1-01-input" type="text" name="course_taken"
-                                        value="{{ old('course_taken', $form['course_taken'] ?? '') }}">
+                                    <label class="form-label">Course Taken <span class="required-asterisk">*</span></label>
+                                    <input class="form1-01-input" type="text" name="course_taken" required
+                                        value="{{ old('course_taken', $form['course_taken'] ?? '') }}"
+                                        placeholder="Enter your course/degree"
+                                        data-validation="text">
                                     @error('course_taken')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Year Graduated</label>
-                                    <input class="form1-01-input" type="text" name="year_graduated"
-                                        value="{{ old('year_graduated', $form['year_graduated'] ?? '') }}">
+                                    <label class="form-label">Year Graduated <span class="required-asterisk">*</span></label>
+                                    <input class="form1-01-input" type="text" name="year_graduated" required
+                                        value="{{ old('year_graduated', $form['year_graduated'] ?? '') }}"
+                                        placeholder="e.g., 2020"
+                                        data-validation="year"
+                                        maxlength="4">
                                     @error('year_graduated')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -224,19 +231,20 @@
                             <div class="form-grid-3">
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
-                                        examination?</label>
+                                        examination? <span class="required-asterisk">*</span></label>
                                     <div class="inline-radio">
                                         <label>
-                                            <input id="needs_yes" type="radio" name="needs" value="1"
-                                                {{ old('needs', $form['needs'] ?? '') === '1' ? 'checked' : '' }}>
+                                            <input id="needs_yes" type="radio" name="needs" value="1" required
+                                                {{ old('needs', $form['needs'] ?? '') === '1' ? 'checked' : '' }}
+                                                data-validation="radio">
                                             Yes
                                         </label>
                                         <label>
-                                            <input type="radio" name="needs" value="0" id="needs_no"
-                                                {{ old('needs', $form['needs'] ?? '') === '0' ? 'checked' : '' }}>
+                                            <input type="radio" name="needs" value="0" id="needs_no" required
+                                                {{ old('needs', $form['needs'] ?? '') === '0' ? 'checked' : '' }}
+                                                data-validation="radio">
                                             No
                                         </label>
-
                                     </div>
                                     @error('needs')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -246,7 +254,9 @@
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
-                                        name="needs_details" value="{{ $form['needs_details'] ?? '' }}" disabled>
+                                        name="needs_details" value="{{ $form['needs_details'] ?? '' }}" disabled
+                                        placeholder="Describe your special needs or requests"
+                                        data-validation="text">
                                     @error('needs_details')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -372,6 +382,289 @@
                 const form = document.getElementById('form101');
                 const validationLink = document.getElementById('validationLink');
 
+                // Enhanced validation system
+                class FormValidator {
+                    constructor() {
+                        this.validationRules = {
+                            'first_name': { required: true, minLength: 2, pattern: /^[A-Za-z\s]+$/ },
+                            'last_name': { required: true, minLength: 2, pattern: /^[A-Za-z\s]+$/ },
+                            'middle_name': { required: false, pattern: /^[A-Za-z\s]*$/ },
+                            'dob': { required: true, type: 'date' },
+                            'sex': { required: true },
+                            'nationality': { required: true },
+                            'province': { required: true },
+                            'city': { required: true },
+                            'barangay': { required: true },
+                            'zip_code': { required: true },
+                            'contact_number': { required: true, pattern: /^(\+63|0)?[0-9]{10}$/ },
+                            'email': { required: true, type: 'email' },
+                            'school_attended': { required: true, minLength: 2 },
+                            'course_taken': { required: true, minLength: 2 },
+                            'year_graduated': { required: true, pattern: /^\d{4}$/ },
+                            'needs': { required: true }
+                        };
+                        this.init();
+                    }
+
+                    init() {
+                        this.addFieldValidationListeners();
+                        this.addStepValidation();
+                        this.addProgressIndicator();
+                    }
+
+                    addFieldValidationListeners() {
+                        // Add real-time validation to clear errors when fields become valid
+                        form.querySelectorAll('input, select, textarea').forEach(field => {
+                            field.addEventListener('input', () => this.clearFieldError(field));
+                            field.addEventListener('change', () => this.clearFieldError(field));
+                        });
+                    }
+
+                    validateField(field) {
+                        const fieldName = field.name;
+                        const rules = this.validationRules[fieldName];
+                        if (!rules) return true;
+
+                        const value = field.value.trim();
+                        let isValid = true;
+                        let errorMessage = '';
+
+                        // Required validation
+                        if (rules.required && !value) {
+                            isValid = false;
+                            errorMessage = `${this.getFieldLabel(field)} is required.`;
+                        }
+
+                        // Pattern validation
+                        if (isValid && value && rules.pattern && !rules.pattern.test(value)) {
+                            isValid = false;
+                            if (fieldName === 'zip_code') {
+                                errorMessage = 'Please enter a valid 4-digit ZIP code (e.g., 1000).';
+                            } else if (fieldName === 'contact_number') {
+                                errorMessage = 'Please enter a valid Philippine phone number (e.g., 09123456789).';
+                            } else if (fieldName === 'year_graduated') {
+                                errorMessage = 'Please enter a valid 4-digit year (e.g., 2020).';
+                            } else if (fieldName === 'first_name' || fieldName === 'last_name' || fieldName === 'middle_name') {
+                                errorMessage = 'Please enter a valid name using only letters and spaces.';
+                            } else {
+                                errorMessage = `Please enter a valid ${this.getFieldLabel(field)}.`;
+                            }
+                        }
+
+                        // Length validation
+                        if (isValid && value && rules.minLength && value.length < rules.minLength) {
+                            isValid = false;
+                            errorMessage = `${this.getFieldLabel(field)} must be at least ${rules.minLength} characters.`;
+                        }
+
+                        // Email validation
+                        if (isValid && value && rules.type === 'email') {
+                            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                            if (!emailPattern.test(value)) {
+                                isValid = false;
+                                errorMessage = 'Please enter a valid email address.';
+                            }
+                        }
+
+                        // Date validation
+                        if (isValid && value && rules.type === 'date') {
+                            const date = new Date(value);
+                            const today = new Date();
+                            if (date > today) {
+                                isValid = false;
+                                errorMessage = 'Date cannot be in the future.';
+                            }
+                        }
+
+                        // Apply validation styling immediately
+                        this.showFieldValidation(field, isValid, errorMessage);
+                        return isValid;
+                    }
+
+                    showFieldValidation(field, isValid, errorMessage) {
+                        // Remove existing error styling
+                        field.classList.remove('field-error');
+                        field.classList.remove('field-success');
+                        
+                        // Remove existing error message
+                        const existingError = field.parentNode.querySelector('.field-error-message');
+                        if (existingError) {
+                            existingError.remove();
+                        }
+
+                        if (!isValid) {
+                            // Add the error class to the field
+                            field.classList.add('field-error');
+                            
+                            // Force a style update
+                            field.style.border = '2px solid #dc3545';
+                            field.style.backgroundColor = '#fff5f5';
+                            
+                            // Add error message with enhanced styling
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'field-error-message';
+                            errorDiv.textContent = errorMessage;
+                            field.parentNode.appendChild(errorDiv);
+                            
+                            console.log('Applied error styling to field:', field.name, 'with class:', field.className);
+                        }
+                    }
+
+                    getFieldLabel(field) {
+                        const label = field.parentNode.querySelector('label');
+                        return label ? label.textContent.replace('*', '').trim() : field.name;
+                    }
+
+                    clearFieldError(field) {
+                        // Check if field is now valid
+                        if (this.validateField(field)) {
+                            // Remove error styling
+                            field.classList.remove('field-error');
+                            field.style.border = '';
+                            field.style.backgroundColor = '';
+                            
+                            // Remove error message
+                            const existingError = field.parentNode.querySelector('.field-error-message');
+                            if (existingError) {
+                                existingError.remove();
+                            }
+                        }
+                    }
+
+                    addStepValidation() {
+                        // Enhanced step validation
+                        this.validateStep = (step) => {
+                            const section = document.getElementById(`step-${step}`);
+                            let valid = true;
+                            const errors = [];
+                            const invalidFields = [];
+
+                            // Clear previous validation
+                            section.querySelectorAll('input, select, textarea').forEach(field => {
+                                field.classList.remove('field-error');
+                                field.style.border = '';
+                                field.style.backgroundColor = '';
+                                const existingError = field.parentNode.querySelector('.field-error-message');
+                                if (existingError) {
+                                    existingError.remove();
+                                }
+                            });
+
+                            // Validate all fields in the step
+                            section.querySelectorAll('input, select, textarea').forEach(field => {
+                                if (!this.validateField(field)) {
+                                    valid = false;
+                                    invalidFields.push(field.name);
+                                }
+                            });
+
+                            // Special validation for exam type
+                            if (step === 'application') {
+                                const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
+                                if (!examTypeSelected) {
+                                    valid = false;
+                                    errors.push('Please select an exam type.');
+                                }
+                            }
+
+                            // Special validation for needs details
+                            if (step === 'assistance') {
+                                const needsYes = section.querySelector('input[name="needs"][value="1"]:checked');
+                                const needsDetails = section.querySelector('input[name="needs_details"]');
+                                if (needsYes && needsDetails && !needsDetails.value.trim()) {
+                                    valid = false;
+                                    errors.push('Please specify your special needs.');
+                                }
+                            }
+
+                            // Update step status
+                            const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+                            if (valid) {
+                                li.classList.add('completed');
+                                li.querySelector('.step-status').textContent = '✓';
+                            } else {
+                                li.classList.remove('completed');
+                                li.querySelector('.step-status').textContent = '';
+                            }
+
+                            // Show summary of invalid fields
+                            if (!valid && invalidFields.length > 0) {
+                                this.showValidationSummary(step, invalidFields);
+                            }
+
+                            return { valid, errors, invalidFields };
+                        };
+                    }
+
+                    showValidationSummary(step, invalidFields) {
+                        // Remove existing summary
+                        const existingSummary = document.querySelector(`#step-${step} .validation-summary`);
+                        if (existingSummary) {
+                            existingSummary.remove();
+                        }
+
+                        // Create validation summary
+                        const summaryDiv = document.createElement('div');
+                        summaryDiv.className = 'validation-summary';
+                        summaryDiv.style.cssText = `
+                            background-color: #f8d7da;
+                            border: 2px solid #dc3545;
+                            border-radius: 6px;
+                            padding: 12px;
+                            margin: 16px 0;
+                            color: #dc3545;
+                            font-weight: 600;
+                        `;
+                        
+                        const fieldLabels = invalidFields.map(fieldName => {
+                            const field = document.querySelector(`[name="${fieldName}"]`);
+                            const label = field ? field.closest('.form-field')?.querySelector('label')?.textContent?.replace('*', '').trim() : fieldName;
+                            return label || fieldName;
+                        });
+
+                        summaryDiv.innerHTML = `
+                            <strong>Please complete the following required fields:</strong><br>
+                            ${fieldLabels.join(', ')}
+                        `;
+
+                        // Insert summary at the top of the step
+                        const stepContent = document.getElementById(`step-${step}`);
+                        if (stepContent) {
+                            stepContent.insertBefore(summaryDiv, stepContent.firstChild);
+                        }
+                    }
+
+                    addProgressIndicator() {
+                        // Add progress indicator
+                        const progressContainer = document.createElement('div');
+                        progressContainer.className = 'form-progress-container';
+                        progressContainer.innerHTML = `
+                            <div class="form-progress-bar">
+                                <div class="form-progress-fill" id="progressFill"></div>
+                            </div>
+                            <div class="form-progress-text" id="progressText">Step 1 of 3</div>
+                        `;
+                        
+                        form.insertBefore(progressContainer, form.firstChild);
+                        this.updateProgress();
+                    }
+
+                    updateProgress() {
+                        const currentStepIndex = stepsOrder.indexOf(currentStep());
+                        const progress = ((currentStepIndex + 1) / stepsOrder.length) * 100;
+                        
+                        const progressFill = document.getElementById('progressFill');
+                        const progressText = document.getElementById('progressText');
+                        
+                        if (progressFill) {
+                            progressFill.style.width = `${progress}%`;
+                        }
+                        if (progressText) {
+                            progressText.textContent = `Step ${currentStepIndex + 1} of ${stepsOrder.length}`;
+                        }
+                    }
+                }
+
                 function showStep(step) {
                     stepsList.querySelectorAll('.step-item').forEach(li => {
                         li.classList.toggle('active', li.dataset.step === step);
@@ -379,6 +672,11 @@
                     document.querySelectorAll('.step-content').forEach(s => {
                         s.classList.toggle('active', s.id === `step-${step}`);
                     });
+                    
+                    // Update progress when step changes
+                    if (window.formValidator) {
+                        window.formValidator.updateProgress();
+                    }
                 }
 
                 function currentStep() {
@@ -405,42 +703,15 @@
                 }
 
                 function validateActiveStep() {
-                    const step = currentStep();
-                    const section = document.getElementById(`step-${step}`);
-                    let valid = true;
-
-                    // Check required fields
-                    section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
-                        if (el.type === 'radio') {
-                            const name = el.name;
-                            const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
-                            const anyChecked = Array.from(group).some(r => r.checked);
-                            if (!anyChecked) valid = false;
-                        } else if (!el.value) {
-                            valid = false;
-                        }
-                    });
-
-                    // Special validation for exam type selection in application step
-                    if (step === 'application') {
-                        const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
-                        if (!examTypeSelected) {
-                            valid = false;
-                        }
+                    if (window.formValidator) {
+                        const result = window.formValidator.validateStep(currentStep());
+                        return result.valid;
                     }
-
-                    // Note: All exam types are now in a single radio group, so no group validation needed
-
-                    const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
-                    if (valid) {
-                        li.classList.add('completed');
-                        li.querySelector('.step-status').textContent = 'Done';
-                    } else {
-                        li.classList.remove('completed');
-                        li.querySelector('.step-status').textContent = '';
-                    }
-                    return valid;
+                    return true;
                 }
+
+                // Initialize the form validator
+                window.formValidator = new FormValidator();
 
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
@@ -458,6 +729,10 @@
 
                         if (currentStepName === 'application') {
                             errorMessage = 'Please select an exam type before proceeding.';
+                        } else if (currentStepName === 'applicant') {
+                            errorMessage = 'Please fill in all required applicant details.';
+                        } else if (currentStepName === 'assistance') {
+                            errorMessage = 'Please complete the assistance section.';
                         }
 
                         const errorDiv = document.createElement('p');
