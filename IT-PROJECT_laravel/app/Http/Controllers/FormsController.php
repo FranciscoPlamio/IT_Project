@@ -340,6 +340,84 @@ class FormsController extends Controller
         ]);
     }
 
+    /**
+     * Show Form Preview page with filled data
+     */
+    public function showPreview(Request $request, $formType)
+    {
+        $token = $request->query('token') ?: $request->input('token');
+        if (!$token) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Missing form token.');
+        }
+
+        $form = session('form_' . $formType . '_' . $token);
+        if (!$form) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Form not found.');
+        }
+
+        // Check if user is viewing his/her own form
+        $sessionEmail = session('email_verified');
+        $user = User::where('email', $sessionEmail)->first();
+        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Unauthorized access to this form.');
+        }
+
+        return view('clientside.forms.FormPreview', [
+            'form' => $form,
+            'formType' => $formType,
+            'formToken' => $token,
+        ]);
+    }
+
+    /**
+     * Generate PDF for the form preview (Paki validate if oks)
+     */
+    public function generatePDF(Request $request, $formType)
+    {
+        $token = $request->query('token');
+        if (!$token) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $form = session('form_' . $formType . '_' . $token);
+        if (!$form) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        // Check if user is authorized
+        $sessionEmail = session('email_verified');
+        $user = User::where('email', $sessionEmail)->first();
+        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        try {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('clientside.forms.FormPDF', [
+                'form' => $form,
+                'formType' => $formType,
+                'formToken' => $token,
+            ]);
+            
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'defaultFont' => 'Arial',
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => false,
+                'debugKeepTemp' => false,
+                'debugCss' => false,
+                'debugLayout' => false,
+                'debugLayoutLines' => false,
+                'debugLayoutBlocks' => false,
+                'debugLayoutInline' => false,
+                'debugLayoutPaddingBox' => false,
+            ]);
+            
+            return $pdf->download("NTC_Form_{$formType}_" . date('Y-m-d') . ".pdf");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function getUser()
     {
         // User email

@@ -29,6 +29,9 @@
         {{ $slot }}
     </main>
 
+    <!-- Footer -->
+    <x-footer />
+
     <script>
         const toggle = document.getElementById("menuToggle");
         const navList = document.getElementById("navList");

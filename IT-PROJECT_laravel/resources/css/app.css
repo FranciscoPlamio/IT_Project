@@ -296,9 +296,9 @@ textarea.form1-01-input {
 }
 
 .form1-01-warning {
-    background: #fff5f5;
-    border: 1px solid #f3c2c2;
-    color: #7a1f1f;
+    background: #ffe5e5;
+    border: 1px solid #ffb3b3;
+    color: #8b0000;
     padding: 16px;
     border-radius: 6px;
     margin: 12px 0 20px 0;
@@ -1021,6 +1021,164 @@ nav {
     margin: 0 auto;
 }
 
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    display: flex;
+    width: 300%;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    width: 33.333%;
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-arrow:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev {
+    left: 20px;
+}
+
+.carousel-next {
+    right: 20px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active,
+.dot:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+}
+
+/* Carousel Animation */
+.carousel-slides.slide-1 {
+    transform: translateX(0);
+}
+
+.carousel-slides.slide-2 {
+    transform: translateX(-33.333%);
+}
+
+.carousel-slides.slide-3 {
+    transform: translateX(-66.666%);
+}
+
+/* Responsive Carousel */
+@media (max-width: 768px) {
+    .carousel-wrapper {
+        height: 300px;
+    }
+    
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .carousel-prev {
+        left: 10px;
+    }
+    
+    .carousel-next {
+        right: 10px;
+    }
+    
+    .carousel-dots {
+        bottom: 15px;
+    }
+    
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-wrapper {
+        height: 250px;
+    }
+    
+    .carousel-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+    
+    .carousel-prev {
+        left: 5px;
+    }
+    
+    .carousel-next {
+        right: 5px;
+    }
+}
+
 /* Quick Links Styles */
 .quick-links {
     display: grid;
@@ -1045,6 +1203,167 @@ nav {
     justify-content: center;
     gap: 1rem;
     flex-direction: row;
+}
+
+/* Footer Styles */
+.footer {
+    background: #1e3a8a;
+    color: #ffffff;
+    margin-top: 4rem;
+    position: relative;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.footer-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.footer-text-content {
+    flex: 1;
+    order: 2;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-separator {
+    border: none;
+    height: 1px;
+    background: #475569;
+    margin: 0;
+}
+
+.footer-copyright {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.footer-copyright p {
+    margin: 0;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-logo-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    
+    .footer-logo {
+        width: 100px;
+        height: 100px;
+        order: 1;
+    }
+    
+    .footer-text-content {
+        order: 2;
+    }
+    
+    .footer-title {
+        font-size: 1.3rem;
+    }
+    
+    .footer-description {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        padding: 1.5rem 1rem;
+        gap: 1.5rem;
+    }
+    
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .footer-copyright {
+        padding: 1rem;
+    }
 }
 
 .card:hover {
@@ -1287,6 +1606,34 @@ footer {
     .forms-list-wrapper {
         max-height: calc(100vh - 320px);
     }
+}
+
+/* Section Headers for Station/Equipment/Antenna */
+.section-header {
+    background: #4a5568;
+    color: white;
+    text-align: center;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.station-section,
+.equipment-section,
+.antenna-section {
+    background: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.antenna-section {
+    margin-top: 16px;
 }
 
 /* Enhanced Responsive Design */

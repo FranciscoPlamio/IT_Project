@@ -96,6 +96,7 @@
 # Project Setup for Network Access
 
 ### Prerequisites
+
 - WAMP Server installed and running
 - Node.js and npm installed
 - Both devices (laptop and phone) connected to the same network
@@ -103,14 +104,19 @@
 ### Steps to Host Laravel Project for Network Access
 
 #### 1. Configure APP_URL
+
 Set your Laravel application URL in the `.env` file:
+
 ```env
 APP_URL=http://[YOUR_LAPTOP_IP]/it-project/IT-PROJECT_laravel/public/
 ```
+
 Replace `[YOUR_LAPTOP_IP]` with your laptop's local network IP address.
 
 #### 2. Configure Vite for Network Access
+
 Update `vite.config.js` to allow external connections:
+
 ```javascript
 server: {
     host: '0.0.0.0', // Allow external connections
@@ -122,6 +128,7 @@ server: {
 ```
 
 #### 3. Configure WAMP Apache Settings
+
 - Right-click WAMP icon → Apache → vhost-httpd.conf
 - Make sure vhost-httpd.conf is default
 - Ensure your virtual host includes:
@@ -133,6 +140,7 @@ server: {
 - Restart Apache
 
 #### 4. Configure Windows Firewall for Apache
+
 Follow these steps to allow Apache (httpd.exe) through the firewall:
 
 1. Open Control Panel → Windows Defender Firewall
@@ -143,10 +151,12 @@ Follow these steps to allow Apache (httpd.exe) through the firewall:
 6. Click "OK"
 
 #### 5. Configure Windows Firewall Communication
+
 1. Open Windows Defender Firewall with Advanced Security
-2. Enable rules for both IPv4 and IPv6 "File Sharing and Printing" in both outbound and  inbound rules.
+2. Enable rules for both IPv4 and IPv6 "File Sharing and Printing" in both outbound and inbound rules.
 
 #### 6. Start Development Servers
+
 ```bash
 # Terminal 1: Start Vite dev server
 npx vite --host
@@ -155,6 +165,55 @@ npx vite --host
 - Use your laptop's IP: `http://[YOUR_LAPTOP_IP]/it-project/IT-PROJECT_laravel/public/`
 - Vite assets will be served from: `http://[YOUR_LAPTOP_IP]:5173`
 ```
+
+## Fixing `cURL error 60: SSL certificate problem` in Laravel (Google reCAPTCHA)
+
+If you encounter this error when verifying Google reCAPTCHA tokens: This means PHP cannot locate a valid SSL certificate authority file to verify HTTPS connections.
+
+### Step-by-Step Fix (WAMP / Windows)
+
+1. **Locate your PHP installation**
+
+   - **Windows (WAMP/XAMPP example)**
+
+     ```
+     C:\wamp64\bin\php\<your_php_version>\
+     ```
+
+     or
+
+     ```
+     C:\xampp\php\
+     ```
+
+   - **Linux/macOS example**
+     ```
+     /etc/php/<your_php_version>/cli/
+     /etc/php/<your_php_version>/apache2/
+     ```
+
+2. **Download the latest CA certificate bundle**
+
+   Get it from the official cURL site:  
+   👉 [https://curl.se/ca/cacert.pem](https://curl.se/ca/cacert.pem)
+
+   Save it to your PHP directory, for example: <server_php_path>/extras/ssl/cacert.pem
+
+_(Replace `<server_php_path>` with your actual PHP installation path.)_
+
+3. **Edit the correct `php.ini` file**
+
+- For **Windows**: check which `php.ini` your Apache uses by creating a `phpinfo()` page and checking **Loaded Configuration File**.
+- For **Linux/macOS**: edit both CLI and Apache/Nginx PHP configs if needed.
+
+4. **Add or update these lines** in your `php.ini` (remove `;` if commented):
+
+```ini
+curl.cainfo = "<server_php_path>/extras/ssl/cacert.pem"
+openssl.cafile = "<server_php_path>/extras/ssl/cacert.pem"
+```
+
+5. **Restart your Server**
 
 ## Getting started
 
