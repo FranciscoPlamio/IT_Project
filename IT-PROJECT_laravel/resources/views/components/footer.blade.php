@@ -19,7 +19,7 @@
         <div class="footer-section">
             <h4 class="footer-subtitle">Services</h4>
             <ul class="footer-links">
-                <li><a href="{{ route('forms.display') }}">Forms</a></li>
+                <li><a href="{{ route('display.forms') }}">Forms</a></li>
                 <li><a href="{{ route('email-auth') }}">Apply Online</a></li>
                 <li><a href="{{ route('requirements') }}">Requirements</a></li>
                 <li><a href="https://car.ntc.gov.ph/category/announcements/examination/schedule/" target="_blank"
