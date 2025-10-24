@@ -11,7 +11,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those
                 fields on site and you will need to set a new appointment.
-                <div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa akin</label></div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
 
             <div class="form-layout">
@@ -258,8 +259,32 @@
                 const stepsOrder = ['categories', 'applicant', 'vas']; // Declaration removed
                 const stepsList = document.getElementById('stepsList20');
                 const form = document.getElementById('form120');
+                const warningCheckbox = document.getElementById('warning-agreement');
+                // Function to disable/enable all form fields
+                function toggleFormFields(enabled) {
+                    const formFields = form.querySelectorAll('input, select, textarea, button');
+                    formFields.forEach(field => {
+                        // Skip the warning checkbox itself and hidden inputs
+                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                            return;
+                        }
+                        field.disabled = !enabled;
+                    });
+                }
+                // Initially disable all form fields
+                toggleFormFields(false);
+                // Add event listener to warning checkbox
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleFormFields(this.checked);
+                    });
+                }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'categories') {
+                        return;
+                    }
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -311,12 +336,23 @@
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
+                    // Only allow navigation if warning checkbox is checked
                     showStep(li.dataset.step);
                 });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     if (validateActiveStep()) go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
