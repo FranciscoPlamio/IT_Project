@@ -50,6 +50,7 @@ Route::get('/requirements', function () {
 
 // Transactions
 Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index')->middleware('email.verified');
+Route::get('/transactions/search', [TransactionController::class, 'search'])->name('transactions.finder')->middleware('email.verified');
 
 
 // Email Authentication routes
