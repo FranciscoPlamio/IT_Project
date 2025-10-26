@@ -11,7 +11,10 @@
                         <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner 2" />
                     </div>
                     <div class="carousel-slide">
-                        <img src="{{ asset('images/logo.png') }}" alt="Campaign Banner 3" />
+                        <img src="{{ asset('images/banner_final-new.png') }}" alt="Campaign Banner 3" />
+                    </div>
+                    <div class="carousel-slide">
+                        <img src="{{ asset('images/NTC_BANNER-new.png') }}" alt="Campaign Banner 4" />
                     </div>
                 </div>
 
@@ -28,6 +31,7 @@
                     <span class="dot active" onclick="currentSlide(1)"></span>
                     <span class="dot" onclick="currentSlide(2)"></span>
                     <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
                 </div>
             </div>
         </div>
@@ -56,7 +60,7 @@
 
     <script>
         let currentSlideIndex = 1;
-        const totalSlides = 3;
+        const totalSlides = 4;
 
         // Initialize carousel
         document.addEventListener('DOMContentLoaded', function() {

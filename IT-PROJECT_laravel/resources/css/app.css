@@ -1129,6 +1129,10 @@ nav {
     transform: translateX(-66.666%);
 }
 
+.carousel-slides.slide-4 {
+    transform: translateX(-99.999%);
+}
+
 /* Responsive Carousel */
 @media (max-width: 768px) {
     .carousel-wrapper {
