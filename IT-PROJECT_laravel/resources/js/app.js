@@ -8,4 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     //     const url = form.getAttribute('data-redirect-url') || '/';
     //     window.location.href = url;
     //   });
+    setTimeout(() => {
+        console.log(1);
+        const banner = document.getElementById("top-banner");
+        if (banner) {
+            banner.classList.add("opacity-0"); // fade effect (Tailwind)
+            // After fade, hide it completely
+            setTimeout(() => (banner.style.display = "none"), 500);
+        }
+    }, 4000);
 });
