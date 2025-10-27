@@ -156,7 +156,30 @@ class FormsController extends Controller
 
     public function show($formType)
     {
-        return view("clientside.forms.Form{$formType}", compact('formType'));
+
+        // Get all session keys
+        $sessionKeys = array_keys(session()->all());
+
+        // Check if any key starts with 'form_'
+        $hasFormSession = collect($sessionKeys)->contains(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        if ($hasFormSession) {
+            $formType = "";
+            $formToken = "";
+
+            foreach ($sessionKeys as $key) {
+                if (str_starts_with($key, 'form')) {
+
+                    $formType = substr($key, 5, 4);
+                    $formToken = substr($key, 10);
+                }
+            }
+            $form = session('form_' . $formType . '_' . $formToken);
+            return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken])->with('message', 'Please finish your current form before signing up a new form');
+        } else {
+            return view("clientside.forms.Form{$formType}", compact('formType'));
+        }
     }
 
     /**
@@ -222,11 +245,11 @@ class FormsController extends Controller
      */
     public function storeAll(Request $request, $formType)
     {
-        $formToken = $request->input('form_token');
+        $formToken = $request->input('token');
         $paymentMethod = $request->input('payment_method');
 
         // Form
-        $validated = session('form_' . $formType . '_' . $request->input('form_token'));
+        $validated = session('form_' . $formType . '_' . $request->input('token'));
         if (!$validated) {
             return back()->withErrors(['message' => 'No form data found in session.']);
         }
@@ -244,8 +267,14 @@ class FormsController extends Controller
         //     session()->forget("form101_" . $formToken);
         // }
 
+        //Forget Form Key session
+        $sessionKeys = array_keys(session()->all());
+        $formKey = collect($sessionKeys)->first(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        session()->forget($formKey);
+
         if ($request->wantsJson()) {
-            dd($result);
             return response()->json([
                 'message' => 'Form ' . $formType . ' saved',
                 'form_token' => $formToken,
@@ -254,7 +283,7 @@ class FormsController extends Controller
             ]);
         }
 
-        return redirect()->route('transactions.index')->with('success', 'Form submitted successfully!');
+        return redirect()->route('transactions.index')->with('message', 'Form created successfully');
     }
 
     public function preview(Request $request, $formType)
@@ -303,11 +332,7 @@ class FormsController extends Controller
 
         // Store validated data temporarily in session
         session(["form_{$formType}_$formToken" => $validated]);
-
-        return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken])
-            ->with([
-                'status' => 'Form ' . $formType . ' saved for review.',
-            ]);
+        return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken]);
     }
 
     /**
@@ -317,27 +342,20 @@ class FormsController extends Controller
     {
         $form = session('form_' . $formType . '_' . $request->input('token'));
 
-        // $token = $request->query('token') ?: $request->input('token');
-        // if (!$token) {
-        //     return redirect()->route('forms.1-01')->withErrors('Missing form token.');
-        // }
+        // If no form is found, redirect safely
+        if (!$form) {
+            return redirect()->route('homepage')->with('message', 'No form found in session.');
+        }
 
-        // $form = Form1_01::where('form_token', $token)->first();
-        // if (!$form) {
-        //     return redirect()->route('forms.1-01')->withErrors('Form not found for the provided token.');
-        // }
-
-        // // Check if user is viewing his/her own form
-        // $sessionEmail = session('email_verified');
-        // $user = User::where('email', $sessionEmail)->first();
-        // if (!$user || (string) $form->user_id !== (string) $user->_id) {
-        //     return redirect()->route('forms.1-01')->withErrors('Unauthorized access to this form.');
-        // }
-
-        return view('clientside.forms.Validation', [
-            'form' => $form,
-            'formType' => $formType,
-        ]);
+        // Return view with no-cache headers
+        return response()
+            ->view('clientside.forms.Validation', [
+                'form' => $form,
+                'formType' => $formType,
+            ])
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
     }
 
     /**
@@ -397,7 +415,7 @@ class FormsController extends Controller
                 'formType' => $formType,
                 'formToken' => $token,
             ]);
-            
+
             $pdf->setPaper('A4', 'portrait');
             $pdf->setOptions([
                 'defaultFont' => 'Arial',
@@ -411,7 +429,7 @@ class FormsController extends Controller
                 'debugLayoutInline' => false,
                 'debugLayoutPaddingBox' => false,
             ]);
-            
+
             return $pdf->download("NTC_Form_{$formType}_" . date('Y-m-d') . ".pdf");
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);

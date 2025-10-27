@@ -32,6 +32,8 @@
     <!-- Footer -->
     <x-footer />
 
+    <x-flash-message />
+
     <script>
         const toggle = document.getElementById("menuToggle");
         const navList = document.getElementById("navList");
