@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FormManager;
 use App\Models\Forms\FormsTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,5 +37,25 @@ class TransactionController extends Controller
         }
 
         return view('payment.transaction',  compact('transactions'));
+    }
+
+    public function destroy(Request $request)
+    {
+        $userEmail = session('user_email');
+        //Form Transaction
+        $transaction = FormsTransactions::where('email', $userEmail)->first();
+        //Form Model
+        $formType = substr($transaction->form_type, -4);
+        $formModel = FormManager::getFormModel("Form" . $formType);
+
+        //Form
+        $form = $formModel::where('_id', $transaction->form_id)->first();
+
+        //Delete
+        $transaction->delete();
+        $form->delete();
+
+        return redirect()->route('homepage')
+            ->with('message', 'Your transaction was cancelled successfully.');
     }
 }
