@@ -203,9 +203,9 @@ class EmailController extends Controller
      */
     public function clearEmailVerification(Request $request)
     {
-        session()->forget('email_verified');
+        session()->flush(); // 🧹 clears ALL session data
 
         // Redirect to home page after signing out
-        return redirect()->route('homepage')->with('success', 'You have been signed out successfully.');
+        return redirect()->route('homepage')->with('message', 'You have been signed out successfully.');
     }
 }
