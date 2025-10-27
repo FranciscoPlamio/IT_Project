@@ -61,11 +61,41 @@
     <script>
         let currentSlideIndex = 1;
         const totalSlides = 4;
+        let autoSlideInterval;
 
         // Initialize carousel
         document.addEventListener('DOMContentLoaded', function() {
             showSlide(currentSlideIndex);
+            startAutoSlide(); // Start automatic sliding
+
+            // Pause auto-slide on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+                carouselContainer.addEventListener('mouseleave', startAutoSlide);
+            }
         });
+
+        function startAutoSlide() {
+            // Clear any existing interval
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+            // Auto-advance slides every 4 seconds
+            autoSlideInterval = setInterval(function() {
+                currentSlideIndex++;
+                if (currentSlideIndex > totalSlides) {
+                    currentSlideIndex = 1;
+                }
+                showSlide(currentSlideIndex);
+            }, 4000); // 4000 milliseconds = 4 seconds
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
 
         function showSlide(n) {
             const slides = document.querySelector('.carousel-slides');
@@ -85,11 +115,17 @@
         function changeSlide(direction) {
             currentSlideIndex += direction;
             showSlide(currentSlideIndex);
+            // Restart auto-slide timer when user manually changes slide
+            stopAutoSlide();
+            startAutoSlide();
         }
 
         function currentSlide(n) {
             currentSlideIndex = n;
             showSlide(currentSlideIndex);
+            // Restart auto-slide timer when user clicks on dots
+            stopAutoSlide();
+            startAutoSlide();
         }
     </script>
 
