@@ -101,17 +101,17 @@ class PDFCoordinateMaps
     private static function getForm102Coordinates()
     {
         return [
-            'first_name' => [50, 100],
-            'last_name' => [150, 100],
-            'email' => [50, 120],
+            'first_name' => [30.30, 152.90],
+            'last_name' => [30.30, 147.70],
+            'email' => [135.50, 190.00],
             'contact_no' => [150, 120],
             'address' => [50, 140],
             'date_of_birth' => [50, 160],
             'place_of_birth' => [150, 160],
-            'nationality' => [50, 180],
-            'sex' => [150, 180],
-            'civil_status' => [50, 200],
-            'religion' => [150, 200],
+            'nationality' => [30.30, 168.90],
+            'sex' => [30.30, 163.50],
+            'civil_status' => [50, 150],
+            'religion' => [150, 150],
         ];
     }
 
