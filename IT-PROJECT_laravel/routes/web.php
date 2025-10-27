@@ -69,6 +69,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
     Route::get('{formType}/preview', [FormsController::class, 'showPreview'])->name('preview');
     Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');
     Route::get('{formType}/pdf', [FormsController::class, 'generatePDF'])->name('pdf');
+    Route::get('{formType}/template-pdf', [FormsController::class, 'generateTemplatePDF'])->name('template-pdf');
 
     Route::post('{formType}/preview', [FormsController::class, 'preview'])->name('preview');
     Route::post('{formType}/submit', [FormsController::class, 'storeAll'])->name('submit');

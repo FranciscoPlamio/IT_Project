@@ -262,8 +262,9 @@
                                     <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
                                 @endif
                             </div>
-                            <div class="step-actions"><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button>
+                            <div class="step-actions">
+                                <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
+                                    Validation</button>
                             </div>
                         </fieldset>
                     </section>

@@ -58,6 +58,8 @@
 
             <div class="validation-btns">
                 <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
+                <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                    style="background-color: #28a745; margin: 0 10px;">Download PDF</button>
                 <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
                 <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
                     style="display:none;">
@@ -899,6 +901,33 @@
                 render125();
             } else if (has126) {
                 render126();
+            }
+
+            // PDF Download functionality
+            const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+            if (downloadPDFBtn) {
+                downloadPDFBtn.addEventListener('click', function() {
+                    // Get token from URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const token = urlParams.get('token');
+
+                    if (!token) {
+                        alert('Form token not found. Please refresh the page and try again.');
+                        return;
+                    }
+
+                    // Generate PDF download URL
+                    const formType = @json($formType);
+                    const downloadUrl = `{{ route('forms.template-pdf', ['formType' => $formType]) }}?token=${token}`;
+
+                    // Create a temporary link and trigger download
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = `NTC_Form_${formType}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
             }
         </script>
     </main>

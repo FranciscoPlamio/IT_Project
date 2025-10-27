@@ -278,11 +278,11 @@ class FormsController extends Controller
                 $rules['attributes']
             );
         } catch (ValidationException $e) {
-            // //  Dump the validation errors (for debugging)
-            // dd('Validation failed:', $e->errors(), $e->getMessage());
+            //  Dump the validation errors (for debugging)
+            dd('Validation failed:', $e->errors(), $e->getMessage());
 
-            // // or log it instead of dumping:
-            // Log::error('Validation failed', ['errors' => $e->errors()]);
+            // or log it instead of dumping:
+            Log::error('Validation failed', ['errors' => $e->errors()]);
 
             // or redirect back manually:
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -397,7 +397,7 @@ class FormsController extends Controller
                 'formType' => $formType,
                 'formToken' => $token,
             ]);
-            
+
             $pdf->setPaper('A4', 'portrait');
             $pdf->setOptions([
                 'defaultFont' => 'Arial',
@@ -411,8 +411,57 @@ class FormsController extends Controller
                 'debugLayoutInline' => false,
                 'debugLayoutPaddingBox' => false,
             ]);
-            
+
             return $pdf->download("NTC_Form_{$formType}_" . date('Y-m-d') . ".pdf");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Generate PDF using template-based approach with FPDF/FPDI
+     */
+    public function generateTemplatePDF(Request $request, $formType)
+    {
+        $token = $request->query('token');
+        if (!$token) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $form = session('form_' . $formType . '_' . $token);
+        if (!$form) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        // Check if user is authorized
+        $sessionEmail = session('email_verified');
+        $user = User::where('email', $sessionEmail)->first();
+        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        try {
+            $pdfGenerator = new \App\Services\PDFGenerator();
+
+            // Check if template exists
+            if (!$pdfGenerator->templateExists($formType)) {
+                return response()->json(['error' => "Template not found for form type: {$formType}"], 404);
+            }
+
+            // Check if form data exists for this token
+            if (!$pdfGenerator->formDataExists($formType, $token)) {
+                return response()->json(['error' => "Form data not found for token: {$token}"], 404);
+            }
+
+            // Generate PDF using form token to retrieve data
+            $pdf = $pdfGenerator->generatePDFFromToken($formType, $token);
+
+            // Generate filename
+            $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
+
+            // Output PDF
+            $pdf->Output('D', $filename); // 'D' for download
+
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
         }
