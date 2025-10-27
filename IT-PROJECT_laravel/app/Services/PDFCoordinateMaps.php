@@ -56,14 +56,14 @@ class PDFCoordinateMaps
     {
         return [
             // Personal Information Section
-            'first_name' => [83.60, 115.03],
-            'middle_name' => [83.60, 95],
-            'last_name' => [83.60, 95],
+            'first_name' => [34.00, 117.85],
+            'middle_name' => [34.00, 121.95],
+            'last_name' => [34.00, 113.55],
             'suffix' => [83.60, 95],
             'date_of_birth' => [83.60, 110],
             'place_of_birth' => [83.60, 110],
-            'nationality' => [83.60, 110],
-            'sex' => [83.60, 110],
+            'nationality' => [146.60, 121.95],
+            'sex' => [146.60, 117.85],
             'civil_status' => [83.60, 125],
             'religion' => [83.60, 125],
             'height' => [83.60, 125],
@@ -71,27 +71,27 @@ class PDFCoordinateMaps
 
             // Address Information
             'house_no' => [45, 140],
-            'street' => [120, 140],
-            'barangay' => [45, 155],
-            'municipality' => [120, 155],
-            'province' => [195, 155],
-            'zip_code' => [270, 155],
+            'street' => [146.60, 126.05],
+            'barangay' => [51.50, 130.30],
+            'municipality' => [146.60, 131.55],
+            'province' => [51.50, 134.50],
+            'zip_code' => [146.60, 134.55],
 
             // Contact Information
-            'contact_no' => [45, 170],
-            'email' => [195, 170],
+            'contact_no' => [51.50, 139.00],
+            'email' => [146.60, 138.75],
 
             // Education Information
-            'school_attended' => [45, 185],
-            'course_taken' => [45, 200],
-            'year_graduated' => [195, 200],
+            'school_attended' => [43, 143.00],
+            'course_taken' => [43, 147.20],
+            'year_graduated' => [146.60, 147.20],
 
             // Special Needs
             'needs' => [45, 215],
             'needs_details' => [120, 215],
 
             // Exam Type Selection (this will be placed in a specific area)
-            'exam_type' => [45, 80],
+            'exam_type' => [16, 65.70],
         ];
     }
 
