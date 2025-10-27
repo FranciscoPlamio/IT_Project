@@ -30,9 +30,10 @@
             </div>
 
         </div>
-
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
+            <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                style="background-color: #28a745; margin: 0 10px;">Download PDF</button>
             <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
             <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
                 style="display:none;">
@@ -40,17 +41,6 @@
                 <input type="hidden" name="payment_method" id="paymentMethodInput">
             </form>
         </div>
-    </div>
-    <div class="validation-btns">
-        <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-        <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-            style="background-color: #28a745; margin: 0 10px;">Download PDF</button>
-        <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
-        <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
-            style="display:none;">
-            @csrf
-            <input type="hidden" name="payment_method" id="paymentMethodInput">
-        </form>
     </div>
     </div>
 
@@ -278,6 +268,61 @@
                 }
             `;
         document.head.appendChild(paymentStyle);
+
+        // PDF Download functionality
+        const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+        if (downloadPDFBtn) {
+            downloadPDFBtn.addEventListener('click', function() {
+                downloadPDF();
+            });
+        }
+
+        function downloadPDF() {
+            try {
+                // Get token from URL or server data
+                const tokenFromServer = server101 && server101.form_token ? server101.form_token : '';
+                const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
+                const token = tokenFromServer || tokenFromQuery;
+
+                if (!token) {
+                    alert('Form token not found. Please go back and resubmit the form.');
+                    return;
+                }
+
+                // Show loading state
+                const originalText = downloadPDFBtn.textContent;
+                downloadPDFBtn.textContent = 'Generating PDF...';
+                downloadPDFBtn.disabled = true;
+
+                // Get form type
+                const formType = @json($formType);
+
+                // Create download URL
+                const downloadUrl = `{{ route('forms.template-pdf', ['formType' => $formType]) }}?token=${token}`;
+
+                // Create a temporary link to trigger download
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = `NTC_Form_${formType}_${new Date().toISOString().split('T')[0]}.pdf`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Reset button state after a short delay
+                setTimeout(() => {
+                    downloadPDFBtn.textContent = originalText;
+                    downloadPDFBtn.disabled = false;
+                }, 2000);
+
+            } catch (error) {
+                console.error('PDF download error:', error);
+                alert('Failed to download PDF. Please try again.');
+
+                // Reset button state
+                downloadPDFBtn.textContent = 'Download PDF';
+                downloadPDFBtn.disabled = false;
+            }
+        }
 
         // Show only the active form (fallback to whichever has data)
         renderFormData(server101, @json($formType));
