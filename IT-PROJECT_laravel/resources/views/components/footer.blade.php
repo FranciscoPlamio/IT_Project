@@ -3,7 +3,6 @@
     <div class="footer-content">
         <div class="footer-section footer-main">
             <div class="footer-logo-section">
-                <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="footer-logo">
                 <div class="footer-text-content">
                     <h3 class="footer-title">NTC CAR Baguio</h3>
                     <p class="footer-description">
@@ -60,7 +59,8 @@
     <hr class="footer-separator">
 
     <!-- Copyright notice -->
-    <div class="footer-copyright">
-        <p>&copy; {{ date('Y') }} NTC CAR Baguio. All rights reserved.</p>
+  <div class="footer-copyright">
+    <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="footer-logo-small">
+    <p>&copy; {{ date('Y') }} NTC CAR Baguio. All rights reserved.</p>
     </div>
 </footer>
