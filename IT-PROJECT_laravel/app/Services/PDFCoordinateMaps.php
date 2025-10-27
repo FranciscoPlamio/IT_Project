@@ -5,6 +5,27 @@ namespace App\Services;
 class PDFCoordinateMaps
 {
     /**
+     * A4 page dimensions in points (72 points = 1 inch)
+     * A4 = 210mm × 297mm = 8.27" × 11.69" = 595.28 × 841.89 points
+     */
+    const A4_WIDTH = 595.28;
+    const A4_HEIGHT = 841.89;
+
+    /**
+     * Get A4 page size information
+     */
+    public static function getA4PageSize()
+    {
+        return [
+            'width' => self::A4_WIDTH,
+            'height' => self::A4_HEIGHT,
+            'width_inches' => 8.27,
+            'height_inches' => 11.69,
+            'orientation' => 'portrait'
+        ];
+    }
+
+    /**
      * Get all coordinate maps for PDF forms
      */
     public static function getAllMaps()
@@ -35,18 +56,18 @@ class PDFCoordinateMaps
     {
         return [
             // Personal Information Section
-            'first_name' => [45, 95],
-            'middle_name' => [120, 95],
-            'last_name' => [195, 95],
-            'suffix' => [270, 95],
-            'date_of_birth' => [45, 110],
-            'place_of_birth' => [120, 110],
-            'nationality' => [195, 110],
-            'sex' => [270, 110],
-            'civil_status' => [45, 125],
-            'religion' => [120, 125],
-            'height' => [195, 125],
-            'weight' => [270, 125],
+            'first_name' => [83.60, 115.03],
+            'middle_name' => [83.60, 95],
+            'last_name' => [83.60, 95],
+            'suffix' => [83.60, 95],
+            'date_of_birth' => [83.60, 110],
+            'place_of_birth' => [83.60, 110],
+            'nationality' => [83.60, 110],
+            'sex' => [83.60, 110],
+            'civil_status' => [83.60, 125],
+            'religion' => [83.60, 125],
+            'height' => [83.60, 125],
+            'weight' => [83.60, 125],
 
             // Address Information
             'house_no' => [45, 140],
