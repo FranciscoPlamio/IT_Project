@@ -64,6 +64,7 @@ class PDFGenerator
             if (!$formData) {
                 throw new Exception("Form data not found for token: {$formToken}");
             }
+            // dd($formData); debug only
 
             // Generate PDF with retrieved data
             return $this->generatePDF($formData, $formType);
@@ -77,11 +78,106 @@ class PDFGenerator
      */
     private function fillFormFields($pdf, $formData, $coordinates)
     {
-        foreach ($coordinates as $fieldName => $coords) {
-            if (isset($formData[$fieldName]) && !empty($formData[$fieldName])) {
-                $value = $this->formatFieldValue($formData[$fieldName], $fieldName);
+        // Special handling for exam_type: mark a check mark at the specific option position if provided
+        if (!empty($formData['exam_type'])) {
+            $examTypeKey = $formData['exam_type'];
+            if (!empty($coordinates['exam_type_positions']) && is_array($coordinates['exam_type_positions'])) {
+                $positions = $coordinates['exam_type_positions'];
+                if (!empty($positions[$examTypeKey]) && is_array($positions[$examTypeKey])) {
+                    $pos = $positions[$examTypeKey];
+                    // Place a check mark on the checkbox/radio location
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($pos[0], $pos[1]);
+                    $pdf->Write(0, '4');
+                    // restore default font for subsequent fields
+                    $pdf->SetFont('Arial', '', 10);
+                } elseif (!empty($coordinates['exam_type']) && is_array($coordinates['exam_type'])) {
+                    // Fallback to generic exam_type position when specific not found
+                    $fallback = $coordinates['exam_type'];
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($fallback[0], $fallback[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['exam_type']) && is_array($coordinates['exam_type'])) {
+                // If no map exists, just place a check mark at the generic exam_type position
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($coordinates['exam_type'][0], $coordinates['exam_type'][1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
 
-                // Set position and write text
+        // Special handling for sex: place check mark at the appropriate position
+        if (!empty($formData['sex'])) {
+            $sexValue = strtolower(trim((string)$formData['sex']));
+            // Prefer specific positions mapping when available
+            if (!empty($coordinates['sex_positions']) && is_array($coordinates['sex_positions'])) {
+                $map = $coordinates['sex_positions'];
+                $target = null;
+                if ($sexValue === 'male' && !empty($map['male'])) {
+                    $target = $map['male'];
+                } elseif ($sexValue === 'female' && !empty($map['female'])) {
+                    $target = $map['female'];
+                }
+                if ($target && is_array($target)) {
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($target[0], $target[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['sex']) && is_array($coordinates['sex'])) {
+                // Fallback to legacy single coordinate (assumed male)
+                $sexCoords = $coordinates['sex'];
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($sexCoords[0], $sexCoords[1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
+
+        // Special handling for needs: place check mark at YES/NO based on value
+        if (array_key_exists('needs', $formData)) {
+            $rawNeeds = $formData['needs'];
+            // Normalize to yes/no
+            $needsValue = null;
+            if (is_bool($rawNeeds)) {
+                $needsValue = $rawNeeds ? 'Yes' : 'No';
+            } else {
+                $val = strtolower(trim((string)$rawNeeds));
+                if ($val === '1' || $val === 'true' || $val === 'yes') $needsValue = 'yes';
+                if ($val === '0' || $val === 'false' || $val === 'no') $needsValue = 'no';
+            }
+
+            if ($needsValue) {
+                if (!empty($coordinates['needs_positions']) && is_array($coordinates['needs_positions'])) {
+                    $map = $coordinates['needs_positions'];
+                    if (!empty($map[$needsValue]) && is_array($map[$needsValue])) {
+                        $pos = $map[$needsValue];
+                        $pdf->SetFont('ZapfDingbats', '', 12);
+                        $pdf->SetXY($pos[0], $pos[1]);
+                        $pdf->Write(0, '4');
+                        $pdf->SetFont('Arial', '', 10);
+                    }
+                } elseif (!empty($coordinates['needs']) && is_array($coordinates['needs'])) {
+                    // Fallback to single position
+                    $fallback = $coordinates['needs'];
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($fallback[0], $fallback[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            }
+        }
+
+        // Render remaining fields normally (skip exam_type and sex to avoid duplicate text)
+        foreach ($coordinates as $fieldName => $coords) {
+            if ($fieldName === 'exam_type' || $fieldName === 'exam_type_positions' || $fieldName === 'sex' || $fieldName === 'needs' || $fieldName === 'needs_positions') {
+                continue;
+            }
+            if (isset($formData[$fieldName]) && $formData[$fieldName] !== '' && $formData[$fieldName] !== null) {
+                $value = $this->formatFieldValue($formData[$fieldName], $fieldName);
+                $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($coords[0], $coords[1]);
                 $pdf->Write(0, $value);
             }
