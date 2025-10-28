@@ -190,6 +190,12 @@
                                     <label class="form-label">Place of Exam</label>
                                     <x-forms.exam-fields :form="$form ?? []" />
 
+                                    <div class="step-actions"><button type="button" class="btn-secondary"
+                                            data-prev>Back</button><button type="button" class="btn-primary"
+                                            data-next>Next</button></div>
+
+                                </div>
+                            </div>
                         </fieldset>
                     </section>
 
@@ -414,6 +420,74 @@
                         go(-1);
                     }
                 });
+
+                // --- Toggle enable/disable for modification reason textbox ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !isModification) return;
+                    const enabled = isModification.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                // Bind change listeners for application_type radios
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                    });
+                }
+
+                // --- Toggle enable/disable for club fields and preferred call sign based on permit type ---
+                function togglePermitDependentFields() {
+                    const selectedPermit = form.querySelector('input[name="permit_type"]:checked');
+                    const clubName = form.querySelector('input[name="club_name"]');
+                    const assignedFreq = form.querySelector('input[name="assigned_frequency"]');
+                    const preferredCallSign = form.querySelector('input[name="preferred_call_sign"]');
+
+                    if (!clubName || !assignedFreq || !preferredCallSign) return;
+
+                    const isClub = selectedPermit && selectedPermit.value === 'club_station';
+                    const enablePreferred = selectedPermit && (selectedPermit.value === 'temporary_foreign' ||
+                        selectedPermit.value === 'special_vanity');
+
+                    // Club fields
+                    clubName.disabled = !isClub;
+                    assignedFreq.disabled = !isClub;
+                    if (!isClub) {
+                        clubName.value = '';
+                        assignedFreq.value = '';
+                    }
+
+                    // Preferred call sign
+                    preferredCallSign.disabled = !enablePreferred;
+                    if (!enablePreferred) {
+                        preferredCallSign.value = '';
+                    }
+                }
+
+                // Bind change listeners for permit_type radios
+                form.querySelectorAll('input[name="permit_type"]').forEach(r => {
+                    r.addEventListener('change', togglePermitDependentFields);
+                });
+
+                // Initialize dependent fields on load
+                togglePermitDependentFields();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        togglePermitDependentFields();
+                    });
+                }
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {

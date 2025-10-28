@@ -492,6 +492,49 @@
                     go(-1);
                 }));
 
+                // --- Conditional enable/disable fields ---
+                function toggleRadioServiceOthers() {
+                    const othersRadio = form.querySelector('input[name="radio_service"][value="others"]');
+                    const othersSpecify = form.querySelector('input[name="others_specify"]');
+                    if (!othersRadio || !othersSpecify) return;
+                    const enabled = othersRadio.checked;
+                    othersSpecify.disabled = !enabled;
+                    if (!enabled) othersSpecify.value = '';
+                }
+
+                function toggleIntendedUseDependents() {
+                    const selectedUse = form.querySelector('input[name="intended_use"]:checked');
+                    const storageLocation = form.querySelector('input[name="storage_location"]');
+                    const othersUseSpecify = form.querySelector('input[name="others_use_specify"]');
+                    if (!storageLocation || !othersUseSpecify) return;
+                    const isStorage = selectedUse && selectedUse.value === 'storage';
+                    const isOthers = selectedUse && selectedUse.value === 'others_use';
+                    storageLocation.disabled = !isStorage;
+                    if (!isStorage) storageLocation.value = '';
+                    othersUseSpecify.disabled = !isOthers;
+                    if (!isOthers) othersUseSpecify.value = '';
+                }
+
+                // Bind listeners
+                form.querySelectorAll('input[name="radio_service"]').forEach(r => {
+                    r.addEventListener('change', toggleRadioServiceOthers);
+                });
+                form.querySelectorAll('input[name="intended_use"]').forEach(r => {
+                    r.addEventListener('change', toggleIntendedUseDependents);
+                });
+
+                // Initialize on load
+                toggleRadioServiceOthers();
+                toggleIntendedUseDependents();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleRadioServiceOthers();
+                        toggleIntendedUseDependents();
+                    });
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {

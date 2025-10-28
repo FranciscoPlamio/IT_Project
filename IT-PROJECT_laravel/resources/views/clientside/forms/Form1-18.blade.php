@@ -488,6 +488,47 @@
                     go(-1);
                 }));
 
+                // --- Conditional enable/disable fields ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !modRadio) return;
+                    const enabled = modRadio.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleEntityOthers() {
+                    const othersRadio = form.querySelector('input[name="entity_type"][value="others"]');
+                    const othersInput = document.getElementById('others_input');
+                    if (!othersInput || !othersRadio) return;
+                    const enabled = othersRadio.checked && !othersRadio.disabled;
+                    othersInput.disabled = !enabled;
+                    if (!enabled) othersInput.value = '';
+                }
+
+                // Bind listeners for application_type
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+
+                // Bind listeners for entity_type
+                form.querySelectorAll('input[name="entity_type"]').forEach(r => {
+                    r.addEventListener('change', toggleEntityOthers);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+                toggleEntityOthers();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleEntityOthers();
+                    });
+                }
+
                 // Handle category sub-options state (disable/enable only)
                 function handleCategoryOptions() {
                     const rceRadio = document.querySelector('input[name="category"][value="rce"]');
@@ -556,10 +597,9 @@
                 // Initialize category options state
                 handleCategoryOptions();
 
-                // Add event listeners for others radio button
+                // Legacy specific listeners for others entity retained but superseded by toggleEntityOthers
                 const othersRadio = document.getElementById('others_radio');
                 const othersInput = document.getElementById('others_input');
-
                 if (othersRadio) {
                     othersRadio.addEventListener('change', function() {
                         if (this.checked && this.disabled === false) {
@@ -569,9 +609,10 @@
                         }
                     });
                 }
-
-                // Initialize on page load
-                othersInput.disabled = !othersRadio.checked;
+                // Initialize legacy state
+                if (othersInput && othersRadio) {
+                    othersInput.disabled = !othersRadio.checked;
+                }
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {

@@ -127,7 +127,7 @@
                                     <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
                                 </fieldset>
 
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field" data-require-one="input[type=radio]">
                                     @error('certificate_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -338,6 +338,46 @@
                     }
                     go(-1);
                 }));
+
+
+                // --- Toggle enable/disable for conditional textboxes ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !isModification) return;
+                    const enabled = isModification.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleOthersSpecify() {
+                    const othersSpecify = form.querySelector('input[name="others_specify"]');
+                    const othersRadio = form.querySelector('input[name="certificate_type"][value="others"]');
+                    if (!othersSpecify || !othersRadio) return;
+                    const enabled = othersRadio.checked;
+                    othersSpecify.disabled = !enabled;
+                    if (!enabled) othersSpecify.value = '';
+                }
+
+                // Bind change listeners for radios controlling the conditional fields
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+                form.querySelectorAll('input[name="certificate_type"]').forEach(r => {
+                    r.addEventListener('change', toggleOthersSpecify);
+                });
+
+                // Initialize states on load
+                toggleModificationReason();
+                toggleOthersSpecify();
+
+                // Keep conditional fields in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleOthersSpecify();
+                    });
+                }
 
 
                 const validateBtn = document.getElementById('validateBtn');

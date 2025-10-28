@@ -355,6 +355,31 @@
                     go(-1);
                 }));
 
+                // --- Conditional enable/disable for 'OTHERS, specify' under Type of Radio Service ---
+                function toggleRadioServiceOthersSpecify() {
+                    const othersRadio = form.querySelector('input[name="radio_service"][value="others"]');
+                    const othersSpecify = form.querySelector('input[name="others_radio_specify"]');
+                    if (!othersRadio || !othersSpecify) return;
+                    const enabled = othersRadio.checked;
+                    othersSpecify.disabled = !enabled;
+                    if (!enabled) othersSpecify.value = '';
+                }
+
+                // Bind change listeners for radio_service
+                form.querySelectorAll('input[name="radio_service"]').forEach(r => {
+                    r.addEventListener('change', toggleRadioServiceOthersSpecify);
+                });
+
+                // Initialize on load
+                toggleRadioServiceOthersSpecify();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleRadioServiceOthersSpecify();
+                    });
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {

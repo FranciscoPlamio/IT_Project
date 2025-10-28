@@ -492,6 +492,45 @@
                     go(-1);
                 }));
 
+                // --- Conditional enable/disable fields for Application Details ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !modRadio) return;
+                    const enabled = modRadio.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleServiceTypeOthers() {
+                    const othersRadio = form.querySelector('input[name="service_type"][value="others"]');
+                    const othersInput = form.querySelector('input[name="others_service"]');
+                    if (!othersRadio || !othersInput) return;
+                    const enabled = othersRadio.checked;
+                    othersInput.disabled = !enabled;
+                    if (!enabled) othersInput.value = '';
+                }
+
+                // Bind listeners
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+                form.querySelectorAll('input[name="service_type"]').forEach(r => {
+                    r.addEventListener('change', toggleServiceTypeOthers);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+                toggleServiceTypeOthers();
+
+                // Keep in sync with agreement state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleServiceTypeOthers();
+                    });
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {

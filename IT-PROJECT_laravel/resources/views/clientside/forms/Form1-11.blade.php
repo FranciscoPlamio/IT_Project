@@ -480,6 +480,45 @@
                     go(-1);
                 }));
 
+                // --- Conditional enable/disable fields ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !modRadio) return;
+                    const enabled = modRadio.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleRadioServiceOthers() {
+                    const othersRadio = form.querySelector('input[name="radio_service"][value="others"]');
+                    const othersSpecify = form.querySelector('input[name="others_specify"]');
+                    if (!othersRadio || !othersSpecify) return;
+                    const enabled = othersRadio.checked;
+                    othersSpecify.disabled = !enabled;
+                    if (!enabled) othersSpecify.value = '';
+                }
+
+                // Bind listeners
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+                form.querySelectorAll('input[name="radio_service"]').forEach(r => {
+                    r.addEventListener('change', toggleRadioServiceOthers);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+                toggleRadioServiceOthers();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleRadioServiceOthers();
+                    });
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
