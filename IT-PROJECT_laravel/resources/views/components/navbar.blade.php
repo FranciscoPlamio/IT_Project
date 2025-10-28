@@ -20,9 +20,11 @@
             <a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/"
                 target="_blank" rel="noopener">Contact us</a>
         </li>
-        <li class="{{ Route::is('transactions.finder') ? 'active' : '' }}">
-            <a href="{{ route('transactions.finder') }}">Transaction Finder</a>
-        </li>
+        @if (session('email_verified'))
+            <li class="{{ Route::is('transactions.index') ? 'active' : '' }}">
+                <a href="{{ route('transactions.index') }}">Transactions</a>
+            </li>
+        @endif
         <!-- temp menu -->
         <li class="{{ request()->routeIs('admin.login') ? 'active' : '' }}">
             <a id="navAdmin" href="{{ route('admin.login') }}">Adminside</a>

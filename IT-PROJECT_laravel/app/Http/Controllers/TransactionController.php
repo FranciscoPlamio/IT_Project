@@ -14,7 +14,7 @@ class TransactionController extends Controller
     {
         $userEmail = session('user_email'); // Assuming you store this when they verified
 
-        $transactions = FormsTransactions::where('email', $userEmail)->latest()->first();
+        $transactions = FormsTransactions::where('email', $userEmail)->where('status', 'pending')->latest()->first();
 
         return view('payment.transaction', compact('transactions'));
     }
@@ -43,17 +43,11 @@ class TransactionController extends Controller
     {
         $userEmail = session('user_email');
         //Form Transaction
-        $transaction = FormsTransactions::where('email', $userEmail)->first();
-        //Form Model
-        $formType = substr($transaction->form_type, -4);
-        $formModel = FormManager::getFormModel("Form" . $formType);
-
-        //Form
-        $form = $formModel::where('_id', $transaction->form_id)->first();
-
+        $transaction = FormsTransactions::where('email', $userEmail)->where('status', 'pending')
+            ->latest()
+            ->first();
         //Delete
-        $transaction->delete();
-        $form->delete();
+        $transaction->update(['status' => 'cancel']);
 
         return redirect()->route('homepage')
             ->with('message', 'Your transaction was cancelled successfully.');

@@ -50,7 +50,7 @@
                             </td>
                             {{-- delete feature db forms_transaction --}}
                             <td class="actions-cell">
-                                <form action="{{ route('transactions.delete') }}" method="POST">
+                                <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
                                     @csrf
                                     @method('DELETE')
                                     <button id="cancel-btn" class="cancel-btn">
@@ -218,7 +218,8 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const form = document.querySelector("form")
+            const form = document.getElementById('cancel-btn')
+            console.log(form);
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 // Show confirmation

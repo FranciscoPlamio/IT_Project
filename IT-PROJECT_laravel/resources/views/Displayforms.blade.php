@@ -1,18 +1,7 @@
 <x-layout :title="'Showcase Forms'">
     <main>
         <div class="forms-gallery-container forms-gallery--md forms-gallery--comfy">
-            @if (session('email_verified'))
-                <div style="font-size:14px;color:#666;">
-                    Verified as: <strong>{{ session('email_verified') }}</strong>
-                </div>
-                <form method="POST" action="{{ route('email-auth.clear') }}" style="display:inline;">
-                    @csrf
-                    <button type="submit"
-                        style="background:#dc3545;color:white;border:none;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:12px;">
-                        Sign Out
-                    </button>
-                </form>
-            @endif
+
             <div class="forms-gallery-header">LIST OF HARMONIZED FORMS</div>
             <p class="forms-gallery-note">Please note that a PDF reader application or equivalent browser plug‑in is
                 required to view these forms.</p>

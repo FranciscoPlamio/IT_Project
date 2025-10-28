@@ -156,7 +156,9 @@ class FormsController extends Controller
 
     public function show($formType)
     {
-
+        if (self::userHasFormTransaction()) {
+            return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
+        }
         // Get all session keys
         $sessionKeys = array_keys(session()->all());
 
@@ -516,5 +518,11 @@ class FormsController extends Controller
         $result = $response->json();
         // dd($result); // for debugging (whether the CAPTCHA was successful or not)
         return isset($result['success']) && $result['success'] === true;
+    }
+
+    public function userHasFormTransaction()
+    {
+        $user = self::getUser();
+        return $user->hasFormTransaction();
     }
 }
