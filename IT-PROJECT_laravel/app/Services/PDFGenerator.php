@@ -34,7 +34,6 @@ class PDFGenerator
             if (empty($coordinates)) {
                 throw new Exception("Coordinate map not found for form type: {$formType}");
             }
-
             // Create FPDI instance
             $pdf = new Fpdi();
             $pdf->setSourceFile($this->templatesPath . $templateFile);
@@ -43,7 +42,6 @@ class PDFGenerator
 
             // Set font
             $pdf->SetFont('Arial', '', 10);
-
             // Fill form fields
             $this->fillFormFields($pdf, $formData, $coordinates);
 

@@ -310,7 +310,7 @@ class FormsController extends Controller
             );
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
-            dd('Validation failed:', $e->errors(), $e->getMessage());
+            // dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // or log it instead of dumping:
             Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -480,8 +480,7 @@ class FormsController extends Controller
             $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
 
             // Output PDF
-            $pdf->Output('D', $filename); // 'D' for download
-
+            $pdf->Output('I', $filename); // 'D' for download
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
         }

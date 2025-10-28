@@ -299,7 +299,7 @@
 
                 // Create download URL
                 const downloadUrl = `{{ route('forms.template-pdf', ['formType' => $formType]) }}?token=${token}`;
-
+                console.log(downloadUrl);
                 // Create a temporary link to trigger download
                 const link = document.createElement('a');
                 link.href = downloadUrl;

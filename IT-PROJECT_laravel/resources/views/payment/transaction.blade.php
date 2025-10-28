@@ -46,6 +46,9 @@
                                         <span class="detail-label">Payment Due Date:</span>
                                         <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
                                     </div>
+                                    <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                                        style="background-color: #28a745; margin: 0 10px;">Download PDF
+                                    </button>
                                 </div>
                             </td>
                             {{-- delete feature db forms_transaction --}}
@@ -53,10 +56,12 @@
                                 <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
                                     @csrf
                                     @method('DELETE')
+
                                     <button id="cancel-btn" class="cancel-btn">
                                         <span class="cancel-icon">✕</span>
                                         <span class="cancel-text">CANCEL</span>
                                     </button>
+
                                 </form>
                             </td>
                         </tr>
@@ -209,6 +214,7 @@
                 <!-- Action Buttons -->
                 <div class="transaction-actions">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+
                 </div>
             @endif
         </div>
@@ -229,6 +235,62 @@
                     form.submit();
                 }
             });
+
+
+            // PDF Download functionality
+            const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+            if (downloadPDFBtn) {
+                downloadPDFBtn.addEventListener('click', function() {
+                    downloadPDF();
+                });
+            }
+
+            function downloadPDF() {
+                try {
+
+                    const token = "{{ $transactions?->form_token }}";
+                    if (!token) {
+                        alert('Form token not found. Please go back and resubmit the form.');
+                        return;
+                    }
+
+                    // Show loading state
+                    const originalText = downloadPDFBtn.textContent;
+                    downloadPDFBtn.textContent = 'Generating PDF...';
+                    downloadPDFBtn.disabled = true;
+
+                    // Get form type
+                    let formType = "{{ $transactions?->form_type }}";
+                    formType = formType.substring(4);
+                    console.log(formType);
+
+                    // Create download URL
+                    const baseUrl = "{{ route('forms.template-pdf', ['formType' => 'PLACEHOLDER']) }}";
+                    const downloadUrl = baseUrl.replace('PLACEHOLDER', formType) + `?token=${token}`;
+
+                    // Create a temporary link to trigger download
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = `NTC_Form_${formType}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Reset button state after a short delay
+                    setTimeout(() => {
+                        downloadPDFBtn.textContent = originalText;
+                        downloadPDFBtn.disabled = false;
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('PDF download error:', error);
+                    alert('Failed to download PDF. Please try again.');
+
+                    // Reset button state
+                    downloadPDFBtn.textContent = 'Download PDF';
+                    downloadPDFBtn.disabled = false;
+                }
+            }
         })
     </script>
 </x-layout>
