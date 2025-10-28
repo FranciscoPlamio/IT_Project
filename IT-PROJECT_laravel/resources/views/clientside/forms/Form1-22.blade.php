@@ -468,14 +468,9 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
                     if (!warningCheckbox.checked) {
