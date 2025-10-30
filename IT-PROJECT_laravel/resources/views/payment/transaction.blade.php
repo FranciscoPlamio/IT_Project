@@ -1,4 +1,7 @@
 <x-layout :title="'Transaction Details'">
+    <x-slot:head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </x-slot:head>
     <div class="form1-01-container">
         <div class="form1-01-header">TRANSACTION DETAILS</div>
         <div class="transaction-table-container">
@@ -70,6 +73,26 @@
         <!-- Payment Method Section -->
         <div class="payment-method-section">
             @if (optional($transactions)->payment_method === 'gcash')
+                <!-- Steps Indicator (GCash) -->
+                <div class="steps steps-gcash" style="margin:16px 0;">
+                    <ol id="gcash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
+                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
+                        <li data-step="2" class="step-item">Step 2: Current Page</li>
+                        <li data-step="3" class="step-item">Step 3: Wait for payment confirmation (email will be sent)
+                        </li>
+                        <li data-step="4" class="step-item">Step 4: Payment successful email with PDF download
+                            (optional if download button is added in payment PJ)</li>
+                    </ol>
+                    <div style="margin-top:8px;display:flex;gap:8px;">
+                        <button id="gcash-finish" type="button" class="btn-primary" style="display:none;">Send Success
+                            Email</button>
+                    </div>
+                </div>
+                <!-- GCash Step 1: Wait for Validation -->
+                <div id="gcash-wait" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                </div>
                 <!-- GCash Payment Interface -->
                 <div class="gcash-payment-interface">
                     <!-- GCash Header -->
@@ -116,11 +139,35 @@
                         </div>
                     </div>
                 </div>
+                <!-- GCash Step 3: Wait for Confirmation Message -->
+                <div id="gcash-confirm" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR PAYMENT CONFIRMATION</h2>
+                    <p>You will receive an email once the payment is confirmed.</p>
+                </div>
                 <!-- Action Buttons -->
                 <div class="transaction-actions">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
                 </div>
             @elseif(optional($transactions)->payment_method === 'cash')
+                <!-- Steps Indicator (Cash) -->
+                <div class="steps steps-cash" style="margin:16px 0;">
+                    <ol id="cash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
+                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
+                        <li data-step="2" class="step-item">Step 2: Current Page</li>
+                        <li data-step="3" class="step-item">Step 3: Payment successful email with PDF download
+                            (optional if download button is added in payment PJ)</li>
+                    </ol>
+                    <div style="margin-top:8px;display:flex;gap:8px;">
+                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send Success
+                            Email</button>
+                    </div>
+                </div>
+                <!-- Step 1: Wait for Validation Message -->
+                <div id="cash-wait" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                </div>
                 <!-- Cash Payment Interface -->
                 <div class="cash-payment-interface">
                     <div class="cash-payment-container">
@@ -229,6 +276,107 @@
                     form.submit();
                 }
             });
+            // Simple stepper for testing only
+            const reference = "{{ optional($transactions)->payment_reference }}";
+            const method = "{{ optional($transactions)->payment_method }}";
+
+            function initStepper(prefix, totalSteps) {
+                const stepsEl = document.getElementById(prefix + '-steps');
+                if (!stepsEl) return;
+                const nextBtn = document.getElementById(prefix + '-next');
+                const finishBtn = document.getElementById(prefix + '-finish');
+                const storageKey = prefix + '-step-' + reference;
+                let current = parseInt(sessionStorage.getItem(storageKey) || '1', 10);
+
+                function render() {
+                    stepsEl.querySelectorAll('.step-item').forEach(li => {
+                        const step = parseInt(li.getAttribute('data-step'), 10);
+                        li.style.padding = '6px 10px';
+                        li.style.borderRadius = '6px';
+                        li.style.border = '1px solid #e0e0e0';
+                        li.style.background = step <= current ? '#e6f0ff' : '#f8f9fa';
+                        li.style.fontWeight = step === current ? '600' : '400';
+                        li.style.cursor = 'pointer';
+                    });
+                    if (nextBtn) nextBtn.style.display = current < totalSteps ? 'inline-block' : 'none';
+                    finishBtn.style.display = current === totalSteps ? 'inline-block' : 'none';
+
+                    // Cash-specific UI toggles
+                    if (prefix === 'cash') {
+                        const waitEl = document.getElementById('cash-wait');
+                        const cashInterface = document.querySelector('.cash-payment-interface');
+                        if (waitEl) waitEl.style.display = (current === 1) ? 'block' : 'none';
+                        if (cashInterface) cashInterface.style.display = (current === 2) ? 'block' : 'none';
+                    }
+
+                    // GCash-specific UI toggles
+                    if (prefix === 'gcash') {
+                        const gcashWait = document.getElementById('gcash-wait');
+                        const gcashInterface = document.querySelector('.gcash-payment-interface');
+                        const gcashConfirm = document.getElementById('gcash-confirm');
+                        if (gcashWait) gcashWait.style.display = (current === 1) ? 'block' : 'none';
+                        if (gcashInterface) gcashInterface.style.display = (current === 2) ? 'block' : 'none';
+                        if (gcashConfirm) gcashConfirm.style.display = (current === 3) ? 'block' : 'none';
+                    }
+                }
+
+                nextBtn?.addEventListener('click', () => {
+                    if (current < totalSteps) {
+                        current++;
+                        sessionStorage.setItem(storageKey, String(current));
+                        render();
+                    }
+                });
+
+                finishBtn?.addEventListener('click', async () => {
+                    // Mirror email auth UX: disable during request
+                    finishBtn.disabled = true;
+                    try {
+                        const res = await fetch("{{ route('transactions.complete') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector(
+                                    'meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                payment_reference: reference
+                            })
+                        });
+                        const data = await res.json();
+                        // If email was sent successfully, redirect to homepage
+                        if (data && data.success) {
+                            window.location.href = "{{ url('/') }}";
+                        } else {
+                            alert(data.message || 'Done');
+                        }
+                    } catch (e) {
+                        alert('Failed to complete transaction.');
+                    } finally {
+                        finishBtn.disabled = false;
+                    }
+                });
+
+                // Allow selecting steps by clicking list items
+                stepsEl.addEventListener('click', (event) => {
+                    const target = event.target.closest('.step-item');
+                    if (!target) return;
+                    const clickedStep = parseInt(target.getAttribute('data-step'), 10);
+                    if (!Number.isNaN(clickedStep)) {
+                        current = Math.min(Math.max(clickedStep, 1), totalSteps);
+                        sessionStorage.setItem(storageKey, String(current));
+                        render();
+                    }
+                });
+
+                render();
+            }
+
+            if (method === 'gcash') {
+                initStepper('gcash', 4);
+            } else if (method === 'cash') {
+                initStepper('cash', 3);
+            }
         })
     </script>
 </x-layout>
