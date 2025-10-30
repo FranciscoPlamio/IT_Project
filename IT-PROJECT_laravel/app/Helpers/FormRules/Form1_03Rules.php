@@ -31,7 +31,7 @@ class Form1_03Rules
                 // Application type fields
                 'application_type' => ['required', 'string'],
                 'modification_reason' => ['nullable', 'string'],
-                'years' => ['required', 'integer'],
+                'years' => ['nullable', 'integer'],
 
                 // Exam fields
                 'exam_place' => ['required', 'string'],

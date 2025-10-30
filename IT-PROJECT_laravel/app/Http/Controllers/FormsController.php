@@ -202,8 +202,7 @@ class FormsController extends Controller
         }
 
         // Check if user is editing his/her own form.
-        $sessionEmail = session('email_verified');
-        $user = User::where('email', $sessionEmail)->first();
+        $user = $this->getUser();
 
         if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
             return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Unauthorized access to this form.');
@@ -258,16 +257,9 @@ class FormsController extends Controller
 
         // User email
         $user = $this->getUser();
-
-        // $status = $request->input('status', 'draft');
-        // $transactionData = ['status' => $status];
-
+        
         // Save using FormManager
         $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
-
-        // if ($status === 'submitted') {
-        //     session()->forget("form101_" . $formToken);
-        // }
 
         //Forget Form Key session
         $sessionKeys = array_keys(session()->all());
@@ -346,7 +338,7 @@ class FormsController extends Controller
 
         // If no form is found, redirect safely
         if (!$form) {
-            return redirect()->route('homepage')->with('message', 'No form found in session.');
+            return redirect()->route('homepage');
         }
 
         // Return view with no-cache headers
@@ -376,8 +368,7 @@ class FormsController extends Controller
         }
 
         // Check if user is viewing his/her own form
-        $sessionEmail = session('email_verified');
-        $user = User::where('email', $sessionEmail)->first();
+        $user = $this->getUser();
         if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
             return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Unauthorized access to this form.');
         }
@@ -405,8 +396,7 @@ class FormsController extends Controller
         }
 
         // Check if user is authorized
-        $sessionEmail = session('email_verified');
-        $user = User::where('email', $sessionEmail)->first();
+        $user = $this->getUser();
         if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
@@ -453,9 +443,7 @@ class FormsController extends Controller
             return response()->json(['error' => 'Form not found'], 404);
         }
 
-        // Check if user is authorized
-        $sessionEmail = session('email_verified');
-        $user = User::where('email', $sessionEmail)->first();
+        $user = $this->getUser();
         if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
             return response()->json(['error' => 'Unauthorized access'], 403);
         }
@@ -521,7 +509,7 @@ class FormsController extends Controller
 
     public function userHasFormTransaction()
     {
-        $user = self::getUser();
+        $user = $this->getUser();
         return $user->hasFormTransaction();
     }
 }

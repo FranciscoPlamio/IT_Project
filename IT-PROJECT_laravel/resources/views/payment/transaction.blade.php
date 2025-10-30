@@ -47,7 +47,7 @@
                                         <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
                                     </div>
                                     <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-                                        style="background-color: #28a745; margin: 0 10px;">Download PDF
+                                        style="background-color: #28a745; margin: 0 10px;">Download Form
                                     </button>
                                 </div>
                             </td>
@@ -225,7 +225,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById('cancel-btn')
-            console.log(form);
+
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 // Show confirmation
@@ -262,7 +262,6 @@
                     // Get form type
                     let formType = "{{ $transactions?->form_type }}";
                     formType = formType.substring(4);
-                    console.log(formType);
 
                     // Create download URL
                     const baseUrl = "{{ route('forms.template-pdf', ['formType' => 'PLACEHOLDER']) }}";
