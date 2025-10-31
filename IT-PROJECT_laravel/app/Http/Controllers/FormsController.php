@@ -304,8 +304,8 @@ class FormsController extends Controller
             //  Dump the validation errors (for debugging)
             // dd('Validation failed:', $e->errors(), $e->getMessage());
 
-            // or log it instead of dumping:
-            Log::error('Validation failed', ['errors' => $e->errors()]);
+            // // or log it instead of dumping:
+            // Log::error('Validation failed', ['errors' => $e->errors()]);
 
             // or redirect back manually:
             return redirect()->back()->withErrors($e->errors())->withInput();
@@ -467,8 +467,9 @@ class FormsController extends Controller
             // Generate filename
             $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
 
-            // Output PDF
-            $pdf->Output('I', $filename); // 'D' for download
+            // Stream inline when preview=1, otherwise force download
+            $destination = $request->boolean('preview') ? 'I' : 'D';
+            $pdf->Output($destination, $filename);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
         }

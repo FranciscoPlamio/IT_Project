@@ -43,6 +43,8 @@
     </div>
 
     <script>
+        // No in-page canvas preview; use inline preview via new tab
+
         function formatKey(key) {
             return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         }
@@ -108,17 +110,14 @@
         const list = document.getElementById('validationList');
 
 
-        // Unified function to render form data from server FORM 1-01 (pj)
+        // Render textual summary list for quick review
         function renderFormData(formData, formType = '1-01') {
-
             const titleEl = document.querySelector('.validation-section-title');
             if (titleEl) {
                 titleEl.textContent = `Form ${formType} Details:`;
             }
 
-            // Clear existing content
             list.innerHTML = '';
-
             if (!formData || typeof formData !== 'object') {
                 const dt = document.createElement('dt');
                 dt.textContent = 'No Data';
@@ -132,10 +131,8 @@
             for (const key in formData) {
                 if (key === 'form_token' || key === '_id' || key === 'user_id' || key === 'created_at' || key ===
                     'updated_at') continue;
-
                 const value = formatValue(key, formData[key]);
                 if (value === '' || value === null || value === undefined) continue;
-
                 const dt = document.createElement('dt');
                 dt.textContent = formatKey(key);
                 const dd = document.createElement('dd');

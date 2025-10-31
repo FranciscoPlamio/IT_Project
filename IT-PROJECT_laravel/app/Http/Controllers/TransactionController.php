@@ -6,6 +6,8 @@ use App\Helpers\FormManager;
 use App\Models\Forms\FormsTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Carbon;
 
 class TransactionController extends Controller
 {
@@ -51,5 +53,65 @@ class TransactionController extends Controller
 
         return redirect()->route('homepage')
             ->with('message', 'Your transaction was cancelled successfully.');
+    }
+
+    /**
+     * Mark transaction as paid and send success email with PDF link.
+     */
+    public function complete(Request $request)
+    {
+        $reference = $request->input('payment_reference');
+
+        $transactionQuery = FormsTransactions::query();
+        if ($reference) {
+            $transactionQuery->where('payment_reference', $reference);
+        } else {
+            $transactionQuery->latest();
+        }
+
+        $transaction = $transactionQuery->first();
+        if (!$transaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaction not found.'
+            ], 404);
+        }
+
+        $transaction->update([
+            'status' => 'completed',
+            'payment_status' => 'paid',
+            'payment_date' => now(),
+        ]);
+
+        try {
+            $downloadUrl = route('forms.pdf', ['formType' => $transaction->form_type]);
+
+            // Attempt to get recipient email from session or fallbacks
+            $recipientEmail = session('email_verified') ?: session('user_email');
+            if (!$recipientEmail) {
+                // If not in session, try to infer from a related model if available in your app
+                $recipientEmail = config('mail.from.address');
+            }
+
+            Mail::send('emails.payment-success', [
+                'reference' => $transaction->payment_reference,
+                'paymentMethod' => $transaction->payment_method,
+                'amount' => $transaction->payment_amount,
+                'download_url' => $downloadUrl,
+            ], function ($message) use ($recipientEmail) {
+                $message->to($recipientEmail)
+                    ->subject('Payment Successful - NTC Forms System');
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment marked as completed and email sent.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Payment updated but email failed to send: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }

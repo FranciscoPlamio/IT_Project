@@ -312,16 +312,12 @@
                     return valid;
                 }
 
+                // Disable sidebar click navigation; use Next/Back only
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && li.dataset.step !== 'application') {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-
-                    showStep(li.dataset.step);
+                    // Intentionally do nothing to enforce Next/Back navigation only
                 });
 
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {

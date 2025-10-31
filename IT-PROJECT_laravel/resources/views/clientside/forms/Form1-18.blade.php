@@ -462,16 +462,9 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-
-                    // Only allow navigation to application step if checkbox not checked
-                    if (!warningCheckbox.checked && li.dataset.step !== 'application') {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-
-                    showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
                     if (!warningCheckbox.checked) {

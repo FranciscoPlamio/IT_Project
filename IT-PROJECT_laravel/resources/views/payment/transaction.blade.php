@@ -1,4 +1,7 @@
 <x-layout :title="'Transaction Details'">
+    <x-slot:head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </x-slot:head>
     <div class="form1-01-container">
         <div class="form1-01-header">TRANSACTION DETAILS</div>
         <div class="transaction-table-container">
@@ -75,6 +78,26 @@
         <!-- Payment Method Section -->
         <div class="payment-method-section">
             @if (optional($transactions)->payment_method === 'gcash')
+                <!-- Steps Indicator (GCash) -->
+                <div class="steps steps-gcash" style="margin:16px 0;">
+                    <ol id="gcash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
+                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
+                        <li data-step="2" class="step-item">Step 2: Current Page</li>
+                        <li data-step="3" class="step-item">Step 3: Wait for payment confirmation (email will be sent)
+                        </li>
+                        <li data-step="4" class="step-item">Step 4: Payment successful email with PDF download
+                            (optional if download button is added in payment PJ)</li>
+                    </ol>
+                    <div style="margin-top:8px;display:flex;gap:8px;">
+                        <button id="gcash-finish" type="button" class="btn-primary" style="display:none;">Send Success
+                            Email</button>
+                    </div>
+                </div>
+                <!-- GCash Step 1: Wait for Validation -->
+                <div id="gcash-wait" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                </div>
                 <!-- GCash Payment Interface -->
                 <div class="gcash-payment-interface">
                     <!-- GCash Header -->
@@ -121,11 +144,35 @@
                         </div>
                     </div>
                 </div>
+                <!-- GCash Step 3: Wait for Confirmation Message -->
+                <div id="gcash-confirm" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR PAYMENT CONFIRMATION</h2>
+                    <p>You will receive an email once the payment is confirmed.</p>
+                </div>
                 <!-- Action Buttons -->
                 <div class="transaction-actions">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
                 </div>
             @elseif(optional($transactions)->payment_method === 'cash')
+                <!-- Steps Indicator (Cash) -->
+                <div class="steps steps-cash" style="margin:16px 0;">
+                    <ol id="cash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
+                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
+                        <li data-step="2" class="step-item">Step 2: Current Page</li>
+                        <li data-step="3" class="step-item">Step 3: Payment successful email with PDF download
+                            (optional if download button is added in payment PJ)</li>
+                    </ol>
+                    <div style="margin-top:8px;display:flex;gap:8px;">
+                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send Success
+                            Email</button>
+                    </div>
+                </div>
+                <!-- Step 1: Wait for Validation Message -->
+                <div id="cash-wait" class="validation-wait-message"
+                    style="display:none; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                </div>
                 <!-- Cash Payment Interface -->
                 <div class="cash-payment-interface">
                     <div class="cash-payment-container">

@@ -308,15 +308,9 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-
-                    // Only allow navigation to equipment step if checkbox not checked
-                    if (!warningCheckbox.checked && li.dataset.step !== 'equipment') {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    showStep(li.dataset.step);
                 });
 
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {

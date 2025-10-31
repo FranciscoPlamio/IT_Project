@@ -390,18 +390,11 @@
                     return valid;
                 }
 
-                // Handle step navigation via sidebar
+                // Disable step navigation via sidebar; enforce using Next/Back buttons
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-
-                    // Only allow navigation to personal step if checkbox not checked
-                    if (!warningCheckbox.checked && li.dataset.step !== 'personal') {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-
-                    showStep(li.dataset.step);
+                    e.preventDefault();
                 });
 
                 // Handle next/prev buttons anywhere in the form
