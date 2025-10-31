@@ -49,6 +49,9 @@
                                         <span class="detail-label">Payment Due Date:</span>
                                         <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
                                     </div>
+                                    <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                                        style="background-color: #28a745; margin: 0 10px;">Download Form
+                                    </button>
                                 </div>
                             </td>
                             {{-- delete feature db forms_transaction --}}
@@ -56,10 +59,12 @@
                                 <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
                                     @csrf
                                     @method('DELETE')
+
                                     <button id="cancel-btn" class="cancel-btn">
                                         <span class="cancel-icon">✕</span>
                                         <span class="cancel-text">CANCEL</span>
                                     </button>
+
                                 </form>
                             </td>
                         </tr>
@@ -256,6 +261,7 @@
                 <!-- Action Buttons -->
                 <div class="transaction-actions">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+
                 </div>
             @endif
         </div>
@@ -266,7 +272,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById('cancel-btn')
-            console.log(form);
+
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
                 // Show confirmation
@@ -276,106 +282,60 @@
                     form.submit();
                 }
             });
-            // Simple stepper for testing only
-            const reference = "{{ optional($transactions)->payment_reference }}";
-            const method = "{{ optional($transactions)->payment_method }}";
 
-            function initStepper(prefix, totalSteps) {
-                const stepsEl = document.getElementById(prefix + '-steps');
-                if (!stepsEl) return;
-                const nextBtn = document.getElementById(prefix + '-next');
-                const finishBtn = document.getElementById(prefix + '-finish');
-                const storageKey = prefix + '-step-' + reference;
-                let current = parseInt(sessionStorage.getItem(storageKey) || '1', 10);
 
-                function render() {
-                    stepsEl.querySelectorAll('.step-item').forEach(li => {
-                        const step = parseInt(li.getAttribute('data-step'), 10);
-                        li.style.padding = '6px 10px';
-                        li.style.borderRadius = '6px';
-                        li.style.border = '1px solid #e0e0e0';
-                        li.style.background = step <= current ? '#e6f0ff' : '#f8f9fa';
-                        li.style.fontWeight = step === current ? '600' : '400';
-                        li.style.cursor = 'pointer';
-                    });
-                    if (nextBtn) nextBtn.style.display = current < totalSteps ? 'inline-block' : 'none';
-                    finishBtn.style.display = current === totalSteps ? 'inline-block' : 'none';
-
-                    // Cash-specific UI toggles
-                    if (prefix === 'cash') {
-                        const waitEl = document.getElementById('cash-wait');
-                        const cashInterface = document.querySelector('.cash-payment-interface');
-                        if (waitEl) waitEl.style.display = (current === 1) ? 'block' : 'none';
-                        if (cashInterface) cashInterface.style.display = (current === 2) ? 'block' : 'none';
-                    }
-
-                    // GCash-specific UI toggles
-                    if (prefix === 'gcash') {
-                        const gcashWait = document.getElementById('gcash-wait');
-                        const gcashInterface = document.querySelector('.gcash-payment-interface');
-                        const gcashConfirm = document.getElementById('gcash-confirm');
-                        if (gcashWait) gcashWait.style.display = (current === 1) ? 'block' : 'none';
-                        if (gcashInterface) gcashInterface.style.display = (current === 2) ? 'block' : 'none';
-                        if (gcashConfirm) gcashConfirm.style.display = (current === 3) ? 'block' : 'none';
-                    }
-                }
-
-                nextBtn?.addEventListener('click', () => {
-                    if (current < totalSteps) {
-                        current++;
-                        sessionStorage.setItem(storageKey, String(current));
-                        render();
-                    }
+            // PDF Download functionality
+            const downloadPDFBtn = document.getElementById('downloadPDFBtn');
+            if (downloadPDFBtn) {
+                downloadPDFBtn.addEventListener('click', function() {
+                    downloadPDF();
                 });
-
-                finishBtn?.addEventListener('click', async () => {
-                    // Mirror email auth UX: disable during request
-                    finishBtn.disabled = true;
-                    try {
-                        const res = await fetch("{{ route('transactions.complete') }}", {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector(
-                                    'meta[name="csrf-token"]').getAttribute('content')
-                            },
-                            body: JSON.stringify({
-                                payment_reference: reference
-                            })
-                        });
-                        const data = await res.json();
-                        // If email was sent successfully, redirect to homepage
-                        if (data && data.success) {
-                            window.location.href = "{{ url('/') }}";
-                        } else {
-                            alert(data.message || 'Done');
-                        }
-                    } catch (e) {
-                        alert('Failed to complete transaction.');
-                    } finally {
-                        finishBtn.disabled = false;
-                    }
-                });
-
-                // Allow selecting steps by clicking list items
-                stepsEl.addEventListener('click', (event) => {
-                    const target = event.target.closest('.step-item');
-                    if (!target) return;
-                    const clickedStep = parseInt(target.getAttribute('data-step'), 10);
-                    if (!Number.isNaN(clickedStep)) {
-                        current = Math.min(Math.max(clickedStep, 1), totalSteps);
-                        sessionStorage.setItem(storageKey, String(current));
-                        render();
-                    }
-                });
-
-                render();
             }
 
-            if (method === 'gcash') {
-                initStepper('gcash', 4);
-            } else if (method === 'cash') {
-                initStepper('cash', 3);
+            function downloadPDF() {
+                try {
+
+                    const token = "{{ $transactions?->form_token }}";
+                    if (!token) {
+                        alert('Form token not found. Please go back and resubmit the form.');
+                        return;
+                    }
+
+                    // Show loading state
+                    const originalText = downloadPDFBtn.textContent;
+                    downloadPDFBtn.textContent = 'Generating PDF...';
+                    downloadPDFBtn.disabled = true;
+
+                    // Get form type
+                    let formType = "{{ $transactions?->form_type }}";
+                    formType = formType.substring(4);
+
+                    // Create download URL
+                    const baseUrl = "{{ route('forms.template-pdf', ['formType' => 'PLACEHOLDER']) }}";
+                    const downloadUrl = baseUrl.replace('PLACEHOLDER', formType) + `?token=${token}`;
+
+                    // Create a temporary link to trigger download
+                    const link = document.createElement('a');
+                    link.href = downloadUrl;
+                    link.download = `NTC_Form_${formType}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+
+                    // Reset button state after a short delay
+                    setTimeout(() => {
+                        downloadPDFBtn.textContent = originalText;
+                        downloadPDFBtn.disabled = false;
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('PDF download error:', error);
+                    alert('Failed to download PDF. Please try again.');
+
+                    // Reset button state
+                    downloadPDFBtn.textContent = 'Download PDF';
+                    downloadPDFBtn.disabled = false;
+                }
             }
         })
     </script>

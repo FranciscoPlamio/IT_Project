@@ -12,7 +12,7 @@ class Form1_11Rules
                 'application_type' => ['required', 'string'],
                 'modification_reason' => ['nullable', 'string'],
                 'permit_type' => ['required', 'string'],
-                'years' => ['required', 'integer'],
+                'years' => ['nullable', 'integer'],
                 'radio_service' => ['required', 'string'],
                 'others_specify' => ['nullable', 'string'],
 

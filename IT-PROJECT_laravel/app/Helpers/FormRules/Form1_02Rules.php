@@ -39,7 +39,7 @@ class Form1_02Rules
                 'employment_type' => ['required', 'string'],
                 'application_type' => ['required', 'string'],
                 'modification_reason' => ['nullable', 'string'],
-                'years' => ['required', 'integer'],
+                'years' => ['nullable', 'integer'],
                 'certificate_type' => ['required', 'string'],
 
 

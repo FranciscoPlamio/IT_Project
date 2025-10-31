@@ -247,7 +247,8 @@
                                     <label class="form-label">If yes, please indicate your specific needs and/or
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
-                                        name="needs_details" value="{{ $form['needs_details'] ?? '' }}" disabled>
+                                        name="needs_details"
+                                        value="{{ old('needs_details', $form['needs_details'] ?? '') }}" disabled>
                                     @error('needs_details')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
