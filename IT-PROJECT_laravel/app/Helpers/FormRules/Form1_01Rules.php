@@ -13,9 +13,9 @@ class Form1_01Rules
                 'date_of_exam' => ['nullable', 'date', 'before_or_equal:today'],
 
                 // Applicant Details
-                'last_name' => ['required', 'string', 'min:2'],
-                'first_name' => ['required', 'string', 'min:2'],
-                'middle_name' => ['required', 'string', 'min:2'],
+                'last_name' => ['required', 'string', 'min:2', 'max:50'],
+                'first_name' => ['required', 'string', 'min:2', 'max:50'],
+                'middle_name' => ['nullable', 'string', 'min:1', 'max:50'],
                 'dob' => ['required', 'date', 'before_or_equal:today'],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
