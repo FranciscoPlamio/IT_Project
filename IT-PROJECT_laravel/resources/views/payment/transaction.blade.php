@@ -164,7 +164,8 @@
                             (optional if download button is added in payment PJ)</li>
                     </ol>
                     <div style="margin-top:8px;display:flex;gap:8px;">
-                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send Success
+                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
+                            Success
                             Email</button>
                     </div>
                 </div>

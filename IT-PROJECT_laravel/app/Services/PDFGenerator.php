@@ -52,17 +52,26 @@ class PDFGenerator
     }
 
     /**
-     * Generate PDF using form token to retrieve data from session
+     * Generate PDF using form token to retrieve data from session or database
      */
     public function generatePDFFromToken($formType, $formToken)
     {
         try {
             // Retrieve form data from session using token
             $formData = session('form_' . $formType . '_' . $formToken);
+
+            // If not in session, try database
             if (!$formData) {
-                throw new Exception("Form data not found for token: {$formToken}");
+                $formModel = \App\Helpers\FormManager::getFormModel('form' . $formType);
+                $dbForm = $formModel::where('form_token', $formToken)->first();
+
+                if (!$dbForm) {
+                    throw new Exception("Form data not found for token: {$formToken}");
+                }
+
+                // Convert model to array
+                $formData = $dbForm->toArray();
             }
-            // dd($formData); debug only
 
             // Generate PDF with retrieved data
             return $this->generatePDF($formData, $formType);
@@ -137,17 +146,21 @@ class PDFGenerator
         // Special handling for needs: place check mark at YES/NO based on value
         if (array_key_exists('needs', $formData)) {
             $rawNeeds = $formData['needs'];
-            // Normalize to yes/no
+            // Normalize to lowercase yes/no for coordinate map lookup
             $needsValue = null;
             if (is_bool($rawNeeds)) {
-                $needsValue = $rawNeeds ? 'Yes' : 'No';
+                $needsValue = $rawNeeds ? 'yes' : 'no';
             } else {
                 $val = strtolower(trim((string)$rawNeeds));
-                if ($val === '1' || $val === 'true' || $val === 'yes') $needsValue = 'yes';
-                if ($val === '0' || $val === 'false' || $val === 'no') $needsValue = 'no';
+                if ($val === '1' || $val === 'true' || $val === 'yes' || $val === 'Yes') {
+                    $needsValue = 'yes';
+                } elseif ($val === '0' || $val === 'false' || $val === 'no' || $val === 'No') {
+                    $needsValue = 'no';
+                }
             }
 
-            if ($needsValue) {
+            // Process both 'yes' and 'no' values
+            if ($needsValue !== null) {
                 if (!empty($coordinates['needs_positions']) && is_array($coordinates['needs_positions'])) {
                     $map = $coordinates['needs_positions'];
                     if (!empty($map[$needsValue]) && is_array($map[$needsValue])) {
@@ -168,12 +181,21 @@ class PDFGenerator
             }
         }
 
-        // Render remaining fields normally (skip exam_type and sex to avoid duplicate text)
+        // Render remaining fields normally (skip exam_type, sex, and needs to avoid duplicate text)
         foreach ($coordinates as $fieldName => $coords) {
-            if ($fieldName === 'exam_type' || $fieldName === 'exam_type_positions' || $fieldName === 'sex' || $fieldName === 'needs' || $fieldName === 'needs_positions') {
+            if (
+                $fieldName === 'exam_type' || $fieldName === 'exam_type_positions' ||
+                $fieldName === 'sex' || $fieldName === 'sex_positions' ||
+                $fieldName === 'needs' || $fieldName === 'needs_positions'
+            ) {
                 continue;
             }
-            if (isset($formData[$fieldName]) && $formData[$fieldName] !== '' && $formData[$fieldName] !== null) {
+            // Check if field exists and has a value (including boolean false and empty strings that should be displayed)
+            if (array_key_exists($fieldName, $formData) && $formData[$fieldName] !== null) {
+                // Skip empty strings unless they're explicitly needed
+                if ($formData[$fieldName] === '' && !in_array($fieldName, ['unit', 'street', 'barangay', 'city', 'province', 'zip_code'])) {
+                    continue;
+                }
                 $value = $this->formatFieldValue($formData[$fieldName], $fieldName);
                 $pdf->SetFont('Arial', '', 10);
                 $pdf->SetXY($coords[0], $coords[1]);
@@ -189,19 +211,44 @@ class PDFGenerator
     {
         // Format specific fields
         switch ($fieldName) {
+            case 'dob':
             case 'date_of_birth':
             case 'date_accomplished':
             case 'or_date':
             case 'admission_date':
-                return date('m/d/Y', strtotime($value));
+            case 'date_of_exam':
+                // Handle various date formats: Carbon instances, DateTime objects, MongoDB dates, and strings
+                try {
+                    if ($value instanceof \DateTimeInterface) {
+                        // Handles Carbon, DateTime, and MongoDB\BSON\UTCDateTime (which implements DateTimeInterface)
+                        return $value->format('m/d/Y');
+                    } elseif (is_string($value) && !empty($value)) {
+                        return date('m/d/Y', strtotime($value));
+                    } elseif (is_numeric($value)) {
+                        // Handle Unix timestamps
+                        return date('m/d/Y', (int)$value);
+                    }
+                } catch (\Exception $e) {
+                    // Fallback to string representation if date parsing fails
+                    return is_string($value) ? strtoupper($value) : '';
+                }
+                return '';
 
             case 'exam_type':
                 return $this->formatExamType($value);
 
             case 'needs':
-                return $value == '1' ? 'Yes' : 'No';
+                // This shouldn't be called since needs is handled separately, but just in case
+                if (is_bool($value)) {
+                    return $value ? 'YES' : 'NO';
+                }
+                return strtoupper($value);
 
             default:
+                // Handle boolean values
+                if (is_bool($value)) {
+                    return $value ? 'YES' : 'NO';
+                }
                 return strtoupper($value);
         }
     }
@@ -285,19 +332,44 @@ class PDFGenerator
     }
 
     /**
-     * Check if form data exists for given token
+     * Check if form data exists for given token (checks session and database)
      */
     public function formDataExists($formType, $formToken)
     {
+        // Check session first
         $formData = session('form_' . $formType . '_' . $formToken);
-        return !empty($formData);
+        if (!empty($formData)) {
+            return true;
+        }
+
+        // Check database
+        try {
+            $formModel = \App\Helpers\FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $formToken)->first();
+            return !empty($dbForm);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
-     * Get form data by token
+     * Get form data by token (checks session and database)
      */
     public function getFormDataByToken($formType, $formToken)
     {
-        return session('form_' . $formType . '_' . $formToken);
+        // Check session first
+        $formData = session('form_' . $formType . '_' . $formToken);
+        if (!empty($formData)) {
+            return $formData;
+        }
+
+        // Check database
+        try {
+            $formModel = \App\Helpers\FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $formToken)->first();
+            return $dbForm ? $dbForm->toArray() : null;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

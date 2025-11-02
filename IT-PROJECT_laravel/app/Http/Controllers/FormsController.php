@@ -257,7 +257,7 @@ class FormsController extends Controller
 
         // User email
         $user = $this->getUser();
-        
+
         // Save using FormManager
         $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
@@ -438,14 +438,36 @@ class FormsController extends Controller
             return response()->json(['error' => 'Missing form token'], 400);
         }
 
-        $form = session('form_' . $formType . '_' . $token);
-        if (!$form) {
-            return response()->json(['error' => 'Form not found'], 404);
-        }
-
         $user = $this->getUser();
-        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
-            return response()->json(['error' => 'Unauthorized access'], 403);
+
+        // Try to get form data from session first (for in-progress forms)
+        $form = session('form_' . $formType . '_' . $token);
+
+        // If not in session, retrieve from database
+        if (!$form) {
+            try {
+                $formModel = FormManager::getFormModel('form' . $formType);
+                $dbForm = $formModel::where('form_token', $token)->first();
+
+                if (!$dbForm) {
+                    return response()->json(['error' => 'Form not found'], 404);
+                }
+
+                // Check authorization
+                if (!$user || (string) $dbForm->user_id !== (string) $user->_id) {
+                    return response()->json(['error' => 'Unauthorized access'], 403);
+                }
+
+                // Convert model to array for PDF generation
+                $form = $dbForm->toArray();
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Form not found: ' . $e->getMessage()], 404);
+            }
+        } else {
+            // If in session, check authorization
+            if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+                return response()->json(['error' => 'Unauthorized access'], 403);
+            }
         }
 
         try {
@@ -456,13 +478,8 @@ class FormsController extends Controller
                 return response()->json(['error' => "Template not found for form type: {$formType}"], 404);
             }
 
-            // Check if form data exists for this token
-            if (!$pdfGenerator->formDataExists($formType, $token)) {
-                return response()->json(['error' => "Form data not found for token: {$token}"], 404);
-            }
-
-            // Generate PDF using form token to retrieve data
-            $pdf = $pdfGenerator->generatePDFFromToken($formType, $token);
+            // Generate PDF with form data
+            $pdf = $pdfGenerator->generatePDF($form, $formType);
 
             // Generate filename
             $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
