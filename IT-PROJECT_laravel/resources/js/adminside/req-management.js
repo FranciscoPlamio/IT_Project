@@ -13,13 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    //Add click event to "See more"
-    const seeMoreLinks = document.querySelectorAll(".see-more");
-    seeMoreLinks.forEach(link => {
-        link.addEventListener("click", function () {
-            alert("More details coming soon...");
-        });
-    });
+    // "See more" is now handled by viewForm function
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -118,6 +112,106 @@ function updateStatus(formId, newStatus) {
 }
 
 window.updateStatus = updateStatus;
+
+// Form Download Functions in progress (pj)
+function viewForm(formToken, formType, formId, element) {
+    // Store original element content for restoration (outside try block for error handling)
+    let originalContent = '';
+    let originalStyle = '';
+    
+    // Store original element state for restoration
+    if (element) {
+        originalContent = element.innerHTML;
+        originalStyle = element.style.pointerEvents;
+        // Show loading state
+        element.innerHTML = 'Loading... <img src="/images/see-icon.png" alt="See">';
+        element.style.pointerEvents = 'none';
+        element.style.opacity = '0.6';
+        element.style.cursor = 'wait';
+    }
+
+    // Fetch form data from database using request ID
+    fetch(`/admin/get-form-data?request_id=${encodeURIComponent(formId)}`, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to fetch form data');
+        }
+
+        const formToken = data.form_token;
+        const formType = data.form_type;
+
+        if (!formToken || !formType) {
+            throw new Error('Form data incomplete');
+        }
+
+        // Update loading state
+        if (element) {
+            element.innerHTML = 'Generating PDF... <img src="/images/see-icon.png" alt="See">';
+        }
+
+        // Clean form type (remove "Form" prefix if present)
+        let cleanFormType = formType.replace(/^Form/i, '').replace(/-/g, '_');
+        
+        // Build download URL using data from database
+        const downloadUrl = `/admin/download-form?token=${encodeURIComponent(formToken)}&formType=${encodeURIComponent(cleanFormType)}`;
+        
+        // Create a temporary link to trigger download
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `NTC_Form_${cleanFormType}_${new Date().toISOString().split('T')[0]}.pdf`;
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        
+        // Trigger download
+        link.click();
+        
+        // Clean up link
+        setTimeout(() => {
+            document.body.removeChild(link);
+        }, 100);
+
+        // Reset element state after a delay (to allow download to start)
+        setTimeout(() => {
+            if (element && originalContent) {
+                element.innerHTML = originalContent;
+                element.style.pointerEvents = originalStyle || 'auto';
+                element.style.opacity = '1';
+                element.style.cursor = 'pointer';
+            }
+        }, 2000);
+
+    })
+    .catch(error => {
+        console.error('PDF download error:', error);
+        alert(error.message || 'Failed to download PDF. Please try again.');
+        
+        // Reset element state on error
+        if (element && originalContent) {
+            element.innerHTML = originalContent;
+            element.style.pointerEvents = originalStyle || 'auto';
+            element.style.opacity = '1';
+            element.style.cursor = 'pointer';
+        }
+    });
+}
+
+function approveRequest(formId) {
+    if (!confirm('Are you sure you want to approve this request?')) {
+        return;
+    }
+    
+    updateStatus(formId, 'done');
+}
+
+window.viewForm = viewForm;
+window.approveRequest = approveRequest;
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Request Management JS Loaded");

@@ -41,7 +41,8 @@
                                     @if (optional($transactions)->payment_method === 'gcash')
                                         <div class="detail-row">
                                             <span class="detail-label">Payment Amount:</span>
-                                            <span class="date-text">-</span>
+                                            <span
+                                                class="date-text">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
                                         </div>
                                     @endif
 
@@ -79,27 +80,35 @@
         <div class="payment-method-section">
             @if (optional($transactions)->payment_method === 'gcash')
                 <!-- Steps Indicator (GCash) -->
-                <div class="steps steps-gcash" style="margin:16px 0;">
-                    <ol id="gcash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
-                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
-                        <li data-step="2" class="step-item">Step 2: Current Page</li>
-                        <li data-step="3" class="step-item">Step 3: Wait for payment confirmation (email will be sent)
-                        </li>
-                        <li data-step="4" class="step-item">Step 4: Payment successful email with PDF download
-                            (optional if download button is added in payment PJ)</li>
+                <div class="steps steps-gcash">
+                    <ol id="gcash-steps">
+                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item completed">Payment</li>
+                            <li data-step="3" class="step-item active">Payment successful email with PDF download</li>
+                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0)
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item active">Payment</li>
+                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                        @else
+                            <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item">Payment</li>
+                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                        @endif
                     </ol>
-                    <div style="margin-top:8px;display:flex;gap:8px;">
+                    <div>
                         <button id="gcash-finish" type="button" class="btn-primary" style="display:none;">Send Success
                             Email</button>
                     </div>
                 </div>
                 <!-- GCash Step 1: Wait for Validation -->
                 <div id="gcash-wait" class="validation-wait-message"
-                    style="display:none; text-align:center; margin:24px 0;">
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'none' : (strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'none' : 'block') }}; text-align:center; margin:24px 0;">
                     <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
                 </div>
                 <!-- GCash Payment Interface -->
-                <div class="gcash-payment-interface">
+                <div class="gcash-payment-interface"
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'block' : 'none' }};">
                     <!-- GCash Header -->
                     <div class="gcash-header">
                         <div class="gcash-header-content">
@@ -144,26 +153,36 @@
                         </div>
                     </div>
                 </div>
-                <!-- GCash Step 3: Wait for Confirmation Message -->
+                <!-- GCash Step 3: Payment Success Message -->
                 <div id="gcash-confirm" class="validation-wait-message"
-                    style="display:none; text-align:center; margin:24px 0;">
-                    <h2 style="font-size:28px;">PLEASE WAIT FOR PAYMENT CONFIRMATION</h2>
-                    <p>You will receive an email once the payment is confirmed.</p>
+                    style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.</p>
                 </div>
                 <!-- Action Buttons -->
-                <div class="transaction-actions">
+                <div class="transaction-actions" style="display:none;">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
                 </div>
             @elseif(optional($transactions)->payment_method === 'cash')
                 <!-- Steps Indicator (Cash) -->
-                <div class="steps steps-cash" style="margin:16px 0;">
-                    <ol id="cash-steps" style="display:flex;gap:10px;flex-wrap:wrap;padding:0;list-style:none;">
-                        <li data-step="1" class="step-item">Step 1: PLEASE WAIT FOR VALIDATION</li>
-                        <li data-step="2" class="step-item">Step 2: Current Page</li>
-                        <li data-step="3" class="step-item">Step 3: Payment successful email with PDF download
-                            (optional if download button is added in payment PJ)</li>
+                <div class="steps steps-cash">
+                    <ol id="cash-steps">
+                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item completed">Payment</li>
+                            <li data-step="3" class="step-item active">Payment successful email with PDF download
+                            </li>
+                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0)
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item active">Payment</li>
+                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                        @else
+                            <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item">Payment</li>
+                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                        @endif
                     </ol>
-                    <div style="margin-top:8px;display:flex;gap:8px;">
+                    <div>
                         <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
                             Success
                             Email</button>
@@ -171,11 +190,12 @@
                 </div>
                 <!-- Step 1: Wait for Validation Message -->
                 <div id="cash-wait" class="validation-wait-message"
-                    style="display:none; text-align:center; margin:24px 0;">
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'none' : (strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'none' : 'block') }}; text-align:center; margin:24px 0;">
                     <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
                 </div>
                 <!-- Cash Payment Interface -->
-                <div class="cash-payment-interface">
+                <div class="cash-payment-interface"
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'block' : 'none' }};">
                     <div class="cash-payment-container">
                         <!-- Top Header -->
                         <div class="cash-header-section">
@@ -200,7 +220,8 @@
                                     </div>
                                     <div class="info-item amount-highlight">
                                         <span class="info-label">Amount:</span>
-                                        <span class="info-value amount-value">₱500.00</span>
+                                        <span
+                                            class="info-value amount-value">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
                                     </div>
                                     <div class="info-item">
                                         <span class="info-label">Status:</span>
@@ -259,8 +280,14 @@
                         </div>
                     </div>
                 </div>
+                <!-- Cash Step 3: Payment Success Message -->
+                <div id="cash-confirm" class="validation-wait-message"
+                    style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+                    <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.</p>
+                </div>
                 <!-- Action Buttons -->
-                <div class="transaction-actions">
+                <div class="transaction-actions" style="display:none;">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
 
                 </div>
@@ -272,17 +299,39 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            // Initialize step progression
+            initializeStepProgression();
+
+            // Check if step 2 is active and hide cancel button
+            checkAndHideCancelButton();
+
+            // Auto-refresh functionality for transitions
+            @if (
+                !isset($transactions->payment_amount) ||
+                    $transactions->payment_amount == null ||
+                    $transactions->payment_amount == 0)
+                startAutoRefreshForAmount();
+            @endif
+
+            @if (isset($transactions->payment_amount) &&
+                    $transactions->payment_amount > 0 &&
+                    strtolower($transactions->payment_status ?? 'pending') !== 'paid')
+                startAutoRefreshForPaid();
+            @endif
+
             const form = document.getElementById('cancel-btn')
 
-            form.addEventListener("submit", (e) => {
-                e.preventDefault();
-                // Show confirmation
-                const confirmCancel = confirm("Are you sure you want to cancel this transaction?");
+            if (form) {
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    // Show confirmation
+                    const confirmCancel = confirm("Are you sure you want to cancel this transaction?");
 
-                if (confirmCancel) {
-                    form.submit();
-                }
-            });
+                    if (confirmCancel) {
+                        form.submit();
+                    }
+                });
+            }
 
 
             // PDF Download functionality
@@ -337,6 +386,241 @@
                     downloadPDFBtn.textContent = 'Download PDF';
                     downloadPDFBtn.disabled = false;
                 }
+            }
+
+            // Check and hide cancel button when step 2 is active
+            function checkAndHideCancelButton() {
+                const cancelForm = document.getElementById('cancel-btn');
+                if (!cancelForm) return;
+
+                // Check both GCash and Cash step containers
+                const gcashSteps = document.getElementById('gcash-steps');
+                const cashSteps = document.getElementById('cash-steps');
+
+                const activeSteps = [];
+                if (gcashSteps) {
+                    const gcashStepItems = gcashSteps.querySelectorAll('.step-item');
+                    gcashStepItems.forEach((step, index) => {
+                        if (step.classList.contains('active') && step.getAttribute('data-step') === '2') {
+                            activeSteps.push(step);
+                        }
+                    });
+                }
+
+                if (cashSteps) {
+                    const cashStepItems = cashSteps.querySelectorAll('.step-item');
+                    cashStepItems.forEach((step, index) => {
+                        if (step.classList.contains('active') && step.getAttribute('data-step') === '2') {
+                            activeSteps.push(step);
+                        }
+                    });
+                }
+
+                // Hide cancel button if step 2 is active
+                if (activeSteps.length > 0) {
+                    cancelForm.style.display = 'none';
+                } else {
+                    cancelForm.style.display = '';
+                }
+            }
+
+            // Step Progression Functionality
+            function initializeStepProgression() {
+                const stepContainers = [
+                    document.getElementById('gcash-steps'),
+                    document.getElementById('cash-steps')
+                ].filter(Boolean);
+
+                stepContainers.forEach((stepList, index) => {
+                    // Add a slight delay for visual effect on page load
+                    setTimeout(() => {
+                        updateProgressLine(stepList);
+                    }, 300 + (index * 100));
+                });
+            }
+
+            function updateProgressLine(stepList) {
+                if (!stepList) return;
+
+                const steps = Array.from(stepList.querySelectorAll('.step-item'));
+                const totalSteps = steps.length;
+
+                if (totalSteps === 0) return;
+
+                // Find the active step index
+                let activeIndex = -1;
+                let completedCount = 0;
+
+                steps.forEach((step, index) => {
+                    if (step.classList.contains('active')) {
+                        activeIndex = index;
+                    }
+                    if (step.classList.contains('completed')) {
+                        completedCount++;
+                    }
+                });
+
+                // Calculate progress percentage
+                // Progress should fill completed steps and reach the center of the active step
+                let progressPercentage = 0;
+
+                if (totalSteps === 1) {
+                    // Single step - if active or completed, show 100%
+                    progressPercentage = (steps[0].classList.contains('active') ||
+                        steps[0].classList.contains('completed')) ? 100 : 0;
+                } else {
+                    // Multiple steps
+                    if (activeIndex >= 0) {
+                        // Progress reaches the center of the active step
+                        // For steps positioned at 0%, 33.33%, 66.67%, 100% (for 4 steps)
+                        // Active step at index 1 should show progress at ~50% (33.33% + half segment)
+                        const segmentWidth = 100 / (totalSteps - 1);
+                        progressPercentage = (activeIndex * segmentWidth) + (segmentWidth / 2);
+
+                        // Ensure it doesn't exceed 100%
+                        progressPercentage = Math.min(progressPercentage, 100);
+                    } else {
+                        // No active step - check for completed steps
+                        const lastCompletedIndex = steps.map((step, idx) =>
+                            step.classList.contains('completed') ? idx : -1
+                        ).filter(idx => idx >= 0).pop();
+
+                        if (lastCompletedIndex !== undefined && lastCompletedIndex >= 0) {
+                            // Progress fills to the end of the last completed step
+                            if (lastCompletedIndex === totalSteps - 1) {
+                                // Last step completed
+                                progressPercentage = 100;
+                            } else {
+                                // Progress reaches the end of the completed step
+                                const segmentWidth = 100 / (totalSteps - 1);
+                                progressPercentage = (lastCompletedIndex + 1) * segmentWidth;
+                            }
+                        }
+                    }
+                }
+
+                // Update the progress line width using CSS variable
+                // Start at 0% then animate to target for smooth initial load
+                stepList.style.setProperty('--progress-width', '0%');
+
+                // Use requestAnimationFrame to ensure the initial 0% is rendered first
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        stepList.style.setProperty('--progress-width', `${progressPercentage}%`);
+                    }, 50);
+                });
+            }
+
+            // Auto-refresh functionality to check for payment_amount changes (Step 1 -> Step 2)
+            function startAutoRefreshForAmount() {
+                const reference = "{{ $transactions?->payment_reference }}";
+                if (!reference) return;
+
+                let refreshInterval;
+                let consecutiveErrors = 0;
+                const maxErrors = 5;
+
+                function checkStatus() {
+                    fetch(`{{ route('transactions.status') }}?reference=${reference}`, {
+                            method: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                consecutiveErrors = 0; // Reset error count on success
+
+                                // Check if payment_amount has been set
+                                if (data.payment_amount && data.payment_amount > 0) {
+                                    // Stop polling
+                                    if (refreshInterval) {
+                                        clearInterval(refreshInterval);
+                                    }
+
+                                    // Reload the page to show updated state
+                                    console.log('Payment amount detected, reloading page...');
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Status check error:', error);
+                            consecutiveErrors++;
+
+                            // Stop polling after too many errors
+                            if (consecutiveErrors >= maxErrors) {
+                                if (refreshInterval) {
+                                    clearInterval(refreshInterval);
+                                }
+                                console.log('Stopped auto-refresh due to multiple errors');
+                            }
+                        });
+                }
+
+                // Start checking every 5 seconds (adjust as needed)
+                refreshInterval = setInterval(checkStatus, 5000);
+
+                // Also check immediately
+                checkStatus();
+            }
+
+            // Auto-refresh functionality to check for payment_status = 'paid' changes (Step 2 -> Step 3)
+            function startAutoRefreshForPaid() {
+                const reference = "{{ $transactions?->payment_reference }}";
+                if (!reference) return;
+
+                let refreshInterval;
+                let consecutiveErrors = 0;
+                const maxErrors = 5;
+
+                function checkStatus() {
+                    fetch(`{{ route('transactions.status') }}?reference=${reference}`, {
+                            method: 'GET',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                                'Accept': 'application/json',
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                consecutiveErrors = 0; // Reset error count on success
+
+                                // Check if payment_status has been set to 'paid'
+                                if (data.payment_status && data.payment_status.toLowerCase() === 'paid') {
+                                    // Stop polling
+                                    if (refreshInterval) {
+                                        clearInterval(refreshInterval);
+                                    }
+
+                                    // Reload the page to show updated state
+                                    console.log('Payment status changed to paid, reloading page...');
+                                    window.location.reload();
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Status check error:', error);
+                            consecutiveErrors++;
+
+                            // Stop polling after too many errors
+                            if (consecutiveErrors >= maxErrors) {
+                                if (refreshInterval) {
+                                    clearInterval(refreshInterval);
+                                }
+                                console.log('Stopped auto-refresh due to multiple errors');
+                            }
+                        });
+                }
+
+                // Start checking every 5 seconds (adjust as needed)
+                refreshInterval = setInterval(checkStatus, 5000);
+
+                // Also check immediately
+                checkStatus();
             }
         })
     </script>

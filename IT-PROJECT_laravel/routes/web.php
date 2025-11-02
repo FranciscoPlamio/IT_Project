@@ -53,6 +53,7 @@ Route::get('/transactions', [TransactionController::class, 'index'])->name('tran
 Route::get('/transactions/search', [TransactionController::class, 'search'])->name('transactions.finder')->middleware('email.verified');
 Route::delete('/transactions', [TransactionController::class, 'destroy'])->name('transactions.delete')->middleware('email.verified');
 Route::post('/transactions/complete', [TransactionController::class, 'complete'])->name('transactions.complete')->middleware('email.verified');
+Route::get('/transactions/status', [TransactionController::class, 'checkStatus'])->name('transactions.status')->middleware('email.verified');
 
 
 // Email Authentication routes
@@ -144,10 +145,13 @@ Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'
 Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
 
 Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
+Route::get('/admin/get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');
+Route::get('/admin/download-form', [AdminAuthController::class, 'downloadFormPDF'])->name('admin.downloadForm');
 
 Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
 
 Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
+Route::post('/adminside/set-amount', [AdminAuthController::class, 'setAmount'])->name('adminside.setAmount');
 
 Route::prefix('adminside')
     ->middleware(\App\Http\Middleware\BlockMobileDevices::class)

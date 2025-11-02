@@ -124,3 +124,53 @@ function setPaid(formId, btn) {
 
 // export for debugging/scope
 window.setPaid = setPaid;
+
+/* SET PAYMENT AMOUNT */
+function setAmount(formId, btn, currentAmount) {
+    const amount = prompt(`Enter payment amount:\n(Current: ${currentAmount || 0})`, currentAmount || '');
+    
+    if (amount === null) return; // User cancelled
+    
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount < 0) {
+        alert('Please enter a valid positive number.');
+        return;
+    }
+
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Updating...";
+
+    fetch("/adminside/set-amount", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": token,
+            "Accept": "application/json",
+        },
+        body: JSON.stringify({ 
+            form_id: formId,
+            payment_amount: parsedAmount
+        }),
+    })
+        .then(async (res) => {
+            const data = await res.json().catch(() => null);
+            if (!res.ok) throw new Error(data?.message || "Server error");
+            return data;
+        })
+        .then((data) => {
+            alert(`Payment amount updated to ${data.payment_amount}`);
+            btn.disabled = false;
+            btn.textContent = originalText;
+        })
+        .catch((err) => {
+            console.error("setAmount error:", err);
+            alert("Failed to update amount: " + (err.message || err));
+            btn.disabled = false;
+            btn.textContent = originalText;
+        });
+}
+
+window.setAmount = setAmount;

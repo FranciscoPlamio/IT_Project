@@ -114,4 +114,35 @@ class TransactionController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get transaction status for polling/auto-refresh
+     */
+    public function checkStatus(Request $request)
+    {
+        $reference = $request->input('reference');
+
+        if (!$reference) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Missing reference number'
+            ], 400);
+        }
+
+        $transaction = FormsTransactions::where('payment_reference', $reference)->first();
+
+        if (!$transaction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Transaction not found'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'payment_amount' => $transaction->payment_amount,
+            'payment_status' => $transaction->payment_status,
+            'status' => $transaction->status,
+        ]);
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Forms\Form1_01;
 use App\Models\Forms\FormsTransactions;
@@ -199,6 +200,134 @@ class AdminAuthController extends Controller   // <-- rename this
         }
     }
 
+    public function getFormData(Request $request)
+    {
+        try {
+            if (!$request->session()->has('admin')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized access'
+                ], 403);
+            }
+
+            $requestId = $request->query('request_id') ?? $request->input('request_id');
+
+            if (!$requestId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Missing request ID'
+                ], 400);
+            }
+
+            // Find the transaction record
+            $transaction = FormsTransactions::where('_id', $requestId)->first();
+
+            if (!$transaction) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not found'
+                ], 404);
+            }
+
+            if (!$transaction->form_token || !$transaction->form_type) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Form data not available for this request'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'form_token' => $transaction->form_token,
+                'form_type' => $transaction->form_type,
+                'request_id' => (string) $transaction->_id
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Get form data error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function downloadFormPDF(Request $request)
+    {
+        try {
+            if (!$request->session()->has('admin')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized access'
+                ], 403);
+            }
+
+            $token = $request->query('token');
+            $formType = $request->query('formType');
+
+            if (!$token || !$formType) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Missing token or form type'
+                ], 400);
+            }
+
+            // Clean form type (remove "Form" prefix if present)
+            $formType = str_replace(['Form', 'form'], '', $formType);
+            $formType = str_replace('-', '_', $formType);
+
+            // Get form model using FormManager
+            $formModel = \App\Helpers\FormManager::getFormModel('form' . $formType);
+
+            // Find form by token
+            $form = $formModel::where('form_token', $token)->first();
+
+            if (!$form) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Form not found'
+                ], 404);
+            }
+
+            // Convert model to array for PDF generation
+            $formData = $form->toArray();
+
+            try {
+                $pdfGenerator = new \App\Services\PDFGenerator();
+
+                // Check if template exists
+                if (!$pdfGenerator->templateExists($formType)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'PDF template not found for this form type'
+                    ], 404);
+                }
+
+                // Generate PDF using the form data
+                $pdf = $pdfGenerator->generatePDF($formData, $formType);
+
+                // Generate filename
+                $filename = "NTC_Form_" . str_replace('_', '-', $formType) . "_" . date('Y-m-d') . ".pdf";
+
+                // Return PDF as download
+                return response($pdf->Output('S'), 200)
+                    ->header('Content-Type', 'application/pdf')
+                    ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            } catch (\Exception $e) {
+                Log::error('PDF generation error: ' . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to generate PDF: ' . $e->getMessage()
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Download form PDF error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Server error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function billPay(Request $request)
     {
         if (!$request->session()->has('admin')) {
@@ -261,6 +390,51 @@ class AdminAuthController extends Controller   // <-- rename this
             'message' => 'Payment marked as paid',
             'payment_status' => $form->payment_status,
             'payment_date' => $form->payment_date->format('M d Y'),
+        ]);
+    }
+
+    public function setAmount(Request $request)
+    {
+        $formId = $request->input('form_id');
+        $paymentAmount = $request->input('payment_amount');
+
+        if (!$formId) {
+            return response()->json(['success' => false, 'message' => 'Missing form id'], 400);
+        }
+
+        if ($paymentAmount === null || $paymentAmount === '') {
+            return response()->json(['success' => false, 'message' => 'Missing payment amount'], 400);
+        }
+
+        $parsedAmount = floatval($paymentAmount);
+        if ($parsedAmount < 0) {
+            return response()->json(['success' => false, 'message' => 'Payment amount must be positive'], 400);
+        }
+
+        $form = FormsTransactions::where('_id', $formId)->first();
+
+        if (!$form) {
+            try {
+                $maybeOid = new \MongoDB\BSON\ObjectId($formId);
+                $form = FormsTransactions::where('_id', $maybeOid)->first();
+            } catch (\Throwable $e) {
+                // ignored
+            }
+        }
+
+        if (!$form) {
+            return response()->json(['success' => false, 'message' => 'Form not found'], 404);
+        }
+
+        // Update payment_amount
+        $form->payment_amount = $parsedAmount;
+        $form->updated_at = now();
+        $form->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment amount updated successfully',
+            'payment_amount' => $form->payment_amount,
         ]);
     }
 }

@@ -3989,3 +3989,295 @@ body {
 #step-equipment .form-table td {
     text-align: center;
 }
+
+/* ============================================
+   Step Progress Indicator Styles
+   ============================================ */
+
+.steps,
+.steps-gcash,
+.steps-cash {
+    margin: 32px 0;
+    padding: 0;
+}
+
+.steps ol,
+.steps-gcash ol,
+.steps-cash ol {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+/* Progress line connecting steps (background) */
+.steps ol::before,
+.steps-gcash ol::before,
+.steps-cash ol::before {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+/* Progress line for completed/active steps (foreground) */
+.steps ol::after,
+.steps-gcash ol::after,
+.steps-cash ol::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #3b82f6 100%);
+    border-radius: 2px;
+    z-index: 1;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: var(--progress-width, 0%);
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Individual Step Item */
+.steps .step-item,
+.steps-gcash .step-item,
+.steps-cash .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 180px;
+    max-width: 280px;
+    padding: 0 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+    color: #6b7280;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding-top: 56px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    list-style: none;
+}
+
+/* Step Circle/Badge */
+.steps .step-item::before,
+.steps-gcash .step-item::before,
+.steps-cash .step-item::before {
+    content: attr(data-step);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #e5e7eb;
+    color: #6b7280;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Pending State (default) */
+.steps .step-item[data-step],
+.steps-gcash .step-item[data-step],
+.steps-cash .step-item[data-step] {
+    color: #9ca3af;
+}
+
+/* Active State */
+.steps .step-item.active::before,
+.steps-gcash .step-item.active::before,
+.steps-cash .step-item.active::before {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: #3b82f6;
+    color: #ffffff;
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.steps .step-item.active,
+.steps-gcash .step-item.active,
+.steps-cash .step-item.active {
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* Completed State */
+.steps .step-item.completed::before,
+.steps-gcash .step-item.completed::before,
+.steps-cash .step-item.completed::before {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    color: #ffffff;
+    content: '✓';
+    font-size: 20px;
+    font-weight: 700;
+    transform: translateX(-50%);
+}
+
+.steps .step-item.completed,
+.steps-gcash .step-item.completed,
+.steps-cash .step-item.completed {
+    color: #059669;
+}
+
+/* Hover Effect */
+.steps .step-item:hover::before,
+.steps-gcash .step-item:hover::before,
+.steps-cash .step-item:hover::before {
+    transform: translateX(-50%) scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Step Action Buttons Container */
+.steps > div[style*="margin-top"],
+.steps-gcash > div[style*="margin-top"],
+.steps-cash > div[style*="margin-top"] {
+    margin-top: 32px !important;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Button Styles for Step Actions */
+.steps .btn-primary,
+.steps-gcash .btn-primary,
+.steps-cash .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.steps .btn-primary:hover,
+.steps-gcash .btn-primary:hover,
+.steps-cash .btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.steps .btn-primary:active,
+.steps-gcash .btn-primary:active,
+.steps-cash .btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design for Steps */
+@media (max-width: 768px) {
+    .steps ol,
+    .steps-gcash ol,
+    .steps-cash ol {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    .steps ol::before,
+    .steps-gcash ol::before,
+    .steps-cash ol::before {
+        display: none;
+    }
+
+    .steps ol::after,
+    .steps-gcash ol::after,
+    .steps-cash ol::after {
+        display: none;
+    }
+
+    .steps .step-item,
+    .steps-gcash .step-item,
+    .steps-cash .step-item {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        min-width: auto;
+        max-width: none;
+        padding: 0;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    .steps .step-item::before,
+    .steps-gcash .step-item::before,
+    .steps-cash .step-item::before {
+        flex-shrink: 0;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+    }
+
+    .steps .step-item.active::before,
+    .steps-gcash .step-item.active::before,
+    .steps-cash .step-item.active::before {
+        transform: scale(1.1);
+    }
+
+    .steps .step-item.completed::before,
+    .steps-gcash .step-item.completed::before,
+    .steps-cash .step-item.completed::before {
+        transform: none;
+    }
+
+    .steps .step-item:hover::before,
+    .steps-gcash .step-item:hover::before,
+    .steps-cash .step-item:hover::before {
+        transform: scale(1.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .steps .step-item::before,
+    .steps-gcash .step-item::before,
+    .steps-cash .step-item::before {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .steps .step-item,
+    .steps-gcash .step-item,
+    .steps-cash .step-item {
+        font-size: 12px;
+        gap: 12px;
+    }
+
+    .steps .btn-primary,
+    .steps-gcash .btn-primary,
+    .steps-cash .btn-primary {
+        padding: 10px 20px;
+        font-size: 13px;
+        width: 100%;
+    }
+}
