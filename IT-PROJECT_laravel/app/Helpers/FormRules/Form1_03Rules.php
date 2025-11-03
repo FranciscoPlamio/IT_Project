@@ -14,7 +14,12 @@ class Form1_03Rules
                 'middle_name' => ['required', 'string', 'min:2'],
 
                 // 3
-                'dob' => ['required', 'date', 'before_or_equal:today'],
+                'dob' => [
+                    'required',
+                    'date',
+                    'before_or_equal:' . now()->subYears(18)->toDateString(),
+                    'after_or_equal:' . now()->subYears(70)->toDateString(),
+                ],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
@@ -53,9 +58,6 @@ class Form1_03Rules
                 'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
             ], // custom messages 
 
-            'attributes' => [
-                'dob' => 'date of birth', // custom attribute name
-            ]
         ];
     }
 }

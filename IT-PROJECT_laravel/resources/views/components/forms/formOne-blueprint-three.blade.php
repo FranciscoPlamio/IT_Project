@@ -8,15 +8,15 @@
 
 <div class="form-grid-3">
     <div class="form-field">
-        <label class="form-label">Date of Birth
+        <label class="form-label">Date of Birth <span class="text-red">*</span>
         </label>
-        <input class="form1-01-input" type="date" name="dob" max="{{ date('Y-m-d', strtotime('-18 years')) }}"
-            value="{{ old('dob', $form['dob'] ?? '') }}">
+        <input class="form1-01-input" type="date" name="dob" min="{{ date('Y-m-d', strtotime('-70 years')) }}"
+            max="{{ date('Y-m-d', strtotime('-18 years')) }}" value="{{ old('dob', $form['dob'] ?? '') }}">
         @error('dob')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
-    <div class="form-field"><label class="form-label">Sex</label>
+    <div class="form-field"><label class="form-label">Sex <span class="text-red">*</span></label>
         <div class="inline-radio">
             <label>
                 <input type="radio" name="sex" value="male"
@@ -35,7 +35,7 @@
     </div>
 
     <div class="form-field">
-        <label class="form-label">Nationality</label>
+        <label class="form-label">Nationality <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="nationality" id="nationalitySelect"
             data-old-value="{{ old('nationality', $form['nationality'] ?? '') }}">
             <option value="">Select Nationality</option>

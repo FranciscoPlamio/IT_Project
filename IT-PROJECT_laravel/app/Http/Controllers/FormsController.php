@@ -254,7 +254,6 @@ class FormsController extends Controller
         if (!$validated) {
             return back()->withErrors(['message' => 'No form data found in session.']);
         }
-
         // User email
         $user = $this->getUser();
 
@@ -280,6 +279,39 @@ class FormsController extends Controller
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
     }
 
+    private function cleanInput(array $data)
+    {
+        $clean_recursive = function ($value, $key = null) use (&$clean_recursive) {
+            if (is_array($value)) {
+                $cleaned = [];
+                foreach ($value as $k => $v) {
+                    $cleaned[$k] = $clean_recursive($v, $k);
+                }
+                return $cleaned;
+            }
+
+            if (is_string($value)) {
+                // Trim and collapse spaces
+                $value = preg_replace('/\s+/', ' ', trim($value));
+
+                // Capitalize name fields
+                $nameFields = ['first_name', 'middle_name', 'last_name'];
+                if ($key && in_array($key, $nameFields)) {
+                    $value = ucwords(strtolower($value));
+                }
+            }
+
+            return $value;
+        };
+
+        $cleanedData = [];
+        foreach ($data as $key => $value) {
+            $cleanedData[$key] = $clean_recursive($value, $key);
+        }
+
+        return $cleanedData;
+    }
+
     public function preview(Request $request, $formType)
     {
         // Verify Google reCAPTCHA first
@@ -294,7 +326,15 @@ class FormsController extends Controller
         $rules = FormManager::getValidationRules($formType);
         // dd($rules);
         // Validate fields of a form, if there are invalid it will print error messages
+
+        // Clean input before validation
+
         try {
+
+            $cleaned = $this->cleanInput($request->all());
+
+            $request->replace($cleaned);
+
             $validated = $request->validate(
                 $rules['rules'],
                 $rules['messages'],
@@ -335,7 +375,6 @@ class FormsController extends Controller
     public function showValidation(Request $request, $formType)
     {
         $form = session('form_' . $formType . '_' . $request->input('token'));
-
         // If no form is found, redirect safely
         if (!$form) {
             return redirect()->route('homepage');

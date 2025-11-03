@@ -1,5 +1,4 @@
 <x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']">
-
     <main>
 
         <form class="form1-01-container" id="form101" method="POST"
@@ -51,6 +50,10 @@
                         @endphp
 
 
+                        <legend>Examination Type <span class="text-red">*</span></legend>
+                        @error('exam_type')
+                            <p class="text-red text-lg text-center w-full">{{ $message }}</p>
+                        @enderror
                         <fieldset class="fieldset-compact">
                             <legend>Radiotelegraphy</legend>
                             <div class="form-field">
@@ -166,9 +169,6 @@
                             </div> --}}
                         </div>
                         <div class="step-actions">
-                            @error('exam_type')
-                                <p class="text-red text-lg text-center w-full">{{ $message }}</p>
-                            @enderror
                             <button type="button" class="btn-primary" data-next>Next</button>
                         </div>
                     </section>
@@ -188,7 +188,7 @@
 
 
                             <div class="form-field">
-                                <label class="form-label">School Attended</label>
+                                <label class="form-label">School Attended <span class="text-red">*</span></label>
                                 <input class="form1-01-input" type="text" name="school_attended"
                                     value="{{ old('school_attended', $form['school_attended'] ?? '') }}">
                                 @error('school_attended')
@@ -197,17 +197,41 @@
                             </div>
                             <div class="form-grid-3">
                                 <div class="form-field">
-                                    <label class="form-label">Course Taken</label>
-                                    <input class="form1-01-input" type="text" name="course_taken"
-                                        value="{{ old('course_taken', $form['course_taken'] ?? '') }}">
+                                    <label class="form-label">Course Taken <span class="text-red">*</span></label>
+                                    <select class="form1-01-input" name="course_taken" id="course_taken" required>
+                                        <x-forms.course-lists-options />
+                                    </select>
+
+                                    {{-- Hidden text input for "Other" --}}
+                                    <input type="text" id="other_course" name="other_course"
+                                        class="form1-01-input mt-2" placeholder="Please specify"
+                                        style="display: none;"
+                                        value="{{ old('other_course', $form['other_course'] ?? '') }}">
+
+                                    </select>
+
                                     @error('course_taken')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Year Graduated</label>
-                                    <input class="form1-01-input" type="text" name="year_graduated"
-                                        value="{{ old('year_graduated', $form['year_graduated'] ?? '') }}">
+                                    <label class="form-label">Year Graduated <span class="text-red">*</span></label>
+                                    <select class="form1-01-input" name="year_graduated">
+                                        <option value="">
+                                            Select Year
+                                        </option>
+                                        @php
+                                            $currentYear = date('Y');
+                                            $startYear = $currentYear - 70; // allows up to 70 years back
+                                        @endphp
+
+                                        @for ($year = $currentYear; $year >= $startYear; $year--)
+                                            <option value="{{ $year }}"
+                                                {{ old('year_graduated', $form['year_graduated'] ?? '') == $year ? 'selected' : '' }}>
+                                                {{ $year }}
+                                            </option>
+                                        @endfor
+                                    </select>
                                     @error('year_graduated')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -225,7 +249,7 @@
                             <div class="form-grid-3">
                                 <div class="form-field" style="grid-column:span 1;">
                                     <label class="form-label">Do you have any special needs and/or requests during the
-                                        examination?</label>
+                                        examination? <span class="text-red">*</span></label>
                                     <div class="inline-radio">
                                         <label>
                                             <input id="needs_yes" type="radio" name="needs" value="1"
@@ -369,250 +393,280 @@
         </form>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
-            (function() {
-                const stepsOrder = ['application', 'applicant', 'assistance']; // declaration removed
-                const stepsList = document.getElementById('stepsList01');
-                const form = document.getElementById('form101');
-                const validationLink = document.getElementById('validationLink');
-                const warningCheckbox = document.getElementById('warning-agreement');
+            document.addEventListener("DOMContentLoaded", () => {
+                (function() {
+                    const stepsOrder = ['application', 'applicant', 'assistance']; // declaration removed
+                    const stepsList = document.getElementById('stepsList01');
+                    const form = document.getElementById('form101');
+                    const validationLink = document.getElementById('validationLink');
+                    const warningCheckbox = document.getElementById('warning-agreement');
 
-                // Function to disable/enable all form fields
-                function toggleFormFields(enabled) {
-                    const formFields = form.querySelectorAll('input, select, textarea, button');
-                    formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                    // Function to disable/enable all form fields
+                    function toggleFormFields(enabled) {
+                        const formFields = form.querySelectorAll('input, select, textarea, button');
+                        formFields.forEach(field => {
+                            // Skip the warning checkbox itself and hidden inputs
+                            if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                                return;
+                            }
+                            field.disabled = !enabled;
+                        });
+                    }
+
+                    // Initially disable all form fields
+                    toggleFormFields(false);
+
+                    // Add event listener to warning checkbox
+                    if (warningCheckbox) {
+                        warningCheckbox.addEventListener('change', function() {
+                            toggleFormFields(this.checked);
+                        });
+                    }
+
+                    function showStep(step) {
+                        // Only allow navigation if warning checkbox is checked
+                        if (!warningCheckbox.checked && step !== 'application') {
                             return;
                         }
-                        field.disabled = !enabled;
-                    });
-                }
 
-                // Initially disable all form fields
-                toggleFormFields(false);
-
-                // Add event listener to warning checkbox
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleFormFields(this.checked);
-                    });
-                }
-
-                function showStep(step) {
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && step !== 'application') {
-                        return;
+                        stepsList.querySelectorAll('.step-item').forEach(li => {
+                            li.classList.toggle('active', li.dataset.step === step);
+                        });
+                        document.querySelectorAll('.step-content').forEach(s => {
+                            s.classList.toggle('active', s.id === `step-${step}`);
+                        });
                     }
 
-                    stepsList.querySelectorAll('.step-item').forEach(li => {
-                        li.classList.toggle('active', li.dataset.step === step);
-                    });
-                    document.querySelectorAll('.step-content').forEach(s => {
-                        s.classList.toggle('active', s.id === `step-${step}`);
-                    });
-                }
-
-                function currentStep() {
-                    const active = stepsList.querySelector('.step-item.active');
-                    return active ? active.dataset.step : stepsOrder[0];
-                }
-
-                function go(delta) {
-                    const idx = stepsOrder.indexOf(currentStep());
-                    const nextIdx = Math.max(0, Math.min(stepsOrder.length - 1, idx + delta));
-                    showStep(stepsOrder[nextIdx]);
-                }
-
-                function validateGroups(section) {
-                    let ok = true;
-                    section.querySelectorAll('[data-require-one]').forEach(group => {
-                        const selector = group.getAttribute('data-require-one');
-                        const items = group.querySelectorAll(selector);
-                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type ===
-                            'radio') ? el.checked : Boolean(el.value));
-                        if (!anyChecked) ok = false;
-                    });
-                    return ok;
-                }
-
-                function validateActiveStep() {
-                    const step = currentStep();
-                    const section = document.getElementById(`step-${step}`);
-                    let valid = true;
-
-                    // Check required fields
-                    section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
-                        if (el.type === 'radio') {
-                            const name = el.name;
-                            const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
-                            const anyChecked = Array.from(group).some(r => r.checked);
-                            if (!anyChecked) valid = false;
-                        } else if (!el.value) {
-                            valid = false;
-                        }
-                    });
-
-                    // Special validation for exam type selection in application step
-                    if (step === 'application') {
-                        const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
-                        if (!examTypeSelected) {
-                            valid = false;
-                        }
+                    function currentStep() {
+                        const active = stepsList.querySelector('.step-item.active');
+                        return active ? active.dataset.step : stepsOrder[0];
                     }
 
-                    // Note: All exam types are now in a single radio group, so no group validation needed
-
-                    const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
-                    if (valid) {
-                        li.classList.add('completed');
-                        li.querySelector('.step-status').textContent = 'Done';
-                    } else {
-                        li.classList.remove('completed');
-                        li.querySelector('.step-status').textContent = '';
-                    }
-                    return valid;
-                }
-
-                stepsList.addEventListener('click', (e) => {
-                    const li = e.target.closest('.step-item');
-                    if (!li) return;
-
-                    // Only allow navigation to application step if checkbox not checked
-                    if (!warningCheckbox.checked && li.dataset.step !== 'application') {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
+                    function go(delta) {
+                        const idx = stepsOrder.indexOf(currentStep());
+                        const nextIdx = Math.max(0, Math.min(stepsOrder.length - 1, idx + delta));
+                        showStep(stepsOrder[nextIdx]);
                     }
 
-                    showStep(li.dataset.step);
-                });
+                    function validateGroups(section) {
+                        let ok = true;
+                        section.querySelectorAll('[data-require-one]').forEach(group => {
+                            const selector = group.getAttribute('data-require-one');
+                            const items = group.querySelectorAll(selector);
+                            const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el
+                                .type ===
+                                'radio') ? el.checked : Boolean(el.value));
+                            if (!anyChecked) ok = false;
+                        });
+                        return ok;
+                    }
 
-                document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
-                    if (validateActiveStep()) {
-                        go(1);
-                    } else {
-                        // Show validation error for current step
-                        const currentStepName = currentStep();
-                        let errorMessage = 'Please complete all required fields before proceeding.';
+                    function validateActiveStep() {
+                        const step = currentStep();
+                        const section = document.getElementById(`step-${step}`);
+                        let valid = true;
 
-                        if (currentStepName === 'application') {
-                            errorMessage = 'Please select an exam type before proceeding.';
+                        // Check required fields
+                        section.querySelectorAll('input[required], select[required], textarea[required]').forEach(
+                            el => {
+                                if (el.type === 'radio') {
+                                    const name = el.name;
+                                    const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
+                                    const anyChecked = Array.from(group).some(r => r.checked);
+                                    if (!anyChecked) valid = false;
+                                } else if (!el.value) {
+                                    valid = false;
+                                }
+                            });
+
+                        // Special validation for exam type selection in application step
+                        if (step === 'application') {
+                            const examTypeSelected = section.querySelector('input[name="exam_type"]:checked');
+                            if (!examTypeSelected) {
+                                valid = false;
+                            }
                         }
 
-                        const errorDiv = document.createElement('p');
-                        errorDiv.className = 'text-red text-sm mt-1';
-                        errorDiv.textContent = errorMessage;
-                        const existingError = document.querySelector(
-                            `#step-${currentStepName} .step-actions .text-red`);
-                        if (existingError) existingError.remove();
-                        document.querySelector(`#step-${currentStepName} .step-actions`).appendChild(errorDiv);
-                    }
-                }));
-                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    go(-1);
-                }));
+                        // Note: All exam types are now in a single radio group, so no group validation needed
 
-                const validateBtn = document.getElementById('validateBtn');
-                if (validateBtn) {
-                    validateBtn.addEventListener('click', async () => {
-                        if (!warningCheckbox.checked) {
+                        const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
+                        if (valid) {
+                            li.classList.add('completed');
+                            li.querySelector('.step-status').textContent = 'Done';
+                        } else {
+                            li.classList.remove('completed');
+                            li.querySelector('.step-status').textContent = '';
+                        }
+                        return valid;
+                    }
+
+                    stepsList.addEventListener('click', (e) => {
+                        const li = e.target.closest('.step-item');
+                        if (!li) return;
+
+                        // Only allow navigation to application step if checkbox not checked
+                        if (!warningCheckbox.checked && li.dataset.step !== 'application') {
                             alert('Please check the agreement checkbox first before proceeding.');
                             return;
                         }
 
-                        const formData = new FormData(form);
-                        formData.forEach((value, key) => {
-                            console.log(`${key}: ${value}`);
-                        });
-                        if (!validateActiveStep()) {
-                            // Show validation error message
+                        showStep(li.dataset.step);
+                    });
+
+                    document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+                        if (validateActiveStep()) {
+                            go(1);
+                        } else {
+                            // Show validation error for current step
+                            const currentStepName = currentStep();
+                            let errorMessage = 'Please complete all required fields before proceeding.';
+
+                            if (currentStepName === 'application') {
+                                errorMessage = 'Please select an exam type before proceeding.';
+                            }
+
                             const errorDiv = document.createElement('p');
-                            errorDiv.className = 'text-red text-sm mt-1';
-                            errorDiv.textContent = 'Please complete all required fields before proceeding.';
-                            const existingError = document.querySelector('.step-actions .text-red');
+                            errorDiv.className = 'text-red text-sm mt-1 text-right';
+                            errorDiv.textContent = errorMessage;
+                            const existingError = document.querySelector(
+                                `#step-${currentStepName} .step-actions .text-red`);
                             if (existingError) existingError.remove();
-                            document.querySelector('.step-actions').appendChild(errorDiv);
+                            document.querySelector(`#step-${currentStepName} .step-actions`)
+                                .parentElement
+                                .appendChild(errorDiv);
+                        }
+                    }));
+                    document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
                             return;
                         }
-                        try {
-                            if (window.grecaptcha) {
-                                const captchaResponse = window.grecaptcha.getResponse();
-                                if (!captchaResponse) {
-                                    const errorDiv = document.createElement('p');
-                                    errorDiv.className = 'text-red text-sm mt-1';
-                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
-                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
-                                    return;
-                                }
+                        go(-1);
+                    }));
+
+                    const validateBtn = document.getElementById('validateBtn');
+                    if (validateBtn) {
+                        validateBtn.addEventListener('click', async () => {
+                            if (!warningCheckbox.checked) {
+                                alert('Please check the agreement checkbox first before proceeding.');
+                                return;
                             }
-                        } catch (e) {}
-                        form.submit();
 
-                        // -- commented AJAX for now--
-                        // -- uncomment if fixed -Richmond
+                            const formData = new FormData(form);
+                            formData.forEach((value, key) => {
+                                console.log(`${key}: ${value}`);
+                            });
+                            if (!validateActiveStep()) {
+                                // Show validation error message
+                                const errorDiv = document.createElement('p');
+                                errorDiv.className = 'text-red text-sm mt-1';
+                                errorDiv.textContent =
+                                    'Please complete all required fields before proceeding.';
+                                const existingError = document.querySelector('.step-actions .text-red');
+                                if (existingError) existingError.remove();
+                                document.querySelector('.step-actions').appendChild(errorDiv);
+                                return;
+                            }
+                            try {
+                                if (window.grecaptcha) {
+                                    const captchaResponse = window.grecaptcha.getResponse();
+                                    if (!captchaResponse) {
+                                        const errorDiv = document.createElement('p');
+                                        errorDiv.className = 'text-red text-sm mt-1';
+                                        errorDiv.textContent =
+                                            'Please complete the CAPTCHA before proceeding.';
+                                        document.querySelector('.g-recaptcha').parentNode.appendChild(
+                                            errorDiv);
+                                        return;
+                                    }
+                                }
+                            } catch (e) {}
+                            form.submit();
 
-                        //const formData = new FormData(form);
-                        // try {
-                        //     const res = await fetch(form.action, {
-                        //         method: 'POST',
-                        //         headers: {
-                        //             'Content-Type': 'application/json',
-                        //             'Accept': 'application/json'
-                        //         },
-                        //         body: formData
-                        //     });
-                        //     const text = await res.text();
-                        //     console.log(text);
-                        //     let json = null;
-                        //     try {
-                        //         json = JSON.parse(text);
-                        //     } catch (e) {}
-                        //     if (res.ok) {
-                        //         if (json.form_token) {
-                        //             localStorage.setItem('form_token', json.form_token);
-                        //         }
-                        //         localStorage.setItem('active-form', '1-01');
-                        //         if (validationLink) {
-                        //             const token = json && json.form_token ? json.form_token : (localStorage
-                        //                 .getItem('form_token') || '');
-                        //             const url = new URL(validationLink.href, window.location.origin);
-                        //             if (token) url.searchParams.set('token', token);
-                        //             window.location.href = url.toString();
-                        //         }
-                        //     } else {
-                        //         console.error('Save failed payload:', json || text);
-                        //         alert('Failed to save. Details logged to console.');
-                        //     }
-                        // } catch (e) {
-                        //     console.error('Network error:', e);
-                        //     alert('Network error. Please try again.');
-                        // }
-                    });
-                }
+                            // -- commented AJAX for now--
+                            // -- uncomment if fixed -Richmond
 
-                // Toggle enable/disable for needs_details based on Yes/No selection
-                const needsYes = document.getElementById('needs_yes');
-                const needsNo = document.getElementById('needs_no');
-                const needsDetails = document.getElementById('needs_details');
+                            //const formData = new FormData(form);
+                            // try {
+                            //     const res = await fetch(form.action, {
+                            //         method: 'POST',
+                            //         headers: {
+                            //             'Content-Type': 'application/json',
+                            //             'Accept': 'application/json'
+                            //         },
+                            //         body: formData
+                            //     });
+                            //     const text = await res.text();
+                            //     console.log(text);
+                            //     let json = null;
+                            //     try {
+                            //         json = JSON.parse(text);
+                            //     } catch (e) {}
+                            //     if (res.ok) {
+                            //         if (json.form_token) {
+                            //             localStorage.setItem('form_token', json.form_token);
+                            //         }
+                            //         localStorage.setItem('active-form', '1-01');
+                            //         if (validationLink) {
+                            //             const token = json && json.form_token ? json.form_token : (localStorage
+                            //                 .getItem('form_token') || '');
+                            //             const url = new URL(validationLink.href, window.location.origin);
+                            //             if (token) url.searchParams.set('token', token);
+                            //             window.location.href = url.toString();
+                            //         }
+                            //     } else {
+                            //         console.error('Save failed payload:', json || text);
+                            //         alert('Failed to save. Details logged to console.');
+                            //     }
+                            // } catch (e) {
+                            //     console.error('Network error:', e);
+                            //     alert('Network error. Please try again.');
+                            // }
+                        });
+                    }
 
-                function updateNeedsDetails() {
-                    if (!needsDetails) return;
-                    const isYes = !!(needsYes && needsYes.checked);
-                    needsDetails.disabled = !isYes;
-                    if (!isYes) {
-                        needsDetails.value = '';
+                    // Toggle enable/disable for needs_details based on Yes/No selection
+                    const needsYes = document.getElementById('needs_yes');
+                    const needsNo = document.getElementById('needs_no');
+                    const needsDetails = document.getElementById('needs_details');
+
+                    function updateNeedsDetails() {
+                        if (!needsDetails) return;
+                        const isYes = !!(needsYes && needsYes.checked);
+                        needsDetails.disabled = !isYes;
+                        if (!isYes) {
+                            needsDetails.value = '';
+                        }
+                    }
+                    if (needsYes) needsYes.addEventListener('change', updateNeedsDetails);
+                    if (needsNo) needsNo.addEventListener('change', updateNeedsDetails);
+                    // Initialize state on load (handles prefilled values)
+                    updateNeedsDetails();
+
+                    showStep(stepsOrder[0]);
+                })();
+
+                //Course taken - Other option
+                const courseSelect = document.getElementById('course_taken');
+                const otherInput = document.getElementById('other_course');
+                console.log(courseSelect, otherInput);
+
+                function toggleOtherInput() {
+                    console.log(1);
+                    if (courseSelect.value === 'Other') {
+                        otherInput.style.display = 'block';
+                        otherInput.required = true;
+                    } else {
+                        otherInput.style.display = 'none';
+                        otherInput.required = false;
+                        otherInput.value = '';
                     }
                 }
-                if (needsYes) needsYes.addEventListener('change', updateNeedsDetails);
-                if (needsNo) needsNo.addEventListener('change', updateNeedsDetails);
-                // Initialize state on load (handles prefilled values)
-                updateNeedsDetails();
 
-                showStep(stepsOrder[0]);
-            })();
+                // Run when loaded + when changed
+                toggleOtherInput();
+                courseSelect.addEventListener('change', toggleOtherInput);
+            });
         </script>
     </main>
 </x-layout>

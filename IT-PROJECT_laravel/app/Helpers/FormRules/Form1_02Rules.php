@@ -14,7 +14,12 @@ class Form1_02Rules
                 'middle_name' => ['required', 'string', 'min:2'],
 
                 // 3 
-                'dob' => ['required', 'date', 'before_or_equal:today'],
+                'dob' => [
+                    'required',
+                    'date',
+                    'before_or_equal:' . now()->subYears(18)->toDateString(),
+                    'after_or_equal:' . now()->subYears(70)->toDateString(),
+                ],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
@@ -33,8 +38,8 @@ class Form1_02Rules
                 'exam_date' => ['required', 'date', 'before_or_equal:today'],
                 'rating' => ['required', 'numeric'],
 
-                'height' => ['required', 'numeric'],
-                'weight' => ['required', 'numeric'],
+                'height' => ['required', 'string'],
+                'weight' => ['required', 'string'],
                 'employment_status' => ['required', 'string'],
                 'employment_type' => ['required', 'string'],
                 'application_type' => ['required', 'string'],

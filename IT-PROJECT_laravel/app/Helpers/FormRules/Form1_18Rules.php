@@ -43,9 +43,6 @@ class Form1_18Rules
                 'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
             ], // custom messages 
 
-            'attributes' => [
-                'dob' => 'date of birth', // custom attribute name
-            ]
         ];
     }
 }

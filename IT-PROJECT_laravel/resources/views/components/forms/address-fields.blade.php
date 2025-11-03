@@ -14,7 +14,7 @@
 
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Province</label>
+        <label class="form-label">Province <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="province" id="provinceSelect"
             data-old-value="{{ old('province', $form['province'] ?? '') }}">
             <option value="">Select Province</option>
@@ -24,7 +24,7 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">City/Municipality</label>
+        <label class="form-label">City/Municipality <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="city" id="citySelect" disabled
             data-old-value="{{ old('city', $form['city'] ?? '') }}">
             <option value="">Select City/Municipality</option>
@@ -36,7 +36,7 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Barangay</label>
+        <label class="form-label">Barangay <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled
             data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}">
             <option value="">Select Barangay</option>
@@ -46,7 +46,7 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Zip Code</label>
+        <label class="form-label">Zip Code <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled
             data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
             <option value="">Select Zip Code</option>
@@ -58,14 +58,14 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Unit/Rm/House/Bldg No.</label>
+        <label class="form-label">Unit/Rm/House/Bldg No. <span class="text-red">*</span></label>
         <input class="form1-01-input" type="text" name="unit" value="{{ old('unit', $form['unit'] ?? '') }}">
         @error('unit')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Street</label>
+        <label class="form-label">Street <span class="text-red">*</span></label>
         <input class="form1-01-input" type="text" name="street" value="{{ old('street', $form['street'] ?? '') }}">
         @error('street')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -74,7 +74,7 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Contact Number</label>
+        <label class="form-label">Contact Number <span class="text-red">*</span></label>
         <input class="form1-01-input" type="text" name="contact_number"
             value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
         @error('contact_number')
@@ -82,7 +82,7 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Email Address</label>
+        <label class="form-label">Email Address <span class="text-red">*</span></label>
         <input class="form1-01-input" type="email" name="email" value="{{ old('email', $form['email'] ?? '') }}">
         @error('email')
             <p class="text-red text-sm mt-1">{{ $message }}</p>

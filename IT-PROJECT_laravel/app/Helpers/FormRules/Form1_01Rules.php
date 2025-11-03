@@ -16,7 +16,12 @@ class Form1_01Rules
                 'last_name' => ['required', 'string', 'min:2', 'max:50'],
                 'first_name' => ['required', 'string', 'min:2', 'max:50'],
                 'middle_name' => ['nullable', 'string', 'min:1', 'max:50'],
-                'dob' => ['required', 'date', 'before_or_equal:today'],
+                'dob' => [
+                    'required',
+                    'date',
+                    'before_or_equal:' . now()->subYears(18)->toDateString(),
+                    'after_or_equal:' . now()->subYears(70)->toDateString(),
+                ],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
                 'unit' => ['required', 'string'],
@@ -50,7 +55,7 @@ class Form1_01Rules
             ],
 
             'messages' => [
-                'exam_type.required' => 'Please select a class',
+                'exam_type.required' => 'Please select an examination type',
                 'needs.required' => 'Please select Yes or No',
                 'needs_details.required_if' => 'Please specify your needs',
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',

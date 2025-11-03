@@ -18,7 +18,7 @@ class EmailController extends Controller
     public function showEmailAuth()
     {
         if (session()->has('email_verified')) {
-            return redirect()->route('forms.list');
+            return redirect()->route('display.forms');
         }
         return view('emailAuthentication');
     }
@@ -162,7 +162,7 @@ class EmailController extends Controller
         }
 
         // Retrieve intended URL from session
-        $redirectUrl = session('intended_url', route('forms.list'));
+        $redirectUrl = session('intended_url', route('display.forms'));
         session()->forget('intended_url'); // Clean up after use
 
 
