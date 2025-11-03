@@ -67,7 +67,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Request #</th>
+                            <th>Reference Number</th>
                             <th>Request Type</th>
                             <th>Payment Date</th>
                             <th>Attachment</th>
@@ -78,7 +78,7 @@
                     <tbody>
                         @forelse($payments as $p)
                             <tr data-id="{{ $p->_id }}">
-                                <td>#{{ $p->form_id ?? $p->_id }}</td>
+                                <td>{{ $p->payment_reference }}</td>
                                 <td>{{ ucfirst($p->form_type ?? 'N/A') }}</td>
                                 <td class="payment-date">{{ $p->formatted_date }}</td>
                                 <td>

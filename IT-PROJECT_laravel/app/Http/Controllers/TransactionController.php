@@ -49,7 +49,7 @@ class TransactionController extends Controller
             ->latest()
             ->first();
         //Delete
-        $transaction->update(['status' => 'cancel']);
+        $transaction->update(['status' => 'cancelled']);
 
         return redirect()->route('homepage')
             ->with('message', 'Your transaction was cancelled successfully.');

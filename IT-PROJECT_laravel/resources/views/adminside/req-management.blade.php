@@ -112,7 +112,7 @@
                     <table class="styled-table">
                         <thead>
                             <tr>
-                                <th>Request #</th>
+                                <th>Reference Number</th>
                                 <th>Request Type</th>
                                 <th>Request Date</th>
                                 <th>Attachment</th>
@@ -123,11 +123,11 @@
                         <tbody>
                             @foreach ($latestRequests as $req)
                                 <tr
-                                    class="request-row {{ isset($highlight) && $highlight == $req->form_id ? 'highlighted' : '' }}">
-                                    <td>#{{ $req->_id }}</td>
+                                    class="request-row {{ isset($highlight) && $highlight == $req->payment_reference ? 'highlighted' : '' }}">
+                                    <td>{{ $req->payment_reference }}</td>
                                     <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
                                     <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
-                                    <td class="see-more" onclick="viewForm('{{ $req->_id }}', this)"
+                                    <td class="see-more" onclick="viewForm('{{ $req->payment_reference }}', this)"
                                         style="cursor: pointer;">
                                         See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
                                     </td>
@@ -143,7 +143,7 @@
                                             Approve
                                         </button>
                                         <button class="badge-btn progress"
-                                            onclick="updateStatus('{{ $req->_id }}', 'cancel')"
+                                            onclick="updateStatus('{{ $req->_id }}', 'cancelled')"
                                             title="Cancel Request">
                                             Cancel
                                         </button>
@@ -218,7 +218,7 @@
                     <table class="styled-table">
                         <thead>
                             <tr>
-                                <th>Request #</th>
+                                <th>Reference Number</th>
                                 <th>Request Type</th>
                                 <th>Request Date</th>
                                 <th>Release Date</th>
@@ -229,20 +229,19 @@
                         <tbody>
                             @foreach ($historyRequests as $req)
                                 <tr
-                                    class="request-row {{ isset($highlight) && $highlight == $req->form_id ? 'highlighted' : '' }}">
-                                    <td>#{{ $req->form_id }}</td>
+                                    class="request-row {{ isset($highlight) && $highlight == $req->payment_reference ? 'highlighted' : '' }}">
+                                    <td>{{ $req->payment_reference }}</td>
                                     <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
                                     <td>{{ $req->created_at->format('d M Y') ?? 'N/A' }}</td>
                                     <td>{{ $req->updated_at->format('d M Y') ?? 'N/A' }}</td>
-                                    <td class="see-more1"
-                                        onclick="viewForm('{{ $req->form_id ?? $req->_id }}', this)"
+                                    <td class="see-more1" onclick="viewForm('{{ $req->payment_reference }}', this)"
                                         style="cursor: pointer;">See more <img
                                             src="{{ asset('images/see-icon.png') }}" alt="See"></td>
                                     <td>
                                         @if (strtolower($req->status) === 'done')
                                             <span class="badge done">Done</span>
                                         @elseif(strtolower($req->status) === 'cancel')
-                                            <span class="badge cancel">Canceled</span>
+                                            <span class="badge cancel">Cancelled</span>
                                         @else
                                             <span class="badge other">{{ ucfirst($req->status ?? 'N/A') }}</span>
                                         @endif

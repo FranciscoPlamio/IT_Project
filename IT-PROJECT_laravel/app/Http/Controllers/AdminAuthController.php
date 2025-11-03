@@ -90,8 +90,8 @@ class AdminAuthController extends Controller   // <-- rename this
                     $app->status_icon = 'Done.png';
                     break;
 
-                case 'cancel':
-                    $app->status_class = 'cancel';
+                case 'cancelled':
+                    $app->status_class = 'cancelled';
                     $app->status_icon = 'Cancel.png';
                     break;
 
@@ -146,12 +146,12 @@ class AdminAuthController extends Controller   // <-- rename this
         $user = User::find($request->session()->get('admin'));
 
         //  Latest (not done or cancel)
-        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancel'])
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled'])
             ->orderBy('created_at', 'desc')
             ->get();
 
         //  History (done or cancel)
-        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel'])
+        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancelled'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -174,7 +174,7 @@ class AdminAuthController extends Controller   // <-- rename this
             // Make sure status is explicitly set (cancel or done)
             $newStatus = strtolower(trim($request->status));
 
-            if (!in_array($newStatus, ['done', 'cancel'])) {
+            if (!in_array($newStatus, ['done', 'cancelled'])) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid status value'

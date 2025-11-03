@@ -66,7 +66,7 @@
             <div class="pie-card cancel">
                 <div class="pie-circle cancel" style="--percent: {{ $percentages['cancel'] }}%;"></div>
                 <div><strong>{{ $percentages['cancel'] }}%</strong></div>
-                <div class="label">Cancel ({{ $cancel }})</div>
+                <div class="label">Cancelled ({{ $cancel }})</div>
             </div>
         </section>
 
@@ -99,7 +99,7 @@
                     <table class="applications-table">
                         <thead>
                             <tr>
-                                <th>Application ID</th>
+                                <th>Reference Number</th>
                                 <th>Form Type</th>
                                 <th>Date Submitted</th>
                                 <th>Status</th>
@@ -112,15 +112,15 @@
                                     $status = strtolower(trim($app->status ?? 'in progress'));
                                     $isInProgress = $status === 'in progress';
                                     $targetRoute = $isInProgress
-                                        ? route('adminside.cert-request', ['highlight' => $app->form_id])
+                                        ? route('adminside.cert-request', ['highlight' => $app->payment_reference])
                                         : route('adminside.req-management', [
-                                            'highlight' => $app->form_id,
+                                            'highlight' => $app->payment_reference,
                                             'section' => 'history',
                                         ]);
                                 @endphp
                                 <tr class="table-row" data-status="{{ $status }}">
                                     <td class="app-id">
-                                        <span class="id-badge">#{{ $app->form_id }}</span>
+                                        <span class="id-badge">{{ $app->payment_reference }}</span>
                                     </td>
                                     <td class="form-type">
                                         <span class="type-label">{{ ucfirst($app->form_type) }}</span>
