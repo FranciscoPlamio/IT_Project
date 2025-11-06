@@ -33,6 +33,10 @@
 
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Instructions</legend>
                             <ol style="margin:8px 0 0 20px;font-size:0.97rem;">
@@ -288,6 +292,7 @@
                                 @endif
                             </div>
                             <div class="step-actions">
+                                <button type="button" class="btn-secondary" data-prev>Back</button>
                                 <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
                                     Validation</button>
                             </div>

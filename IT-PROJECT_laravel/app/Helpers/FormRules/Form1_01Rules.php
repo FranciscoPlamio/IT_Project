@@ -31,7 +31,7 @@ class Form1_01Rules
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['nullable', 'email'],
+                'email' => ['required', 'email', 'regex:/@(gmail|yahoo|outlook)\.com$/i'],
                 'school_attended' => ['required', 'string'],
                 'course_taken' => ['required', 'string'],
                 'year_graduated' => ['required', 'string'],
@@ -56,6 +56,7 @@ class Form1_01Rules
 
             'messages' => [
                 'exam_type.required' => 'Please select an examination type',
+                'email.regex' => 'The email field format is invalid. Please use gmail, yahoo, or outlook email',
                 'needs.required' => 'Please select Yes or No',
                 'needs_details.required_if' => 'Please specify your needs',
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',

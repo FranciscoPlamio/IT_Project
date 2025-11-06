@@ -82,7 +82,9 @@
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Email Address <span class="text-red">*</span></label>
+        <label class="form-label">Email Address <span class="text-red">* </span><small
+                class="text-gray-500 ms-1">(Gmail,
+                Yahoo, or Outlook only)</small></label>
         <input class="form1-01-input" type="email" name="email" value="{{ old('email', $form['email'] ?? '') }}">
         @error('email')
             <p class="text-red text-sm mt-1">{{ $message }}</p>

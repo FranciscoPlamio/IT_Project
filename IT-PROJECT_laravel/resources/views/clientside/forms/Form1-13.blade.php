@@ -21,6 +21,10 @@
                 <div>
 
                     <section class="step-content" id="step-particulars">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset>
                             <legend>Particulars</legend>
                             <div class="form-grid-1">

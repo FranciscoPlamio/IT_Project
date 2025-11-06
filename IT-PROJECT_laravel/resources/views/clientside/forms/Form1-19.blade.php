@@ -33,6 +33,10 @@
 
                 <div>
                     <section class="step-content active" id="step-equipment">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Type of Equipment/Device</legend>
                             @php

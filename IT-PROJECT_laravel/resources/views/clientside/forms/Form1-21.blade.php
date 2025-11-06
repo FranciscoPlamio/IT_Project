@@ -31,6 +31,10 @@
 
                 <div>
                     <section class="step-content active" id="step-applicant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset>
                             <legend>Applicant's Details</legend>
                             <div class="form-grid-1">

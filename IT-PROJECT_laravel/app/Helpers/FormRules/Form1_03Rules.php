@@ -57,6 +57,7 @@ class Form1_03Rules
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
                 'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
             ], // custom messages 
+            'attributes' => []
 
         ];
     }

@@ -33,6 +33,10 @@
 
                 <div class="form-layout-content">
                     <section class="step-content active" id="step-nature">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <div class="form-grid-2">
                             <fieldset class="fieldset-compact">
                                 <legend>Nature of Service</legend>

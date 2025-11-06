@@ -34,6 +34,10 @@
 
                 <div>
                     <section class="step-content active" id="step-transport">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Transport Details</legend>
                             <div class="form-grid-3">

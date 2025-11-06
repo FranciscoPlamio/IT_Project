@@ -33,6 +33,10 @@
 
                 <div>
                     <section class="step-content active" id="step-personal">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset>
                             <legend>Applicant's Details</legend>
 
@@ -46,7 +50,7 @@
                             <div class="form-grid-3">
 
                                 <div class="form-field">
-                                    <label class="form-label">Weight (kg)</label>
+                                    <label class="form-label">Weight (kg)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="weight"
                                         value="{{ old('weight', $form['weight'] ?? '') }}">
                                     @error('weight')
@@ -54,7 +58,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Height (cm)</label>
+                                    <label class="form-label">Height (cm)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="height"
                                         value="{{ old('height', $form['height'] ?? '') }}">
                                     @error('height')
@@ -114,7 +118,7 @@
 
                     <section class="step-content" id="step-application">
                         <fieldset class="fieldset-compact">
-                            <legend>Type of Application & Certificate</legend>
+                            <legend>Type of Application & Certificate<span class="text-red"> *</span></legend>
 
                             @php
                                 $applicationType = old('application_type', $form['application_type'] ?? null);
@@ -131,7 +135,8 @@
                                     @error('certificate_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
-                                    <label class="form-label">Type of Certificate</label>
+                                    <label class="form-label">Type of Certificate<span class="text-red">
+                                            *</span></label>
                                     @php
                                         $certificateType = old('certificate_type', $form['certificate_type'] ?? null);
                                     @endphp
@@ -192,7 +197,8 @@
                             <!-- Exam fields -->
                             <div class="form-grid-3">
                                 <div class="form-field">
-                                    <label class="form-label">Place of Exam/Seminar</label>
+                                    <label class="form-label">Place of Exam/Seminar<span class="text-red">
+                                            *</span></label>
                                     <x-forms.exam-fields :form="$form ?? []" />
                                     <!-- CAPTCHA fields -->
                                     <div class="form-field"
