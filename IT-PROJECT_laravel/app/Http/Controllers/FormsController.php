@@ -184,6 +184,11 @@ class FormsController extends Controller
         }
     }
 
+    public function showFormInformation($formType)
+    {
+        return view("clientside.forms.information.FormInformation{$formType}");
+    }
+
     /**
      * Load Form 1-01 for editing using form token or applicant ID.
      */

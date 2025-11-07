@@ -1,8 +1,12 @@
 <x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']">
     <main>
 
+
         <form class="form1-01-container" id="form101" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            <a href="{{ route('display.forms') }}" class="inline-flex items-center hover:underline">
+                &#8592; Back
+            </a>
             @csrf
             <input type="hidden" name="form_token"
                 value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
