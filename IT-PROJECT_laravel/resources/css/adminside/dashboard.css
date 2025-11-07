@@ -40,30 +40,47 @@ body {
 .sidebar {
     width: 250px;
     background: #dde3eb;
-    padding: 30px 0;
+    padding: 30px 0 0 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .logo {
     width: 140px;
     margin-bottom: 40px;
     transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
 .logo:hover {
     transform: scale(1.05);
 }
 
-.menu,
+.menu {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 10px;
+}
+
 .bottom-links {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 5px;
+    flex-shrink: 0;
+    padding-bottom: 20px;
 }
 
 .menu-item {
@@ -108,9 +125,22 @@ body {
     color: #fff;
 }
 
-.bottom-links {
-    margin-top: auto;
-    padding-bottom: 20px;
+/* Scrollbar for menu */
+.menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.menu::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.menu::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
 }
 
 /* Main layout */
@@ -120,6 +150,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    margin-left: 250px;
 }
 
 /* Stats */
@@ -603,6 +634,7 @@ body {
     .main {
         padding: 15px;
         gap: 15px;
+        margin-left: 200px;
     }
 
     .pie {
@@ -661,13 +693,15 @@ body {
 
     .sidebar {
         width: 100%;
-        min-height: auto;
+        height: auto;
+        position: relative;
         padding: 15px 0;
     }
 
     .main {
         max-width: 100%;
         padding: 15px;
+        margin-left: 0;
     }
 
     .menu,
