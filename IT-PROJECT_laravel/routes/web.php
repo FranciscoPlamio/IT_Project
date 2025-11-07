@@ -150,6 +150,8 @@ Route::get('/admin/download-form', [AdminAuthController::class, 'downloadFormPDF
 
 Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
 
+Route::get('/adminside/form-fees', [App\Http\Controllers\AdminAuthController::class, 'formFees'])->name('adminside.form-fees');
+
 Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
 Route::post('/adminside/set-amount', [AdminAuthController::class, 'setAmount'])->name('adminside.setAmount');
 

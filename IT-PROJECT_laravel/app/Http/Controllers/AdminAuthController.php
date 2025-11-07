@@ -437,4 +437,15 @@ class AdminAuthController extends Controller   // <-- rename this
             'payment_amount' => $form->payment_amount,
         ]);
     }
+
+    public function formFees(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        return view('adminside.form-fees', compact('user'));
+    }
 }

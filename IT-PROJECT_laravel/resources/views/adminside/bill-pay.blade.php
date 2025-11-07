@@ -23,6 +23,9 @@
                     src="{{ asset('images/req-icon.png') }}" alt="">Request Management</a>
             <a href="{{ route('adminside.bill-pay') }}" class="menu-item active"><img
                     src="{{ asset('images/white-bill-icon.png') }}" alt="">Billings and Payment</a>
+            <a href="{{ route('adminside.form-fees') }}" class="menu-item">
+                <img src="{{ asset('images/billicon.png') }}" alt=""> Form Fees & Breakdown
+            </a>
         </nav>
         <div class="bottom-links">
             <a href="#" class="menu-item"><img src="{{ asset('images/out-icon.png') }}" alt="">Log

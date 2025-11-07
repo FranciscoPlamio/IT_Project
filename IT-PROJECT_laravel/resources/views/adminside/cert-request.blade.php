@@ -25,6 +25,9 @@
             <a href="{{ route('adminside.bill-pay') }}" class="menu-item">
                 <img src="{{ asset('images/billicon.png') }}" alt="">Billings and Payment
             </a>
+            <a href="{{ route('adminside.form-fees') }}" class="menu-item">
+                <img src="{{ asset('images/billicon.png') }}" alt=""> Form Fees & Breakdown
+            </a>
         </nav>
         <div class="bottom-links">
             <a href="#" class="menu-item" id="logout-link">
