@@ -675,6 +675,159 @@
                 // Run when loaded + when changed
                 toggleOtherInput();
                 courseSelect.addEventListener('change', toggleOtherInput);
+
+                // Filter course options based on examination type
+                // Store all original course options
+                let allCourseOptions = [];
+                let initiallySelectedValue = '';
+
+                function storeOriginalOptions() {
+                    allCourseOptions = Array.from(courseSelect.options).map(option => ({
+                        value: option.value,
+                        text: option.text.trim(), // Trim whitespace
+                        html: option.innerHTML, // Store HTML to preserve formatting
+                        selected: option.selected // Store initial selected state
+                    }));
+
+                    // Store the initially selected value
+                    const selectedOption = allCourseOptions.find(opt => opt.selected);
+                    if (selectedOption) {
+                        initiallySelectedValue = selectedOption.value;
+                    }
+                }
+
+                // Store options on page load
+                storeOriginalOptions();
+
+                // Courses allowed for radiotelegraphy
+                const radiotelegraphyCourses = [
+                    'General Radio Communication Operator (GRCO)',
+                    'Industrial Electronics Technician Course (IETC)',
+                    'Communications Technician Course (CTC)',
+                    'Bachelor of Science in Avionics Technology (BS AVTECH)',
+                    'Bachelor of Science in Electronics and Communications Engineering / Bachelor of Science in Electronics Engineering (BS ECE)'
+                ];
+
+                // Courses allowed for amateur
+                const amateurCourses = [
+                    'Radio Enthusiast',
+                    'Registered ECE or Commercial Operator',
+                    'Licensed Amateur (for upgrading)'
+                ];
+
+                // Courses allowed for restricted radiotelephone
+                const restrictedRadiotelephoneCourses = [
+                    'Commercial Pilot',
+                    'Student Pilot'
+                ];
+
+                function filterCourseOptions() {
+                    const examTypeRadios = document.querySelectorAll('input[name="exam_type"]');
+                    const selectedExamType = Array.from(examTypeRadios).find(radio => radio.checked);
+
+                    // Store currently selected value before filtering
+                    // Use current value if set, otherwise use the initially selected value
+                    let currentSelectedValue = courseSelect.value || initiallySelectedValue;
+
+                    // Clear current options
+                    courseSelect.innerHTML = '';
+
+                    // Determine which courses to show based on exam type
+                    let allowedCourses = [];
+                    let isFilteredCategory = false;
+
+                    if (selectedExamType) {
+                        if (selectedExamType.value.includes('rtg')) {
+                            // Radiotelegraphy selected
+                            isFilteredCategory = true;
+                            allowedCourses = radiotelegraphyCourses;
+                        } else if (selectedExamType.value.includes('phn')) {
+                            // Radiotelephony selected - same courses as Radiotelegraphy
+                            isFilteredCategory = true;
+                            allowedCourses = radiotelegraphyCourses;
+                        } else if (selectedExamType.value.startsWith('class_')) {
+                            // Amateur selected (all amateur exam types start with "class_")
+                            isFilteredCategory = true;
+                            allowedCourses = amateurCourses;
+                        } else if (selectedExamType.value.includes('rroc')) {
+                            // Restricted Radiotelephone selected
+                            isFilteredCategory = true;
+                            allowedCourses = restrictedRadiotelephoneCourses;
+                        }
+                    }
+
+                    if (isFilteredCategory) {
+                        // Filtered exam type selected - show only allowed courses
+                        // Add "Select Course" option
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '';
+                        defaultOption.textContent = 'Select Course';
+                        courseSelect.appendChild(defaultOption);
+
+                        // Add allowed courses
+                        allCourseOptions.forEach(option => {
+                            if (allowedCourses.includes(option.value)) {
+                                const newOption = document.createElement('option');
+                                newOption.value = option.value;
+                                // Use innerHTML to preserve any formatting (like line breaks)
+                                newOption.innerHTML = option.html || option.text;
+                                // Preserve selection if it was the selected value
+                                if (currentSelectedValue === option.value) {
+                                    newOption.selected = true;
+                                }
+                                courseSelect.appendChild(newOption);
+                            }
+                        });
+
+                        // Add "Other" option if it was in the original list
+                        const otherOption = allCourseOptions.find(opt => opt.value === 'Other');
+                        if (otherOption) {
+                            const newOption = document.createElement('option');
+                            newOption.value = 'Other';
+                            newOption.textContent = 'Other';
+                            if (currentSelectedValue === 'Other') {
+                                newOption.selected = true;
+                            }
+                            courseSelect.appendChild(newOption);
+                        }
+
+                        // Clear selection if the previously selected value is not in the filtered list
+                        if (currentSelectedValue && !allowedCourses.includes(currentSelectedValue) &&
+                            currentSelectedValue !== 'Other') {
+                            courseSelect.value = '';
+                            // Also clear the other_course input if it was visible
+                            if (otherInput) {
+                                otherInput.value = '';
+                                otherInput.style.display = 'none';
+                                otherInput.required = false;
+                            }
+                        }
+                    } else {
+                        // Other exam type selected - show all courses
+                        allCourseOptions.forEach(option => {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            // Use innerHTML to preserve formatting
+                            newOption.innerHTML = option.html || option.text;
+                            // Preserve selection if it was the selected value
+                            if (currentSelectedValue === option.value) {
+                                newOption.selected = true;
+                            }
+                            courseSelect.appendChild(newOption);
+                        });
+                    }
+
+                    // Re-trigger the toggleOtherInput to handle "Other" option visibility
+                    toggleOtherInput();
+                }
+
+                // Listen for changes on exam type radio buttons
+                document.querySelectorAll('input[name="exam_type"]').forEach(radio => {
+                    radio.addEventListener('change', filterCourseOptions);
+                });
+
+                // Initialize on page load if an exam type is already selected
+                filterCourseOptions();
             });
         </script>
     </main>
