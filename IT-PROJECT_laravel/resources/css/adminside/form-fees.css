@@ -440,6 +440,13 @@ body {
     justify-content: space-between;
     align-items: start;
     margin-bottom: 12px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.variant-header-info > div:first-child {
+    flex: 1 1 0;
+    min-width: 0;
 }
 
 .variant-name {
@@ -447,17 +454,24 @@ body {
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: 4px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .variant-description {
     font-size: 13px;
     color: #6b7280;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .variant-actions {
     display: flex;
     gap: 8px;
     flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .btn {
@@ -472,6 +486,8 @@ body {
     align-items: center;
     gap: 6px;
     font-family: "Poppins-500", sans-serif;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-view {
@@ -808,6 +824,54 @@ body {
     .modal-content {
         width: 95%;
         max-height: 95vh;
+    }
+
+    .variant-header-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .variant-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .btn {
+        flex: 0 1 auto;
+        min-width: 100px;
+    }
+}
+
+/* Additional responsive rules for variant items */
+@media (max-width: 900px) {
+    .variant-header-info {
+        flex-wrap: wrap;
+    }
+
+    .variant-actions {
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .btn {
+        padding: 7px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .variant-header-info {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .variant-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .btn {
+        flex: 0 1 auto;
     }
 }
 
