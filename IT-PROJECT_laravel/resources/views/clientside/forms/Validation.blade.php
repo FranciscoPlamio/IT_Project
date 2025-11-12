@@ -3,7 +3,10 @@
         <div class="form1-01-header">Validation Phase: Review Your Application</div>
         <div class="validation-section-title">Please review your details before final submission:</div>
         <dl class="validation-list" id="validationList"></dl>
-
+        <hr>
+        <div id="attachments-container" data-form-type="{{ $formType }}" class="mt-2">
+            <p class="font-semibold mb-6">Upload Requirements</p>
+        </div>
         {{-- Payment Method Selection --}}
         <div class="payment-method-container">
             <h2>Choose Payment Method</h2>
@@ -30,6 +33,7 @@
             </div>
 
         </div>
+
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
             <x-forms.cancel-validation />
@@ -43,7 +47,7 @@
     </div>
     </div>
 
-    <script>
+    <script type="module">
         // No in-page canvas preview; use inline preview via new tab
 
         function formatKey(key) {
@@ -51,6 +55,9 @@
             if (newKey == "Dob") {
                 newKey = "Date of Birth";
                 return newKey;
+            }
+            if (newKey == "Needs") {
+                newKey = "Special Needs/ Requests during examination"
             }
             return newKey;
         }
@@ -91,9 +98,18 @@
 
             // Map checkbox values to their labels when applicable
             const map = checkboxLabelMaps[rawValue];
-            console.log(map);
-            if (map) {
-                return map;
+            if (key === 'exam_type') {
+                if (map) {
+                    return map;
+                }
+            }
+
+            if (key === 'needs') {
+                if (rawValue === '0') {
+                    return 'None';
+                } else if (rawValue === '1') {
+                    return 'Yes';
+                }
             }
 
             // Default formatting
@@ -102,12 +118,13 @@
         }
 
         const server101 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
+        window.formData = server101; // now available globally
         const data = {}; // always prefer server; keep empty to avoid localStorage conflicts
         const list = document.getElementById('validationList');
 
 
         // Render textual summary list for quick review
-        function renderFormData(formData, formType = '1-01') {
+        function renderFormData(formData, formType) {
             const titleEl = document.querySelector('.validation-section-title');
             if (titleEl) {
                 titleEl.textContent = `Form ${formType} Details:`;

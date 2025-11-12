@@ -11,7 +11,8 @@
 @source "../js/**/*.js";
 
 @theme {
-    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+    --font-sans:
+        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 }
@@ -1213,7 +1214,10 @@ nav {
     padding: 1.5rem;
     text-align: center;
     box-shadow: 0 2px 8px rgba(59, 130, 246, 0.08);
-    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
     cursor: pointer;
     border: 2px solid #e5e7eb;
     display: flex;
@@ -1522,7 +1526,6 @@ footer {
     background: #f8f8f8;
     border-radius: 8px;
     padding: 24px 20px;
-    margin-bottom: 32px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
 }
 .validation-list dt {
@@ -2976,7 +2979,9 @@ body {
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, cursor 0.2s ease;
+    transition:
+        transform 0.3s ease,
+        cursor 0.2s ease;
     cursor: pointer;
     filter: brightness(1.05) contrast(1.05);
     image-rendering: -webkit-optimize-contrast;
@@ -3775,7 +3780,9 @@ body {
     overflow: hidden;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     border: 3px solid #3b82f6;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
 }

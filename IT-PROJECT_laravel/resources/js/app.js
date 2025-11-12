@@ -1,4 +1,5 @@
 import "./bootstrap";
+import { createAttachments } from "./attachmentHelper.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     //   const form = document.getElementById('emailAuthForm');
@@ -17,4 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => (banner.style.display = "none"), 500);
         }
     }, 4000);
+
+    const container = document.getElementById("attachments-container");
+    if (container) {
+        const formType = container.dataset.formType;
+        createAttachments(formType, "attachments-container");
+    }
 });
