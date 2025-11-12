@@ -57,30 +57,22 @@
 
         // Map of checkbox values -> human-readable labels from Form1-01
         const checkboxLabelMaps = {
-            rtg: {
-                '1rtg_e1256_code25': '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
-                '1rtg_code25': '1RTG - Code (25/20 wpm)',
-                '2rtg_e1256_code16': '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
-                '2rtg_code16': '2RTG - Code (16 wpm)',
-                '3rtg_e125_code16': '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
-                '3rtg_code16': '3RTG - Code (16 wpm)'
-            },
-            amateur: {
-                'class_a_e8910_code5': 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
-                'class_a_code5_only': 'Class A - Code (5 wpm) Only',
-                'class_b_e567': 'Class B - Elements 5, 6 & 7',
-                'class_b_e2': 'Class B - Element 2',
-                'class_c_e234': 'Class C - Elements 2, 3 & 4',
-                'class_d_e2': 'Class D - Element 2'
-            },
-            rphn: {
-                '1phn_e1234': '1PHN - Elements 1, 2, 3 & 4',
-                '2phn_e123': '2PHN - Elements 1, 2 & 3',
-                '3phn_e12': '3PHN - Elements 1 & 2'
-            },
-            rroc: {
-                'rroc_aircraft_e1': 'RROC - Aircraft - Element 1'
-            }
+            "class_a_e8910_code5": "Class A - Elements 8, 9, 10 & Code (5 wpm)",
+            "class_a_code5_only": "Class A - Code (5 wpm) Only",
+            "class_b_e567": "Class B - Elements 5, 6 & 7",
+            "class_b_e2": "Class B - Element 2",
+            "class_c_e234": "Class C - Elements 2, 3 & 4",
+            "class_d_e2": "Class D - Element 2",
+            "1rtg_e1256_code25": "1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)",
+            "1rtg_code25": "1RTG - Code (25/20 wpm)",
+            "2rtg_e1256_code16": "2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)",
+            "2rtg_code16": "2RTG - Code (16 wpm)",
+            "3rtg_e125_code16": "3RTG - Elements 1, 2, 5 & Code (16 wpm)",
+            "3rtg_code16": "3RTG - Code (16 wpm)",
+            "1phn_e1234": "1PHN - Elements 1, 2, 3 & 4",
+            "2phn_e123": "2PHN - Elements 1, 2 & 3",
+            "3phn_e12": "3PHN - Elements 1 & 2",
+            "rroc_aircraft_e1": "RROC - Aircraft - Element 1"
         };
 
         function formatValue(key, rawValue) {
@@ -98,12 +90,10 @@
             }
 
             // Map checkbox values to their labels when applicable
-            const map = checkboxLabelMaps[key];
+            const map = checkboxLabelMaps[rawValue];
+            console.log(map);
             if (map) {
-                if (Array.isArray(rawValue)) {
-                    return rawValue.map(v => map[v] || v).join(', ');
-                }
-                return map[rawValue] || rawValue || '';
+                return map;
             }
 
             // Default formatting
@@ -140,12 +130,19 @@
                 const value = formatValue(key, formData[key]);
                 if (value === '' || value === null || value === undefined) continue;
                 const dt = document.createElement('dt');
-                dt.textContent = formatKey(key);
-                console.log(dt.textContent);
+                dt.classList.add('inline', 'font-semibold', 'mr-1'); // inline + bold + small space after
+                dt.textContent = formatKey(key) + ":"; // add the colon
+
                 const dd = document.createElement('dd');
+                dd.classList.add('inline'); // inline so it stays on the same line
                 dd.textContent = value;
+
+                const wrapper = document.createElement('div'); // wrapper for each pair
+                wrapper.classList.add('mb-2'); // vertical spacing between pairs
+
                 list.appendChild(dt);
                 list.appendChild(dd);
+                list.appendChild(wrapper); // append wrapper instead of br
             }
         }
 

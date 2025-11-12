@@ -58,14 +58,14 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Unit/Rm/House/Bldg No. <span class="text-red">*</span></label>
+        <label class="form-label">Unit/Rm/House/Bldg No.</label>
         <input class="form1-01-input" type="text" name="unit" value="{{ old('unit', $form['unit'] ?? '') }}">
         @error('unit')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
     <div class="form-field">
-        <label class="form-label">Street <span class="text-red">*</span></label>
+        <label class="form-label">Street</label>
         <input class="form1-01-input" type="text" name="street" value="{{ old('street', $form['street'] ?? '') }}">
         @error('street')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -87,7 +87,7 @@
                 Yahoo, or Outlook only)</small></label>
         <input class="form1-01-input" type="email" name="email" value="{{ old('email', $form['email'] ?? '') }}">
         @error('email')
-            <p class="text-red text-sm mt-1">{{ $message }}</p>
+            <div class="text-red text-sm mt-1">{!! $message !!}</div>
         @enderror
     </div>
 </div>

@@ -10,15 +10,20 @@ class Form1_21Rules
             'rules' => [
                 // Applicant Details
                 'applicant' => ['required', 'string'],
-                'unit' => ['required', 'string'],
-                'street' => ['required', 'string'],
+                'unit' => ['nullable', 'string'],
+                'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['required', 'email', 'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])?@(gmail|yahoo|outlook)\.com$/i',],
-
+                'email' => [
+                    'required',
+                    'email',
+                    'min:6',
+                    'max:30',
+                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
+                ],
                 //Permit License Details
                 'permit_license_certificate_no' => ['required', 'string'],
                 'validity' => ['required', 'date', 'after_or_equal:today'],
