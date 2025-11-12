@@ -47,7 +47,12 @@
         // No in-page canvas preview; use inline preview via new tab
 
         function formatKey(key) {
-            return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            let newKey = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            if (newKey == "Dob") {
+                newKey = "Date of Birth";
+                return newKey;
+            }
+            return newKey;
         }
 
         // Map of checkbox values -> human-readable labels from Form1-01
@@ -136,6 +141,7 @@
                 if (value === '' || value === null || value === undefined) continue;
                 const dt = document.createElement('dt');
                 dt.textContent = formatKey(key);
+                console.log(dt.textContent);
                 const dd = document.createElement('dd');
                 dd.textContent = value;
                 list.appendChild(dt);
