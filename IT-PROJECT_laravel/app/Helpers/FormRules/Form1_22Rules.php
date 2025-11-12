@@ -26,7 +26,7 @@ class Form1_22Rules
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['nullable', 'email'],
+                'email' => ['required', 'email', 'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])?@(gmail|yahoo|outlook)\.com$/i',],
                 'validity' => ['required', 'date', 'after_or_equal:today'],
                 'pa_ca_no' => ['required', 'string'],
                 'service_area' => ['required', 'string'],

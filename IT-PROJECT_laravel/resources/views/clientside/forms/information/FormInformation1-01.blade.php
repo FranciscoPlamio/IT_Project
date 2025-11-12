@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :title="'Issuance / Release — Admission Slip & Report of Rating'">
     <main class="max-w-4xl mx-auto bg-white shadow-md rounded-xl p-6 mt-2">
         <a href="{{ route('display.forms') }}" class="inline-flex items-center hover:underline mb-4">
             &#8592; Back
@@ -28,12 +28,14 @@
                 <div class="text-xl font-medium">Description :</div>
                 <div class=" bg-gray-50  rounded-lg p-4 text-gray-700">
                     <p>
-                        The Admission Slip is a document issued by the Commission to a qualified applicant authorizing
+                        The <span class="font-semibold">Admission Slip</span> is a document issued by the Commission to
+                        a qualified applicant authorizing
                         the holder
                         to take the commercial or non-commercial radio operator examination.
                     </p>
                     <p class="">
-                        The Report of Rating is issued to a Radio Operator Examinee indicating the result of his/her
+                        The <span class="font-semibold">Report of Rating</span> is issued to a Radio Operator Examinee
+                        indicating the result of his/her
                         examination.
                     </p>
                 </div>

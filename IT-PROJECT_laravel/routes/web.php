@@ -68,6 +68,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
 
     // GET routes to render form views
     Route::get('{formType}', [FormsController::class, 'show'])->name('show');
+    Route::get('{formType}/information', [FormsController::class, 'showFormInformation'])->name('showFormInformation');
     Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
     Route::get('{formType}/preview', [FormsController::class, 'showPreview'])->name('preview');
     Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');

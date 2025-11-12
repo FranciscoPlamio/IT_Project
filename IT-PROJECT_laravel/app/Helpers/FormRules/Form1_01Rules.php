@@ -31,7 +31,7 @@ class Form1_01Rules
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['required', 'email', 'regex:/@(gmail|yahoo|outlook)\.com$/i'],
+                'email' => ['required', 'email', 'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])?@(gmail|yahoo|outlook)\.com$/i',],
                 'school_attended' => ['required', 'string'],
                 'course_taken' => ['required', 'string'],
                 'year_graduated' => ['required', 'string'],
