@@ -143,6 +143,7 @@ Route::get('/nationalities.json', function () {
 Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
 
 Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
+Route::get('/adminside/req-history', [AdminAuthController::class, 'requestHistory'])->name('adminside.req-history');
 
 Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
 Route::get('/admin/get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');

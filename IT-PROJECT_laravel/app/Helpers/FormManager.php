@@ -57,7 +57,7 @@ class FormManager
             'form_type' => $formType,
             'user_id' => $userId,
             'status' => $transactionData['status'] ?? 'pending',
-            'payment_status' => $transactionData['payment_status'] ?? 'pending',
+            'payment_status' => $transactionData['payment_status'] ?? 'unpaid',
             'payment_method' => $paymentMethod,
             'payment_reference' => self::generateReferenceNumber(),
             'payment_amount' => $transactionData['payment_amount'] ?? null,

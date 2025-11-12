@@ -145,20 +145,32 @@ class AdminAuthController extends Controller   // <-- rename this
 
         $user = User::find($request->session()->get('admin'));
 
-        //  Latest (not done or cancel)
+        // Latest requests exclude completed or cancelled
         $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        //  History (done or cancel)
-        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancelled'])
+        $highlight = $request->query('highlight');
+
+        return view('adminside.req-management', compact('user', 'latestRequests', 'highlight'));
+    }
+
+    public function requestHistory(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        // History includes completed or cancelled records
+        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel', 'cancelled'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
         $highlight = $request->query('highlight');
-        $section = $request->query('section', 'latest'); // 'history' or 'latest'
 
-        return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests', 'highlight', 'section'));
+        return view('adminside.req-history', compact('user', 'historyRequests', 'highlight'));
     }
 
 

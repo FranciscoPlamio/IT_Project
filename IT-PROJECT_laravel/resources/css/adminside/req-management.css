@@ -420,6 +420,22 @@ body {
   transform: translateY(-2px); 
 }
 
+/* Status colors */
+td.paid {
+  color: #00c49a;
+  font-weight: 600;
+}
+
+td.pending {
+  color: #ffcc00;
+  font-weight: 600;
+}
+
+td.failed {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 
 /* Clickable status badges styled as buttons */
 .badge-btn {

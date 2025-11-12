@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Request Management</title>
+    <title>Request History</title>
 
     @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
 </head>
@@ -22,11 +22,11 @@
             <a href="{{ route('adminside.cert-request') }}" class="menu-item">
                 <img src="{{ asset('images/cert-icon.png') }}" alt=""> Certification Request
             </a>
-            <a href="{{ route('adminside.req-management') }}" class="menu-item active">
-                <img src="{{ asset('images/whitereq-icon.png') }}" alt=""> Request Management
+            <a href="{{ route('adminside.req-management') }}" class="menu-item">
+                <img src="{{ asset('images/req-icon.png') }}" alt=""> Request Management
             </a>
-            <a href="{{ route('adminside.req-history') }}" class="menu-item">
-                <img src="{{ asset('images/req-icon.png') }}" alt=""> Request History
+            <a href="{{ route('adminside.req-history') }}" class="menu-item active">
+                <img src="{{ asset('images/whitereq-icon.png') }}" alt=""> Request History
             </a>
             <a href="{{ route('adminside.bill-pay') }}" class="menu-item">
                 <img src="{{ asset('images/billicon.png') }}" alt="">Billings and Payment
@@ -58,25 +58,30 @@
 
     <!-- Main Content -->
     <div class="main">
-        <h1>Request Management</h1>
+        <h1>Request History</h1>
 
         <div class="card full-page">
-            <!-- Latest Request Section -->
             <section class="half-section">
                 <div class="card-header">
-                    <h2>Latest Request</h2>
+                    <h2>History</h2>
                     <div class="actions">
                         <div class="search-bar">
-                            <input type="text" id="latestSearch" placeholder="Search">
+                            <input type="text" id="searchLatest" placeholder="Search">
                             <img src="{{ asset('images/search-icon.png') }}" alt="Search">
                         </div>
                         <div class="filter-bar">
-                            <img src="{{ asset('images/filter-icon.png') }}" alt="Filter" id="latestFilterIcon">
-                            <div class="filter-dropdown" id="latestFilterDropdown">
+                            <img src="{{ asset('images/filter-icon.png') }}" alt="Filter">
+                            <div class="filter-dropdown" id="filterDropdownLatest">
                                 <h4>Filter by:</h4>
 
-                                <label for="latestDateFilter">Date Range</label>
-                                <select id="latestDateFilter">
+                                <label for="historyDateType">Filter Date Type</label>
+                                <select id="historyDateType">
+                                    <option value="request">Request Date</option>
+                                    <option value="release">Release Date</option>
+                                </select>
+
+                                <label for="dateFilterLatest">Date Range</label>
+                                <select id="dateFilterLatest">
                                     <option value="all">All Dates</option>
                                     <option value="week">This Week</option>
                                     <option value="month">This Month</option>
@@ -85,9 +90,9 @@
                                     <option value="year">This Year</option>
                                 </select>
 
-                                <label for="latestFormFilter">Form Type</label>
+                                <label for="formFilterLatest">Form Type</label>
                                 <div class="form-list">
-                                    <select id="latestFormFilter" size="5">
+                                    <select id="formFilterLatest" size="5">
                                         <option value="all">All Forms</option>
                                         <option value="Form1-01">Form1-01</option>
                                         <option value="Form1-02">Form1-02</option>
@@ -108,42 +113,35 @@
                                     </select>
                                 </div>
 
-                                <button id="applyLatestFilter">Apply Filter</button>
+                                <button id="applyFilterLatest">Apply Filter</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="table-container">
+                <div class="table-container1">
                     <table class="styled-table">
                         <thead>
                             <tr>
                                 <th>Reference Number</th>
                                 <th>Request Type</th>
                                 <th>Request Date</th>
+                                <th>Release Date</th>
                                 <th>Attachment</th>
-                                <th>Certificate</th>
                                 <th>Status</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($latestRequests as $req)
+                            @foreach ($historyRequests as $req)
                                 <tr
                                     class="request-row {{ isset($highlight) && $highlight == $req->payment_reference ? 'highlighted' : '' }}">
                                     <td>{{ $req->payment_reference }}</td>
                                     <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
                                     <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
-                                    <td class="see-more" onclick="viewForm('{{ $req->payment_reference }}', this)"
-                                        style="cursor: pointer;">
-                                        See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
-                                    </td>
-                                    <td>
-                                        <button class="upload-btn" onclick="handleUpload()">
-                                            <img src="{{ asset('images/upload-icon.png') }}" alt="Upload">
-                                            Upload file
-                                        </button>
-                                    </td>
+                                    <td>{{ $req->updated_at ? $req->updated_at->format('d M Y') : 'N/A' }}</td>
+                                    <td class="see-more1" onclick="viewForm('{{ $req->payment_reference }}', this)"
+                                        style="cursor: pointer;">See more <img
+                                            src="{{ asset('images/see-icon.png') }}" alt="See"></td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
                                         $status = strtolower(trim($rawStatus));
@@ -164,17 +162,6 @@
                                         }
                                     @endphp
                                     <td class="{{ $statusClass }}">{{ $statusLabel }}</td>
-                                    <td>
-                                        <button class="badge-btn approve"
-                                            onclick="approveRequest('{{ $req->_id }}')" title="Approve Request">
-                                            Approve
-                                        </button>
-                                        <button class="badge-btn progress"
-                                            onclick="updateStatus('{{ $req->_id }}', 'cancelled')"
-                                            title="Cancel Request">
-                                            Cancel
-                                        </button>
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -183,8 +170,6 @@
             </section>
         </div>
     </div>
-    </main>
-
 </body>
 
 </html>
