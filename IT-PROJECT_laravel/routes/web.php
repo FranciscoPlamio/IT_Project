@@ -20,6 +20,7 @@ Route::get('/forms-list', [FormsController::class, 'index'])->name('forms.list')
 
 // Forms showcase gallery
 Route::get('/display-forms', [FormsController::class, 'index2'])->name('display.forms');
+Route::get('{formType}/information', [FormsController::class, 'showFormInformation'])->name('showFormInformation');
 
 // Payment method selection page
 Route::get('/payment/method', function () {
@@ -68,7 +69,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
 
     // GET routes to render form views
     Route::get('{formType}', [FormsController::class, 'show'])->name('show');
-    Route::get('{formType}/information', [FormsController::class, 'showFormInformation'])->name('showFormInformation');
+
     Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
     Route::get('{formType}/preview', [FormsController::class, 'showPreview'])->name('preview');
     Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');
@@ -77,6 +78,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
 
     Route::post('{formType}/preview', [FormsController::class, 'preview'])->name('preview');
     Route::post('{formType}/submit', [FormsController::class, 'storeAll'])->name('submit');
+    Route::post('{formType}/cancel', [FormsController::class, 'cancel'])->name('cancel');
 });
 
 // Adminside Pages

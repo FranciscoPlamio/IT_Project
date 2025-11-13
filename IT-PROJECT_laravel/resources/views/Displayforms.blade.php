@@ -24,7 +24,7 @@
                                 View PDF
                             </a>
 
-                            <a href="{{ route('forms.showFormInformation', ['formType' => '1-01']) }}"
+                            <a href="{{ route('showFormInformation', ['formType' => '1-01']) }}"
                                 style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
                                 Sign up
                             </a>
@@ -51,7 +51,7 @@
                                 View PDF
                             </a>
 
-                            <a href="{{ route('forms.showFormInformation', ['formType' => '1-02']) }}"
+                            <a href="{{ route('showFormInformation', ['formType' => '1-02']) }}"
                                 style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
                                 Sign up
                             </a>

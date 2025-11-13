@@ -36,8 +36,9 @@
 
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-            <x-forms.cancel-validation />
-            <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
+            <x-forms.cancel-validation :formType="$targetFormType" />
+            <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to
+                Payment</a>
             <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
                 style="display:none;">
                 @csrf
