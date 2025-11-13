@@ -163,17 +163,34 @@
                                                 break;
                                         }
                                     @endphp
-                                    <td class="{{ $statusClass }}">{{ $statusLabel }}</td>
-                                    <td>
-                                        <button class="badge-btn approve"
-                                            onclick="approveRequest('{{ $req->_id }}')" title="Approve Request">
-                                            Approve
-                                        </button>
-                                        <button class="badge-btn progress"
-                                            onclick="updateStatus('{{ $req->_id }}', 'cancelled')"
-                                            title="Cancel Request">
-                                            Cancel
-                                        </button>
+                                    @php
+                                        $managedStatuses = ['pending', 'processing', 'done'];
+                                        $isManagedStatus = in_array($status, $managedStatuses);
+                                    @endphp
+                                    <td class="status-cell {{ $statusClass }}">
+                                        @if ($isManagedStatus)
+                                            <select class="status-select" data-request-id="{{ $req->_id }}"
+                                                data-current-status="{{ $status }}">
+                                                <option value="pending" @selected($status === 'pending')>Pending</option>
+                                                <option value="processing" @selected($status === 'processing')>Processing
+                                                </option>
+                                                <option value="done" @selected($status === 'done')
+                                                    @disabled($status === 'pending')>Done</option>
+                                            </select>
+                                        @else
+                                            <span class="status-label">{{ $statusLabel }}</span>
+                                        @endif
+                                    </td>
+                                    <td class="action-cell">
+                                        @if (!in_array($status, ['done', 'cancelled', 'cancel']))
+                                            <button class="badge-btn progress"
+                                                onclick="cancelRequest('{{ $req->_id }}')"
+                                                title="Cancel Request">
+                                                Cancel
+                                            </button>
+                                        @else
+                                            <span class="muted-text">—</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

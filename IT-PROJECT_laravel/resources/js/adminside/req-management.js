@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // "See more" is now handled by viewForm function
+    initializeStatusDropdowns();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -80,10 +81,16 @@ function handleProgress() {
     alert("Status set to In Progress!");
 }
 
+const STATUS_FLOW = ['pending', 'processing', 'done'];
+
+function capitalize(word = '') {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
 function updateStatus(formId, newStatus) {
     console.log("Updating status for:", formId, "→", newStatus);
 
-    fetch('/admin/update-status', {
+    return fetch('/admin/update-status', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -94,24 +101,131 @@ function updateStatus(formId, newStatus) {
             status: newStatus
         })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Server response:", data);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update status. Please try again.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Server response:", data);
 
-        if (data.success) {
-            alert(` Status updated to ${newStatus.toUpperCase()}`);
-            location.reload(); // refresh to reflect change
-        } else {
-            alert(` ${data.message || "Failed to update status."}`);
-        }
-    })
-    .catch(error => {
-        console.error(" AJAX error:", error);
-        alert("Something went wrong. Check the console.");
-    });
+            if (!data.success) {
+                throw new Error(data.message || "Failed to update status.");
+            }
+
+            return data;
+        })
+        .catch(error => {
+            console.error("AJAX error:", error);
+            throw error;
+        });
 }
 
 window.updateStatus = updateStatus;
+
+function canTransition(currentStatus, nextStatus) {
+    const currentIndex = STATUS_FLOW.indexOf(currentStatus);
+    const nextIndex = STATUS_FLOW.indexOf(nextStatus);
+
+    if (currentIndex === -1 || nextIndex === -1) {
+        return {
+            allowed: false,
+            reason: 'Invalid status selection.'
+        };
+    }
+
+    if (currentIndex === nextIndex) {
+        return {
+            allowed: false,
+            reason: null // no change
+        };
+    }
+
+    if (currentStatus === 'done') {
+        return {
+            allowed: false,
+            reason: 'Request is already completed.'
+        };
+    }
+
+    if (nextIndex < currentIndex) {
+        return {
+            allowed: false,
+            reason: `Cannot revert status. Current status is ${capitalize(currentStatus)}.`
+        };
+    }
+
+    if (nextIndex - currentIndex > 1) {
+        return {
+            allowed: false,
+            reason: 'Please follow the status order: Pending → Processing → Done.'
+        };
+    }
+
+    return {
+        allowed: true
+    };
+}
+
+function initializeStatusDropdowns() {
+    const statusSelects = document.querySelectorAll(".status-select");
+
+    statusSelects.forEach(select => {
+        const requestId = select.dataset.requestId;
+        const currentStatus = (select.dataset.currentStatus || 'pending').toLowerCase();
+
+        if (!STATUS_FLOW.includes(currentStatus)) {
+            console.warn(`Unmanaged status "${currentStatus}" for request ${requestId}. Dropdown disabled.`);
+            select.disabled = true;
+            return;
+        }
+
+        select.value = currentStatus;
+
+        if (currentStatus === 'done') {
+            select.disabled = true;
+        }
+
+        select.addEventListener('change', () => {
+            const previousStatus = (select.dataset.currentStatus || 'pending').toLowerCase();
+            const selectedStatus = select.value;
+            const transition = canTransition(previousStatus, selectedStatus);
+
+            if (!transition.allowed) {
+                if (transition.reason) {
+                    alert(transition.reason);
+                }
+                select.value = previousStatus;
+                return;
+            }
+
+            select.disabled = true;
+            select.classList.add('status-updating');
+
+            updateStatus(requestId, selectedStatus)
+                .then(() => {
+                    alert(`Status updated to ${capitalize(selectedStatus)}.`);
+                    select.dataset.currentStatus = selectedStatus;
+
+                    if (selectedStatus === 'done') {
+                        window.location.reload();
+                    } else {
+                        select.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    alert(error.message || 'Failed to update status. Please try again.');
+                    select.value = previousStatus;
+                })
+                .finally(() => {
+                    const latestStatus = (select.dataset.currentStatus || previousStatus).toLowerCase();
+                    select.disabled = latestStatus === 'done';
+                    select.classList.remove('status-updating');
+                });
+        });
+    });
+}
 
 // Form Download Functions in progress (pj)
 function viewForm(formToken, formType, formId, element) {
@@ -207,11 +321,35 @@ function approveRequest(formId) {
         return;
     }
     
-    updateStatus(formId, 'done');
+    updateStatus(formId, 'done')
+        .then(() => {
+            alert('Status updated to Done.');
+            window.location.reload();
+        })
+        .catch(error => {
+            alert(error.message || 'Failed to approve request. Please try again.');
+        });
 }
 
 window.viewForm = viewForm;
 window.approveRequest = approveRequest;
+
+function cancelRequest(formId) {
+    if (!confirm('Are you sure you want to cancel this request?')) {
+        return;
+    }
+
+    updateStatus(formId, 'cancelled')
+        .then(() => {
+            alert('Request has been cancelled.');
+            window.location.reload();
+        })
+        .catch(error => {
+            alert(error.message || 'Failed to cancel request. Please try again.');
+        });
+}
+
+window.cancelRequest = cancelRequest;
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("Request Management JS Loaded");

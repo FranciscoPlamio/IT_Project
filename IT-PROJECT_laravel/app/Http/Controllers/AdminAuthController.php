@@ -183,13 +183,80 @@ class AdminAuthController extends Controller   // <-- rename this
                 return response()->json(['success' => false, 'message' => 'Form not found']);
             }
 
-            // Make sure status is explicitly set (cancel or done)
+            $statusFlow = ['pending', 'processing', 'done'];
+            $allowedStatuses = array_merge($statusFlow, ['cancelled']);
             $newStatus = strtolower(trim($request->status));
 
-            if (!in_array($newStatus, ['done', 'cancelled'])) {
+            if (!in_array($newStatus, $allowedStatuses, true)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid status value'
+                ]);
+            }
+
+            $currentStatus = strtolower(trim($form->status ?? 'pending'));
+
+            if (!in_array($currentStatus, $allowedStatuses, true)) {
+                $currentStatus = 'pending';
+            }
+
+            if ($currentStatus === 'cancelled') {
+                if ($newStatus === 'cancelled') {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request is already cancelled.',
+                        'status' => $form->status,
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cancelled requests cannot be updated.'
+                ]);
+            }
+
+            if ($currentStatus === 'done' && $newStatus !== 'done') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request is already marked as done.'
+                ]);
+            }
+
+            if ($newStatus === 'cancelled') {
+                $form->status = $newStatus;
+                $form->updated_at = now();
+                $form->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status updated to cancelled',
+                    'status' => $form->status,
+                    'updated_at' => $form->updated_at
+                ]);
+            }
+
+            $currentIndex = array_search($currentStatus, $statusFlow, true);
+            $nextIndex = array_search($newStatus, $statusFlow, true);
+
+            if ($currentIndex === $nextIndex) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Status remains {$newStatus}",
+                    'status' => $form->status,
+                ]);
+            }
+
+            if ($nextIndex < $currentIndex) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status cannot be reverted.'
+                ]);
+            }
+
+            if ($nextIndex - $currentIndex > 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please follow the status order: pending → processing → done.'
                 ]);
             }
 
