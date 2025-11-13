@@ -167,18 +167,18 @@ class FormsController extends Controller
             return str_starts_with($key, 'form_');
         });
         if ($hasFormSession) {
-            $formType = "";
+            $oldFormType = "";
             $formToken = "";
 
             foreach ($sessionKeys as $key) {
                 if (str_starts_with($key, 'form')) {
 
-                    $formType = substr($key, 5, 4);
+                    $oldFormType = substr($key, 5, 4);
                     $formToken = substr($key, 10);
                 }
             }
-            $form = session('form_' . $formType . '_' . $formToken);
-            return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken])->with('message', 'Please finish your current form before signing up a new form');
+            $form = session('form_' . $oldFormType . '_' . $formToken);
+            return redirect()->route('forms.validation', ['formType' => $oldFormType, 'token' => $formToken, 'targetFormType' => $formType])->with('message', 'Please finish your current form before signing up a new form');
         } else {
             return view("clientside.forms.Form{$formType}", compact('formType'));
         }
@@ -289,6 +289,17 @@ class FormsController extends Controller
         }
 
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
+    }
+
+    public function cancel(Request $request, $formType)
+    {
+        //Forget Form Key session
+        $sessionKeys = array_keys($request->session()->all());
+        $formKey = collect($sessionKeys)->first(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        session()->forget($formKey);
+        return redirect()->route('forms.show', ['formType' => $formType]);
     }
 
     private function validateAndStoreUploadedFile($request, $formToken)
@@ -423,6 +434,7 @@ class FormsController extends Controller
             ->view('clientside.forms.Validation', [
                 'form' => $form,
                 'formType' => $formType,
+                'targetFormType' => $request->input('targetFormType')
             ])
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
             ->header('Pragma', 'no-cache')
