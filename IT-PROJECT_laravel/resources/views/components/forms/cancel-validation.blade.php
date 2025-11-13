@@ -1,4 +1,4 @@
-@props(['formType'])
+@props(['formType' => null])
 
 <!-- Cancel Button -->
 <button id="cancelBtn" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
@@ -25,7 +25,7 @@
                 No, go back
             </button>
 
-            <form action="{{ route('forms.cancel', ['formType' => $formType]) }}" method="POST">
+            <form action="{{ route('forms.cancel') }}" method="POST">
                 @csrf
                 <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
                     Yes, cancel

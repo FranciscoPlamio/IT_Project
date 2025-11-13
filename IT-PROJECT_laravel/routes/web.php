@@ -78,7 +78,7 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
 
     Route::post('{formType}/preview', [FormsController::class, 'preview'])->name('preview');
     Route::post('{formType}/submit', [FormsController::class, 'storeAll'])->name('submit');
-    Route::post('{formType}/cancel', [FormsController::class, 'cancel'])->name('cancel');
+    Route::post('/cancel', [FormsController::class, 'cancel'])->name('cancel');
 });
 
 // Adminside Pages

@@ -291,7 +291,7 @@ class FormsController extends Controller
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
     }
 
-    public function cancel(Request $request, $formType)
+    public function cancel(Request $request)
     {
         //Forget Form Key session
         $sessionKeys = array_keys($request->session()->all());
@@ -299,7 +299,7 @@ class FormsController extends Controller
             return str_starts_with($key, 'form_');
         });
         session()->forget($formKey);
-        return redirect()->route('forms.show', ['formType' => $formType]);
+        return redirect()->route('homepage')->with('message', 'Draft Form cancelled successfully.');
     }
 
     private function validateAndStoreUploadedFile($request, $formToken)
