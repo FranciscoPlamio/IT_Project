@@ -37,9 +37,9 @@
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
             <x-forms.cancel-validation />
-            <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
-            <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
-                style="display:none;">
+            <button class="form1-01-btn" id="proceedPayment" href="">Proceed to Payment</button>
+            <form id="paymentForm" enctype="multipart/form-data"
+                action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST" style="display:none;">
                 @csrf
                 <input type="hidden" name="payment_method" id="paymentMethodInput">
             </form>
@@ -204,6 +204,8 @@
 
         link.addEventListener('click', function(event) {
             event.preventDefault(); // prevent normal link behavior
+            const inputs = document.querySelectorAll("input[type='file']");
+            console.log(inputs);
 
             // Check if payment method is selected
             if (!selectedPaymentMethod) {
@@ -211,6 +213,9 @@
                 return;
             }
 
+            inputs.forEach((input) => {
+                form.appendChild(input);
+            })
             // Redirect to transaction page with payment method
             form.submit();
         });
@@ -251,13 +256,37 @@
             }
 
             selectedPaymentMethod = method;
-            if (proceedPaymentBtn) {
+
+            if (paymentInput.value !== "" && checkAllFilesUploaded()) {
                 proceedPaymentBtn.removeAttribute('disabled');
                 proceedPaymentBtn.style.opacity = '1';
                 proceedPaymentBtn.style.cursor = 'pointer';
             }
         }
 
+        function checkAllFilesUploaded() {
+            const container = document.getElementById("attachments-container");
+            const inputs = container.querySelectorAll("input[type='file']");
+            container.addEventListener("change", (e) => {
+                if (paymentInput.value !== "" && checkAllFilesUploaded()) {
+                    proceedPaymentBtn.removeAttribute('disabled');
+                    proceedPaymentBtn.style.opacity = '1';
+                    proceedPaymentBtn.style.cursor = 'pointer';
+                }
+            });
+            let allFilled = true;
+
+            inputs.forEach((input) => {
+
+                if (!input.files || input.files.length === 0) {
+                    allFilled = false;
+                }
+            });
+
+            return allFilled;
+        }
+
+        checkAllFilesUploaded();
         // Add keyboard navigation support for payment options
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {

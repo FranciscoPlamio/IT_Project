@@ -262,6 +262,13 @@ class FormsController extends Controller
         // User email
         $user = $this->getUser();
 
+
+        $message = $this->validateAndStoreUploadedFile($request, $formToken);
+
+        if ($message) {
+            // Validation failed
+            return redirect()->back()->with('message', $message);
+        }
         // Save using FormManager
         $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
@@ -282,6 +289,32 @@ class FormsController extends Controller
         }
 
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
+    }
+
+    private function validateAndStoreUploadedFile($request, $formToken)
+    {
+
+        $rules = [];
+
+        foreach ($request->file() as $key => $file) {
+            $rules[$key] = 'file|mimes:pdf,jpg,png|max:2048';
+        }
+        try {
+            // Validate dynamically
+            $validated = $request->validate($rules);
+
+            // Store files if validation passes
+            foreach ($request->file() as $key => $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = $key . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('forms/' . $formToken, $fileName, 'local');
+            }
+
+            return null;
+        } catch (ValidationException $e) {
+            $message = "Validation failed: files must be no larger than 5 MB and must be in .png, .jpg, or .pdf";
+            return $message;
+        }
     }
 
     private function cleanInput(array $data)

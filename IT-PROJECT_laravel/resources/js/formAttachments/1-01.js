@@ -116,4 +116,23 @@ export default function attachmentsForm101(containerId, form) {
         // Add to container
         container.appendChild(wrapper);
     }
+    // Function to check if all required files are uploaded
+
+    const proceedPaymentBtn = document.getElementById("proceedPayment");
+    function checkAllFilesUploaded() {
+        const inputs = container.querySelectorAll("input[type='file']");
+        let allFilled = true;
+
+        inputs.forEach((input) => {
+            if (!input.files || input.files.length === 0) {
+                allFilled = false;
+            }
+        });
+        console.log(allFilled);
+        console.log(proceedPaymentBtn);
+        proceedPaymentBtn.disabled = !allFilled;
+    }
+
+    // Initial check (in case some inputs are pre-filled)
+    checkAllFilesUploaded();
 }
