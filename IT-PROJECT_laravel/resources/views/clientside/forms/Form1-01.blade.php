@@ -537,12 +537,15 @@
                             const errorDiv = document.createElement('p');
                             errorDiv.className = 'text-red text-sm mt-1 text-right';
                             errorDiv.textContent = errorMessage;
-                            const existingError = document.querySelector(
-                                `#step-${currentStepName} .step-actions .text-red`);
+
+                            let x = document.querySelector(`#step-${currentStepName} .step-actions`)
+                                .parentElement
+                            const existingError = x.querySelector('p.text-red');
+
                             if (existingError) existingError.remove();
                             document.querySelector(`#step-${currentStepName} .step-actions`)
                                 .parentElement
-                                .appendChild(errorDiv);
+                                .appendChild(errorDiv);;
                         }
                     }));
                     document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
