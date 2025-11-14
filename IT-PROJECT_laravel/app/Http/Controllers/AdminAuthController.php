@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
@@ -36,8 +37,9 @@ class AdminAuthController extends Controller   // <-- rename this
         if ($user && \Hash::check($request->password, $user->password)) {
             // Save admin session
             $request->session()->put('admin', (string) $user->_id);
+            $request->session()->regenerate();
 
-            return redirect()->route('adminside.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         // Invalid credentials
