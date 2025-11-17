@@ -88,6 +88,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('cert-request', [AdminAuthController::class, 'certRequest'])->name('cert-request');
 
     Route::get('req-management', [AdminAuthController::class, 'requestManagement'])->name('req-management');
+    Route::get('req-management/{formToken}', [AdminAuthController::class, 'showRequestAttachments'])->name('req.attachments');
+    Route::get('view-file', [AdminAuthController::class, 'viewFile'])->name('viewFile');
+
     Route::get('req-history', [AdminAuthController::class, 'requestHistory'])->name('req-history');
 
     Route::post('update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
@@ -101,7 +104,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
 
 
 // Show login page (GET)
-Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 
 // Handle login (POST) → same page (index.blade.php)
 Route::post('/adminside', [AdminAuthController::class, 'login'])->name('admin.login.submit');

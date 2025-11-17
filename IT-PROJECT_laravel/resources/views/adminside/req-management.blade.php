@@ -71,7 +71,7 @@
                                 <th>Request Type</th>
                                 <th>Request Date</th>
                                 <th>Attachment</th>
-                                <th>Certificate</th>
+                                <th>Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -85,13 +85,14 @@
                                     <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
                                     <td class="see-more" onclick="viewForm('{{ $req->payment_reference }}', this)"
                                         style="cursor: pointer;">
-                                        See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
+                                        <a
+                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
+                                            See
+                                            more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
+
                                     </td>
                                     <td>
-                                        <button class="upload-btn" onclick="handleUpload()">
-                                            <img src="{{ asset('images/upload-icon.png') }}" alt="Upload">
-                                            Upload file
-                                        </button>
+                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
                                     </td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';

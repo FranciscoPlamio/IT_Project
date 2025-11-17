@@ -12,6 +12,7 @@ use App\Models\Forms\FormsTransactions;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\ObjectId;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -147,10 +148,21 @@ class AdminAuthController extends Controller   // <-- rename this
 
         $user = User::find($request->session()->get('admin'));
 
+
         // Latest requests exclude completed or cancelled
         $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled'])
             ->orderBy('created_at', 'desc')
+            ->with('user')
             ->get();
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
 
         $highlight = $request->query('highlight');
 
@@ -528,5 +540,29 @@ class AdminAuthController extends Controller   // <-- rename this
         $user = User::find($request->session()->get('admin'));
 
         return view('adminside.form-fees', compact('user'));
+    }
+
+    public function showRequestAttachments(Request $request, $formToken)
+    {
+        $folderPath = "forms/{$formToken}";
+        if (!Storage::exists($folderPath)) {
+            abort(404, "No files found for this form.");
+        }
+
+        $files = Storage::files($folderPath);
+        return view('adminside.req-management-attachments', compact('files'));
+    }
+
+    public function viewFile(Request $request)
+    {
+        $path = $request->query('path');
+        if (!Storage::exists($path)) {
+            abort(404);
+        }
+
+        $mime = Storage::mimeType($path);
+        return response(Storage::get($path))
+            ->header('Content-Type', $mime)
+            ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
     }
 }
