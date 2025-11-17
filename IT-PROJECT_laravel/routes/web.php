@@ -143,8 +143,6 @@ Route::get('/nationalities.json', function () {
     ]);
 })->name('nationalities.data');
 
-Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
-
 Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
 Route::get('/adminside/req-history', [AdminAuthController::class, 'requestHistory'])->name('adminside.req-history');
 

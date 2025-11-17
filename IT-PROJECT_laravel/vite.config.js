@@ -14,8 +14,6 @@ export default defineConfig({
                 "resources/css/adminside/req-management.css",
                 "resources/js/adminside/dashboard.js",
                 "resources/css/adminside/dashboard.css",
-                "resources/js/adminside/cert-request.js",
-                "resources/css/adminside/cert-request.css",
                 "resources/js/adminside/bill-pay.js",
                 "resources/css/adminside/bill-pay.css",
             ],
