@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
@@ -16,7 +17,7 @@ class TransactionController extends Controller
     {
         $userEmail = session('user_email'); // Assuming you store this when they verified
 
-        $transactions = FormsTransactions::where('email', $userEmail)->where('status', 'pending')->latest()->first();
+        $transactions = FormsTransactions::where('email', $userEmail)->whereNot('status', 'cancelled')->latest()->first();
 
         return view('payment.transaction', compact('transactions'));
     }
@@ -144,5 +145,50 @@ class TransactionController extends Controller
             'payment_status' => $transaction->payment_status,
             'status' => $transaction->status,
         ]);
+    }
+
+    public function submitGcashProofPayment(Request $request)
+    {
+        $message = $this->validateAndStoreUploadedFile($request, $request->form_token);
+
+        if ($message) {
+            // Validation failed
+            return redirect()->back()->with('message', $message);
+        }
+        //Form Transaction
+        $transaction = FormsTransactions::where('form_token', $request->form_token)
+            ->latest()
+            ->first();
+        //Delete
+        $transaction->update(['payment_status' => 'paid']);
+
+
+        return redirect()->back()->with('message', 'Proof of Payment Sent');
+    }
+
+    private function validateAndStoreUploadedFile($request, $formToken)
+    {
+
+        $rules = [];
+
+        foreach ($request->file() as $key => $file) {
+            $rules[$key] = 'file|mimes:pdf,jpg,png|max:2048';
+        }
+        try {
+            // Validate dynamically
+            $validated = $request->validate($rules);
+
+            // Store files if validation passes
+            foreach ($request->file() as $key => $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = $key . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('forms/' . $formToken, $fileName, 'local');
+            }
+
+            return null;
+        } catch (ValidationException $e) {
+            $message = "Validation failed: files must be no larger than 5 MB and must be in .png, .jpg, or .pdf";
+            return $message;
+        }
     }
 }

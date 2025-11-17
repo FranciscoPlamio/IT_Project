@@ -2,6 +2,7 @@
 
     <x-slot:head>
         @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </x-slot:head>
 
 
@@ -72,6 +73,7 @@
                                 <th>Request Date</th>
                                 <th>Attachment</th>
                                 <th>Name</th>
+                                <th>Payment Method</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -83,17 +85,21 @@
                                     <td>{{ $req->payment_reference }}</td>
                                     <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
                                     <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
-                                    <td class="see-more" onclick="viewForm('{{ $req->payment_reference }}', this)"
-                                        style="cursor: pointer;">
+
+                                    <td class="see-more">
                                         <a
                                             href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
                                             See
                                             more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
-
+                                        @if ($req->payment_status == 'paid')
+                                            <p>Proof of Payment Received!</p>
+                                        @endif
                                     </td>
+
                                     <td>
                                         {{ $req->form->last_name }} {{ $req->form->first_name }}
                                     </td>
+                                    <td id="payment-method">{{ ucfirst($req->payment_method) }}</td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
                                         $status = strtolower(trim($rawStatus));

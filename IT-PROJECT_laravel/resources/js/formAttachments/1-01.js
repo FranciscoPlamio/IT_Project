@@ -1,4 +1,5 @@
 export default function attachmentsForm101(containerId, form) {
+    console.log(3);
     const examType = form.exam_type;
     const container = document.getElementById(containerId);
     if (!container) return;

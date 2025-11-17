@@ -14,7 +14,7 @@
                         <tr class="transaction-table-header">
                             <th class="ref-number-header">Reference Number</th>
                             <th class="details-header">Details</th>
-                            <th class="actions-header">Actions</th>
+                            {{-- <th class="actions-header">Actions</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -26,7 +26,14 @@
                                 <div class="transaction-details">
                                     <div class="detail-row">
                                         <span class="detail-label">Status:</span>
-                                        <span class="status-badge pending">{{ $transactions->payment_status }}</span>
+                                        @if ($transactions->payment_status == 'paid')
+                                            <span
+                                                class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
+                                        @elseif ($transactions->status == 'processing')
+                                            <span class="status-badge pending">{{ $transactions->status }}</span>
+                                        @elseif ($transactions->status == 'pending')
+                                            <span class="status-badge pending">{{ $transactions->status }}</span>
+                                        @endif
                                     </div>
                                     <div class="detail-row">
                                         <span class="detail-label">Purpose:</span>
@@ -38,36 +45,28 @@
                                             class="date-text">{{ $transactions->created_at->format('F d, Y H:i:s') }}</span>
                                     </div>
 
-                                    @if (optional($transactions)->payment_method === 'gcash')
-                                        <div class="detail-row">
-                                            <span class="detail-label">Payment Amount:</span>
-                                            <span
-                                                class="date-text">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
-                                        </div>
-                                    @endif
-
                                     <div class="detail-row">
                                         <span class="detail-label">Payment Due Date:</span>
-                                        <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+22 days')) }}</span>
+                                        <span class="date-text">{{ date('F d, Y H:i:s', strtotime('+3 days')) }}</span>
                                     </div>
-                                    <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-                                        style="background-color: #28a745; margin: 0 10px;">Download Form
-                                    </button>
+
                                 </div>
                             </td>
-                            {{-- delete feature db forms_transaction --}}
-                            <td class="actions-cell">
-                                <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
-                                    @csrf
-                                    @method('DELETE')
+                            {{-- delete feature db forms_transaction
+                            @if ($transactions->status != 'pending')
+                                <td class="actions-cell">
+                                    <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
+                                        @csrf
+                                        @method('DELETE')
 
-                                    <button id="cancel-btn" class="cancel-btn">
-                                        <span class="cancel-icon">✕</span>
-                                        <span class="cancel-text">CANCEL</span>
-                                    </button>
+                                        <button id="cancel-btn" class="cancel-btn">
+                                            <span class="cancel-icon">✕</span>
+                                            <span class="cancel-text">CANCEL</span>
+                                        </button>
 
-                                </form>
-                            </td>
+                                    </form>
+                                </td>
+                            @endif --}}
                         </tr>
                     </tbody>
                 </table>
@@ -86,7 +85,7 @@
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item completed">Payment</li>
                             <li data-step="3" class="step-item active">Payment successful email with PDF download</li>
-                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0)
+                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item active">Payment</li>
                             <li data-step="3" class="step-item">Payment successful email with PDF download</li>
@@ -102,13 +101,15 @@
                     </div>
                 </div>
                 <!-- GCash Step 1: Wait for Validation -->
-                <div id="gcash-wait" class="validation-wait-message"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'none' : (strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'none' : 'block') }}; text-align:center; margin:24px 0;">
-                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
-                </div>
+                @if ($transactions->status === 'pending')
+                    <div id="gcash-wait" class="validation-wait-message"
+                        style="display:block; text-align:center; margin:24px 0;">
+                        <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                    </div>
+                @endif
                 <!-- GCash Payment Interface -->
                 <div class="gcash-payment-interface"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'block' : 'none' }};">
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
                     <!-- GCash Header -->
                     <div class="gcash-header">
                         <div class="gcash-header-content">
@@ -152,13 +153,43 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <form action="{{ route('transactions.submit.gcash.proof') }}" method="POST"
+                        enctype="multipart/form-data">
+                        <div id="attachments-container" class="mb-6 flex flex-col justify-center items-center ">
+
+                            <label class="block font-semibold mb-2" for="transcript_of_records">
+                                Send Proof of Payment
+                            </label>
+                            <input type="file" name="proof_of_payment" accept=".pdf,.jpg,.png"
+                                class="border p-2 rounded mb-2">
+                            @csrf
+                            <button id="submitBtn"
+                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition  disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+                                disabled>
+                                Submit
+                            </button>
+                            <!-- Hidden input to pass transaction id -->
+                            <input type="hidden" name="form_token" value="{{ $transactions->form_token }}">
+                        </div>
+                    </form>
+
                 </div>
                 <!-- GCash Step 3: Payment Success Message -->
                 <div id="gcash-confirm" class="validation-wait-message"
                     style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
                     <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
-                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.</p>
+                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.
+                    </p>
+                    <div class="flex justify-center">
+
+                        <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                            style="background-color: #28a745; margin: 0 10px;">Download Form
+                        </button>
+                    </div>
                 </div>
+
                 <!-- Action Buttons -->
                 <div class="transaction-actions" style="display:none;">
                     <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
@@ -167,12 +198,12 @@
                 <!-- Steps Indicator (Cash) -->
                 <div class="steps steps-cash">
                     <ol id="cash-steps">
-                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                        @if (strtolower($transactions->status ?? 'pending') === 'done')
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item completed">Payment</li>
                             <li data-step="3" class="step-item active">Payment successful email with PDF download
                             </li>
-                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0)
+                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item active">Payment</li>
                             <li data-step="3" class="step-item">Payment successful email with PDF download</li>
@@ -189,13 +220,15 @@
                     </div>
                 </div>
                 <!-- Step 1: Wait for Validation Message -->
-                <div id="cash-wait" class="validation-wait-message"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'none' : (strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'none' : 'block') }}; text-align:center; margin:24px 0;">
-                    <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
-                </div>
+                @if ($transactions->status === 'pending')
+                    <div id="cash-wait" class="validation-wait-message"
+                        style="display:block; text-align:center; margin:24px 0;">
+                        <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                    </div>
+                @endif
                 <!-- Cash Payment Interface -->
                 <div class="cash-payment-interface"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->payment_status ?? 'pending') !== 'paid' ? 'block' : 'none' }};">
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
                     <div class="cash-payment-container">
                         <!-- Top Header -->
                         <div class="cash-header-section">
@@ -284,7 +317,8 @@
                 <div id="cash-confirm" class="validation-wait-message"
                     style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
                     <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
-                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.</p>
+                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.
+                    </p>
                 </div>
                 <!-- Action Buttons -->
                 <div class="transaction-actions" style="display:none;">
@@ -299,11 +333,6 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // Initialize step progression
-            initializeStepProgression();
-
-            // Check if step 2 is active and hide cancel button
-            checkAndHideCancelButton();
 
             // Auto-refresh functionality for transitions
             @if (
@@ -388,56 +417,7 @@
                 }
             }
 
-            // Check and hide cancel button when step 2 is active
-            function checkAndHideCancelButton() {
-                const cancelForm = document.getElementById('cancel-btn');
-                if (!cancelForm) return;
 
-                // Check both GCash and Cash step containers
-                const gcashSteps = document.getElementById('gcash-steps');
-                const cashSteps = document.getElementById('cash-steps');
-
-                const activeSteps = [];
-                if (gcashSteps) {
-                    const gcashStepItems = gcashSteps.querySelectorAll('.step-item');
-                    gcashStepItems.forEach((step, index) => {
-                        if (step.classList.contains('active') && step.getAttribute('data-step') === '2') {
-                            activeSteps.push(step);
-                        }
-                    });
-                }
-
-                if (cashSteps) {
-                    const cashStepItems = cashSteps.querySelectorAll('.step-item');
-                    cashStepItems.forEach((step, index) => {
-                        if (step.classList.contains('active') && step.getAttribute('data-step') === '2') {
-                            activeSteps.push(step);
-                        }
-                    });
-                }
-
-                // Hide cancel button if step 2 is active
-                if (activeSteps.length > 0) {
-                    cancelForm.style.display = 'none';
-                } else {
-                    cancelForm.style.display = '';
-                }
-            }
-
-            // Step Progression Functionality
-            function initializeStepProgression() {
-                const stepContainers = [
-                    document.getElementById('gcash-steps'),
-                    document.getElementById('cash-steps')
-                ].filter(Boolean);
-
-                stepContainers.forEach((stepList, index) => {
-                    // Add a slight delay for visual effect on page load
-                    setTimeout(() => {
-                        updateProgressLine(stepList);
-                    }, 300 + (index * 100));
-                });
-            }
 
             function updateProgressLine(stepList) {
                 if (!stepList) return;
@@ -622,6 +602,32 @@
                 // Also check immediately
                 checkStatus();
             }
+            const submitBtn = document.getElementById("submitBtn");
+
+            function checkAllFilesUploaded() {
+                const container = document.getElementById("attachments-container");
+                const inputs = container.querySelectorAll("input[type='file']");
+
+                container.addEventListener("change", (e) => {
+
+                    if (checkAllFilesUploaded()) {
+                        submitBtn.removeAttribute('disabled');
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                    }
+                });
+                let allFilled = true;
+
+                inputs.forEach((input) => {
+
+                    if (!input.files || input.files.length === 0) {
+                        allFilled = false;
+                    }
+                });
+                console.log(allFilled);
+                return allFilled;
+            }
+            checkAllFilesUploaded();
         })
     </script>
 </x-layout>

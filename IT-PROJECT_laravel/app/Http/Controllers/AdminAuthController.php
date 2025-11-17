@@ -154,6 +154,8 @@ class AdminAuthController extends Controller   // <-- rename this
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
+
+        // Gets the form data using form id
         $latestRequests->each(function ($transaction) {
             $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
             // If form_type is invalid, skip
@@ -192,7 +194,6 @@ class AdminAuthController extends Controller   // <-- rename this
     {
         try {
             $form = \App\Models\Forms\FormsTransactions::where('_id', $request->form_id)->first();
-
             if (!$form) {
                 return response()->json(['success' => false, 'message' => 'Form not found']);
             }
@@ -275,6 +276,12 @@ class AdminAuthController extends Controller   // <-- rename this
             }
 
             // Update status and timestamp
+
+            //      Check if payment method is cash
+            if ($form->payment_method === "cash") {
+                $form->payment_status = "paid";
+            }
+
             $form->status = $newStatus;
             $form->updated_at = now();
             $form->save();
