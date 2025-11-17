@@ -27,7 +27,7 @@
         @endif
         <!-- temp menu -->
         <li class="{{ request()->routeIs('admin.login') ? 'active' : '' }}">
-            <a id="navAdmin" href="{{ route('admin.login') }}">Adminside</a>
+            <a id="navAdmin" href="{{ route('admin.dashboard') }}">Adminside</a>
         </li>
 
     </ul>

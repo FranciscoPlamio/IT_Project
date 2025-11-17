@@ -82,14 +82,33 @@ Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(func
 });
 
 // Adminside Pages
+Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
+    // Dashboard (after login)
+    Route::get('dashboard', [AdminAuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('cert-request', [AdminAuthController::class, 'certRequest'])->name('cert-request');
+
+    Route::get('req-management', [AdminAuthController::class, 'requestManagement'])->name('req-management');
+    Route::get('req-management/{formToken}', [AdminAuthController::class, 'showRequestAttachments'])->name('req.attachments');
+    Route::get('view-file', [AdminAuthController::class, 'viewFile'])->name('viewFile');
+
+    Route::get('req-history', [AdminAuthController::class, 'requestHistory'])->name('req-history');
+
+    Route::post('update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
+    Route::get('get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');
+    Route::get('download-form', [AdminAuthController::class, 'downloadFormPDF'])->name('admin.downloadForm');
+
+    Route::get('bill-pay', [AdminAuthController::class, 'billPay'])->name('bill-pay');
+
+    Route::get('form-fees', [AdminAuthController::class, 'formFees'])->name('form-fees');
+});
+
+
 // Show login page (GET)
-Route::get('/adminside', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+Route::get('/admin/login', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
 
 // Handle login (POST) → same page (index.blade.php)
 Route::post('/adminside', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 
-// Dashboard (after login)
-Route::get('/adminside/dashboard', [AdminAuthController::class, 'dashboard'])->name('adminside.dashboard');
 
 // Logout
 Route::post('/adminside/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
@@ -143,16 +162,7 @@ Route::get('/nationalities.json', function () {
     ]);
 })->name('nationalities.data');
 
-Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
-Route::get('/adminside/req-history', [AdminAuthController::class, 'requestHistory'])->name('adminside.req-history');
 
-Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
-Route::get('/admin/get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');
-Route::get('/admin/download-form', [AdminAuthController::class, 'downloadFormPDF'])->name('admin.downloadForm');
-
-Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
-
-Route::get('/adminside/form-fees', [App\Http\Controllers\AdminAuthController::class, 'formFees'])->name('adminside.form-fees');
 
 Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
 Route::post('/adminside/set-amount', [AdminAuthController::class, 'setAmount'])->name('adminside.setAmount');
