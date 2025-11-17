@@ -1,57 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<x-admin-layout :title="'Request Management'">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Request Management</title>
+    <x-slot:head>
+        @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
+    </x-slot:head>
 
-    @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
-</head>
-
-<body>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-        <img src="{{ asset('images/ntc-logo.png') }}" class="logo" alt="NTC Logo" />
-        <nav class="menu">
-            <a href="{{ route('adminside.dashboard') }}" class="menu-item">
-                <img src="{{ asset('images/dash-icon.png') }}" alt=""> Dashboard
-            </a>
-            <a href="{{ route('adminside.req-management') }}" class="menu-item active">
-                <img src="{{ asset('images/whitereq-icon.png') }}" alt=""> Request Management
-            </a>
-            <a href="{{ route('adminside.req-history') }}" class="menu-item">
-                <img src="{{ asset('images/req-icon.png') }}" alt=""> Request History
-            </a>
-            <a href="{{ route('adminside.bill-pay') }}" class="menu-item">
-                <img src="{{ asset('images/billicon.png') }}" alt="">Billings and Payment
-            </a>
-            <a href="{{ route('adminside.form-fees') }}" class="menu-item">
-                <img src="{{ asset('images/billicon.png') }}" alt=""> Form Fees & Breakdown
-            </a>
-        </nav>
-        <div class="bottom-links">
-            <a href="#" class="menu-item" id="logout-link">
-                <img src="{{ asset('images/out-icon.png') }}" alt=""> Log out
-            </a>
-        </div>
-
-        <!-- Log Out Confirmation Modal -->
-        <div id="logout-modal" class="modal">
-            <div class="modal-content">
-                <h3>Are you sure you want to log out?</h3>
-                <div class="modal-buttons">
-                    <button id="confirm-logout" class="confirm-btn">Yes</button>
-                    <button id="cancel-logout" class="cancel-btn">No</button>
-                </div>
-            </div>
-            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
-    </aside>
 
     <!-- Main Content -->
     <div class="main">
@@ -119,7 +71,7 @@
                                 <th>Request Type</th>
                                 <th>Request Date</th>
                                 <th>Attachment</th>
-                                <th>Certificate</th>
+                                <th>Name</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -133,13 +85,14 @@
                                     <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
                                     <td class="see-more" onclick="viewForm('{{ $req->payment_reference }}', this)"
                                         style="cursor: pointer;">
-                                        See more <img src="{{ asset('images/see-icon.png') }}" alt="See">
+                                        <a
+                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
+                                            See
+                                            more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
+
                                     </td>
                                     <td>
-                                        <button class="upload-btn" onclick="handleUpload()">
-                                            <img src="{{ asset('images/upload-icon.png') }}" alt="Upload">
-                                            Upload file
-                                        </button>
+                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
                                     </td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
@@ -168,7 +121,8 @@
                                         @if ($isManagedStatus)
                                             <select class="status-select" data-request-id="{{ $req->_id }}"
                                                 data-current-status="{{ $status }}">
-                                                <option value="pending" @selected($status === 'pending')>Pending</option>
+                                                <option value="pending" @selected($status === 'pending')>Pending
+                                                </option>
                                                 <option value="processing" @selected($status === 'processing')>Processing
                                                 </option>
                                                 <option value="done" @selected($status === 'done')
@@ -181,8 +135,7 @@
                                     <td class="action-cell">
                                         @if (!in_array($status, ['done', 'cancelled', 'cancel']))
                                             <button class="badge-btn progress"
-                                                onclick="cancelRequest('{{ $req->_id }}')"
-                                                title="Cancel Request">
+                                                onclick="cancelRequest('{{ $req->_id }}')" title="Cancel Request">
                                                 Cancel
                                             </button>
                                         @else
@@ -197,8 +150,4 @@
             </section>
         </div>
     </div>
-    </main>
-
-</body>
-
-</html>
+</x-admin-layout>
