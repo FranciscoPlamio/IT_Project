@@ -54,7 +54,9 @@
                 this.nationalitySelect = document.getElementById('nationalitySelect');
 
                 this.remoteUrl =
-                    'https://gist.githubusercontent.com/tiveor/5444753e9919ffe74b41/raw/47e48c7575189ef7ee228e40153a1fa57b5864b1/nationalities.json';
+                    //too long to load so we use local file
+                    // 'https://gist.githubusercontent.com/tiveor/5444753e9919ffe74b41/raw/47e48c7575189ef7ee228e40153a1fa57b5864b1/nationalities.json';
+                    '/nationalities.json';
                 this.localUrl = '/nationalities.json';
 
                 this.init();

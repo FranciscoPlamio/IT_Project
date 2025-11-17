@@ -68,8 +68,10 @@ class AdminAuthController extends Controller   // <-- rename this
 
         // Fetch data from forms_transactions (case-insensitive)
         $done = FormsTransactions::where('status', new Regex('^done$', 'i'))->count();
-        $progress = FormsTransactions::where('status', new Regex('^in progress$', 'i'))->count();
-        $cancel = FormsTransactions::where('status', new Regex('^cancel$', 'i'))->count();
+        $progress = FormsTransactions::where('status', new Regex('^processing$', 'i'))
+            ->orWhere('status', new Regex('^pending$', 'i'))
+            ->count();
+        $cancel = FormsTransactions::where('status', new Regex('^cancelled$', 'i'))->count();
 
         $total = $done + $progress + $cancel;
 
@@ -84,7 +86,7 @@ class AdminAuthController extends Controller   // <-- rename this
 
         // Normalize statuses and assign icons/classes
         foreach ($recentApps as $app) {
-            $status = strtolower(trim($app->status ?? 'in progress')); // default = in progress
+            $status = strtolower(trim($app->status ?? 'pending')); // default = pending
             $app->normalized_status = $status;
 
             switch ($status) {
@@ -125,7 +127,8 @@ class AdminAuthController extends Controller   // <-- rename this
         $user = User::find($request->session()->get('admin'));
 
         // ✅ Use case-insensitive regex instead of whereRaw
-        $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^in progress$', 'i'))
+        $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^processing$', 'i'))
+            ->orWhere('status', new Regex('^pending$', 'i'))
             ->orderBy('created_at', 'desc')
             ->get();
 

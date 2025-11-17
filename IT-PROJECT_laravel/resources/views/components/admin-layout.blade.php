@@ -24,10 +24,6 @@
                     alt="">
                 Dashboard
             </a>
-            <a href="{{ route('admin.cert-request') }}"
-                class="menu-item {{ Route::is('admin.cert-request') ? 'active' : '' }}">
-                <img src="{{ asset('images/cert-icon.png') }}" alt=""> Certification Request
-            </a>
             <a href="{{ route('admin.req-management') }}"
                 class="menu-item {{ Route::is('admin.req-management') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.req-management') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
@@ -38,11 +34,11 @@
                 <img src="{{ Route::is('admin.req-history') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
                     alt=""> Request History
             </a>
-            <a href="{{ route('admin.bill-pay') }}"
+            {{-- <a href="{{ route('admin.bill-pay') }}"
                 class="menu-item {{ Route::is('admin.bill-pay') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.bill-pay') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt="">Billings and Payment
-            </a>
+            </a> --}}
             <a href="{{ route('admin.form-fees') }}"
                 class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "

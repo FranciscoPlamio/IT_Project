@@ -26,19 +26,20 @@
                                 <div class="transaction-details">
                                     <div class="detail-row">
                                         <span class="detail-label">Status:</span>
-                                        @if ($transactions->payment_status == 'paid')
+                                        @if ($transactions->status == 'processing')
+                                            <span class="status-badge pending">{{ $transactions->status }}</span>
+                                        @elseif ($transactions->payment_status == 'paid')
                                             <span
                                                 class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
-                                        @elseif ($transactions->status == 'processing')
-                                            <span class="status-badge pending">{{ $transactions->status }}</span>
                                         @elseif ($transactions->status == 'pending')
                                             <span class="status-badge pending">{{ $transactions->status }}</span>
                                         @endif
                                     </div>
-                                    <div class="detail-row">
+                                    <!-- hidden since its not dynamic yet (pj)-->
+                                    {{-- <div class="detail-row">
                                         <span class="detail-label">Purpose:</span>
                                         <span class="purpose-text">MULTI-PURPOSE CLEARANCE PROCESSING</span>
-                                    </div>
+                                    </div> --}}
                                     <div class="detail-row">
                                         <span class="detail-label">Transaction Date:</span>
                                         <span
@@ -111,20 +112,19 @@
                 <div class="gcash-payment-interface"
                     style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
                     <!-- GCash Header -->
-                    <div class="gcash-header">
+                    {{-- <div class="gcash-header">
                         <div class="gcash-header-content">
                             <img src="{{ asset('images/white-gcash.png') }}" alt="GCash Logo" class="gcash-logo-img">
                         </div>
-                    </div>
+                    </div> --}}
 
                     <!-- GCash Payment Card -->
                     <div class="gcash-card">
                         <p class="gcash-note">Securely complete the payment with your GCash app</p>
                         <p class="gcash-subnote">Log in to GCash and scan this QR with the QR Scanner.</p>
-                        <p class="gcash-name"><b>NTC CAR | 09491191100</b></p>
 
                         <div class="gcash-qr">
-                            <img src="{{ asset('images/qr_code.png') }}" alt="GCash QR Code">
+                            <img src="{{ asset('images/Gcash-Form1-01.png') }}" alt="GCash QR Code">
                         </div>
                     </div>
 
@@ -179,154 +179,164 @@
                 <!-- GCash Step 3: Payment Success Message -->
                 <div id="gcash-confirm" class="validation-wait-message"
                     style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
-                    <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
-                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.
-                    </p>
-                    <div class="flex justify-center">
+                    @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                        <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+                        <p>Your payment was sent successfully!
+                            Please wait a moment while we update your status to “Paid.”
 
-                        <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-                            style="background-color: #28a745; margin: 0 10px;">Download Form
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="transaction-actions" style="display:none;">
-                    <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
-                </div>
-            @elseif(optional($transactions)->payment_method === 'cash')
-                <!-- Steps Indicator (Cash) -->
-                <div class="steps steps-cash">
-                    <ol id="cash-steps">
-                        @if (strtolower($transactions->status ?? 'pending') === 'done')
-                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item completed">Payment</li>
-                            <li data-step="3" class="step-item active">Payment successful email with PDF download
-                            </li>
-                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
-                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item active">Payment</li>
-                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
-                        @else
-                            <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item">Payment</li>
-                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
-                        @endif
-                    </ol>
-                    <div>
-                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
-                            Success
-                            Email</button>
-                    </div>
-                </div>
-                <!-- Step 1: Wait for Validation Message -->
-                @if ($transactions->status === 'pending')
-                    <div id="cash-wait" class="validation-wait-message"
-                        style="display:block; text-align:center; margin:24px 0;">
-                        <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
-                    </div>
-                @endif
-                <!-- Cash Payment Interface -->
-                <div class="cash-payment-interface"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
-                    <div class="cash-payment-container">
-                        <!-- Top Header -->
-                        <div class="cash-header-section">
-                            <div class="success-icon">✓</div>
-                            <div class="header-content">
-                                <h2>Cash Payment Selected</h2>
-                                <p>You have chosen to pay in cash. Please visit our office during business hours
-                                    to
-                                    complete your payment.</p>
-                            </div>
+                            You can download your form by clicking the button below.
+                        </p>
+                        <div class="flex justify-center">
+                            <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                                style="background-color: #28a745; margin: 0 10px;">Download Form
+                            </button>
                         </div>
-
-                        <!-- Main Content Grid -->
-                        <div class="cash-content-grid">
-                            <!-- Left Column - Payment Info & Office Hours -->
-                            <div class="cash-left-column">
-                                <div class="payment-info">
-                                    <h3>Payment Information</h3>
-                                    <div class="info-item">
-                                        <span class="info-label">Payment Method:</span>
-                                        <span class="info-value">Cash</span>
-                                    </div>
-                                    <div class="info-item amount-highlight">
-                                        <span class="info-label">Amount:</span>
-                                        <span
-                                            class="info-value amount-value">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <span class="info-label">Status:</span>
-                                        <span class="info-value">Pending</span>
-                                    </div>
-                                </div>
-
-                                <div class="office-hours">
-                                    <h4>Office Hours</h4>
-                                    <p><strong>Monday - Friday:</strong> 8:00 AM - 5:00 PM</p>
-                                    <p><strong>Saturday:</strong> 8:00 AM - 12:00 PM</p>
-                                    <p><strong>Sunday:</strong> Closed</p>
-                                </div>
-                            </div>
-
-                            <!-- Right Column - Google Maps -->
-                            <div class="cash-right-column">
-                                <div class="office-location">
-                                    <h4>Office Location</h4>
-                                    <div class="location-content">
-                                        <!-- Google Maps Embed -->
-                                        <div class="maps-container">
-                                            <iframe
-                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.1691931618943!2d120.61167997460701!3d16.416231330056114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a1543cf37fcf%3A0x643f8ec7f155d470!2sNational%20Telecommunications%20Commission!5e0!3m2!1sen!2sph!4v1761151402669!5m2!1sen!2sph"
-                                                width="100%" height="375" style="border:0;" allowfullscreen=""
-                                                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                                            </iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="cash-bottom-section">
-                            <div class="payment-instructions">
-                                <h4 style="text-align: center;">How to Pay</h4>
-                                <ul class="instruction-list" style="list-style-type: bullet;">
-                                    <li>Please bring a valid identification card along with all required
-                                        documents.
-                                    </li>
-                                    <li>Present your reference number upon arrival.</li>
-                                    <li>Pay the required amount.</li>
-                                    <li>Obtain your official receipt.</li>
-                                </ul>
-                            </div>
-
-                            <div class="important-notes">
-                                <h4 style="text-align: center;">Reminders</h4>
-                                <ul class="notes-list" style="list-style-type: bullet;">
-                                    <li>Arrive at least 30 minutes prior to closing time.</li>
-                                    <li>Your application will be processed only after the payment has been
-                                        completed.</li>
-                                    <li>For any inquiries, please do not hesitate to contact us.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    @endif
                 </div>
-                <!-- Cash Step 3: Payment Success Message -->
-                <div id="cash-confirm" class="validation-wait-message"
-                    style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
-                    <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
-                    <p>Your payment has been confirmed. An email with the PDF download has been sent to your email.
-                    </p>
-                </div>
-                <!-- Action Buttons -->
-                <div class="transaction-actions" style="display:none;">
-                    <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
-
-                </div>
-            @endif
         </div>
+
+        <!-- Action Buttons -->
+        <div class="transaction-actions" style="display:none;">
+            <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+        </div>
+    @elseif(optional($transactions)->payment_method === 'cash')
+        <!-- Steps Indicator (Cash) -->
+        <div class="steps steps-cash">
+            <ol id="cash-steps">
+                @if (strtolower($transactions->status ?? 'pending') === 'done')
+                    <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                    <li data-step="2" class="step-item completed">Payment</li>
+                    <li data-step="3" class="step-item active">Payment successful email with PDF download
+                    </li>
+                @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
+                    <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                    <li data-step="2" class="step-item active">Payment</li>
+                    <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                @else
+                    <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
+                    <li data-step="2" class="step-item">Payment</li>
+                    <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                @endif
+            </ol>
+            <div>
+                <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
+                    Success
+                    Email</button>
+            </div>
+        </div>
+        <!-- Step 1: Wait for Validation Message -->
+        @if ($transactions->status === 'pending')
+            <div id="cash-wait" class="validation-wait-message"
+                style="display:block; text-align:center; margin:24px 0;">
+                <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+            </div>
+        @endif
+        <!-- Cash Payment Interface -->
+        <div class="cash-payment-interface"
+            style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
+            <div class="cash-payment-container">
+                <!-- Top Header -->
+                <div class="cash-header-section">
+                    <div class="success-icon">✓</div>
+                    <div class="header-content">
+                        <h2>Cash Payment Selected</h2>
+                        <p>You have chosen to pay in cash. Please visit our office during business hours
+                            to
+                            complete your payment.</p>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="cash-content-grid">
+                    <!-- Left Column - Payment Info & Office Hours -->
+                    <div class="cash-left-column">
+                        <div class="payment-info">
+                            <h3>Payment Information</h3>
+                            <div class="info-item">
+                                <span class="info-label">Payment Method:</span>
+                                <span class="info-value">Cash</span>
+                            </div>
+                            <div class="info-item amount-highlight">
+                                <span class="info-label">Amount:</span>
+                                <span
+                                    class="info-value amount-value">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Status:</span>
+                                <span class="info-value">Pending</span>
+                            </div>
+                        </div>
+
+                        <div class="office-hours">
+                            <h4>Office Hours</h4>
+                            <p><strong>Monday - Friday:</strong> 8:00 AM - 5:00 PM</p>
+                            <p><strong>Saturday:</strong> 8:00 AM - 12:00 PM</p>
+                            <p><strong>Sunday:</strong> Closed</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column - Google Maps -->
+                    <div class="cash-right-column">
+                        <div class="office-location">
+                            <h4>Office Location</h4>
+                            <div class="location-content">
+                                <!-- Google Maps Embed -->
+                                <div class="maps-container">
+                                    <iframe
+                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.1691931618943!2d120.61167997460701!3d16.416231330056114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a1543cf37fcf%3A0x643f8ec7f155d470!2sNational%20Telecommunications%20Commission!5e0!3m2!1sen!2sph!4v1761151402669!5m2!1sen!2sph"
+                                        width="100%" height="375" style="border:0;" allowfullscreen=""
+                                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                                    </iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cash-bottom-section">
+                    <div class="payment-instructions">
+                        <h4 style="text-align: center;">How to Pay</h4>
+                        <ul class="instruction-list" style="list-style-type: bullet;">
+                            <li>Please bring a valid identification card along with all required
+                                documents.
+                            </li>
+                            <li>Present your reference number upon arrival.</li>
+                            <li>Pay the required amount.</li>
+                            <li>Obtain your official receipt.</li>
+                        </ul>
+                    </div>
+
+                    <div class="important-notes">
+                        <h4 style="text-align: center;">Reminders</h4>
+                        <ul class="notes-list" style="list-style-type: bullet;">
+                            <li>Arrive at least 30 minutes prior to closing time.</li>
+                            <li>Your application will be processed only after the payment has been
+                                completed.</li>
+                            <li>For any inquiries, please do not hesitate to contact us.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cash Step 3: Payment Success Message -->
+        <div id="cash-confirm" class="validation-wait-message"
+            style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+            <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+            <p>Your payment has been confirmed. You can now download your form by clicking the button below.
+            </p>
+            <div style="display: flex; justify-content: center;">
+                <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                    style="background-color: #28a745; margin: 0 10px;">Download Form
+                </button>
+            </div>
+        </div>
+        <!-- Action Buttons -->
+        <div class="transaction-actions" style="display:none;">
+            <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+
+        </div>
+        @endif
+    </div>
 
 
     </div>

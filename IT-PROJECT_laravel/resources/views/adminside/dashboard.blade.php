@@ -64,8 +64,8 @@
                         <tbody>
                             @foreach ($recentApps as $app)
                                 @php
-                                    $status = strtolower(trim($app->status ?? 'in progress'));
-                                    $isInProgress = $status === 'in progress';
+                                    $status = strtolower(trim($app->status ?? 'pending'));
+                                    $isInProgress = in_array($status, ['pending', 'processing']);
                                     $targetRoute = $isInProgress
                                         ? route('admin.cert-request', ['highlight' => $app->payment_reference])
                                         : route('admin.req-management', [
