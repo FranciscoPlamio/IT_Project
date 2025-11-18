@@ -167,21 +167,26 @@ class FormsController extends Controller
             return str_starts_with($key, 'form_');
         });
         if ($hasFormSession) {
-            $formType = "";
+            $oldFormType = "";
             $formToken = "";
 
             foreach ($sessionKeys as $key) {
                 if (str_starts_with($key, 'form')) {
 
-                    $formType = substr($key, 5, 4);
+                    $oldFormType = substr($key, 5, 4);
                     $formToken = substr($key, 10);
                 }
             }
-            $form = session('form_' . $formType . '_' . $formToken);
-            return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken])->with('message', 'Please finish your current form before signing up a new form');
+            $form = session('form_' . $oldFormType . '_' . $formToken);
+            return redirect()->route('forms.validation', ['formType' => $oldFormType, 'token' => $formToken, 'targetFormType' => $formType])->with('message', 'Please finish your current form before signing up a new form');
         } else {
             return view("clientside.forms.Form{$formType}", compact('formType'));
         }
+    }
+
+    public function showFormInformation($formType)
+    {
+        return view("clientside.forms.information.FormInformation{$formType}");
     }
 
     /**
@@ -254,10 +259,16 @@ class FormsController extends Controller
         if (!$validated) {
             return back()->withErrors(['message' => 'No form data found in session.']);
         }
-
         // User email
         $user = $this->getUser();
 
+
+        $message = $this->validateAndStoreUploadedFile($request, $formToken);
+
+        if ($message) {
+            // Validation failed
+            return redirect()->back()->with('message', $message);
+        }
         // Save using FormManager
         $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
@@ -280,6 +291,76 @@ class FormsController extends Controller
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
     }
 
+    public function cancel(Request $request)
+    {
+        //Forget Form Key session
+        $sessionKeys = array_keys($request->session()->all());
+        $formKey = collect($sessionKeys)->first(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        session()->forget($formKey);
+        return redirect()->route('homepage')->with('message', 'Draft Form cancelled successfully.');
+    }
+
+    private function validateAndStoreUploadedFile($request, $formToken)
+    {
+
+        $rules = [];
+
+        foreach ($request->file() as $key => $file) {
+            $rules[$key] = 'file|mimes:pdf,jpg,png|max:2048';
+        }
+        try {
+            // Validate dynamically
+            $validated = $request->validate($rules);
+
+            // Store files if validation passes
+            foreach ($request->file() as $key => $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = $key . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('forms/' . $formToken, $fileName, 'local');
+            }
+
+            return null;
+        } catch (ValidationException $e) {
+            $message = "Validation failed: files must be no larger than 5 MB and must be in .png, .jpg, or .pdf";
+            return $message;
+        }
+    }
+
+    private function cleanInput(array $data)
+    {
+        $clean_recursive = function ($value, $key = null) use (&$clean_recursive) {
+            if (is_array($value)) {
+                $cleaned = [];
+                foreach ($value as $k => $v) {
+                    $cleaned[$k] = $clean_recursive($v, $k);
+                }
+                return $cleaned;
+            }
+
+            if (is_string($value)) {
+                // Trim and collapse spaces
+                $value = preg_replace('/\s+/', ' ', trim($value));
+
+                // Capitalize name fields
+                $nameFields = ['first_name', 'middle_name', 'last_name'];
+                if ($key && in_array($key, $nameFields)) {
+                    $value = ucwords(strtolower($value));
+                }
+            }
+
+            return $value;
+        };
+
+        $cleanedData = [];
+        foreach ($data as $key => $value) {
+            $cleanedData[$key] = $clean_recursive($value, $key);
+        }
+
+        return $cleanedData;
+    }
+
     public function preview(Request $request, $formType)
     {
         // Verify Google reCAPTCHA first
@@ -294,7 +375,15 @@ class FormsController extends Controller
         $rules = FormManager::getValidationRules($formType);
         // dd($rules);
         // Validate fields of a form, if there are invalid it will print error messages
+
+        // Clean input before validation
+
         try {
+
+            $cleaned = $this->cleanInput($request->all());
+
+            $request->replace($cleaned);
+
             $validated = $request->validate(
                 $rules['rules'],
                 $rules['messages'],
@@ -335,7 +424,6 @@ class FormsController extends Controller
     public function showValidation(Request $request, $formType)
     {
         $form = session('form_' . $formType . '_' . $request->input('token'));
-
         // If no form is found, redirect safely
         if (!$form) {
             return redirect()->route('homepage');
@@ -346,6 +434,7 @@ class FormsController extends Controller
             ->view('clientside.forms.Validation', [
                 'form' => $form,
                 'formType' => $formType,
+                'targetFormType' => $request->input('targetFormType')
             ])
             ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
             ->header('Pragma', 'no-cache')

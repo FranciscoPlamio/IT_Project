@@ -16,14 +16,20 @@ class Form1_20Rules
 
                 // Applicant Details
                 'applicant' => ['required', 'string'],
-                'unit' => ['required', 'string'],
-                'street' => ['required', 'string'],
+                'unit' => ['nullable', 'string'],
+                'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['nullable', 'email'],
+                'email' => [
+                    'required',
+                    'email',
+                    'min:6',
+                    'max:30',
+                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
+                ],
                 'cpcn_pa_ca_no' => ['required', 'string'],
                 'cpcn_validity' => ['required', 'date', 'after_or_equal:today'],
                 'cor_no' => ['required', 'string'],
@@ -41,10 +47,7 @@ class Form1_20Rules
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
                 'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
             ], // custom messages 
-
-            'attributes' => [
-                'dob' => 'date of birth', // custom attribute name
-            ]
+            'attributes' => []
         ];
     }
 }

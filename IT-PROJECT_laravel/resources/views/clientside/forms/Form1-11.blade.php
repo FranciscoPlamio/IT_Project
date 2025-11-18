@@ -33,6 +33,10 @@
 
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <div class="form-grid-2">
                             <fieldset class="fieldset-compact">
 

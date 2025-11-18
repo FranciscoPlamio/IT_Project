@@ -152,24 +152,24 @@
                     margin: 20px auto;
                     padding: 30px 20px;
                 }
-                
+
                 .cash-payment-container h2 {
                     font-size: 1.6rem;
                 }
-                
+
                 .payment-info {
                     padding: 20px;
                 }
-                
+
                 .office-hours {
                     padding: 16px;
                 }
-                
+
                 .action-buttons {
                     flex-direction: column;
                     gap: 12px;
                 }
-                
+
                 .btn {
                     width: 100%;
                     max-width: 300px;
@@ -182,29 +182,29 @@
                     margin: 15px auto;
                     padding: 20px 15px;
                 }
-                
+
                 .cash-payment-container h2 {
                     font-size: 1.4rem;
                 }
-                
+
                 .cash-payment-container p {
                     font-size: 0.9rem;
                 }
-                
+
                 .payment-info {
                     padding: 16px;
                 }
-                
+
                 .info-item {
                     flex-direction: column;
                     align-items: flex-start;
                     gap: 4px;
                 }
-                
+
                 .office-hours {
                     padding: 12px;
                 }
-                
+
                 .btn {
                     padding: 10px 20px;
                     font-size: 0.95rem;
@@ -217,7 +217,8 @@
         <div class="cash-payment-container">
             <div class="success-icon">✓</div>
             <h2>Cash Payment Selected</h2>
-            <p>You have chosen to pay in cash. Please visit our office during business hours to complete your payment.</p>
+            <p>You have chosen to pay in cash. Please visit our office during business hours to complete your payment.
+            </p>
 
             <div class="payment-info">
                 <h3>Payment Information</h3>
@@ -243,7 +244,7 @@
             </div>
 
             <div class="action-buttons">
-                <a href="{{ route('forms.list') }}" class="btn btn-primary">
+                <a href="{{ route('display.forms') }}" class="btn btn-primary">
                     Continue to Forms
                 </a>
                 <a href="{{ route('payment.method') }}" class="btn btn-secondary">

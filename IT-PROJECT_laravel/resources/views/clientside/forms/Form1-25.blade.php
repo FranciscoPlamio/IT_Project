@@ -28,6 +28,10 @@
 
                 <div>
                     <section class="step-content active" id="step-complainant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Complainant's Details</legend>
                             <div class="form-field">

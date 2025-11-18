@@ -8,15 +8,15 @@
 
 <div class="form-grid-3">
     <div class="form-field">
-        <label class="form-label">Date of Birth
+        <label class="form-label">Date of Birth <span class="text-red">*</span>
         </label>
-        <input class="form1-01-input" type="date" name="dob" max="{{ date('Y-m-d', strtotime('-18 years')) }}"
-            value="{{ old('dob', $form['dob'] ?? '') }}">
+        <input class="form1-01-input" type="date" name="dob" min="{{ date('Y-m-d', strtotime('-70 years')) }}"
+            max="{{ date('Y-m-d', strtotime('-18 years')) }}" value="{{ old('dob', $form['dob'] ?? '') }}">
         @error('dob')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
-    <div class="form-field"><label class="form-label">Sex</label>
+    <div class="form-field"><label class="form-label">Sex <span class="text-red">*</span></label>
         <div class="inline-radio">
             <label>
                 <input type="radio" name="sex" value="male"
@@ -35,7 +35,7 @@
     </div>
 
     <div class="form-field">
-        <label class="form-label">Nationality</label>
+        <label class="form-label">Nationality <span class="text-red">*</span></label>
         <select class="form1-01-input address-select" name="nationality" id="nationalitySelect"
             data-old-value="{{ old('nationality', $form['nationality'] ?? '') }}">
             <option value="">Select Nationality</option>
@@ -54,7 +54,9 @@
                 this.nationalitySelect = document.getElementById('nationalitySelect');
 
                 this.remoteUrl =
-                    'https://gist.githubusercontent.com/tiveor/5444753e9919ffe74b41/raw/47e48c7575189ef7ee228e40153a1fa57b5864b1/nationalities.json';
+                    //too long to load so we use local file
+                    // 'https://gist.githubusercontent.com/tiveor/5444753e9919ffe74b41/raw/47e48c7575189ef7ee228e40153a1fa57b5864b1/nationalities.json';
+                    '/nationalities.json';
                 this.localUrl = '/nationalities.json';
 
                 this.init();

@@ -37,10 +37,11 @@
     <script>
         const toggle = document.getElementById("menuToggle");
         const navList = document.getElementById("navList");
-
-        toggle.addEventListener("click", () => {
-            navList.classList.toggle("open");
-        });
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                navList.classList.toggle("open");
+            });
+        }
     </script>
 </body>
 

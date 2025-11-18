@@ -23,6 +23,10 @@
 
                 <div>
                     <section class="step-content active" id="step-affiant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Affiant Information</legend>
                             <div class="inline-text-container">

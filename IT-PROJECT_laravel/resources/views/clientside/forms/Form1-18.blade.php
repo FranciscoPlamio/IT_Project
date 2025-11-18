@@ -39,6 +39,10 @@
                 @endphp
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Type of Application</legend>
                             <x-forms.application-type-fields :form="$form101 ?? []" :applicationType="$applicationType" :permitTypeValue="$permitTypeValue"

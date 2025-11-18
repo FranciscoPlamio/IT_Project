@@ -14,27 +14,37 @@ class Form1_02Rules
                 'middle_name' => ['required', 'string', 'min:2'],
 
                 // 3 
-                'dob' => ['required', 'date', 'before_or_equal:today'],
+                'dob' => [
+                    'required',
+                    'date',
+                    'before_or_equal:' . now()->subYears(18)->toDateString(),
+                    'after_or_equal:' . now()->subYears(70)->toDateString(),
+                ],
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
                 //8 Address fields
-                'unit' => ['required', 'string'],
-                'street' => ['required', 'string'],
+                'unit' => ['nullable', 'string'],
+                'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['nullable', 'email'],
-
+                'email' => [
+                    'required',
+                    'email',
+                    'min:6',
+                    'max:30',
+                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
+                ],
                 // Exam fields
                 'exam_place' => ['required', 'string'],
                 'exam_date' => ['required', 'date', 'before_or_equal:today'],
                 'rating' => ['required', 'numeric'],
 
-                'height' => ['required', 'numeric'],
-                'weight' => ['required', 'numeric'],
+                'height' => ['required', 'string'],
+                'weight' => ['required', 'string'],
                 'employment_status' => ['required', 'string'],
                 'employment_type' => ['required', 'string'],
                 'application_type' => ['required', 'string'],

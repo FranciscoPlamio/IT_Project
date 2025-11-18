@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
@@ -11,6 +12,7 @@ use App\Models\Forms\FormsTransactions;
 use MongoDB\BSON\Regex;
 use MongoDB\BSON\ObjectId;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -36,8 +38,9 @@ class AdminAuthController extends Controller   // <-- rename this
         if ($user && \Hash::check($request->password, $user->password)) {
             // Save admin session
             $request->session()->put('admin', (string) $user->_id);
+            $request->session()->regenerate();
 
-            return redirect()->route('adminside.dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         // Invalid credentials
@@ -65,8 +68,10 @@ class AdminAuthController extends Controller   // <-- rename this
 
         // Fetch data from forms_transactions (case-insensitive)
         $done = FormsTransactions::where('status', new Regex('^done$', 'i'))->count();
-        $progress = FormsTransactions::where('status', new Regex('^in progress$', 'i'))->count();
-        $cancel = FormsTransactions::where('status', new Regex('^cancel$', 'i'))->count();
+        $progress = FormsTransactions::where('status', new Regex('^processing$', 'i'))
+            ->orWhere('status', new Regex('^pending$', 'i'))
+            ->count();
+        $cancel = FormsTransactions::where('status', new Regex('^cancelled$', 'i'))->count();
 
         $total = $done + $progress + $cancel;
 
@@ -81,7 +86,7 @@ class AdminAuthController extends Controller   // <-- rename this
 
         // Normalize statuses and assign icons/classes
         foreach ($recentApps as $app) {
-            $status = strtolower(trim($app->status ?? 'in progress')); // default = in progress
+            $status = strtolower(trim($app->status ?? 'pending')); // default = pending
             $app->normalized_status = $status;
 
             switch ($status) {
@@ -90,8 +95,8 @@ class AdminAuthController extends Controller   // <-- rename this
                     $app->status_icon = 'Done.png';
                     break;
 
-                case 'cancel':
-                    $app->status_class = 'cancel';
+                case 'cancelled':
+                    $app->status_class = 'cancelled';
                     $app->status_icon = 'Cancel.png';
                     break;
 
@@ -122,7 +127,8 @@ class AdminAuthController extends Controller   // <-- rename this
         $user = User::find($request->session()->get('admin'));
 
         // ✅ Use case-insensitive regex instead of whereRaw
-        $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^in progress$', 'i'))
+        $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^processing$', 'i'))
+            ->orWhere('status', new Regex('^pending$', 'i'))
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -145,20 +151,45 @@ class AdminAuthController extends Controller   // <-- rename this
 
         $user = User::find($request->session()->get('admin'));
 
-        //  Latest (not done or cancel)
-        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancel'])
+
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled'])
             ->orderBy('created_at', 'desc')
+            ->with('user')
             ->get();
 
-        //  History (done or cancel)
-        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel'])
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+        $highlight = $request->query('highlight');
+
+        return view('adminside.req-management', compact('user', 'latestRequests', 'highlight'));
+    }
+
+    public function requestHistory(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        // History includes completed or cancelled records
+        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel', 'cancelled'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
         $highlight = $request->query('highlight');
-        $section = $request->query('section', 'latest'); // 'history' or 'latest'
 
-        return view('adminside.req-management', compact('user', 'latestRequests', 'historyRequests', 'highlight', 'section'));
+        return view('adminside.req-history', compact('user', 'historyRequests', 'highlight'));
     }
 
 
@@ -166,22 +197,94 @@ class AdminAuthController extends Controller   // <-- rename this
     {
         try {
             $form = \App\Models\Forms\FormsTransactions::where('_id', $request->form_id)->first();
-
             if (!$form) {
                 return response()->json(['success' => false, 'message' => 'Form not found']);
             }
 
-            // Make sure status is explicitly set (cancel or done)
+            $statusFlow = ['pending', 'processing', 'done'];
+            $allowedStatuses = array_merge($statusFlow, ['cancelled']);
             $newStatus = strtolower(trim($request->status));
 
-            if (!in_array($newStatus, ['done', 'cancel'])) {
+            if (!in_array($newStatus, $allowedStatuses, true)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid status value'
                 ]);
             }
 
+            $currentStatus = strtolower(trim($form->status ?? 'pending'));
+
+            if (!in_array($currentStatus, $allowedStatuses, true)) {
+                $currentStatus = 'pending';
+            }
+
+            if ($currentStatus === 'cancelled') {
+                if ($newStatus === 'cancelled') {
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request is already cancelled.',
+                        'status' => $form->status,
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Cancelled requests cannot be updated.'
+                ]);
+            }
+
+            if ($currentStatus === 'done' && $newStatus !== 'done') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request is already marked as done.'
+                ]);
+            }
+
+            if ($newStatus === 'cancelled') {
+                $form->status = $newStatus;
+                $form->updated_at = now();
+                $form->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status updated to cancelled',
+                    'status' => $form->status,
+                    'updated_at' => $form->updated_at
+                ]);
+            }
+
+            $currentIndex = array_search($currentStatus, $statusFlow, true);
+            $nextIndex = array_search($newStatus, $statusFlow, true);
+
+            if ($currentIndex === $nextIndex) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Status remains {$newStatus}",
+                    'status' => $form->status,
+                ]);
+            }
+
+            if ($nextIndex < $currentIndex) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status cannot be reverted.'
+                ]);
+            }
+
+            if ($nextIndex - $currentIndex > 1) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please follow the status order: pending → processing → done.'
+                ]);
+            }
+
             // Update status and timestamp
+
+            //      Check if payment method is cash
+            if ($form->payment_method === "cash") {
+                $form->payment_status = "paid";
+            }
+
             $form->status = $newStatus;
             $form->updated_at = now();
             $form->save();
@@ -436,5 +539,40 @@ class AdminAuthController extends Controller   // <-- rename this
             'message' => 'Payment amount updated successfully',
             'payment_amount' => $form->payment_amount,
         ]);
+    }
+
+    public function formFees(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        return view('adminside.form-fees', compact('user'));
+    }
+
+    public function showRequestAttachments(Request $request, $formToken)
+    {
+        $folderPath = "forms/{$formToken}";
+        if (!Storage::exists($folderPath)) {
+            abort(404, "No files found for this form.");
+        }
+
+        $files = Storage::files($folderPath);
+        return view('adminside.req-management-attachments', compact('files'));
+    }
+
+    public function viewFile(Request $request)
+    {
+        $path = $request->query('path');
+        if (!Storage::exists($path)) {
+            abort(404);
+        }
+
+        $mime = Storage::mimeType($path);
+        return response(Storage::get($path))
+            ->header('Content-Type', $mime)
+            ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
     }
 }

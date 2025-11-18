@@ -3,7 +3,10 @@
         <div class="form1-01-header">Validation Phase: Review Your Application</div>
         <div class="validation-section-title">Please review your details before final submission:</div>
         <dl class="validation-list" id="validationList"></dl>
-
+        <hr>
+        <div id="attachments-container" data-form-type="{{ $formType }}" class="mt-2">
+            <p class="font-semibold mb-6">Upload Requirements</p>
+        </div>
         {{-- Payment Method Selection --}}
         <div class="payment-method-container">
             <h2>Choose Payment Method</h2>
@@ -30,11 +33,14 @@
             </div>
 
         </div>
+
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-            <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
-            <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
-                style="display:none;">
+            <x-forms.cancel-validation :formType="$targetFormType" />
+            <button class="form1-01-btn" id="proceedPayment" href="">Proceed to
+                Payment</button>
+            <form id="paymentForm" enctype="multipart/form-data"
+                action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST" style="display:none;">
                 @csrf
                 <input type="hidden" name="payment_method" id="paymentMethodInput">
             </form>
@@ -42,39 +48,39 @@
     </div>
     </div>
 
-    <script>
+    <script type="module">
         // No in-page canvas preview; use inline preview via new tab
 
         function formatKey(key) {
-            return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            let newKey = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            if (newKey == "Dob") {
+                newKey = "Date of Birth";
+                return newKey;
+            }
+            if (newKey == "Needs") {
+                newKey = "Special Needs/ Requests during examination"
+            }
+            return newKey;
         }
 
         // Map of checkbox values -> human-readable labels from Form1-01
         const checkboxLabelMaps = {
-            rtg: {
-                '1rtg_e1256_code25': '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
-                '1rtg_code25': '1RTG - Code (25/20 wpm)',
-                '2rtg_e1256_code16': '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
-                '2rtg_code16': '2RTG - Code (16 wpm)',
-                '3rtg_e125_code16': '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
-                '3rtg_code16': '3RTG - Code (16 wpm)'
-            },
-            amateur: {
-                'class_a_e8910_code5': 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
-                'class_a_code5_only': 'Class A - Code (5 wpm) Only',
-                'class_b_e567': 'Class B - Elements 5, 6 & 7',
-                'class_b_e2': 'Class B - Element 2',
-                'class_c_e234': 'Class C - Elements 2, 3 & 4',
-                'class_d_e2': 'Class D - Element 2'
-            },
-            rphn: {
-                '1phn_e1234': '1PHN - Elements 1, 2, 3 & 4',
-                '2phn_e123': '2PHN - Elements 1, 2 & 3',
-                '3phn_e12': '3PHN - Elements 1 & 2'
-            },
-            rroc: {
-                'rroc_aircraft_e1': 'RROC - Aircraft - Element 1'
-            }
+            "class_a_e8910_code5": "Class A - Elements 8, 9, 10 & Code (5 wpm)",
+            "class_a_code5_only": "Class A - Code (5 wpm) Only",
+            "class_b_e567": "Class B - Elements 5, 6 & 7",
+            "class_b_e2": "Class B - Element 2",
+            "class_c_e234": "Class C - Elements 2, 3 & 4",
+            "class_d_e2": "Class D - Element 2",
+            "1rtg_e1256_code25": "1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)",
+            "1rtg_code25": "1RTG - Code (25/20 wpm)",
+            "2rtg_e1256_code16": "2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)",
+            "2rtg_code16": "2RTG - Code (16 wpm)",
+            "3rtg_e125_code16": "3RTG - Elements 1, 2, 5 & Code (16 wpm)",
+            "3rtg_code16": "3RTG - Code (16 wpm)",
+            "1phn_e1234": "1PHN - Elements 1, 2, 3 & 4",
+            "2phn_e123": "2PHN - Elements 1, 2 & 3",
+            "3phn_e12": "3PHN - Elements 1 & 2",
+            "rroc_aircraft_e1": "RROC - Aircraft - Element 1"
         };
 
         function formatValue(key, rawValue) {
@@ -92,12 +98,19 @@
             }
 
             // Map checkbox values to their labels when applicable
-            const map = checkboxLabelMaps[key];
-            if (map) {
-                if (Array.isArray(rawValue)) {
-                    return rawValue.map(v => map[v] || v).join(', ');
+            const map = checkboxLabelMaps[rawValue];
+            if (key === 'exam_type') {
+                if (map) {
+                    return map;
                 }
-                return map[rawValue] || rawValue || '';
+            }
+
+            if (key === 'needs') {
+                if (rawValue === '0') {
+                    return 'None';
+                } else if (rawValue === '1') {
+                    return 'Yes';
+                }
             }
 
             // Default formatting
@@ -106,12 +119,13 @@
         }
 
         const server101 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
+        window.formData = server101; // now available globally
         const data = {}; // always prefer server; keep empty to avoid localStorage conflicts
         const list = document.getElementById('validationList');
 
 
         // Render textual summary list for quick review
-        function renderFormData(formData, formType = '1-01') {
+        function renderFormData(formData, formType) {
             const titleEl = document.querySelector('.validation-section-title');
             if (titleEl) {
                 titleEl.textContent = `Form ${formType} Details:`;
@@ -134,11 +148,19 @@
                 const value = formatValue(key, formData[key]);
                 if (value === '' || value === null || value === undefined) continue;
                 const dt = document.createElement('dt');
-                dt.textContent = formatKey(key);
+                dt.classList.add('inline', 'font-semibold', 'mr-1'); // inline + bold + small space after
+                dt.textContent = formatKey(key) + ":"; // add the colon
+
                 const dd = document.createElement('dd');
+                dd.classList.add('inline'); // inline so it stays on the same line
                 dd.textContent = value;
+
+                const wrapper = document.createElement('div'); // wrapper for each pair
+                wrapper.classList.add('mb-2'); // vertical spacing between pairs
+
                 list.appendChild(dt);
                 list.appendChild(dd);
+                list.appendChild(wrapper); // append wrapper instead of br
             }
         }
 
@@ -183,6 +205,8 @@
 
         link.addEventListener('click', function(event) {
             event.preventDefault(); // prevent normal link behavior
+            const inputs = document.querySelectorAll("input[type='file']");
+            console.log(inputs);
 
             // Check if payment method is selected
             if (!selectedPaymentMethod) {
@@ -190,6 +214,9 @@
                 return;
             }
 
+            inputs.forEach((input) => {
+                form.appendChild(input);
+            })
             // Redirect to transaction page with payment method
             form.submit();
         });
@@ -230,13 +257,37 @@
             }
 
             selectedPaymentMethod = method;
-            if (proceedPaymentBtn) {
+
+            if (paymentInput.value !== "" && checkAllFilesUploaded()) {
                 proceedPaymentBtn.removeAttribute('disabled');
                 proceedPaymentBtn.style.opacity = '1';
                 proceedPaymentBtn.style.cursor = 'pointer';
             }
         }
 
+        function checkAllFilesUploaded() {
+            const container = document.getElementById("attachments-container");
+            const inputs = container.querySelectorAll("input[type='file']");
+            container.addEventListener("change", (e) => {
+                if (paymentInput.value !== "" && checkAllFilesUploaded()) {
+                    proceedPaymentBtn.removeAttribute('disabled');
+                    proceedPaymentBtn.style.opacity = '1';
+                    proceedPaymentBtn.style.cursor = 'pointer';
+                }
+            });
+            let allFilled = true;
+
+            inputs.forEach((input) => {
+
+                if (!input.files || input.files.length === 0) {
+                    allFilled = false;
+                }
+            });
+
+            return allFilled;
+        }
+
+        checkAllFilesUploaded();
         // Add keyboard navigation support for payment options
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {

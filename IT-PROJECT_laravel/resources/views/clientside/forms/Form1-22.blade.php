@@ -38,6 +38,10 @@
 
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Type of Application</legend>
                             <!-- Application type fields -->
