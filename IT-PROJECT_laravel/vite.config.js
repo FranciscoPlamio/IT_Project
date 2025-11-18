@@ -16,6 +16,10 @@ export default defineConfig({
                 "resources/css/adminside/dashboard.css",
                 "resources/js/adminside/bill-pay.js",
                 "resources/css/adminside/bill-pay.css",
+                "resources/js/adminside/declaration.js",
+                "resources/css/adminside/declaration.css",
+                "resources/js/adminside/admission-slip.js",
+                "resources/css/adminside/admission-slip.css",
             ],
             refresh: true,
         }),
@@ -27,8 +31,8 @@ export default defineConfig({
         hmr: {
             host: "localhost", //(change depending on your IP)
         },
-        cors: {
-            origin: "localhost:5173", //(change depending on your IP for css and js to multiple devices) (sample: http://10.135.140.117:8000)
-        }
+        //cors: {
+           // origin: "localhost:5173", //(change depending on your IP for css and js to multiple devices) (sample: http://10.135.140.117:8000)
+        //}
     },
 });

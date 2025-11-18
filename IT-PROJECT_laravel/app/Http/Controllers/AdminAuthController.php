@@ -214,6 +214,43 @@ class AdminAuthController extends Controller   // <-- rename this
         return view('adminside.admission-slip', compact('user', 'slipData'));
     }
 
+    public function declaration(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        $declarationText = 'I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.';
+
+        $declarationEntries = [
+            [
+                'reference' => 'NTC-2025-001',
+                'applicant' => 'Francisco Plamio',
+                'form' => 'Form 1-01',
+                'submitted' => '15 Oct 2025',
+                'status' => 'Pending OR',
+            ],
+            [
+                'reference' => 'NTC-2025-024',
+                'applicant' => 'Francisco Plamio2',
+                'form' => 'Form 1-02',
+                'submitted' => '17 Oct 2025',
+                'status' => 'Processing',
+            ],
+            [
+                'reference' => 'NTC-2025-033',
+                'applicant' => 'Francisco Plamio3',
+                'form' => 'Form 1-11',
+                'submitted' => '20 Oct 2025',
+                'status' => 'For Release',
+            ],
+        ];
+
+        return view('adminside.declaration', compact('user', 'declarationText', 'declarationEntries'));
+    }
+
 
     public function updateStatus(Request $request)
     {

@@ -49,6 +49,11 @@
                 <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt=""> Form Fees & Breakdown
             </a>
+            <a href="{{ route('admin.declaration') }}"
+                class="menu-item {{ Route::is('admin.declaration') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.declaration') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
+                    alt=""> Declaration
+            </a>
         </nav>
         <div class="bottom-links">
             <a href="#" class="menu-item" id="logout-link">
