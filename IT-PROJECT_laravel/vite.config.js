@@ -27,5 +27,8 @@ export default defineConfig({
         hmr: {
             host: "localhost", //(change depending on your IP)
         },
+        cors: {
+            origin: "localhost:5173", //(change depending on your IP for css and js to multiple devices) (sample: http://10.135.140.117:8000)
+        }
     },
 });

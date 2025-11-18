@@ -109,8 +109,6 @@
                 this.zipCodeSelect = document.getElementById('zipCodeSelect');
 
                 this.remoteUrls = {
-                    // provinceData: 'https://raw.githubusercontent.com/flores-jacob/philippine-regions-provinces-cities-municipalities-barangays/refs/heads/master/philippine_provinces_cities_municipalities_and_barangays_2019v2.json',
-                    // zipCodeData: 'https://raw.githubusercontent.com/arnellebalane/zipcodes-ph/refs/heads/master/source/zipcodes.json'
                     provinceData: '/philippine_provinces_cities_municipalities_and_barangays_2019v2.json',
                     zipCodeData: '/ph-zipcodes.json'
                 };
