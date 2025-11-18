@@ -55,16 +55,7 @@ class PDFCoordinateMaps
      */
     private static function getForm101Coordinates()
     {
-        $sexXCoord = 0;
-        $sexYCoord = 0;
-        // sex selection coords
-        if('sex' == 'male'){
-            $sexXCoord=146.60;
-            $sexYCoord=117.85;
-        }else{
-            $sexXCoord=151.60;
-            $sexYCoord=117.85;
-        }
+
         return [
             // Personal Information Section
             'first_name' => [34.00, 117.85],
@@ -74,11 +65,11 @@ class PDFCoordinateMaps
             'dob' => [163.60, 113.55],
             'place_of_birth' => [83.60, 110],
             'nationality' => [146.60, 121.95],
-            'sex' => [$sexXCoord, $sexYCoord], // default/male position
+            'sex' => [146.60, 117.85], // default/male position
             'sex_positions' => [
-                'male' => [$sexXCoord, $sexYCoord],
+                'male' => [146.60, 117.85],
                 // TODO: Adjust this placeholder to match female checkbox exact location on the template
-                'female' => [$sexXCoord, $sexYCoord],
+                'female' => [183.60, 117.85],
             ],
             'civil_status' => [83.60, 125],
             'religion' => [83.60, 125],
@@ -117,27 +108,27 @@ class PDFCoordinateMaps
             'exam_type_positions' => [
                 // Radiotelegraphy
                 '1rtg_e1256_code25' => [17, 65.70],
-                '1rtg_code25' => [16, 67.70],
-                '2rtg_e1256_code16' => [16, 69.70],
-                '2rtg_code16' => [16, 71.70],
-                '3rtg_e125_code16' => [16, 73.70],
-                '3rtg_code16' => [16, 75.70],
+                '1rtg_code25' => [17, 69.70],
+                '2rtg_e1256_code16' => [17, 73.70],
+                '2rtg_code16' => [17, 77.70],
+                '3rtg_e125_code16' => [16, 81.70],
+                '3rtg_code16' => [17, 85.70],
 
                 // Amateur
-                'class_a_e8910_code5' => [60, 65.70],
-                'class_a_code5_only' => [60, 67.70],
-                'class_b_e567' => [60, 69.70],
-                'class_b_e2' => [60, 71.70],
-                'class_c_e234' => [60, 73.70],
-                'class_d_e2' => [60, 75.70],
+                'class_a_e8910_code5' => [121.10, 65.70],
+                'class_a_code5_only' => [121.10, 69.70],
+                'class_b_e567' => [121.10, 73.70],
+                'class_b_e2' => [121.10, 77.70],
+                'class_c_e234' => [121.10, 81.70],
+                'class_d_e2' => [121.10, 85.70],
 
                 // Radiotelephony
-                '1phn_e1234' => [105, 65.70],
-                '2phn_e123' => [105, 67.70],
-                '3phn_e12' => [105, 69.70],
+                '1phn_e1234' => [17, 95.70],
+                '2phn_e123' => [17, 99.70],
+                '3phn_e12' => [17, 103.70],
 
                 // Restricted Radiotelephone
-                'rroc_aircraft_e1' => [150, 65.70],
+                'rroc_aircraft_e1' => [121.10, 95.70],
             ],
         ];
     }
