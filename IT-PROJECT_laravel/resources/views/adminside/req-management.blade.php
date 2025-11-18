@@ -73,7 +73,6 @@
                                 <th>Request Date</th>
                                 <th>Attachment</th>
                                 <th>Name</th>
-                                <th>Payment Method</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -99,7 +98,6 @@
                                     <td>
                                         {{ $req->form->last_name }} {{ $req->form->first_name }}
                                     </td>
-                                    <td id="payment-method">{{ ucfirst($req->payment_method) }}</td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
                                         $status = strtolower(trim($rawStatus));

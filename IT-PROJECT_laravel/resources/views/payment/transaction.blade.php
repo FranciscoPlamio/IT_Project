@@ -14,7 +14,7 @@
                         <tr class="transaction-table-header">
                             <th class="ref-number-header">Reference Number</th>
                             <th class="details-header">Details</th>
-                            {{-- <th class="actions-header">Actions</th> --}}
+                            <th class="actions-header">Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,21 +53,10 @@
 
                                 </div>
                             </td>
-                            {{-- delete feature db forms_transaction
-                            @if ($transactions->status != 'pending')
-                                <td class="actions-cell">
-                                    <form action="{{ route('transactions.delete') }}" method="POST" id="cancel-btn">
-                                        @csrf
-                                        @method('DELETE')
 
-                                        <button id="cancel-btn" class="cancel-btn">
-                                            <span class="cancel-icon">✕</span>
-                                            <span class="cancel-text">CANCEL</span>
-                                        </button>
+                            <td class="actions-cell">
 
-                                    </form>
-                                </td>
-                            @endif --}}
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -74,7 +74,8 @@
 </div>
 <div class="form-grid-2">
     <div class="form-field">
-        <label class="form-label">Contact Number <span class="text-red">*</span></label>
+        <label class="form-label">Contact Number </span><span class="text-red"> *</span><small
+                class="text-gray-500 ms-1"> (09xxxxxxxxx)</small></label>
         <input class="form1-01-input" type="text" name="contact_number"
             value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
         @error('contact_number')

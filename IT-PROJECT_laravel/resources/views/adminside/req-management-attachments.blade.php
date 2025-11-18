@@ -11,7 +11,43 @@
             <!-- Latest Request Section -->
             <section class="half-section">
                 <div class="card-header">
-                    <h2>Attachment</h2>
+                    <h2>Form</h2>
+                </div>
+
+                <div class="table-container">
+                    @php
+                        function formatKey($key)
+                        {
+                            return ucwords(str_replace('_', ' ', $key));
+                        }
+                    @endphp
+                    @foreach ($form->form->getAttributes() as $key => $value)
+                        @if ($key !== 'form_token' && $key !== 'user_id' && $key !== 'created_at' && $key !== 'updated_at' && $key !== 'id')
+                            @if ($key === 'needs')
+                                <p><strong>{{ formatKey($key) }}:</strong> {{ $value ? 'Yes' : 'None' }}</p>
+                                @continue
+                            @endif
+
+                            @if ($key === 'dob')
+                                <p><strong>Date of Birth:</strong> {{ $value }}</p>
+                                @continue
+                            @endif
+                            <p><strong>{{ formatKey($key) }}:</strong> {{ $value }}</p>
+                        @endif
+                    @endforeach
+                </div>
+            </section>
+        </div>
+        <div class="card full-page">
+            <!-- Latest Request Section -->
+            <section class="half-section">
+                <div class="card-header">
+                    <h2>Attachment <small><a
+                                href="{{ route('showFormInformation', ['formType' => '1-01']) }}"class="text-sm text-gray-500"
+                                target="_blank">Requirements
+                                of
+                                Form</a></small>
+                    </h2>
                 </div>
 
                 <div class="table-container">
@@ -49,5 +85,6 @@
                 </div>
             </section>
         </div>
+
     </div>
 </x-admin-layout>

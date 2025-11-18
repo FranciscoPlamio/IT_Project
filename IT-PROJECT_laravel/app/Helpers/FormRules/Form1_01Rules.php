@@ -30,7 +30,7 @@ class Form1_01Rules
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
-                'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
+                'contact_number' => ['required', 'regex:/^09\d{9}$/'],
                 'email' => [
                     'required',
                     'email',

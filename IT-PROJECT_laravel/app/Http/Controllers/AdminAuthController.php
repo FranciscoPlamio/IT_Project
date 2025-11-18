@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FormManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -554,13 +555,22 @@ class AdminAuthController extends Controller   // <-- rename this
 
     public function showRequestAttachments(Request $request, $formToken)
     {
+        // Get files
         $folderPath = "forms/{$formToken}";
         if (!Storage::exists($folderPath)) {
             abort(404, "No files found for this form.");
         }
 
         $files = Storage::files($folderPath);
-        return view('adminside.req-management-attachments', compact('files'));
+
+
+        // Get Form from Form token
+        $form = FormsTransactions::where('form_token', $formToken)->first();
+        $formClass = FormManager::getFormModel($form->form_type);
+        $form->form = $formClass::find($form->form_id);
+
+
+        return view('adminside.req-management-attachments', compact('files', 'form'));
     }
 
     public function viewFile(Request $request)

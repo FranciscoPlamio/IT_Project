@@ -13,14 +13,7 @@
             <p>Select your preferred payment method to proceed with your application.</p>
 
             <div class="payment-options">
-                <div class="payment-option" data-method="cash" id="cashOption">
-                    <div class="payment-option-check">✓</div>
-                    <div class="payment-option-icon cash-icon">₱</div>
-                    <div>
-                        <h3 class="payment-option-title">Cash Payment</h3>
-                        <p class="payment-option-description">Pay in cash at our office during business hours</p>
-                    </div>
-                </div>
+
 
                 <div class="payment-option" data-method="gcash" id="gcashOption">
                     <div class="payment-option-check">✓</div>
