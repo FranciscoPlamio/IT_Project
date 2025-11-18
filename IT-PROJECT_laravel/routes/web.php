@@ -97,6 +97,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::post('update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
     Route::get('get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');
     Route::get('download-form', [AdminAuthController::class, 'downloadFormPDF'])->name('admin.downloadForm');
+    Route::get('admission-slip', [AdminAuthController::class, 'admissionSlip'])->name('admission-slip');
 
     Route::get('bill-pay', [AdminAuthController::class, 'billPay'])->name('bill-pay');
 

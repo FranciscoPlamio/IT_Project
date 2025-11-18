@@ -193,6 +193,27 @@ class AdminAuthController extends Controller   // <-- rename this
         return view('adminside.req-history', compact('user', 'historyRequests', 'highlight'));
     }
 
+    public function admissionSlip(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+        $slipData = [
+            'admit_name' => 'Juan Dela Cruz',
+            'mailing_address' => '123 Sampaguita St., Quezon City, Metro Manila',
+            'exam_for' => 'First Class Radiotelephone Operator',
+            'place' => 'NTC Main Office, Quezon City',
+            'date' => '12/15/2025',
+            'time' => '08:00 AM',
+            'authorized_officer' => 'Engr. Maria Santos',
+        ];
+
+        return view('adminside.admission-slip', compact('user', 'slipData'));
+    }
+
 
     public function updateStatus(Request $request)
     {

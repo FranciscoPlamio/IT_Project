@@ -34,6 +34,11 @@
                 <img src="{{ Route::is('admin.req-history') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
                     alt=""> Request History
             </a>
+            <a href="{{ route('admin.admission-slip') }}"
+                class="menu-item {{ Route::is('admin.admission-slip') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.admission-slip') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
+                    alt=""> Admission Slip
+            </a>
             {{-- <a href="{{ route('admin.bill-pay') }}"
                 class="menu-item {{ Route::is('admin.bill-pay') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.bill-pay') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
