@@ -74,7 +74,7 @@ class Form1_01Rules
                 'needs_details.required_if' => 'Please specify your needs',
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
                 'date_of_exam.before_or_equal' => 'Invalid date. Please enter correct date of exam',
-                'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
+                'contact_number.regex' => 'Please enter a valid contact number (09xxxxxxxxxxx) with 11 digits.'
             ], // custom messages 
 
             'attributes' => [

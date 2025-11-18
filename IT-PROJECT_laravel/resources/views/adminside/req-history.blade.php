@@ -102,6 +102,10 @@
                                                 $statusClass = 'failed';
                                                 $statusLabel = 'Cancelled';
                                                 break;
+                                            case 'declined':
+                                                $statusClass = 'failed';
+                                                $statusLabel = 'Declined';
+                                                break;
                                             default:
                                                 $statusClass = 'pending';
                                                 $statusLabel = ucwords($rawStatus);

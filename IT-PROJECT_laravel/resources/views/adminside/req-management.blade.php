@@ -125,6 +125,8 @@
                                         @if ($isManagedStatus)
                                             <select class="status-select" data-request-id="{{ $req->_id }}"
                                                 data-current-status="{{ $status }}">
+                                                <option value="declined" @selected($status === 'declined')>Decline
+                                                </option>
                                                 <option value="pending" @selected($status === 'pending')>Pending
                                                 </option>
                                                 <option value="processing" @selected($status === 'processing')>Processing

@@ -16,6 +16,38 @@
 
                 <div class="table-container">
                     @php
+                        // 1. Define the descriptive map
+                        $licenseDescriptions = [
+                            'class_a_e8910_code5' => 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
+                            'class_a_code5_only' => 'Class A - Code (5 wpm) Only',
+                            'class_b_e567' => 'Class B - Elements 5, 6 & 7',
+                            'class_b_e2' => 'Class B - Element 2',
+                            'class_c_e234' => 'Class C - Elements 2, 3 & 4',
+                            'class_d_e2' => 'Class D - Element 2',
+                            '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+                            '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+                            '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+                            '2rtg_code16' => '2RTG - Code (16 wpm)',
+                            '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+                            '3rtg_code16' => '3RTG - Code (16 wpm)',
+                            '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+                            '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+                            '3phn_e12' => '3PHN - Elements 1 & 2',
+                            'rroc_aircraft_e1' => 'RROC - Aircraft - Element 1',
+                        ];
+
+                        // 2. Function to look up the descriptive name or format the key if not found
+                        function getDisplayValue($key, $rawValue, $descriptions)
+                        {
+                            // Check if the key exists in our map
+                            if (isset($descriptions[$rawValue])) {
+                                // Return the descriptive name from the map
+                                return $descriptions[$rawValue];
+                            }
+
+                            // If not a specific license key, return the original attribute value
+                            return $rawValue;
+                        }
                         function formatKey($key)
                         {
                             return ucwords(str_replace('_', ' ', $key));
@@ -32,7 +64,8 @@
                                 <p><strong>Date of Birth:</strong> {{ $value }}</p>
                                 @continue
                             @endif
-                            <p><strong>{{ formatKey($key) }}:</strong> {{ $value }}</p>
+                            <p><strong>{{ formatKey($key) }}:</strong>
+                                {{ getDisplayValue($key, $value, $licenseDescriptions) }}</p>
                         @endif
                     @endforeach
                 </div>

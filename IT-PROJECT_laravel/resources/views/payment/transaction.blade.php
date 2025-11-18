@@ -14,7 +14,6 @@
                         <tr class="transaction-table-header">
                             <th class="ref-number-header">Reference Number</th>
                             <th class="details-header">Details</th>
-                            <th class="actions-header">Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,7 +31,7 @@
                                             <span
                                                 class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
                                         @elseif ($transactions->status == 'pending')
-                                            <span class="status-badge pending">{{ $transactions->status }}</span>
+                                            <span class="status-badge pending">Pending Application</span>
                                         @endif
                                     </div>
                                     <!-- hidden since its not dynamic yet (pj)-->
@@ -169,7 +168,7 @@
                 <div id="gcash-confirm" class="validation-wait-message"
                     style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
                     @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
-                        <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+                        <h2 style="font-size:28px;">PAYMENT SENT</h2>
                         <p>Your payment was sent successfully!
                             Please wait a moment while we update your status to “Paid.”
 

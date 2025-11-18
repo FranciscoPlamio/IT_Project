@@ -25,10 +25,7 @@
                 <a href="{{ route('transactions.index') }}">Transactions</a>
             </li>
         @endif
-        <!-- temp menu -->
-        <li class="{{ request()->routeIs('admin.login') ? 'active' : '' }}">
-            <a id="navAdmin" href="{{ route('admin.dashboard') }}">Adminside</a>
-        </li>
+
 
     </ul>
 </nav>

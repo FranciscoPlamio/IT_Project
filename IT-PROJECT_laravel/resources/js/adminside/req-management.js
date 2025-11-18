@@ -83,7 +83,7 @@ function handleProgress() {
     alert("Status set to In Progress!");
 }
 
-const STATUS_FLOW = ["pending", "processing", "done"];
+const STATUS_FLOW = ["pending", "processing", "done", "declined"];
 
 function capitalize(word = "") {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -130,7 +130,12 @@ window.updateStatus = updateStatus;
 function canTransition(currentStatus, nextStatus) {
     const currentIndex = STATUS_FLOW.indexOf(currentStatus);
     const nextIndex = STATUS_FLOW.indexOf(nextStatus);
-
+    console.log(currentIndex, nextIndex);
+    if (nextIndex === 3) {
+        return {
+            allowed: true,
+        };
+    }
     if (currentIndex === -1 || nextIndex === -1) {
         return {
             allowed: false,
