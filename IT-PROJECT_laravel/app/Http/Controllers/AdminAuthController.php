@@ -154,7 +154,7 @@ class AdminAuthController extends Controller   // <-- rename this
 
 
         // Latest requests exclude completed or cancelled
-        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled'])
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -184,7 +184,7 @@ class AdminAuthController extends Controller   // <-- rename this
         $user = User::find($request->session()->get('admin'));
 
         // History includes completed or cancelled records
-        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel', 'cancelled'])
+        $historyRequests = \App\Models\Forms\FormsTransactions::whereIn('status', ['done', 'cancel', 'cancelled', 'declined'])
             ->orderBy('updated_at', 'desc')
             ->get();
 
@@ -202,7 +202,7 @@ class AdminAuthController extends Controller   // <-- rename this
                 return response()->json(['success' => false, 'message' => 'Form not found']);
             }
 
-            $statusFlow = ['pending', 'processing', 'done'];
+            $statusFlow = ['pending', 'processing', 'done', 'declined'];
             $allowedStatuses = array_merge($statusFlow, ['cancelled']);
             $newStatus = strtolower(trim($request->status));
 
@@ -256,7 +256,6 @@ class AdminAuthController extends Controller   // <-- rename this
 
             $currentIndex = array_search($currentStatus, $statusFlow, true);
             $nextIndex = array_search($newStatus, $statusFlow, true);
-
             if ($currentIndex === $nextIndex) {
                 return response()->json([
                     'success' => true,
@@ -272,12 +271,12 @@ class AdminAuthController extends Controller   // <-- rename this
                 ]);
             }
 
-            if ($nextIndex - $currentIndex > 1) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Please follow the status order: pending → processing → done.'
-                ]);
-            }
+            // if ($nextIndex - $currentIndex > 1 ) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Please follow the status order: pending → processing → done.' . $nextIndex . '. ' . $currentIndex
+            //     ]);
+            // }
 
             // Update status and timestamp
 
