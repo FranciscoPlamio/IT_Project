@@ -1,6 +1,6 @@
 <x-admin-layout title="Admission Slip">
     <x-slot:head>
-        @vite(['resources/css/adminside/admission-slip.css'])
+        @vite(['resources/css/adminside/admission-slip.css', 'resources/js/adminside/admission-slip.js'])
     </x-slot:head>
 
     <main class="main admission-slip-page">

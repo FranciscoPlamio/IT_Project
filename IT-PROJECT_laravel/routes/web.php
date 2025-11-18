@@ -102,6 +102,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('bill-pay', [AdminAuthController::class, 'billPay'])->name('bill-pay');
 
     Route::get('form-fees', [AdminAuthController::class, 'formFees'])->name('form-fees');
+    Route::get('declaration', [AdminAuthController::class, 'declaration'])->name('declaration');
 });
 
 
