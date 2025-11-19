@@ -54,7 +54,14 @@
                         }
                     @endphp
                     @foreach ($form->form->getAttributes() as $key => $value)
-                        @if ($key !== 'form_token' && $key !== 'user_id' && $key !== 'created_at' && $key !== 'updated_at' && $key !== 'id')
+                        @if (
+                            $key !== 'form_token' &&
+                                $key !== 'user_id' &&
+                                $key !== 'created_at' &&
+                                $key !== 'updated_at' &&
+                                $key !== 'id' &&
+                                $key !== 'or' &&
+                                $key !== 'admission_slip')
                             @if ($key === 'needs')
                                 <p><strong>{{ formatKey($key) }}:</strong> {{ $value ? 'Yes' : 'None' }}</p>
                                 @continue
@@ -70,7 +77,47 @@
                     @endforeach
                 </div>
             </section>
+            <!-- OR -->
+
+
+
         </div>
+        @if ($form->form->or)
+            <div class="card full-page">
+                <section class="half-section">
+                    <div class="card-header">
+                        <h2>Official Receipt</h2>
+                    </div>
+
+                    <div class="table-container">
+
+                        @foreach ($form->form->or as $key => $value)
+                            <p><strong>{{ formatKey($key) }}:
+                                </strong>{{ $value }}</p>
+                        @endforeach
+                    </div>
+                </section>
+            </div>
+        @endif
+
+        @if ($form->form->admission_slip)
+            <div class="card full-page">
+                <section class="half-section">
+                    <div class="card-header">
+                        <h2>Admission Slip</h2>
+                    </div>
+
+                    <div class="table-container">
+
+                        @foreach ($form->form->admission_slip as $key => $value)
+                            <p><strong>{{ formatKey($key) }}:
+                                </strong>{{ $value }}</p>
+                        @endforeach
+                    </div>
+                </section>
+            </div>
+        @endif
+
         <div class="card full-page">
             <!-- Latest Request Section -->
             <section class="half-section">
@@ -96,8 +143,12 @@
                                 $newFileName = preg_replace('/_\d+\..+$/', '', $newFileName);
                                 $newFileName = ucwords(str_replace('_', ' ', $newFileName)); // Id Picture
                             @endphp
+                            @if ($newFileName === 'Coa')
+                                <h3>Certicicate of Attendance</h3>
+                            @else
+                                <h3>{{ $newFileName }}</h3>
+                            @endif
 
-                            <h3>{{ $newFileName }}</h3>
                             <div class="mb-6">
 
                                 {{-- PDF --}}

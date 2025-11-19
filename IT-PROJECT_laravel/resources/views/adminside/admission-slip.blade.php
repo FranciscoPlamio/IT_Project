@@ -52,7 +52,7 @@
                                     <span class="field-box">{{ $slipData['place'] }}</span>
                                 </div>
                                 <div class="detail">
-                                    <span class="detail-label">Date of Exam (mm/dd/yy):</span>
+                                    <span class="detail-label">Date of Exam (mm/dd/yy):</span>dasd</span>
                                     <span class="field-box">{{ $slipData['date'] }}</span>
                                 </div>
                                 <div class="detail">

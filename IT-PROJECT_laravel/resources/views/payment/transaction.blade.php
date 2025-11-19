@@ -1,6 +1,7 @@
 <x-layout :title="'Transaction Details'">
     <x-slot:head>
         <meta name="csrf-token" content="{{ csrf_token() }}">
+
     </x-slot:head>
     <div class="form1-01-container">
         <div class="form1-01-header">TRANSACTION DETAILS</div>
@@ -70,18 +71,25 @@
                 <!-- Steps Indicator (GCash) -->
                 <div class="steps steps-gcash">
                     <ol id="gcash-steps">
-                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid' && $transactions->status === 'done')
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item completed">Payment</li>
-                            <li data-step="3" class="step-item active">Payment successful email with PDF download</li>
+                            <li data-step="3" class="step-item completed">Approved Application</li>
+                        @elseif (isset($transactions->payment_amount) &&
+                                $transactions->payment_amount > 0 &&
+                                $transactions->status === 'processing' &&
+                                $transactions->payment_status === 'paid')
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item completed">Payment</li>
+                            <li data-step="3" class="step-item active">Processing Application</li>
                         @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
                             <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item active">Payment</li>
-                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                            <li data-step="3" class="step-item">Processing Application</li>
                         @else
                             <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
                             <li data-step="2" class="step-item">Payment</li>
-                            <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                            <li data-step="3" class="step-item">Processing Application</li>
                         @endif
                     </ol>
                     <div>
@@ -165,22 +173,142 @@
 
                 </div>
                 <!-- GCash Step 3: Payment Success Message -->
-                <div id="gcash-confirm" class="validation-wait-message"
-                    style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
-                    @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
-                        <h2 style="font-size:28px;">PAYMENT SENT</h2>
-                        <p>Your payment was sent successfully!
-                            Please wait a moment while we update your status to “Paid.”
+                @if ($transactions->status === 'processing')
+                    <div id="gcash-confirm" class="validation-wait-message"
+                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
+                            <h2 style="font-size:28px;">PAYMENT SENT</h2>
+                            <p>Your payment was sent successfully!
+                                Please wait while we process your application
 
-                            You can download your form by clicking the button below.
-                        </p>
-                        <div class="flex justify-center">
-                            <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                                You can download your form by clicking the button below.
+                            </p>
+                            <div class="flex justify-center">
+                                <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                                    style="background-color: #28a745; margin: 0 10px;">Download Form
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                @elseif ($transactions->status === 'done')
+                    <div id="gcash-confirm" class="validation-wait-message"
+                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }};  margin:24px 0;">
+
+                        <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                            <!-- Header -->
+                            <div class="text-center p-8 bg-blue-900 text-white">
+                                <img src="{{ asset('images/logo.png') }}" alt="NTC Logo"
+                                    class="mx-auto mb-4 max-w-[120px]">
+                                <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
+                                <p class="text-sm text-gray-300">Cordillera Administrative Region, Baguio City
+                                    Philippines</p>
+                            </div>
+
+                            <!-- Content -->
+                            <div class="p-8 text-gray-800">
+                                <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been Approved</h2>
+
+                                <p class="text-base mb-4">Hello {{ $form->last_name }} {{ $form->first_name }},</p>
+
+                                <p class="text-base mb-4">
+                                    Your payment was successful. Your transaction has been recorded successfully.
+                                </p>
+
+                                <p class="text-base mb-4">
+                                    Your application <strong>{{ $transactions->payment_reference }}</strong> has been
+                                    approved.
+                                    Below are the details:
+                                </p>
+
+                                <!-- Payment Details -->
+                                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                    <p><strong>Reference Number:</strong> {{ $transactions->payment_reference }}</p>
+                                    <p><strong>Method:</strong> {{ ucfirst($transactions->payment_method ?? '—') }}</p>
+                                    <p>
+                                        <strong>Amount:</strong>
+                                        {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                    </p>
+                                </div>
+
+                                <!-- OR + Admission Details -->
+                                <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                    <h3 class="text-lg font-semibold mb-2">OR Details</h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>OR Number: {{ $form->or['or_no'] ?? '-' }}</li>
+                                        <li>OR Amount: {{ $form->or['or_amount'] ?? '-' }}</li>
+                                        <li>Collecting Officer: {{ $form->or['collecting_officer'] ?? '-' }}</li>
+                                        <li>Date: {{ $form->or['or_date'] ?? '-' }}</li>
+                                    </ul>
+
+                                    <h3 class="text-lg font-semibold mt-4 mb-2">Admission Slip Details</h3>
+                                    <ul class="list-disc pl-5 space-y-1">
+                                        <li>Name: {{ $form->last_name }} {{ $form->first_name }}</li>
+                                        <li>Exam For: {{ $form->exam_type }}</li>
+                                        <li>Place of Exam: {{ $form->admission_slip['place_of_exam'] ?? '-' }}</li>
+                                        <li>Date: {{ $form->admission_slip['date_of_exam'] ?? '-' }}</li>
+                                        <li>Time: {{ $form->admission_slip['time_of_exam'] ?? '-' }}</li>
+                                        <li>Authorized Officer:
+                                            {{ $form->admission_slip['authorized_officer'] ?? '-' }}</li>
+                                    </ul>
+                                </div>
+
+
+                                @php
+
+                                    // Format date
+                                    $examDate = $form->admission_slip['date_of_exam'] ?? null;
+                                    if ($examDate) {
+                                        $formattedDate = \Carbon\Carbon::parse($examDate)->format('F j, Y'); // e.g., November 4, 2025
+                                    } else {
+                                        $formattedDate = '-';
+                                    }
+
+                                    // Format time
+                                    $examTime = $form->admission_slip['time_of_exam'] ?? null;
+                                    if ($examTime) {
+                                        // Append seconds to parse correctly if missing
+                                        $formattedTime = \Carbon\Carbon::createFromFormat('H:i', $examTime)->format(
+                                            'g:i A',
+                                        ); // e.g., 10:49 AM
+                                    } else {
+                                        $formattedTime = '-';
+                                    }
+                                @endphp
+                                <!-- Schedule Warning -->
+                                <div class="bg-yellow-100 border border-yellow-300 p-5 rounded-lg mb-6">
+                                    <p class="text-lg font-bold mb-2">📌 Please take note of your exam schedule:</p>
+                                    <p class="text-base leading-relaxed">
+                                        <strong>Place of Exam:</strong>
+                                        {{ $form->admission_slip['place_of_exam'] ?? '-' }} <br>
+                                        <strong>Date and Time:</strong> {{ $formattedDate ?? '-' }}
+                                        {{ $formattedTime ?? '-' }}
+                                    </p>
+                                </div>
+
+                                <hr class="border-gray-300 my-6">
+
+                                <p class="text-sm leading-6 mb-4">
+                                    If you have any questions or concerns, feel free to contact us at
+                                    <strong>car.admin@ntc.gov.ph</strong>.
+                                </p>
+
+                                <p class="text-base">Thank you for using the NTC Forms System.</p>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="text-center text-xs text-gray-500 p-6">
+                                <p>This is an automated message from the NTC Forms System.</p>
+                                <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center flex-col items-center mt-6">
+                            <p> You can download your form by clicking the button below.</p>
+                            <button class="form1-01-btn w-50" type="button" id="downloadPDFBtn"
                                 style="background-color: #28a745; margin: 0 10px;">Download Form
                             </button>
                         </div>
-                    @endif
-                </div>
+                    </div>
+                @endif
         </div>
 
         <!-- Action Buttons -->
@@ -194,16 +322,16 @@
                 @if (strtolower($transactions->status ?? 'pending') === 'done')
                     <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                     <li data-step="2" class="step-item completed">Payment</li>
-                    <li data-step="3" class="step-item active">Payment successful email with PDF download
+                    <li data-step="3" class="step-item active">Processing Application
                     </li>
                 @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
                     <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
                     <li data-step="2" class="step-item active">Payment</li>
-                    <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                    <li data-step="3" class="step-item">Processing Application</li>
                 @else
                     <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
                     <li data-step="2" class="step-item">Payment</li>
-                    <li data-step="3" class="step-item">Payment successful email with PDF download</li>
+                    <li data-step="3" class="step-item">Processing Application</li>
                 @endif
             </ol>
             <div>
@@ -308,7 +436,7 @@
         </div>
         <!-- Cash Step 3: Payment Success Message -->
         <div id="cash-confirm" class="validation-wait-message"
-            style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+            style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
             <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
             <p>Your payment has been confirmed. You can now download your form by clicking the button below.
             </p>

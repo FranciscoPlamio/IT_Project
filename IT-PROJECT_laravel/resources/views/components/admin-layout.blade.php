@@ -11,6 +11,42 @@
 
     <!-- For vite files -->
     {{ $head }}
+    <style>
+        .flash-message {
+            background-color: #d1fae5;
+            /* light green */
+            border-bottom: 2px solid #10b981;
+            /* green accent */
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .flash-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px 35px;
+            font-weight: bold;
+            color: #065f46;
+            position: relative;
+            text-align: center;
+        }
+
+        .flash-close {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #065f46;
+        }
+    </style>
 </head>
 
 <body>
@@ -44,16 +80,17 @@
                 <img src="{{ Route::is('admin.bill-pay') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt="">Billings and Payment
             </a> --}}
-            <a href="{{ route('admin.form-fees') }}"
-                class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
-                <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
-                    alt=""> Form Fees & Breakdown
-            </a>
             <a href="{{ route('admin.declaration') }}"
                 class="menu-item {{ Route::is('admin.declaration') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.declaration') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
                     alt=""> Declaration
             </a>
+            <a href="{{ route('admin.form-fees') }}"
+                class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
+                    alt=""> Form Fees & Breakdown
+            </a>
+
         </nav>
         <div class="bottom-links">
             <a href="#" class="menu-item" id="logout-link">
@@ -77,7 +114,18 @@
     </aside>
 
     <!-- Content of page -->
+    <x-admin-flash-message />
     {{ $slot }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flash = document.querySelector('.flash-message');
+            if (flash) {
+                setTimeout(() => {
+                    flash.style.display = 'none';
+                }, 5000); // hide after 5 seconds
+            }
+        });
+    </script>
 </body>
 
 </html>

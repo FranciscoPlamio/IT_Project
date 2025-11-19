@@ -95,14 +95,18 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('req-history', [AdminAuthController::class, 'requestHistory'])->name('req-history');
 
     Route::post('update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
+    Route::post('forms/{formId}/approve', [AdminAuthController::class, 'approveForm']);
     Route::get('get-form-data', [AdminAuthController::class, 'getFormData'])->name('admin.getFormData');
     Route::get('download-form', [AdminAuthController::class, 'downloadFormPDF'])->name('admin.downloadForm');
     Route::get('admission-slip', [AdminAuthController::class, 'admissionSlip'])->name('admission-slip');
+    Route::post('admission-slip', [AdminAuthController::class, 'admissionSlipSubmit'])->name('admission-slip.submit');
+
 
     Route::get('bill-pay', [AdminAuthController::class, 'billPay'])->name('bill-pay');
 
     Route::get('form-fees', [AdminAuthController::class, 'formFees'])->name('form-fees');
     Route::get('declaration', [AdminAuthController::class, 'declaration'])->name('declaration');
+    Route::post('declaration', [AdminAuthController::class, 'declarationSubmit'])->name('declaration.submit');
 });
 
 

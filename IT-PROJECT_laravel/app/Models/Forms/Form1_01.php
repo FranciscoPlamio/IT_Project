@@ -29,25 +29,19 @@ class Form1_01 extends BaseForm
         'zip_code',
         'contact_number',
         'email',
-
         'school_attended',
         'course_taken',
         'year_graduated',
         'exam_type',
-        'date_of_exam',
         'signature_name',
         'date_accomplished',
-        'or_no',
-        'or_date',
         'or_amount',
-        'admit_name',
         'mailing_address',
-        'exam_for',
-        'place_of_exam',
         'admission_date',
-        'time_of_exam',
         'needs',
         'needs_details',
+        'admission_slip',
+        'or',
     ];
 
     // Fields data type

@@ -14,6 +14,7 @@ use MongoDB\BSON\Regex;
 use MongoDB\BSON\ObjectId;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 class AdminAuthController extends Controller   // <-- rename this
 {
@@ -201,17 +202,76 @@ class AdminAuthController extends Controller   // <-- rename this
 
         $user = User::find($request->session()->get('admin'));
 
-        $slipData = [
-            'admit_name' => 'Juan Dela Cruz',
-            'mailing_address' => '123 Sampaguita St., Quezon City, Metro Manila',
-            'exam_for' => 'First Class Radiotelephone Operator',
-            'place' => 'NTC Main Office, Quezon City',
-            'date' => '12/15/2025',
-            'time' => '08:00 AM',
-            'authorized_officer' => 'Engr. Maria Santos',
+        $declarationText = 'I hereby declare that all the above entries are true and correct. Under the Revised Penal Code, I shall be held liable for any willful false statement(s) or misrepresentation(s) made in this application form that may serve as a valid ground for the denial of this application and/or cancellation/revocation of the permit issued/granted. Further, I am freely giving full consent for the collection and processing of personal information in accordance with Republic Act No. 10173, Data Privacy Act of 2012.';
+
+        $declarationEntries = [
+            [
+                'reference' => 'NTC-2025-001',
+                'applicant' => 'Francisco Plamio',
+                'form' => 'Form 1-01',
+                'submitted' => '15 Oct 2025',
+                'status' => 'Pending OR',
+            ],
+            [
+                'reference' => 'NTC-2025-024',
+                'applicant' => 'Francisco Plamio2',
+                'form' => 'Form 1-02',
+                'submitted' => '17 Oct 2025',
+                'status' => 'Processing',
+            ],
+            [
+                'reference' => 'NTC-2025-033',
+                'applicant' => 'Francisco Plamio3',
+                'form' => 'Form 1-11',
+                'submitted' => '20 Oct 2025',
+                'status' => 'For Release',
+            ],
+        ];
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->whereNotIn('payment_status', ['unpaid'])
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+
+        return view('adminside.list-admission', compact('user', 'declarationText', 'declarationEntries', 'latestRequests'));
+    }
+
+    public function admissionSlipSubmit(Request $request)
+    {
+        $formModel = FormManager::getFormModel($request->input('form_type'));
+        $form = $formModel::where('form_token', $request->input('form_token'))->first();
+
+        if (!$form) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        // Create the OR sub-document
+        $admissionSlipData = [
+            'admit_name' => $request->input('admit_name'),
+            'mailing_address' => $request->input('mailing_address'),
+            'place_of_exam' => $request->input('place_of_exam'),
+            'date_of_exam' => $request->input('date_of_exam'),
+            'time_of_exam' => $request->input('time_of_exam'),
+            'authorized_officer' => $request->input('authorized_officer')
         ];
 
-        return view('adminside.admission-slip', compact('user', 'slipData'));
+        // Save into the form document
+        $form->admission_slip = $admissionSlipData; // if the field is in fillable
+        $form->save();
+        return redirect()->back();
     }
 
     public function declaration(Request $request)
@@ -247,8 +307,49 @@ class AdminAuthController extends Controller   // <-- rename this
                 'status' => 'For Release',
             ],
         ];
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->whereNotIn('payment_status', ['unpaid'])
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
 
-        return view('adminside.declaration', compact('user', 'declarationText', 'declarationEntries'));
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+
+        return view('adminside.declaration', compact('user', 'declarationText', 'declarationEntries', 'latestRequests'));
+    }
+    public function declarationSubmit(Request $request)
+    {
+
+        $formModel = FormManager::getFormModel($request->input('form_type'));
+        $form = $formModel::where('form_token', $request->input('form_token'))->first();
+
+        if (!$form) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        // Create the OR sub-document
+        $orData = [
+            'or_no' => strtoupper($request->input('or_no')),
+            'or_amount' => $request->input('or_amount'),
+            'collecting_officer' => ucwords(strtolower($request->input('collecting_officer'))),
+            'or_date' => now()
+        ];
+
+        // Save into the form document
+        $form->or = $orData; // if the field is in fillable
+        $form->save();
+        return redirect()->back();
     }
 
 
@@ -347,6 +448,8 @@ class AdminAuthController extends Controller   // <-- rename this
             $form->updated_at = now();
             $form->save();
 
+
+
             return response()->json([
                 'success' => true,
                 'message' => "Status updated to {$newStatus}",
@@ -359,6 +462,28 @@ class AdminAuthController extends Controller   // <-- rename this
                 'message' => 'Server error: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function approveForm(Request $request, $id)
+    {
+        $formTransactions = FormsTransactions::where('_id', $id)->first();
+        $formModel = FormManager::getFormModel(ucfirst($formTransactions->form_type));
+        $form = $formModel::find($formTransactions->form_id);
+
+        // Mark as approved
+        $formTransactions->status = 'done';
+        $formTransactions->save();
+
+        // Send email using the Blade view
+        if (!empty($form->email)) {
+            Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form) {
+                $message->to($form->user->email)
+                    ->subject('Your Form Has Been Approved');
+            });
+        }
+        return redirect()->back()->with([
+            'message' => 'Form approved and email sent',
+        ]);
     }
 
     public function getFormData(Request $request)

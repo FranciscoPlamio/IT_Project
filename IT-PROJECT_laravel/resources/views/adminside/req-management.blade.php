@@ -3,6 +3,19 @@
     <x-slot:head>
         @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <style>
+            .action-placeholder {
+                font-size: 0.9rem;
+                color: #9ca3af;
+            }
+
+            .action-cell {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
     </x-slot:head>
 
 
@@ -131,18 +144,17 @@
                                                 </option>
                                                 <option value="processing" @selected($status === 'processing')>Processing
                                                 </option>
-                                                <option value="done" @selected($status === 'done')
-                                                    @disabled($status === 'pending')>Done</option>
                                             </select>
                                         @else
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif
                                     </td>
                                     <td class="action-cell">
-                                        @if (!in_array($status, ['done', 'cancelled', 'cancel']))
+                                        @if ($req->form->admission_slip && $req->form->or)
                                             <button class="badge-btn progress"
-                                                onclick="cancelRequest('{{ $req->_id }}')" title="Cancel Request">
-                                                Cancel
+                                                onclick="approveRequest('{{ $req->_id }}')"
+                                                title="Approve Request">
+                                                Approve
                                             </button>
                                         @else
                                             <span class="muted-text">—</span>

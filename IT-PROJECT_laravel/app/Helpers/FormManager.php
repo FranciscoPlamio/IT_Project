@@ -47,12 +47,22 @@ class FormManager
         if (self::convertType($formType)) {
             $transactionData['payment_amount'] = 50;
         }
-
+        if ($formType === "form1-01") {
+            $form = $formModel::updateOrCreate(
+                ['form_token' => $formToken],
+                array_merge($formData, [
+                    'admission_slip' => null,
+                    'or' => null
+                ])
+            );
+        } else {
+            $form = $formModel::updateOrCreate(
+                ['form_token' => $formToken],
+                $formData
+            );
+        }
         // Save or update the main form
-        $form = $formModel::updateOrCreate(
-            ['form_token' => $formToken],
-            $formData
-        );
+
 
         // Default meta fields
         $defaultMeta = [

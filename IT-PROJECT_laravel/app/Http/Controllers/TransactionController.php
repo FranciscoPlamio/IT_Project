@@ -21,7 +21,10 @@ class TransactionController extends Controller
 
         $transactions = FormsTransactions::where('user_id', $user->_id)->whereNotIn('status', ['cancelled', 'declined'])->latest()->first();
 
-        return view('payment.transaction', compact('transactions'));
+        $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
+        $form = $formModel::find($transactions->form_id);
+
+        return view('payment.transaction', compact('transactions', 'form'));
     }
 
     public function search(Request $request)
