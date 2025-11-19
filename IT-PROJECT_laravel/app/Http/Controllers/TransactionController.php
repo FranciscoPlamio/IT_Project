@@ -19,7 +19,7 @@ class TransactionController extends Controller
         $userEmail = session('email_verified'); // Assuming you store this when they verified
         $user = User::where('email', $userEmail)->first();
 
-        $transactions = FormsTransactions::where('user_id', $user->_id)->whereNotIn('status', ['cancelled', 'declined'])->latest()->first();
+        $transactions = FormsTransactions::where('user_id', $user->_id)->whereNotIn('status', ['cancelled'])->latest()->first();
 
         $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
         $form = $formModel::find($transactions->form_id);

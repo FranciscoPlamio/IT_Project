@@ -90,6 +90,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
 
     Route::get('req-management', [AdminAuthController::class, 'requestManagement'])->name('req-management');
     Route::get('req-management/{formToken}', [AdminAuthController::class, 'showRequestAttachments'])->name('req.attachments');
+    Route::post('req-management/save-remarks/{formId}/', [AdminAuthController::class, 'saveRemarks'])->name('remarks.save');
     Route::get('view-file', [AdminAuthController::class, 'viewFile'])->name('viewFile');
 
     Route::get('req-history', [AdminAuthController::class, 'requestHistory'])->name('req-history');

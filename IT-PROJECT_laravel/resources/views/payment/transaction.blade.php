@@ -15,6 +15,7 @@
                         <tr class="transaction-table-header">
                             <th class="ref-number-header">Reference Number</th>
                             <th class="details-header">Details</th>
+                            <th>Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,6 +34,8 @@
                                                 class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
                                         @elseif ($transactions->status == 'pending')
                                             <span class="status-badge pending">Pending Application</span>
+                                        @elseif ($transactions->status == 'declined')
+                                            <span class="status-badge pending">Declined</span>
                                         @endif
                                     </div>
                                     <!-- hidden since its not dynamic yet (pj)-->
@@ -54,8 +57,12 @@
                                 </div>
                             </td>
 
-                            <td class="actions-cell">
-
+                            <td>
+                                @if ($transactions->remarks)
+                                    <div class="detail-row">
+                                        <span class="detail-label">{{ $transactions->remarks }}</span>
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     </tbody>
@@ -64,10 +71,17 @@
 
 
         </div>
+        @if ($transactions->status === 'declined')
+            <div style="text-align:center">
+                Application has been denied.
+                <a href="/display-forms" style="color:blue; text-decoration:underline;">Click here to apply a new
+                    one</a>.
+            </div>
+        @endif
 
         <!-- Payment Method Section -->
         <div class="payment-method-section">
-            @if (optional($transactions)->payment_method === 'gcash')
+            @if (optional($transactions)->payment_method === 'gcash' && $transactions->status !== 'declined')
                 <!-- Steps Indicator (GCash) -->
                 <div class="steps steps-gcash">
                     <ol id="gcash-steps">

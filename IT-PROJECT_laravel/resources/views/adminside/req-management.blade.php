@@ -6,7 +6,7 @@
         <style>
             .action-placeholder {
                 font-size: 0.9rem;
-                color: #9ca3af;
+                color: #65686d;
             }
 
             .action-cell {
@@ -21,6 +21,22 @@
 
     <!-- Main Content -->
     <div class="main">
+        <div id="flash-message"
+            style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+">
+        </div>
+
+
         <h1>Request Management</h1>
 
         <div class="card full-page">
@@ -87,6 +103,7 @@
                                 <th>Attachment</th>
                                 <th>Name</th>
                                 <th>Status</th>
+                                <th>Remarks</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -149,6 +166,18 @@
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif
                                     </td>
+                                    <td>
+
+                                        <form action="{{ route('admin.remarks.save', ['formId' => $req->_id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <input type="hidden" name="user_id" value="1">
+                                            <!-- ID of the row/user -->
+                                            <input type="text" name="remarks" placeholder="Enter remarks">
+                                            <button type="submit">Send</button>
+                                        </form>
+                                        <span class="action-placeholder">{{ $req->remarks }}</span>
+                                    </td>
                                     <td class="action-cell">
                                         @if ($req->form->admission_slip && $req->form->or)
                                             <button class="badge-btn progress"
@@ -160,6 +189,7 @@
                                             <span class="muted-text">—</span>
                                         @endif
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>

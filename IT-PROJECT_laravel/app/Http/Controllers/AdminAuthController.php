@@ -176,6 +176,20 @@ class AdminAuthController extends Controller   // <-- rename this
         return view('adminside.req-management', compact('user', 'latestRequests', 'highlight'));
     }
 
+    public function saveRemarks(Request $request, $id)
+    {
+
+        $formTransactions = FormsTransactions::where('_id', $id)->first();
+
+        // Mark as approved
+        $formTransactions->remarks = $request->input('remarks');
+        $formTransactions->save();
+
+        return redirect()->back()->with([
+            'message' => 'Remarks updated successfully',
+        ]);
+    }
+
     public function requestHistory(Request $request)
     {
         if (!$request->session()->has('admin')) {

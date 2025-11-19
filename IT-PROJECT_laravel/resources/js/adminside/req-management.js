@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const message = sessionStorage.getItem("flashMessage");
+    if (message) {
+        showFlashMessage(message);
+        sessionStorage.removeItem("flashMessage");
+    }
     const searchInput = document.querySelector("#searchInput");
     const tableRows = document.querySelectorAll(
         ".table-container table tbody tr"
@@ -205,6 +210,15 @@ function canTransition(currentStatus, nextStatus) {
         allowed: true,
     };
 }
+function showFlashMessage(message, duration = 3000) {
+    const flash = document.getElementById("flash-message");
+    flash.textContent = message;
+    flash.style.opacity = "1";
+
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, duration);
+}
 
 function initializeStatusDropdowns() {
     const statusSelects = document.querySelectorAll(".status-select");
@@ -249,14 +263,18 @@ function initializeStatusDropdowns() {
 
             updateStatus(requestId, selectedStatus)
                 .then(() => {
-                    alert(`Status updated to ${capitalize(selectedStatus)}.`);
-                    select.dataset.currentStatus = selectedStatus;
+                    // Store flash message for next page load
+                    sessionStorage.setItem(
+                        "flashMessage",
+                        `Status updated to ${capitalize(selectedStatus)}.`
+                    );
 
-                    if (selectedStatus === "done") {
-                        window.location.reload();
-                    } else {
-                        select.disabled = false;
-                    }
+                    // Update current status in dataset
+                    select.dataset.currentStatus = selectedStatus;
+                    select.disabled = false;
+
+                    // Reload the page (optional)
+                    window.location.reload();
                 })
                 .catch((error) => {
                     alert(
