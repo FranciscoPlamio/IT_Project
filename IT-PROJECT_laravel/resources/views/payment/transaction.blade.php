@@ -86,24 +86,60 @@
                 <div class="steps steps-gcash">
                     <ol id="gcash-steps">
                         @if (strtolower($transactions->payment_status ?? 'pending') === 'paid' && $transactions->status === 'done')
-                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item completed">Payment</li>
-                            <li data-step="3" class="step-item completed">Approved Application</li>
+                            <li data-step="1" class="step-item completed">
+                                <span class="step-label">Validation Review</span>
+                                <span class="step-sub">We are double-checking your form.</span>
+                            </li>
+                            <li data-step="2" class="step-item completed">
+                                <span class="step-label">Payment Confirmed</span>
+                                <span class="step-sub">GCash payment received.</span>
+                            </li>
+                            <li data-step="3" class="step-item completed">
+                                <span class="step-label">Application Approved</span>
+                                <span class="step-sub">Ready for download.</span>
+                            </li>
                         @elseif (isset($transactions->payment_amount) &&
                                 $transactions->payment_amount > 0 &&
                                 $transactions->status === 'processing' &&
                                 $transactions->payment_status === 'paid')
-                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item completed">Payment</li>
-                            <li data-step="3" class="step-item active">Processing Application</li>
+                            <li data-step="1" class="step-item completed">
+                                <span class="step-label">Validation Review</span>
+                                <span class="step-sub">We are double-checking your form.</span>
+                            </li>
+                            <li data-step="2" class="step-item completed">
+                                <span class="step-label">Payment Confirmed</span>
+                                <span class="step-sub">GCash payment received.</span>
+                            </li>
+                            <li data-step="3" class="step-item active">
+                                <span class="step-label">Processing Application</span>
+                                <span class="step-sub">Hang tight, we’re finalizing things.</span>
+                            </li>
                         @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
-                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item active">Payment</li>
-                            <li data-step="3" class="step-item">Processing Application</li>
+                            <li data-step="1" class="step-item completed">
+                                <span class="step-label">Validation Review</span>
+                                <span class="step-sub">We’ll notify you shortly.</span>
+                            </li>
+                            <li data-step="2" class="step-item active">
+                                <span class="step-label">Make Payment</span>
+                                <span class="step-sub">Settle the amount via GCash.</span>
+                            </li>
+                            <li data-step="3" class="step-item">
+                                <span class="step-label">Processing Application</span>
+                                <span class="step-sub">Next step after payment.</span>
+                            </li>
                         @else
-                            <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
-                            <li data-step="2" class="step-item">Payment</li>
-                            <li data-step="3" class="step-item">Processing Application</li>
+                            <li data-step="1" class="step-item active">
+                                <span class="step-label">Validation Review</span>
+                                <span class="step-sub">We’re verifying your submission.</span>
+                            </li>
+                            <li data-step="2" class="step-item">
+                                <span class="step-label">Make Payment</span>
+                                <span class="step-sub">You’ll receive instructions soon.</span>
+                            </li>
+                            <li data-step="3" class="step-item">
+                                <span class="step-label">Processing Application</span>
+                                <span class="step-sub">We’ll update you once done.</span>
+                            </li>
                         @endif
                     </ol>
                     <div>
@@ -115,7 +151,26 @@
                 @if ($transactions->status === 'pending')
                     <div id="gcash-wait" class="validation-wait-message"
                         style="display:block; text-align:center; margin:24px 0;">
-                        <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                        <div
+                            class="mx-auto w-full max-w-2xl rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-white p-6 shadow-[0_20px_60px_rgba(251,191,36,0.25)]">
+                            <div class="flex flex-col items-center text-center gap-4">
+                                <div
+                                    class="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
+                                    <svg class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="1.6"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 9v3m0 4h.01M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 class="text-2xl font-semibold text-amber-700">Please wait for validation</h2>
+                                    <p class="mt-2 text-sm text-amber-600 max-w-xl">
+                                        Our team is reviewing your application details. You’ll receive a notification as
+                                        soon as we’re ready for the next step. Feel free to keep this tab open.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 @endif
                 <!-- GCash Payment Interface -->
@@ -167,19 +222,74 @@
 
                     <form action="{{ route('transactions.submit.gcash.proof') }}" method="POST"
                         enctype="multipart/form-data">
-                        <div id="attachments-container" class="mb-6 flex flex-col justify-center items-center ">
+                        @csrf
+                        <div id="attachments-container"
+                            class="mb-8 w-full max-w-2xl mx-auto rounded-3xl border border-blue-100 bg-white/90 shadow-[0_25px_60px_rgba(15,23,42,0.08)] overflow-hidden">
+                            <div class="bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 px-6 py-5 text-white">
+                                <p class="text-sm uppercase tracking-[0.2em] font-semibold">Step 3</p>
+                                <h3 class="text-2xl font-bold mt-1">Upload Proof of GCash Payment</h3>
+                                <p class="text-sm text-blue-50 mt-1">Accepted formats: PDF, JPG, PNG (max 5&nbsp;MB)
+                                </p>
+                            </div>
 
-                            <label class="block font-semibold mb-2" for="transcript_of_records">
-                                Send Proof of Payment
-                            </label>
-                            <input type="file" name="proof_of_payment" accept=".pdf,.jpg,.png"
-                                class="border p-2 rounded mb-2">
-                            @csrf
-                            <button id="submitBtn"
-                                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition  disabled:bg-gray-400 disabled:cursor-not-allowed transition"
-                                disabled>
-                                Submit
-                            </button>
+                            <div class="p-6 space-y-5">
+                                <p class="text-sm text-slate-500">
+                                    Tip: Take a clear screenshot of your successful GCash transaction showing the
+                                    reference number, amount, and date/time. You can re-upload before final submission
+                                    if needed.
+                                </p>
+
+                                <label class="block text-base font-semibold text-slate-800" for="proof_of_payment">
+                                    Send Proof of Payment
+                                </label>
+
+                                <div
+                                    class="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/70 px-6 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/60">
+                                    <div
+                                        class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-inner">
+                                        <svg class="h-8 w-8 text-blue-500" fill="none" stroke="currentColor"
+                                            stroke-width="1.5" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 16V4m0 0 4 4m-4-4-4 4M6 12H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2h-1" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-base font-semibold text-slate-800">
+                                        Drop your file here or
+                                        <span class="text-blue-600 underline decoration-dotted">browse</span>
+                                    </p>
+                                    <p class="text-xs text-slate-500 mt-1">Make sure the file clearly shows the payment
+                                        details.</p>
+                                    <input type="file" name="proof_of_payment" id="proof_of_payment"
+                                        accept=".pdf,.jpg,.png"
+                                        class="absolute inset-0 h-full w-full cursor-pointer opacity-0" required>
+                                </div>
+
+                                <div id="proofMeta"
+                                    class="hidden rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                                    <p class="font-medium text-slate-800">Ready to submit</p>
+                                    <p class="file-name truncate"></p>
+                                </div>
+
+                                <ul class="text-sm text-slate-500 space-y-1">
+                                    <li>• Only upload once per transaction. Re-submit if you need to replace the file.
+                                    </li>
+                                    <li>• Keep your reference number handy for faster validation.</li>
+                                </ul>
+
+                                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                    <span id="uploadStatus"
+                                        class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                                        Waiting for file
+                                    </span>
+
+                                    <button id="submitBtn"
+                                        class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+                                        disabled>
+                                        Submit Payment Proof
+                                    </button>
+                                </div>
+                            </div>
+
                             <!-- Hidden input to pass transaction id -->
                             <input type="hidden" name="form_token" value="{{ $transactions->form_token }}">
                         </div>
@@ -189,18 +299,39 @@
                 <!-- GCash Step 3: Payment Success Message -->
                 @if ($transactions->status === 'processing')
                     <div id="gcash-confirm" class="validation-wait-message"
-                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; text-align:center; margin:24px 0;">
+                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
                         @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
-                            <h2 style="font-size:28px;">PAYMENT SENT</h2>
-                            <p>Your payment was sent successfully!
-                                Please wait while we process your application
-
-                                You can download your form by clicking the button below.
-                            </p>
-                            <div class="flex justify-center">
-                                <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-                                    style="background-color: #28a745; margin: 0 10px;">Download Form
-                                </button>
+                            <div
+                                class="mx-auto w-full max-w-3xl rounded-3xl border border-emerald-100 bg-white p-8 text-center shadow-[0_25px_80px_rgba(16,185,129,0.25)]">
+                                <div
+                                    class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+                                    <svg class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="1.5"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="m4.5 12.75 5.25 5.25L19.5 8.25" />
+                                    </svg>
+                                </div>
+                                <h2 class="text-3xl font-semibold text-emerald-600">Payment sent successfully!</h2>
+                                <p class="mt-3 text-base text-slate-600">
+                                    We’ve received your GCash payment and will finish reviewing your application
+                                    shortly.
+                                    Once approved, you can download your form anytime.
+                                </p>
+                                <div
+                                    class="mt-6 flex flex-col items-center gap-3 text-sm text-slate-500 sm:flex-row sm:justify-center">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-600">
+                                        Reference: {{ $transactions->payment_reference }}
+                                    </span>
+                                    <span>Amount paid: ₱{{ number_format($transactions->payment_amount, 2) }}</span>
+                                </div>
+                                <div class="mt-8 flex flex-wrap justify-center gap-3">
+                                    <a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/"
+                                        target="_blank" rel="noopener"
+                                        class="inline-flex items-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300">
+                                        Need help? Contact us
+                                    </a>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -743,31 +874,40 @@
                 checkStatus();
             }
             const submitBtn = document.getElementById("submitBtn");
+            const proofInput = document.getElementById("proof_of_payment");
+            const uploadStatus = document.getElementById("uploadStatus");
+            const proofMeta = document.getElementById("proofMeta");
 
-            function checkAllFilesUploaded() {
-                const container = document.getElementById("attachments-container");
-                const inputs = container.querySelectorAll("input[type='file']");
+            function updateProofState() {
+                const hasFile = !!(proofInput?.files && proofInput.files.length > 0);
+                if (submitBtn) {
+                    submitBtn.disabled = !hasFile;
+                }
 
-                container.addEventListener("change", (e) => {
+                if (uploadStatus) {
+                    uploadStatus.textContent = hasFile ? "File attached" : "Waiting for file";
+                    uploadStatus.classList.toggle("bg-emerald-100", hasFile);
+                    uploadStatus.classList.toggle("text-emerald-700", hasFile);
+                    uploadStatus.classList.toggle("bg-slate-100", !hasFile);
+                    uploadStatus.classList.toggle("text-slate-600", !hasFile);
+                }
 
-                    if (checkAllFilesUploaded()) {
-                        submitBtn.removeAttribute('disabled');
-                        submitBtn.style.opacity = '1';
-                        submitBtn.style.cursor = 'pointer';
+                if (proofMeta) {
+                    if (hasFile) {
+                        proofMeta.classList.remove("hidden");
+                        proofMeta.querySelector(".file-name").textContent = proofInput.files[0].name;
+                    } else {
+                        proofMeta.classList.add("hidden");
+                        const nameEl = proofMeta.querySelector(".file-name");
+                        if (nameEl) nameEl.textContent = "";
                     }
-                });
-                let allFilled = true;
-
-                inputs.forEach((input) => {
-
-                    if (!input.files || input.files.length === 0) {
-                        allFilled = false;
-                    }
-                });
-                console.log(allFilled);
-                return allFilled;
+                }
             }
-            checkAllFilesUploaded();
+
+            if (proofInput) {
+                proofInput.addEventListener("change", updateProofState);
+            }
+            updateProofState();
         })
     </script>
 </x-layout>

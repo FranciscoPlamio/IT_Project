@@ -1,31 +1,49 @@
 export default function attachmentsForm101(containerId, form) {
-    console.log(3);
-    const examType = form.exam_type;
+    const examType = (form?.exam_type || "").toLowerCase();
     const container = document.getElementById(containerId);
     if (!container) return;
+
+    const fieldsHost =
+        container.querySelector("[data-role='attachment-fields']") || container;
+    const statusPill = document.getElementById("attachmentStatusPill");
+    const statusMessage = document.getElementById("attachmentStatusMessage");
+    const paymentInput = document.getElementById("paymentMethodInput");
+
+    const baseCardClasses = [
+        "rounded-2xl",
+        "border",
+        "border-gray-200",
+        "bg-white",
+        "p-4",
+        "shadow-sm",
+        "transition",
+        "hover:-translate-y-0.5",
+        "hover:border-emerald-400/70",
+        "focus-within:border-emerald-500",
+        "space-y-3",
+    ];
+
+    const defaultLabels = {
+        id_picture: "ID picture (1” x 1”) taken within the last six (6) months",
+        proof_of_identity: "Photocopy of any of the following:",
+    };
 
     let labels;
 
     if (examType.includes("class")) {
         labels = {
-            id_picture:
-                "ID picture (1” x 1”) taken within the last six (6) months",
-            proof_of_identity: "Photocopy of any of the following:",
-            coa: "Certificate of attendance of seminar issued by NTC accredited Amateur Radio Club:",
+            ...defaultLabels,
+            coa: "Certificate of attendance of seminar issued by an NTC accredited Amateur Radio Club",
         };
     } else if (examType.includes("rtg")) {
         labels = {
-            id_picture:
-                "ID picture (1” x 1”) taken within the last six (6) months",
-            proof_of_identity: "Photocopy of any of the following:",
+            ...defaultLabels,
             transcript_of_records:
                 "Photocopy of Transcript of Records with Special Order (SO)",
         };
     } else if (examType.includes("phn")) {
         labels = {
-            id_picture:
-                "ID picture (1” x 1”) taken within the last six (6) months",
-            proof_of_identity: "Photocopy of any of the following:",
+            ...defaultLabels,
             transcript_of_records:
                 "Photocopy of Transcript of Records with Special Order (SO)",
         };
@@ -37,103 +55,217 @@ export default function attachmentsForm101(containerId, form) {
                 "Aircraft pilot’s license OR Student pilot’s license:",
         };
     }
-    // Generate each input
-    for (const [name, labelText] of Object.entries(labels)) {
-        // Wrapper for spacing between groups
-        const wrapper = document.createElement("div");
-        wrapper.classList.add("mb-4", "ml-2"); // margin-bottom for spacing
-        //Proof of identity
-        if (name == "transcript_of_records") {
-            wrapper.innerHTML = `<div class="mb-6">
-    <label class="block font-semibold mb-2" for="transcript_of_records">
-       Photocopy of Transcript of Records with Special Order (SO):
-    </label>
 
-    <p class="ml-6 text-gray-600 mb-1">Note 1: The applicant has to show the Original.</p>
-    <p class="ml-6 text-gray-600 mb-2">Note 2: SO is not required for State Universities/ Colleges.</p>
-    <p class="ml-6 text-gray-600 mb-2">Note 3: This requirement is not applicable for Retakers.</p>
-        <input type="file" name="transcript_of_records" id="transcript_of_records"
-           accept=".pdf,.jpg,.png" class="border p-2 rounded w-full mb-2">
-</div>`;
-            container.append(wrapper);
-            continue;
-
-            // Transcript of records
-        } else if (name == "proof_of_identity") {
-            wrapper.innerHTML = `<div class="mb-6">
-    <label class="block font-semibold mb-2" for="proof_of_identity">
-        Photocopy of ANY of the following:
-    </label>
-
-
-    <ul class="ml-6 list-disc text-gray-700 mb-2">
-        <li>National ID</li>
-        <li>Birth Certificate</li>
-        <li>Baptismal Certificate</li>
-        <li>Passport</li>
-        <li>Driver’s License OR any document which can serve as the basis for age requirement</li>
-    </ul>
-
-    <p class="ml-6 text-gray-600 mb-1">Note 1: The applicant has to show the Original.</p>
-    <p class="ml-6 text-gray-600 mb-2">Note 2: This requirement is not applicable for Retakers.</p>
-        <input type="file" name="proof_of_identity" id="proof_of_identity"
-           accept=".pdf,.jpg,.png" class="border p-2 rounded w-full mb-2">
-</div>`;
-            container.append(wrapper);
-            continue;
-
-            //COA
-        } else if (name == "coa") {
-            wrapper.innerHTML = `<div class="mb-6">
-    <label class="block font-semibold mb-2" for="coa">
-        Certificate of attendance of seminar issued by NTC accredited Amateur Radio Club::
-    </label>
-    <p class="ml-6 text-gray-600 mb-2">Note 1: This requirement is not applicable for Retakers.</p>
-        <input type="file" name="coa" id="coa"
-           accept=".pdf,.jpg,.png" class="border p-2 rounded w-full mb-2">
-</div>`;
-            container.append(wrapper);
-            continue;
-        }
-        // Label (on top)
-        const label = document.createElement("label");
-        label.textContent = labelText;
-        label.setAttribute("for", name);
-        label.classList.add("block", "font-semibold", "mb-1");
-        // "block" puts it on its own line, "mb-1" gives small space below
-
-        // Input (below label)
-        const input = document.createElement("input");
-        input.type = "file";
-        input.name = name;
-        input.id = name;
-        input.accept = ".pdf,.jpg,.png";
-        input.classList.add("border", "p-2", "rounded", "w-full");
-
-        // Put label + input inside wrapper
-        wrapper.appendChild(label);
-        wrapper.appendChild(input);
-
-        // Add to container
-        container.appendChild(wrapper);
+    if (!labels) {
+        labels = defaultLabels;
     }
-    // Function to check if all required files are uploaded
+
+    const accentMap = ["border-emerald-200", "border-sky-200", "border-amber-200"];
+    let accentIndex = 0;
 
     const proceedPaymentBtn = document.getElementById("proceedPayment");
+    if (proceedPaymentBtn) {
+        proceedPaymentBtn.disabled = true;
+    }
+
+    function updateWrapperAccent(wrapper) {
+        wrapper.classList.remove(
+            "border-emerald-200",
+            "border-sky-200",
+            "border-amber-200"
+        );
+        const accent = accentMap[accentIndex % accentMap.length];
+        accentIndex += 1;
+        wrapper.classList.add(accent);
+    }
+
+    function formatUploadedText(input) {
+        if (!input.files || input.files.length === 0) return "No file selected";
+        if (input.files.length === 1) return input.files[0].name;
+        return `${input.files.length} files selected`;
+    }
+
+    function updateFileStatus(wrapper, input) {
+        const status = wrapper.querySelector("[data-role='file-status']");
+        if (!status) return;
+
+        const hasFiles = !!(input.files && input.files.length);
+
+        status.textContent = formatUploadedText(input);
+        status.classList.toggle("text-emerald-600", hasFiles);
+        status.classList.toggle("text-gray-500", !hasFiles);
+        wrapper.classList.toggle("ring-1", hasFiles);
+        wrapper.classList.toggle("ring-emerald-200", hasFiles);
+    }
+
+    function updateGlobalStatus(allFilled, uploaded, total, gcashReady) {
+        if (statusPill) {
+            statusPill.textContent = allFilled
+                ? gcashReady
+                    ? "Ready to proceed"
+                    : "Select GCash to proceed"
+                : `Uploaded ${uploaded}/${total}`;
+            statusPill.classList.toggle("bg-emerald-100", allFilled && gcashReady);
+            statusPill.classList.toggle("text-emerald-700", allFilled && gcashReady);
+            statusPill.classList.toggle("bg-gray-100", !allFilled);
+            statusPill.classList.toggle("text-gray-600", !allFilled);
+        }
+
+        if (statusMessage) {
+            statusMessage.textContent = allFilled
+                ? gcashReady
+                    ? "Great! All required documents are attached and GCash is selected."
+                    : "Documents look good! Choose GCash to unlock the payment step."
+                : "Upload all required documents to unlock the payment step.";
+        }
+    }
+
+    function buildSpecialContent(name) {
+        if (name === "transcript_of_records") {
+            return `
+                <label class="block text-base font-semibold text-gray-900" for="transcript_of_records">
+                    Photocopy of Transcript of Records with Special Order (SO)
+                </label>
+                <p class="text-sm text-gray-600">Note 1: Present the original upon request.</p>
+                <p class="text-sm text-gray-600">Note 2: SO is not required for State Universities/Colleges.</p>
+                <p class="text-sm text-gray-600">Note 3: Not required for retakers.</p>
+                <input type="file" name="transcript_of_records" id="transcript_of_records"
+                    accept=".pdf,.jpg,.png"
+                    class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm font-medium text-gray-700 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200">
+            `;
+        }
+
+        if (name === "proof_of_identity") {
+            return `
+                <label class="block text-base font-semibold text-gray-900" for="proof_of_identity">
+                    Photocopy of ANY of the following:
+                </label>
+                <ul class="ml-4 list-disc space-y-1 text-sm text-gray-700">
+                    <li>National ID</li>
+                    <li>Birth Certificate</li>
+                    <li>Baptismal Certificate</li>
+                    <li>Passport</li>
+                    <li>Driver’s License or similar proof for age requirement</li>
+                </ul>
+                <p class="text-sm text-gray-600">Note 1: Present the original upon request.</p>
+                <p class="text-sm text-gray-600">Note 2: Not required for retakers.</p>
+                <input type="file" name="proof_of_identity" id="proof_of_identity"
+                    accept=".pdf,.jpg,.png"
+                    class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm font-medium text-gray-700 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200">
+            `;
+        }
+
+        if (name === "coa") {
+            return `
+                <label class="block text-base font-semibold text-gray-900" for="coa">
+                    Certificate of attendance of seminar issued by an NTC accredited Amateur Radio Club
+                </label>
+                <p class="text-sm text-gray-600">Note: Not required for retakers.</p>
+                <input type="file" name="coa" id="coa"
+                    accept=".pdf,.jpg,.png"
+                    class="block w-full rounded-xl border border-gray-300 bg-gray-50 p-3 text-sm font-medium text-gray-700 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200">
+            `;
+        }
+
+        return "";
+    }
+
+    function createInput(name, labelText) {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add(...baseCardClasses);
+        wrapper.dataset.requirementName = name;
+        updateWrapperAccent(wrapper);
+
+        const specialContent = buildSpecialContent(name);
+        if (specialContent) {
+            wrapper.innerHTML = specialContent;
+        } else {
+            const label = document.createElement("label");
+            label.textContent = labelText;
+            label.setAttribute("for", name);
+            label.classList.add(
+                "block",
+                "text-base",
+                "font-semibold",
+                "text-gray-900"
+            );
+
+            const input = document.createElement("input");
+            input.type = "file";
+            input.name = name;
+            input.id = name;
+            input.accept = ".pdf,.jpg,.png";
+            input.classList.add(
+                "mt-2",
+                "block",
+                "w-full",
+                "rounded-xl",
+                "border",
+                "border-gray-300",
+                "bg-gray-50",
+                "p-3",
+                "text-sm",
+                "font-medium",
+                "text-gray-700",
+                "transition",
+                "focus:border-emerald-500",
+                "focus:ring-2",
+                "focus:ring-emerald-200"
+            );
+
+            wrapper.appendChild(label);
+            wrapper.appendChild(input);
+        }
+
+        const status = document.createElement("p");
+        status.dataset.role = "file-status";
+        status.classList.add("text-sm", "font-medium", "text-gray-500");
+        status.textContent = "No file selected";
+        wrapper.appendChild(status);
+
+        fieldsHost.appendChild(wrapper);
+
+        const input = wrapper.querySelector("input[type='file']");
+        if (!input) return;
+
+        input.addEventListener("change", () => {
+            updateFileStatus(wrapper, input);
+            checkAllFilesUploaded();
+        });
+    }
+
+    Object.entries(labels).forEach(([name, labelText]) => {
+        createInput(name, labelText);
+    });
+
     function checkAllFilesUploaded() {
-        const inputs = container.querySelectorAll("input[type='file']");
-        let allFilled = true;
+        const inputs = fieldsHost.querySelectorAll("input[type='file']");
+        let filledCount = 0;
 
         inputs.forEach((input) => {
-            if (!input.files || input.files.length === 0) {
-                allFilled = false;
+            if (input.files && input.files.length > 0) {
+                filledCount += 1;
             }
         });
-        console.log(allFilled);
-        console.log(proceedPaymentBtn);
-        proceedPaymentBtn.disabled = !allFilled;
+
+        const allFilled = filledCount === inputs.length && inputs.length > 0;
+        const gcashReady = paymentInput?.value === "gcash";
+        const canProceed = allFilled && gcashReady;
+
+        if (proceedPaymentBtn) {
+            proceedPaymentBtn.disabled = !canProceed;
+            proceedPaymentBtn.classList.toggle("opacity-50", !canProceed);
+            proceedPaymentBtn.classList.toggle("cursor-not-allowed", !canProceed);
+        }
+
+        updateGlobalStatus(allFilled, filledCount, inputs.length || 0, gcashReady);
+        return canProceed;
     }
 
     // Initial check (in case some inputs are pre-filled)
     checkAllFilesUploaded();
+
+    if (typeof window !== "undefined") {
+        window.__revalidateAttachments = checkAllFilesUploaded;
+    }
 }

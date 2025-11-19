@@ -7,168 +7,205 @@
 
     <!-- Main Content -->
     <div class="main">
-        <div class="card full-page">
-            <!-- Latest Request Section -->
-            <section class="half-section">
-                <div class="card-header">
-                    <h2>Form</h2>
-                </div>
+        <div class="page-heading">
+            <p class="page-eyebrow">Admin · Request Management</p>
+            <h1>Form Review & Attachments</h1>
+        </div>
 
-                <div class="table-container">
-                    @php
-                        // 1. Define the descriptive map
-                        $licenseDescriptions = [
-                            'class_a_e8910_code5' => 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
-                            'class_a_code5_only' => 'Class A - Code (5 wpm) Only',
-                            'class_b_e567' => 'Class B - Elements 5, 6 & 7',
-                            'class_b_e2' => 'Class B - Element 2',
-                            'class_c_e234' => 'Class C - Elements 2, 3 & 4',
-                            'class_d_e2' => 'Class D - Element 2',
-                            '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
-                            '1rtg_code25' => '1RTG - Code (25/20 wpm)',
-                            '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
-                            '2rtg_code16' => '2RTG - Code (16 wpm)',
-                            '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
-                            '3rtg_code16' => '3RTG - Code (16 wpm)',
-                            '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
-                            '2phn_e123' => '2PHN - Elements 1, 2 & 3',
-                            '3phn_e12' => '3PHN - Elements 1 & 2',
-                            'rroc_aircraft_e1' => 'RROC - Aircraft - Element 1',
-                        ];
+        <div class="card-stack">
+            @php
+                $licenseDescriptions = [
+                    'class_a_e8910_code5' => 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
+                    'class_a_code5_only' => 'Class A - Code (5 wpm) Only',
+                    'class_b_e567' => 'Class B - Elements 5, 6 & 7',
+                    'class_b_e2' => 'Class B - Element 2',
+                    'class_c_e234' => 'Class C - Elements 2, 3 & 4',
+                    'class_d_e2' => 'Class D - Element 2',
+                    '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+                    '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+                    '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+                    '2rtg_code16' => '2RTG - Code (16 wpm)',
+                    '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+                    '3rtg_code16' => '3RTG - Code (16 wpm)',
+                    '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+                    '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+                    '3phn_e12' => '3PHN - Elements 1 & 2',
+                    'rroc_aircraft_e1' => 'RROC - Aircraft - Element 1',
+                ];
 
-                        // 2. Function to look up the descriptive name or format the key if not found
-                        function getDisplayValue($key, $rawValue, $descriptions)
-                        {
-                            // Check if the key exists in our map
-                            if (isset($descriptions[$rawValue])) {
-                                // Return the descriptive name from the map
-                                return $descriptions[$rawValue];
-                            }
+                function getDisplayValue($key, $rawValue, $descriptions)
+                {
+                    if (isset($descriptions[$rawValue])) {
+                        return $descriptions[$rawValue];
+                    }
+                    return $rawValue;
+                }
+                function formatKey($key)
+                {
+                    return ucwords(str_replace('_', ' ', $key));
+                }
+            @endphp
 
-                            // If not a specific license key, return the original attribute value
-                            return $rawValue;
-                        }
-                        function formatKey($key)
-                        {
-                            return ucwords(str_replace('_', ' ', $key));
-                        }
-                    @endphp
-                    @foreach ($form->form->getAttributes() as $key => $value)
-                        @if (
-                            $key !== 'form_token' &&
-                                $key !== 'user_id' &&
-                                $key !== 'created_at' &&
-                                $key !== 'updated_at' &&
-                                $key !== 'id' &&
-                                $key !== 'or' &&
-                                $key !== 'admission_slip')
-                            @if ($key === 'needs')
-                                <p><strong>{{ formatKey($key) }}:</strong> {{ $value ? 'Yes' : 'None' }}</p>
-                                @continue
-                            @endif
+            <section class="info-card" data-collapsible>
+                <header class="section-heading">
+                    <div>
+                        <p class="section-eyebrow">Applicant Details</p>
+                        <h2>Submitted Form Snapshot</h2>
+                        <p class="section-description">
+                            Reference:
+                            <strong>{{ $form->form->form_token ?? '—' }}</strong> ·
+                            Submitted {{ optional($form->form->created_at)->format('F d, Y h:i A') ?? '—' }}
+                        </p>
+                    </div>
+                    <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="true">
+                        <span data-toggle-label>Hide details</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            class="chevron-icon" data-toggle-icon>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                </header>
 
-                            @if ($key === 'dob')
-                                <p><strong>Date of Birth:</strong> {{ $value }}</p>
-                                @continue
-                            @endif
-                            <p><strong>{{ formatKey($key) }}:</strong>
-                                {{ getDisplayValue($key, $value, $licenseDescriptions) }}</p>
-                        @endif
-                    @endforeach
+                <div class="section-body" data-collapsible-content>
+                    <div class="info-grid">
+                        @foreach ($form->form->getAttributes() as $key => $value)
+                            @continue (in_array($key, ['form_token', 'user_id', 'created_at', 'updated_at', 'id', 'or',
+                            'admission_slip']))
+                            @php
+                                if ($key === 'needs') {
+                                    $value = $value ? 'Yes' : 'None';
+                                } elseif ($key === 'dob') {
+                                    $value = \Carbon\Carbon::parse($value)->format('F d, Y');
+                                }
+                            @endphp
+                            <article class="info-item">
+                                <p class="info-label">{{ formatKey($key) }}</p>
+                                <p class="info-value">{{ getDisplayValue($key, $value, $licenseDescriptions) ?: '—' }}
+                                </p>
+                            </article>
+                        @endforeach
+                    </div>
                 </div>
             </section>
-            <!-- OR -->
 
+            @if ($form->form->or)
+                <section class="info-card" data-collapsible data-default-collapsed="true">
+                    <header class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">Official Receipt</p>
+                            <h2>Payment Acknowledgment</h2>
+                            <p class="section-description">Double-check OR fields before final approval.</p>
+                        </div>
+                        <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="false">
+                            <span data-toggle-label>Show details</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                class="chevron-icon" data-toggle-icon>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                    </header>
 
-
-        </div>
-        @if ($form->form->or)
-            <div class="card full-page">
-                <section class="half-section">
-                    <div class="card-header">
-                        <h2>Official Receipt</h2>
-                    </div>
-
-                    <div class="table-container">
-
-                        @foreach ($form->form->or as $key => $value)
-                            <p><strong>{{ formatKey($key) }}:
-                                </strong>{{ $value }}</p>
-                        @endforeach
-                    </div>
-                </section>
-            </div>
-        @endif
-
-        @if ($form->form->admission_slip)
-            <div class="card full-page">
-                <section class="half-section">
-                    <div class="card-header">
-                        <h2>Admission Slip</h2>
-                    </div>
-
-                    <div class="table-container">
-
-                        @foreach ($form->form->admission_slip as $key => $value)
-                            <p><strong>{{ formatKey($key) }}:
-                                </strong>{{ $value }}</p>
-                        @endforeach
+                    <div class="section-body" data-collapsible-content hidden>
+                        <div class="info-grid">
+                            @foreach ($form->form->or as $key => $value)
+                                <article class="info-item">
+                                    <p class="info-label">{{ formatKey($key) }}</p>
+                                    <p class="info-value">{{ $value ?: '—' }}</p>
+                                </article>
+                            @endforeach
+                        </div>
                     </div>
                 </section>
-            </div>
-        @endif
+            @endif
 
-        <div class="card full-page">
-            <!-- Latest Request Section -->
-            <section class="half-section">
-                <div class="card-header">
-                    <h2>Attachment <small><a
-                                href="{{ route('showFormInformation', ['formType' => '1-01']) }}"class="text-sm text-gray-500"
-                                target="_blank">Requirements
-                                of
-                                Form</a></small>
-                    </h2>
-                </div>
+            @if ($form->form->admission_slip)
+                <section class="info-card" data-collapsible data-default-collapsed="true">
+                    <header class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">Admission Slip</p>
+                            <h2>Exam Schedule Overview</h2>
+                            <p class="section-description">Keep these specifics handy when coordinating with the
+                                applicant.</p>
+                        </div>
+                        <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="false">
+                            <span data-toggle-label>Show details</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                class="chevron-icon" data-toggle-icon>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                    </header>
 
-                <div class="table-container">
-                    <ul>
+                    <div class="section-body" data-collapsible-content hidden>
+                        <div class="info-grid">
+                            @foreach ($form->form->admission_slip as $key => $value)
+                                <article class="info-item">
+                                    <p class="info-label">{{ formatKey($key) }}</p>
+                                    <p class="info-value">{{ $value ?: '—' }}</p>
+                                </article>
+                            @endforeach
+                        </div>
+                    </div>
+                </section>
+            @endif
 
-                        @foreach ($files as $file)
+            <section class="info-card" data-collapsible>
+                <header class="section-heading">
+                    <div>
+                        <p class="section-eyebrow">Attachments</p>
+                        <h2>Uploaded Requirements</h2>
+                        <p class="section-description">
+                            Cross-check every attachment before marking the request as done.
+                            <a href="{{ route('showFormInformation', ['formType' => '1-01']) }}" target="_blank"
+                                class="inline-link">View requirement list</a>
+                        </p>
+                    </div>
+                    <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="true">
+                        <span data-toggle-label>Hide details</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                            class="chevron-icon" data-toggle-icon>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                </header>
+
+                <div class="section-body" data-collapsible-content>
+                    <div class="attachment-grid">
+                        @forelse ($files as $file)
                             @php
                                 $url = route('admin.viewFile', ['path' => $file]);
-                                $ext = pathinfo($file, PATHINFO_EXTENSION);
-
-                                //Renaming file name to requirement name
-                                $newFileName = basename($file); // id_picture_1763101141.png
+                                $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                                $newFileName = basename($file);
                                 $newFileName = preg_replace('/_\d+\..+$/', '', $newFileName);
-                                $newFileName = ucwords(str_replace('_', ' ', $newFileName)); // Id Picture
+                                $newFileName = ucwords(str_replace('_', ' ', $newFileName));
                             @endphp
-                            @if ($newFileName === 'Coa')
-                                <h3>Certicicate of Attendance</h3>
-                            @else
-                                <h3>{{ $newFileName }}</h3>
-                            @endif
-
-                            <div class="mb-6">
-
-                                {{-- PDF --}}
-                                @if (in_array($ext, ['pdf']))
-                                    <iframe src="{{ $url }}" width="100%" height="500px"
-                                        class="border rounded"></iframe>
-                                @endif
-
-                                {{-- IMAGES --}}
-                                @if (in_array($ext, ['jpg', 'jpeg', 'png']))
-                                    <img src="{{ $url }}" class="border rounded mb-2 max-w-full">
-                                @endif
-
-                            </div>
-                        @endforeach
-
-                    </ul>
+                            <article class="attachment-card">
+                                <header class="attachment-card-header">
+                                    <h3>{{ $newFileName === 'Coa' ? 'Certificate of Attendance' : $newFileName }}</h3>
+                                    <span class="attachment-badge">{{ strtoupper($ext) }}</span>
+                                </header>
+                                <div class="attachment-preview">
+                                    @if ($ext === 'pdf')
+                                        <iframe src="{{ $url }}"
+                                            title="{{ $newFileName }} preview"></iframe>
+                                    @elseif (in_array($ext, ['jpg', 'jpeg', 'png']))
+                                        <img src="{{ $url }}" alt="{{ $newFileName }} preview">
+                                    @else
+                                        <p class="info-value">Preview not available. Use the button below to open the
+                                            file.</p>
+                                    @endif
+                                </div>
+                                <div class="attachment-actions">
+                                    <a href="{{ $url }}" target="_blank" class="btn btn-primary">Open in new
+                                        tab</a>
+                                </div>
+                            </article>
+                        @empty
+                            <p class="empty-state">No attachments were uploaded for this form.</p>
+                        @endforelse
+                    </div>
                 </div>
             </section>
         </div>
-
     </div>
 </x-admin-layout>

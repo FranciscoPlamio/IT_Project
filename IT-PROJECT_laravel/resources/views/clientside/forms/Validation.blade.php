@@ -4,8 +4,44 @@
         <div class="validation-section-title">Please review your details before final submission:</div>
         <dl class="validation-list" id="validationList"></dl>
         <hr>
-        <div id="attachments-container" data-form-type="{{ $formType }}" class="mt-2">
-            <p class="font-semibold mb-6">Upload Requirements</p>
+        <div id="attachments-container" data-form-type="{{ $formType }}" class="mt-8">
+            <div class="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-sm">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-lg font-semibold text-gray-900">Upload Requirements</p>
+                        <p class="text-sm text-gray-600">
+                            Attach the documents requested below. Accepted formats: PDF, JPG, PNG (max 5&nbsp;MB per
+                            file).
+                        </p>
+                    </div>
+                    <span id="attachmentStatusPill"
+                        class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                        Waiting for files
+                    </span>
+                </div>
+
+                <ul class="mt-4 grid gap-2 text-sm text-gray-600 sm:grid-cols-2">
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-emerald-400"></span>
+                        Gather clear scans or photos before uploading.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-sky-400"></span>
+                        Click each file field to attach the required document.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-amber-400"></span>
+                        You may replace an upload anytime before payment.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-rose-400"></span>
+                        Proceed to payment unlocks once all uploads are complete.
+                    </li>
+                </ul>
+
+                <div data-role="attachment-fields" class="mt-6 space-y-5" aria-live="polite"></div>
+                <p id="attachmentStatusMessage" class="mt-4 text-sm text-gray-600">No files uploaded yet.</p>
+            </div>
         </div>
         {{-- Payment Method Selection --}}
         <div class="payment-method-container">
@@ -251,36 +287,11 @@
 
             selectedPaymentMethod = method;
 
-            if (paymentInput.value !== "" && checkAllFilesUploaded()) {
-                proceedPaymentBtn.removeAttribute('disabled');
-                proceedPaymentBtn.style.opacity = '1';
-                proceedPaymentBtn.style.cursor = 'pointer';
+            if (typeof window.__revalidateAttachments === 'function') {
+                window.__revalidateAttachments();
             }
         }
 
-        function checkAllFilesUploaded() {
-            const container = document.getElementById("attachments-container");
-            const inputs = container.querySelectorAll("input[type='file']");
-            container.addEventListener("change", (e) => {
-                if (paymentInput.value !== "" && checkAllFilesUploaded()) {
-                    proceedPaymentBtn.removeAttribute('disabled');
-                    proceedPaymentBtn.style.opacity = '1';
-                    proceedPaymentBtn.style.cursor = 'pointer';
-                }
-            });
-            let allFilled = true;
-
-            inputs.forEach((input) => {
-
-                if (!input.files || input.files.length === 0) {
-                    allFilled = false;
-                }
-            });
-
-            return allFilled;
-        }
-
-        checkAllFilesUploaded();
         // Add keyboard navigation support for payment options
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
