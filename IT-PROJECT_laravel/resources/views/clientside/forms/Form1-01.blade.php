@@ -280,7 +280,9 @@
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
                                         name="needs_details"
-                                        value="{{ old('needs_details', $form['needs_details'] ?? '') }}" disabled>
+                                        value="{{ old('needs_details', $form['needs_details'] ?? '') }}"
+                                        maxlength="70" disabled>
+                                    <p class="text-gray-500 text-xs mt-1">Maximum 70 characters</p>
                                     @error('needs_details')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
