@@ -58,7 +58,7 @@
             </div>
 
             <!-- Form -->
-            <form class="email-auth-form" id="emailAuthForm" data-redirect-url="{{ route('forms.list') }}">
+            <form class="email-auth-form" id="emailAuthForm" data-redirect-url="{{ route('display.forms') }}">
                 <label class="email-auth-label" for="email">Email address</label>
                 <input class="email-auth-input" type="email" id="email" name="email"
                     placeholder="Enter your email" required />

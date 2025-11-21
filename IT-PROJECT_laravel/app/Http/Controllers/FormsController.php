@@ -21,33 +21,9 @@ use Illuminate\Support\Facades\Http;
 class FormsController extends Controller
 {
     // In FormController or a dedicated page controller
+
+
     public function index()
-    {
-        $forms = [
-            ['number' => '1-01', 'title' => 'Application for Radio Operator Examination'],
-            ['number' => '1-02', 'title' => 'Application for Radio Operator Certificate'],
-            ['number' => '1-03', 'title' => 'Application for Amateur Radio Operator Certificate/AmateurRadio Station License'],
-            ['number' => '1-09', 'title' => 'Aplication for Permit to Purchase/Possess/Sell/Transfer'],
-            ['number' => '1-11', 'title' => 'Application for Construction Permit/Radio Station License'],
-            ['number' => '1-13', 'title' => 'Form D (For Modification)'],
-            ['number' => '1-14', 'title' => 'Application for Temporary Permit to Propagate/Demonstrate'],
-            ['number' => '1-16', 'title' => 'Application for Permit to Transport Radio Transmitter/Transceiver'],
-            ['number' => '1-18', 'title' => 'Application for Dealer/Manufacturer/Service/Center/Retailer/Reseller/Permit/CPE
-                                Supplier Accreditation'],
-            ['number' => '1-19', 'title' => 'Application for Certificate of Registration (WDN/SRD/RFID/SRRS/Public Trunk Radio)'],
-            ['number' => '1-20', 'title' => 'Application for Certificate of Registration - Value Added Services'],
-            ['number' => '1-21', 'title' => 'Application for Duplicate of Permit/License/Certificate'],
-            ['number' => '1-22', 'title' => 'Application for TVRO Registration Certificate/TVRO/Station License/CATV Station
-                                License'],
-            ['number' => '1-24', 'title' => 'Affidavit of Ownership and Loss with Undertaking'],
-            ['number' => '1-25', 'title' => 'Complaint Form'],
-            ['number' => '1-26', 'title' => 'Complaint on Text Message'],
-        ];
-
-        return view('formsList', compact('forms'));
-    }
-
-    public function index2()
     {
         $forms = [
             [ //0
@@ -222,32 +198,7 @@ class FormsController extends Controller
     }
 
     /**
-     * Store Application Details section (Form 1-01) into the database.
-     */
-    public function storeApplication(Request $request)
-    {
-        $validated = $request->validate([
-            'date_of_exam' => ['nullable', 'date'],
-            'rtg' => ['nullable', 'array'],
-            'amateur' => ['nullable', 'array'],
-            'rphn' => ['nullable', 'array'],
-            'rroc' => ['nullable', 'array'],
-        ]);
-
-        $formToken = $request->input('form_token');
-        if (!$formToken) {
-            $formToken = (string) Str::uuid();
-        }
-
-        // Otherwise redirect back with token in session for linking next steps
-        return redirect()->back()->with([
-            'status' => 'Application Details saved',
-            // 'form_token' => $record->form_token,
-        ]);
-    }
-
-    /**
-     * Store the entire Form 1-01 (all sections) in one request.
+     * Store the entire Form in one request.
      */
     public function storeAll(Request $request, $formType)
     {
@@ -272,12 +223,7 @@ class FormsController extends Controller
         // Save using FormManager
         $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
-        //Forget Form Key session
-        $sessionKeys = array_keys(session()->all());
-        $formKey = collect($sessionKeys)->first(function ($key) {
-            return str_starts_with($key, 'form_');
-        });
-        session()->forget($formKey);
+        $this->forgetFormKeySession($request);
 
         if ($request->wantsJson()) {
             return response()->json([
@@ -291,7 +237,7 @@ class FormsController extends Controller
         return redirect()->route('transactions.index')->with('message', 'Form created successfully');
     }
 
-    public function cancel(Request $request)
+    private function forgetFormKeySession($request)
     {
         //Forget Form Key session
         $sessionKeys = array_keys($request->session()->all());
@@ -299,6 +245,11 @@ class FormsController extends Controller
             return str_starts_with($key, 'form_');
         });
         session()->forget($formKey);
+    }
+
+    public function cancel(Request $request)
+    {
+        $this->forgetFormKeySession($request);
         return redirect()->route('homepage')->with('message', 'Draft Form cancelled successfully.');
     }
 
