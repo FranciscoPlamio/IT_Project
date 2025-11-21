@@ -16,7 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 
-class AdminAuthController extends Controller   // <-- rename this
+class AdminController extends Controller   // <-- rename this
 {
     // Show login page
     public function showLoginForm()
@@ -118,31 +118,6 @@ class AdminAuthController extends Controller   // <-- rename this
             'cancel',
             'recentApps'
         ));
-    }
-
-    public function certRequest(Request $request)
-    {
-        if (!$request->session()->has('admin')) {
-            return redirect()->route('admin.login');
-        }
-
-        $user = User::find($request->session()->get('admin'));
-
-        // ✅ Use case-insensitive regex instead of whereRaw
-        $requests = \App\Models\Forms\FormsTransactions::where('status', new Regex('^processing$', 'i'))
-            ->orWhere('status', new Regex('^pending$', 'i'))
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        foreach ($requests as $req) {
-            $req->formatted_date = $req->created_at
-                ? \Carbon\Carbon::parse($req->created_at)->format('d F Y')
-                : 'No date';
-        }
-
-        $highlight = $request->query('highlight');
-
-        return view('adminside.cert-request', compact('user', 'requests', 'highlight'));
     }
 
     public function requestManagement(Request $request)

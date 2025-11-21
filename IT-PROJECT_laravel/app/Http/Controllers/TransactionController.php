@@ -13,11 +13,24 @@ use Illuminate\Validation\ValidationException;
 
 class TransactionController extends Controller
 {
+
+    public function getUser()
+    {
+        // User email
+        $userEmail = session('email_verified');
+        $user = User::where('email', $userEmail)->first();
+        // Check if user exists
+        if (!$user) {
+            // Throw a manual exception if not found
+            throw new \Exception('User not found in the database. Please authenticate your email again');
+        }
+        return $user;
+    }
+
     //
     public function index()
     {
-        $userEmail = session('email_verified'); // Assuming you store this when they verified
-        $user = User::where('email', $userEmail)->first();
+        $user = $this->getUser();
 
         $transactions = FormsTransactions::where('user_id', $user->_id)->whereNotIn('status', ['cancelled'])->latest()->first();
 
@@ -61,65 +74,6 @@ class TransactionController extends Controller
             ->with('message', 'Your transaction was cancelled successfully.');
     }
 
-    /**
-     * Mark transaction as paid and send success email with PDF link.
-     */
-    public function complete(Request $request)
-    {
-        $reference = $request->input('payment_reference');
-
-        $transactionQuery = FormsTransactions::query();
-        if ($reference) {
-            $transactionQuery->where('payment_reference', $reference);
-        } else {
-            $transactionQuery->latest();
-        }
-
-        $transaction = $transactionQuery->first();
-        if (!$transaction) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Transaction not found.'
-            ], 404);
-        }
-
-        $transaction->update([
-            'status' => 'completed',
-            'payment_status' => 'paid',
-            'payment_date' => now(),
-        ]);
-
-        try {
-            $downloadUrl = route('forms.pdf', ['formType' => $transaction->form_type]);
-
-            // Attempt to get recipient email from session or fallbacks
-            $recipientEmail = session('email_verified') ?: session('user_email');
-            if (!$recipientEmail) {
-                // If not in session, try to infer from a related model if available in your app
-                $recipientEmail = config('mail.from.address');
-            }
-
-            Mail::send('emails.payment-success', [
-                'reference' => $transaction->payment_reference,
-                'paymentMethod' => $transaction->payment_method,
-                'amount' => $transaction->payment_amount,
-                'download_url' => $downloadUrl,
-            ], function ($message) use ($recipientEmail) {
-                $message->to($recipientEmail)
-                    ->subject('Payment Successful - NTC Forms System');
-            });
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Payment marked as completed and email sent.',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Payment updated but email failed to send: ' . $e->getMessage(),
-            ], 500);
-        }
-    }
 
     /**
      * Get transaction status for polling/auto-refresh
