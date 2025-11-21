@@ -30,7 +30,7 @@ class PDFCoordinateMaps
      */
     public static function getAllMaps()
     {
-        return [
+        $maps = [
             '1-01' => self::getForm101Coordinates(),
             '1-02' => self::getForm102Coordinates(),
             '1-03' => self::getForm103Coordinates(),
@@ -48,6 +48,15 @@ class PDFCoordinateMaps
             '1-25' => self::getForm125Coordinates(),
             '1-26' => self::getForm126Coordinates(),
         ];
+
+        foreach ($maps as $formType => $coordinates) {
+            $maps[$formType] = array_merge(
+                $coordinates,
+                self::getSupplementalCoordinates($formType)
+            );
+        }
+
+        return $maps;
     }
 
     /**
@@ -101,6 +110,12 @@ class PDFCoordinateMaps
                 'no' => [129.60, 155.50], // NO: 129.60, 155.50
             ],
             'needs_details' => [85.60, 159.60],
+
+            // Attachment placeholders
+            'id_picture_slot' => [175.60, 31.40], // top-left corner in mm
+            'id_picture_slot_size' => [25.40, 25.40], // default width/height in mm (1x1 in)
+            'id_picture_slot_secondary' => [175.60, 217.87], // placeholder for secondary photo box
+            'id_picture_slot_secondary_size' => [25.40, 25.40],
 
             // Exam Type Selection placeholders: position per option (mark 'X' at these coords)
             // Update these coordinates to match the exact checkbox locations on the template
@@ -758,6 +773,62 @@ class PDFCoordinateMaps
             // Complaint Against
             'complaint_against' => [50, 200], // placeholder
         ];
+    }
+
+    /**
+     * Get supplemental placeholders shared across all templates
+     */
+    private static function getSupplementalCoordinates($formType)
+    {
+        return array_merge(
+            self::getAdmissionSlipCoordinates(),
+            self::getOfficialReceiptCoordinates($formType)
+        );
+    }
+
+    /**
+     * Admission Slip placeholders (update exact coordinates per template as needed)
+     */
+    private static function getAdmissionSlipCoordinates()
+    {
+        return [
+            'admit_name' => [60.77, 221.90], // placeholder
+            'mailing_address' => [60.77, 226.90], // placeholder
+            'mailing_address_line2' => [60.77, 230.90], // placeholder for extended address field
+            'admission_exam_type' => [60.77, 234.80],  // placeholder (formatted exam type)
+            'place_of_exam' => [60.77, 240.80], // placeholder
+            'date_of_exam' => [60.77, 244.44], // placeholder
+            'date_of_exam_line2' => [153.96, 104.04], // placeholder for extended date field
+            'time_of_exam' => [60.77, 248.64], // placeholder
+            'authorized_officer' => [140.00, 253.82], // placeholder
+        ];
+    }
+
+    /**
+     * Official Receipt placeholders (update exact coordinates per template as needed)
+     */
+    private static function getOfficialReceiptCoordinates($formType)
+    {
+        $default = [
+            'or_no' => [166.50, 180.58],
+            'or_amount' => [158.52, 190.04],
+            'collecting_officer' => [152.22, 196.16],
+            'or_date' => [168.16, 186.33],
+            'or_year_suffix' => [189.67, 186.33],
+        ];
+
+        // Override coordinates for specific form types for Declaration
+        $overrides = [
+            '1-01' => [
+                'or_no' => [166.50, 180.58],
+                'or_amount' => [158.52, 190.04],
+                'collecting_officer' => [152.22, 196.16],
+                'or_date' => [168.16, 186.33],
+                'or_year_suffix' => [189.67, 186.33],
+            ],
+        ];
+
+        return $overrides[$formType] ?? $default;
     }
 
     /**
