@@ -66,12 +66,10 @@
                                 @php
                                     $status = strtolower(trim($app->status ?? 'pending'));
                                     $isInProgress = in_array($status, ['pending', 'processing']);
-                                    $targetRoute = $isInProgress
-                                        ? route('admin.cert-request', ['highlight' => $app->payment_reference])
-                                        : route('admin.req-management', [
-                                            'highlight' => $app->payment_reference,
-                                            'section' => 'history',
-                                        ]);
+                                    $targetRoute = route('admin.req-management', [
+                                        'highlight' => $app->payment_reference,
+                                        'section' => 'history',
+                                    ]);
                                 @endphp
                                 <tr class="table-row" data-status="{{ $status }}">
                                     <td class="app-id">

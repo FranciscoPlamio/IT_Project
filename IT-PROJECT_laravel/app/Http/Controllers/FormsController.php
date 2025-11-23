@@ -259,7 +259,7 @@ class FormsController extends Controller
         $rules = [];
 
         foreach ($request->file() as $key => $file) {
-            $rules[$key] = 'file|mimes:pdf,jpg,png|max:2048';
+            $rules[$key] = 'file|mimes:pdf,jpg,png|max:10240';
         }
         try {
             // Validate dynamically
@@ -274,10 +274,14 @@ class FormsController extends Controller
 
             return null;
         } catch (ValidationException $e) {
-            $message = "Validation failed: files must be no larger than 5 MB and must be in .png, .jpg, or .pdf";
+            dd($e->errors());
+            dd(ini_get('post_max_size'), ini_get('upload_max_filesize'));
+            $message = "Validation failed: files must be no larger than 10 MB and must be in .png, .jpg, or .pdf";
             return $message;
         }
     }
+
+
 
     private function cleanInput(array $data)
     {
