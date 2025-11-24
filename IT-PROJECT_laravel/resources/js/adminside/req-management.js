@@ -626,11 +626,13 @@ document.addEventListener("DOMContentLoaded", function () {
         ) {
             latestDropdown.style.display = "none";
         }
-        if (
-            !historyDropdown.contains(e.target) &&
-            !historyFilterIcon.contains(e.target)
-        ) {
-            historyDropdown.style.display = "none";
+        if (historyDropdown) {
+            if (
+                !historyDropdown.contains(e.target) &&
+                !historyFilterIcon.contains(e.target)
+            ) {
+                historyDropdown.style.display = "none";
+            }
         }
     });
 });

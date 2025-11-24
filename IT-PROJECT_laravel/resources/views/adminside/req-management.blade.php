@@ -15,6 +15,41 @@
                 justify-content: center;
                 align-items: center;
             }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+
+            .status-badge.done {
+                background: #f0fdf4;
+                color: #22c55e;
+                border: 1px solid #bbf7d0;
+            }
+
+            .status-badge.progress {
+                background: #fffbeb;
+                color: #f59e0b;
+                border: 1px solid #fed7aa;
+            }
+
+            .status-badge img {
+                width: 14px;
+                height: 14px;
+            }
+
+            .status-badge a {
+                color: inherit;
+                text-decoration: underline;
+            }
         </style>
     </x-slot:head>
 
@@ -120,9 +155,7 @@
                                             href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
                                             See
                                             more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
-                                        @if ($req->payment_status == 'paid')
-                                            <p>Proof of Payment Received!</p>
-                                        @endif
+
                                     </td>
 
                                     <td>
@@ -162,6 +195,21 @@
                                                 <option value="declined" @selected($status === 'declined')>Decline
                                                 </option>
                                             </select>
+
+                                            @if ($req->payment_status == 'paid')
+                                                <div class="status-badge done">
+                                                    <img src="{{ asset('images/Done.png') }}">
+                                                    <span><a
+                                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">Proof
+                                                            of Payment Received!</a></span>
+                                                </div>
+                                            @else
+                                                <div class="status-badge progress">
+                                                    <img src="{{ asset('images/In-prog.png') }}">
+                                                    <span>Waiting for Payment</span>
+                                                </div>
+                                            @endif
+                                            <x-admin.req-management-status :req="$req" />
                                         @else
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif

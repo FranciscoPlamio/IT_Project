@@ -6,6 +6,53 @@
             <p class="forms-gallery-note">Please note that a PDF reader application or equivalent browser plug‑in is
                 required to view these forms.</p>
 
+            <!-- SEARCH -->
+            <div class="max-w-5xl mx-auto mt-6">
+
+                <!-- Search Bar -->
+                <div class="mb-6">
+                    <input type="text" id="searchInput" placeholder="Search form number or title..."
+                        class="w-full px-4 py-2 border bg-white border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <!-- Forms Grid -->
+                <div id="formsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                    @foreach ($forms as $form)
+                        <div class="form-card bg-white shadow-lg rounded-lg hidden border border-gray-200 p-4 transition hover:shadow-xl"
+                            style="display:none" data-title="{{ strtolower($form['title']) }}"
+                            data-number="{{ strtolower($form['formType']) }}">
+                            <h3 class="mt-3 font-semibold text-lg text-gray-800">
+                                Form No. NTC {{ $form['formType'] }}
+                            </h3>
+
+                            <p class="text-gray-600 text-sm">
+                                {{ $form['title'] }}
+                            </p>
+
+                            <div class="mt-4 flex flex-wrap justify-center gap-2">
+                                <a href="{{ asset('forms/Form-No.-NTC-' . $form['formType'] . '.pdf') }}"
+                                    target="_blank"
+                                    class="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                                    View PDF
+                                </a>
+
+                                <a href="{{ route('showFormInformation', ['formType' => $form['formType']]) }}"
+                                    class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                                    Sign Up
+                                </a>
+
+                                <a href="{{ route('requirements') }}"
+                                    class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm">
+                                    Requirements
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+
+                </div>
+            </div>
+
             <h3 class="forms-gallery-section">Operator Certification & Exams</h3>
             <div class="forms-gallery-grid">
                 <div class="form-card">
@@ -149,4 +196,28 @@
             </div>
         </div>
     </main>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const formsGrid = document.getElementById('formsGrid')
+        const cards = formsGrid.querySelectorAll('.form-card');
+
+        searchInput.addEventListener('keyup', function() {
+            const search = this.value.toLowerCase();
+
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                const number = card.getAttribute('data-number');
+                if (search === "") {
+                    card.style.display = "none";
+                    return;
+                }
+                if (title.includes(search) || number.includes(search)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        });
+    </script>
+
 </x-layout>

@@ -150,6 +150,36 @@ class AdminController extends Controller   // <-- rename this
 
         return view('adminside.req-management', compact('user', 'latestRequests', 'highlight'));
     }
+    public function test(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+        $highlight = $request->query('highlight');
+
+        return view('adminside.test', compact('user', 'latestRequests', 'highlight'));
+    }
 
     public function saveRemarks(Request $request, $id)
     {

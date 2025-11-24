@@ -34,6 +34,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('form-fees', [AdminController::class, 'formFees'])->name('form-fees');
     Route::get('get-form-data', [AdminController::class, 'getFormData'])->name('admin.getFormData');
     Route::get('download-form', [AdminController::class, 'downloadFormPDF'])->name('admin.downloadForm');
+    Route::get('test', [AdminController::class, 'test'])->name('test');
 });
 
 
