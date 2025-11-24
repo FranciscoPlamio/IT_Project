@@ -10,7 +10,7 @@
                     <div>
                         <p class="text-lg font-semibold text-gray-900">Upload Requirements</p>
                         <p class="text-sm text-gray-600">
-                            Attach the documents requested below. Accepted formats: PDF, JPG, PNG (max 5&nbsp;MB per
+                            Attach the documents requested below. Accepted formats: PDF, JPG, PNG (max 10&nbsp;MB per
                             file).
                         </p>
                     </div>
