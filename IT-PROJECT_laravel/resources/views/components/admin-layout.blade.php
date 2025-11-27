@@ -90,6 +90,7 @@
                 <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt=""> Form Fees & Breakdown
             </a>
+            <a href="{{ route('admin.test') }}">test</a>
 
         </nav>
         <div class="bottom-links">

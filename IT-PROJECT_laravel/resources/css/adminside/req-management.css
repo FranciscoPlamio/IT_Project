@@ -507,7 +507,8 @@ body {
     min-width: 220px;
     vertical-align: middle;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    row-gap: 5px;
 }
 .status-cell select.status-select {
     width: 100%;
@@ -546,7 +547,6 @@ body {
 }
 
 .styled-table td:nth-child(7) {
-    min-width: 260px;
 }
 .styled-table td:nth-child(7) form {
     background: #f8fafc;
