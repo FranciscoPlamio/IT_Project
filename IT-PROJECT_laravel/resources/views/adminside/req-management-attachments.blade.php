@@ -42,8 +42,13 @@
                 }
                 function formatKey($key)
                 {
+                    if ($key === 'dob') {
+                        $key = 'Date of Birth';
+                    }
                     return ucwords(str_replace('_', ' ', $key));
                 }
+
+                function formatDateAndTime($value) {}
             @endphp
 
             <section class="info-card" data-collapsible>
@@ -53,7 +58,7 @@
                         <h2>Submitted Form Snapshot</h2>
                         <p class="section-description">
                             Reference:
-                            <strong>{{ $form->form->form_token ?? '—' }}</strong> ·
+                            <strong>{{ $form->payment_reference ?? '—' }}</strong> ·
                             Submitted {{ optional($form->form->created_at)->format('F d, Y h:i A') ?? '—' }}
                         </p>
                     </div>
@@ -105,12 +110,16 @@
                         </button>
                     </header>
 
-                    <div class="section-body" data-collapsible-content hidden>
+                    <div class="section-body" data-collapsible-content>
                         <div class="info-grid">
                             @foreach ($form->form->or as $key => $value)
                                 <article class="info-item">
                                     <p class="info-label">{{ formatKey($key) }}</p>
-                                    <p class="info-value">{{ $value ?: '—' }}</p>
+                                    @if ($key == 'or_date')
+                                        <p class="info-value">{{ $form->form->formatted_or_date }}</p>
+                                    @else
+                                        <p class="info-value">{{ $value ?: '—' }}</p>
+                                    @endif
                                 </article>
                             @endforeach
                         </div>
@@ -136,12 +145,18 @@
                         </button>
                     </header>
 
-                    <div class="section-body" data-collapsible-content hidden>
+                    <div class="section-body" data-collapsible-content>
                         <div class="info-grid">
                             @foreach ($form->form->admission_slip as $key => $value)
                                 <article class="info-item">
                                     <p class="info-label">{{ formatKey($key) }}</p>
-                                    <p class="info-value">{{ $value ?: '—' }}</p>
+                                    @if ($key == 'date_of_exam')
+                                        <p class="info-value">{{ $form->form->formatted_date_exam }}</p>
+                                    @elseif ($key == 'time_of_exam')
+                                        <p class="info-value">{{ $form->form->formatted_time_exam }}</p>
+                                    @else
+                                        <p class="info-value">{{ $value ?: '—' }}</p>
+                                    @endif
                                 </article>
                             @endforeach
                         </div>

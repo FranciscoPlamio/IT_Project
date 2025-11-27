@@ -88,7 +88,6 @@
                         @if (strtolower($transactions->payment_status ?? 'pending') === 'paid' && $transactions->status === 'done')
                             <li data-step="1" class="step-item completed">
                                 <span class="step-label">Validation Review</span>
-                                <span class="step-sub">We are double-checking your form.</span>
                             </li>
                             <li data-step="2" class="step-item completed">
                                 <span class="step-label">Payment Confirmed</span>
@@ -104,7 +103,6 @@
                                 $transactions->payment_status === 'paid')
                             <li data-step="1" class="step-item completed">
                                 <span class="step-label">Validation Review</span>
-                                <span class="step-sub">We are double-checking your form.</span>
                             </li>
                             <li data-step="2" class="step-item completed">
                                 <span class="step-label">Payment Confirmed</span>

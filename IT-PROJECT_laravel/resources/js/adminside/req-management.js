@@ -392,10 +392,6 @@ function viewForm(formToken, formType, formId, element) {
 }
 
 function approveRequest(formId) {
-    if (!confirm("Are you sure you want to approve this request?")) {
-        return;
-    }
-
     updateStatus(formId, "done")
         .then(() => {
             alert("Status updated to Done.");
@@ -626,11 +622,13 @@ document.addEventListener("DOMContentLoaded", function () {
         ) {
             latestDropdown.style.display = "none";
         }
-        if (
-            !historyDropdown.contains(e.target) &&
-            !historyFilterIcon.contains(e.target)
-        ) {
-            historyDropdown.style.display = "none";
+        if (historyDropdown) {
+            if (
+                !historyDropdown.contains(e.target) &&
+                !historyFilterIcon.contains(e.target)
+            ) {
+                historyDropdown.style.display = "none";
+            }
         }
     });
 });
