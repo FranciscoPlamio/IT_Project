@@ -249,6 +249,7 @@ class AdminController extends Controller   // <-- rename this
         // Latest requests exclude completed or cancelled
         $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
             ->whereNotIn('payment_status', ['unpaid'])
+            ->where('form_type', 'form1-01')
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -486,8 +487,11 @@ class AdminController extends Controller   // <-- rename this
     public function approveForm(Request $request, $id)
     {
         $formTransactions = FormsTransactions::where('_id', $id)->first();
+
         $formModel = FormManager::getFormModel(ucfirst($formTransactions->form_type));
         $form = $formModel::find($formTransactions->form_id);
+
+        $formType = substr($formTransactions->form_type, 4);
 
         // Mark as approved
         $formTransactions->status = 'done';
@@ -495,9 +499,23 @@ class AdminController extends Controller   // <-- rename this
 
         // Send email using the Blade view
         if (!empty($form->email)) {
-            Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form) {
+
+            //Generate PDF
+            // STEP 1: Generate PDF raw data
+            $pdfService = new \App\Services\PDFGenerator();
+            $pdf = $pdfService->generatePDF($form->toArray(), $formType);
+
+            // Return PDF string instead of streaming
+            $pdfData = $pdf->Output('S'); // <--- IMPORTANT
+
+            $fileName = "NTC_Form_{$formTransactions->form_type}.pdf";
+
+
+
+            Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName) {
                 $message->to($form->user->email)
-                    ->subject('Your Form Has Been Approved');
+                    ->subject('Your Form Has Been Approved')
+                    ->attachData($pdfData, $fileName, ['mime' => 'application/pdf']);
             });
         }
         return redirect()->back()->with([

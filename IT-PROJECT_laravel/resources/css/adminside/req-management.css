@@ -547,7 +547,6 @@ body {
 }
 
 .styled-table td:nth-child(7) {
-    min-width: 260px;
 }
 .styled-table td:nth-child(7) form {
     background: #f8fafc;
