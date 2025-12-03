@@ -3,6 +3,8 @@
 namespace App\Models\Forms;
 
 use App\Models\User;
+use Carbon\Carbon;
+use PDO;
 
 class Form1_01 extends BaseForm
 {
@@ -58,5 +60,20 @@ class Form1_01 extends BaseForm
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function getFormattedOrDateAttribute()
+    {
+        return Carbon::parse($this->or['or_date'])->format('F j, Y g:i A');
+    }
+
+    public function getFormattedDateExamAttribute()
+    {
+        return Carbon::createFromFormat('Y-m-d', $this->admission_slip['date_of_exam'])->format('F j, Y');
+    }
+
+    public function getFormattedTimeExamAttribute()
+    {
+        return Carbon::createFromFormat('H:i', $this->admission_slip['time_of_exam'])->format('g:i A');
     }
 }

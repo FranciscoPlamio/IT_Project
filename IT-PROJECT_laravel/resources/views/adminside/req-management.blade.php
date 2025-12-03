@@ -15,6 +15,85 @@
                 justify-content: center;
                 align-items: center;
             }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+
+            .status-badge.done {
+                background: #f0fdf4;
+                color: #22c55e;
+                border: 1px solid #bbf7d0;
+            }
+
+            .status-badge.progress {
+                background: #fffbeb;
+                color: #f59e0b;
+                border: 1px solid #fed7aa;
+            }
+
+            .status-badge img {
+                width: 14px;
+                height: 14px;
+            }
+
+            .status-badge a {
+                color: inherit;
+                text-decoration: underline;
+            }
+
+            .confirm-modal {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 999;
+            }
+
+            .confirm-modal__content {
+                background: white;
+                padding: 20px 25px;
+                border-radius: 10px;
+                width: 320px;
+                text-align: center;
+            }
+
+            .btn-secondary,
+            .btn-primary {
+                border: none;
+                border-radius: 10px;
+                padding: 10px 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .btn-secondary {
+                background: #e5e7eb;
+                color: #374151;
+            }
+
+            .btn-primary {
+                background: #213c78;
+                color: #fff;
+            }
+
+            .btn-secondary:hover,
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px -15px rgba(15, 23, 42, 0.8);
+            }
         </style>
     </x-slot:head>
 
@@ -120,9 +199,7 @@
                                             href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
                                             See
                                             more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
-                                        @if ($req->payment_status == 'paid')
-                                            <p>Proof of Payment Received!</p>
-                                        @endif
+
                                     </td>
 
                                     <td>
@@ -162,6 +239,21 @@
                                                 <option value="declined" @selected($status === 'declined')>Decline
                                                 </option>
                                             </select>
+
+                                            @if ($req->payment_status == 'paid')
+                                                <div class="status-badge done">
+                                                    <img src="{{ asset('images/Done.png') }}">
+                                                    <span><a
+                                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">Proof
+                                                            of Payment Received!</a></span>
+                                                </div>
+                                            @else
+                                                <div class="status-badge progress">
+                                                    <img src="{{ asset('images/In-prog.png') }}">
+                                                    <span>Waiting for Payment</span>
+                                                </div>
+                                            @endif
+                                            <x-admin.req-management-status :req="$req" />
                                         @else
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif
@@ -181,7 +273,7 @@
                                     <td class="action-cell">
                                         @if ($req->form->admission_slip && $req->form->or)
                                             <button class="badge-btn progress"
-                                                onclick="approveRequest('{{ $req->_id }}')"
+                                                onclick="openConfirmApproveModal('{{ $req->_id }}')"
                                                 title="Approve Request">
                                                 Approve
                                             </button>
@@ -198,4 +290,40 @@
             </section>
         </div>
     </div>
+    <div class="confirm-modal" id="confirmApproveModal" style="display:none;">
+        <div class="confirm-modal__content">
+            <h3>Approve Request</h3>
+            <p>Are you sure you want to approve this request?</p>
+
+            <div class="confirm-actions">
+                <button id="confirmApproveCancel" class="btn-secondary">Cancel</button>
+                <button id="confirmApproveYes" class="btn-primary">Yes,
+                    Approve</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        let approveId = null;
+
+        function openConfirmApproveModal(id) {
+            approveId = id;
+            document.getElementById("confirmApproveModal").style.display = "flex";
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // Close modal
+            document.getElementById("confirmApproveCancel").addEventListener("click", () => {
+                document.getElementById("confirmApproveModal").style.display = "none";
+                approveId = null;
+            });
+
+            // Confirm approve
+            document.getElementById("confirmApproveYes").addEventListener("click", () => {
+                document.getElementById("confirmApproveModal").style.display = "none";
+
+
+                approveRequest(approveId);
+            });
+        })
+    </script>
 </x-admin-layout>

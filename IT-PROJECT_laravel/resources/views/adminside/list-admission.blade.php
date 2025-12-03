@@ -1,7 +1,176 @@
-<x-admin-layout :title="'Admision Slip Requests'">
+<x-admin-layout :title="'Request Management'">
+
     <x-slot:head>
-        @vite(['resources/css/adminside/dashboard.css', 'resources/css/adminside/declaration.css', 'resources/js/adminside/declaration.js'])
+        @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <style>
+            .receipt-btn {
+                border: none;
+                border-radius: 999px;
+                padding: 10px 18px;
+                font-weight: 600;
+                font-size: 0.95rem;
+                background: #213c78;
+                color: #fff;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                align-self: flex-start;
+            }
+
+            .receipt-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 10px 20px -15px rgba(33, 60, 120, 0.9);
+            }
+
+            .receipt-modal {
+                position: fixed;
+                inset: 0;
+                background: rgba(15, 23, 42, 0.5);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                z-index: 1000;
+            }
+
+            .receipt-modal__content {
+                background: #fff;
+                border-radius: 18px;
+                max-width: 520px;
+                width: 100%;
+                padding: 32px;
+                position: relative;
+                box-shadow: 0 25px 60px -30px rgba(15, 23, 42, 0.6);
+            }
+
+            .receipt-modal__close {
+                position: absolute;
+                right: 12px;
+                top: 12px;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #6b7280;
+            }
+
+            .receipt-modal__header h3 {
+                margin-bottom: 4px;
+            }
+
+            .receipt-modal__header p {
+                color: #6b7280;
+                font-size: 0.95rem;
+            }
+
+            .receipt-form {
+                margin-top: 20px;
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .receipt-form .form-grid {
+                display: grid;
+                gap: 18px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .receipt-form label {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                font-size: 0.9rem;
+                color: #4b5563;
+                font-weight: 600;
+            }
+
+            .receipt-form input {
+                border: 1px solid #d1d5db;
+                border-radius: 10px;
+                padding: 10px 12px;
+                font-size: 0.95rem;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .receipt-form input:focus {
+                outline: none;
+                border-color: #213c78;
+                box-shadow: 0 0 0 3px rgba(33, 60, 120, 0.15);
+            }
+
+            .receipt-form__actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+            }
+
+            .status-chip {
+                display: inline-block;
+                padding: 6px 14px;
+                border-radius: 999px;
+                background: #ecfdf5;
+                color: #065f46;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .btn-secondary,
+            .btn-primary {
+                border: none;
+                border-radius: 10px;
+                padding: 10px 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+            }
+
+            .btn-secondary {
+                background: #e5e7eb;
+                color: #374151;
+            }
+
+            .btn-primary {
+                background: #213c78;
+                color: #fff;
+            }
+
+            .btn-secondary:hover,
+            .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 20px -15px rgba(15, 23, 42, 0.8);
+            }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+
+            .status-badge.done {
+                background: #f0fdf4;
+                color: #22c55e;
+                border: 1px solid #bbf7d0;
+            }
+
+            .status-badge.progress {
+                background: #fffbeb;
+                color: #f59e0b;
+                border: 1px solid #fed7aa;
+            }
+
+            .status-badge img {
+                width: 14px;
+                height: 14px;
+            }
+
             .error-message {
                 color: red;
                 font-size: 13px;
@@ -11,74 +180,163 @@
         </style>
     </x-slot:head>
 
-    <main class="main declaration-main">
+
+    <!-- Main Content -->
+    <div class="main">
+        <div id="flash-message"
+            style="
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+">
+        </div>
+
+
         <h1>Admision Slip</h1>
 
-        <section class="declaration-table-card">
-            <div class="card-header">
-                <div>
+        <div class="card full-page">
+            <!-- Latest Request Section -->
+            <section class="half-section">
+                <div class="card-header">
                     <h2>Admision Slip Requests</h2>
-                </div>
-                <div class="table-meta">
-                    <span>Total Items: {{ count($latestRequests) }}</span>
-                </div>
-            </div>
+                    <div class="actions">
+                        <div class="search-bar">
+                            <input type="text" id="latestSearch" placeholder="Search">
+                            <img src="{{ asset('images/search-icon.png') }}" alt="Search">
+                        </div>
+                        <div class="filter-bar">
+                            <img src="{{ asset('images/filter-icon.png') }}" alt="Filter" id="latestFilterIcon">
+                            <div class="filter-dropdown" id="latestFilterDropdown">
+                                <h4>Filter by:</h4>
 
-            <div class="table-container">
-                <table class="styled-table declaration-table">
-                    <thead>
-                        <tr>
-                            <th>Reference Number</th>
-                            <th>Applicant</th>
-                            <th>Form Type</th>
-                            <th>Date Submitted</th>
-                            <th>Attachment</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($latestRequests as $req)
+                                <label for="latestDateFilter">Date Range</label>
+                                <select id="latestDateFilter">
+                                    <option value="all">All Dates</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                    <option value="3months">Last 3 Months</option>
+                                    <option value="6months">Last 6 Months</option>
+                                    <option value="year">This Year</option>
+                                </select>
+
+                                <label for="latestFormFilter">Form Type</label>
+                                <div class="form-list">
+                                    <select id="latestFormFilter" size="5">
+                                        <option value="all">All Forms</option>
+                                        <option value="Form1-01">Form1-01</option>
+                                        <option value="Form1-02">Form1-02</option>
+                                        <option value="Form1-03">Form1-03</option>
+                                        <option value="Form1-09">Form1-09</option>
+                                        <option value="Form1-11">Form1-11</option>
+                                        <option value="Form1-13">Form1-13</option>
+                                        <option value="Form1-14">Form1-14</option>
+                                        <option value="Form1-16">Form1-16</option>
+                                        <option value="Form1-18">Form1-18</option>
+                                        <option value="Form1-19">Form1-19</option>
+                                        <option value="Form1-20">Form1-20</option>
+                                        <option value="Form1-21">Form1-21</option>
+                                        <option value="Form1-22">Form1-22</option>
+                                        <option value="Form1-24">Form1-24</option>
+                                        <option value="Form1-25">Form1-25</option>
+                                        <option value="Form1-26">Form1-26</option>
+                                    </select>
+                                </div>
+
+                                <button id="applyLatestFilter">Apply Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
                             <tr>
-                                <td>{{ $req->payment_reference }}</td>
-                                <td>
-                                    {{ $req->form->last_name }} {{ $req->form->first_name }}
-                                </td>
-                                <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
-                                <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
-                                <td class="see-more">
-                                    <a href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
-                                        See
-                                        more </a>
-                                </td>
-                                <td>
-                                    @if ($req->form->admission_slip)
-                                        <span class="status-chip"> For Release Admission Slip</span>
-                                    @else
-                                        <span class="status-chip"> Pending Admission Slip</span>
-                                    @endif
-                                </td>
-                                <td class="action-cell">
-                                    @if ($req->form->admission_slip)
-                                    @else
-                                        <button id="orBtn"class="receipt-btn open-receipt-btn"
-                                            data-reference="{{ $req->payment_reference }}"
-                                            data-applicant="{{ $req->form->last_name }} {{ $req->form->first_name }}"
-                                            data-form="{{ ucfirst($req->form_type ?? 'N/A') }}"
-                                            data-formtoken="{{ $req->form_token }}">
-                                            Create Admission Slip
-                                        </button>
-                                    @endif
-
-                                </td>
+                                <th>Reference Number</th>
+                                <th>Request Type</th>
+                                <th>Request Date</th>
+                                <th>Attachment</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
-                        @endforeach
+                        </thead>
+                        <tbody>
+                            @foreach ($latestRequests as $req)
+                                <tr
+                                    class="request-row {{ isset($highlight) && $highlight == $req->payment_reference ? 'highlighted' : '' }}">
+                                    <td>{{ $req->payment_reference }}</td>
+                                    <td>{{ ucfirst($req->form_type ?? 'N/A') }}</td>
+                                    <td>{{ $req->created_at ? $req->created_at->format('d M Y') : 'N/A' }}</td>
 
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    </main>
+                                    <td class="see-more">
+                                        <a
+                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
+                                            See
+                                            more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
+
+                                    </td>
+
+                                    <td>
+                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                    </td>
+
+                                    <td>
+                                        @if ($req->form->or)
+                                            @if ($req->form->admission_slip)
+                                                <div class="status-badge done">
+                                                    <img src="{{ asset('images/Done.png') }}">
+                                                    <span>For Release Admission Slip</span>
+                                                </div>
+                                            @else
+                                                <div class="status-badge progress">
+                                                    <img src="{{ asset('images/In-prog.png') }}">
+                                                    <span>Pending Admission Slip</span>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <div class="status-badge progress">
+                                                <img src="{{ asset('images/In-prog.png') }}">
+                                                <span>Waiting for Official Receipt</span>
+                                            </div>
+                                        @endif
+                                    </td>
+
+                                    <td class="action-cell">
+                                        @if ($req->form->or)
+                                            @if ($req->form->admission_slip)
+                                                <span>-</span>
+                                            @else
+                                                <button id="orBtn"class="receipt-btn open-receipt-btn"
+                                                    data-reference="{{ $req->payment_reference }}"
+                                                    data-applicant="{{ $req->form->last_name }} {{ $req->form->first_name }}"
+                                                    data-form="{{ ucfirst($req->form_type ?? 'N/A') }}"
+                                                    data-formtoken="{{ $req->form_token }}"
+                                                    data-address="{{ $req->form->province }} {{ $req->form->city }} {{ $req->form->barangay }}">
+                                                    Create Admission Slip
+                                                </button>
+                                            @endif
+                                        @else
+                                            <span>-</span>
+                                        @endif
+
+                                    </td>
+
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
 
     <div class="receipt-modal" id="receiptModal">
         <div class="receipt-modal__content">
@@ -143,6 +401,119 @@
     </div>
 
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const logoutLink = document.getElementById("logout-link");
+            const logoutModal = document.getElementById("logout-modal");
+            const confirmLogout = document.getElementById("confirm-logout");
+            const cancelLogout = document.getElementById("cancel-logout");
+            const logoutForm = document.getElementById("logout-form");
+
+            if (logoutLink && logoutModal) {
+                logoutLink.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    logoutModal.style.display = "flex";
+                });
+            }
+
+            if (cancelLogout && logoutModal) {
+                cancelLogout.addEventListener("click", () => {
+                    logoutModal.style.display = "none";
+                });
+            }
+
+            if (confirmLogout && logoutForm) {
+                confirmLogout.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    logoutForm.submit();
+                });
+            }
+
+            if (logoutModal) {
+                logoutModal.addEventListener("click", (event) => {
+                    if (event.target === logoutModal) {
+                        logoutModal.style.display = "none";
+                    }
+                });
+            }
+
+            // Official receipt modal logic
+            const receiptModal = document.getElementById("receiptModal");
+            const receiptClose = document.getElementById("receiptModalClose");
+            const receiptSubtitle = document.getElementById("receiptModalSubtitle");
+            const receiptCancelBtn = document.getElementById("receiptCancelBtn");
+            const receiptForm = document.getElementById("receiptForm");
+
+            const openReceiptModal = (reference = "", applicant = "", form = "", address) => {
+                if (!receiptModal) return;
+                if (receiptSubtitle) {
+                    const details = [reference, applicant, form]
+                        .filter(Boolean)
+                        .join(" • ");
+                    receiptSubtitle.textContent = details || "Official receipt entry";
+
+                }
+
+                if (receiptForm) {
+                    receiptForm.reset();
+                }
+                const mailingAddressInput = document.getElementById('mailing_address');
+                mailingAddressInput.value = address;
+
+                const admitNameInput = document.getElementById('admit_name');
+                admitNameInput.value = applicant;
+
+                receiptModal.style.display = "flex";
+                receiptModal.setAttribute("aria-hidden", "false");
+            };
+
+            const closeReceiptModal = () => {
+                if (!receiptModal) return;
+                receiptModal.style.display = "none";
+                receiptModal.setAttribute("aria-hidden", "true");
+            };
+
+            document.querySelectorAll(".open-receipt-btn").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const reference = button.dataset.reference || "";
+                    const applicant = button.dataset.applicant || "";
+                    const form = button.dataset.form || "";
+                    const or_amount = button.dataset.amount;
+                    const address = button.dataset.address;
+                    openReceiptModal(reference, applicant, form, address);
+                });
+            });
+
+            [receiptClose, receiptCancelBtn].forEach((el) => {
+                if (!el) return;
+                el.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    closeReceiptModal();
+                });
+            });
+
+            if (receiptModal) {
+                receiptModal.addEventListener("click", (event) => {
+                    if (event.target === receiptModal) {
+                        closeReceiptModal();
+                    }
+                });
+            }
+
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape") {
+                    closeReceiptModal();
+                }
+            });
+
+            if (receiptForm) {
+                receiptForm.addEventListener("submit", (event) => {
+                    event.preventDefault();
+                    // Placeholder for persistence logic
+                    closeReceiptModal();
+                });
+            }
+        });
         document.addEventListener('DOMContentLoaded', function() {
             const btn = document.getElementById('orBtn');
             let formToken;
@@ -171,10 +542,10 @@
                 const authorizedOfficer = document.getElementById('authorized_officer');
 
                 // Letters only regex
-                const lettersOnly = /^[A-Za-z\s]+$/;
+                const lettersOnly = /^[A-Za-zñÑ\s]+$/;
 
                 // Letters & numbers regex
-                const lettersNumbers = /^[A-Za-z0-9\s]+$/;
+                const lettersNumbers = /^[A-Za-z0-9ñÑ\s]+$/;
 
                 // Validate Admin/Admit Name
                 if (!admitName.value.trim()) {
