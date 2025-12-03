@@ -23,6 +23,12 @@
                     <p class="text-gray-600 text-sm">Apply for your official Radio Operator Certificate after passing
                         the examination.</p>
                 </a>
+                <a href="{{ route('showFormInformation', ['formType' => '1-03']) }}"
+                    class="block bg-gray-50 hover:bg-gray-100 transition rounded-lg p-4 shadow-sm mt-4">
+                    <div class="font-semibold text-lg">Radio Operator Certificate Application</div>
+                    <p class="text-gray-600 text-sm">Apply for your official Radio Operator Certificate after passing
+                        the examination.</p>
+                </a>
 
 
             </div>

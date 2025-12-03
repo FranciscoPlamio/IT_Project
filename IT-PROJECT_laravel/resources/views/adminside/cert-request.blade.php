@@ -5,12 +5,11 @@
 
     <!-- Main Content -->
     <div class="main">
-        <h1>Request History</h1>
+        <h1>Certification Request</h1>
 
         <div class="card full-page">
             <section class="half-section">
                 <div class="card-header">
-                    <h2>History</h2>
                     <div class="actions">
                         <div class="search-bar">
                             <input type="text" id="searchLatest" placeholder="Search">
@@ -77,10 +76,11 @@
                                 <th>Attachment</th>
                                 <th>Name</th>
                                 <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($historyRequests as $req)
+                            @foreach ($latestRequests as $req)
                                 <tr
                                     class="request-row {{ isset($highlight) && $highlight == $req->payment_reference ? 'highlighted' : '' }}">
                                     <td>{{ $req->payment_reference }}</td>
@@ -120,7 +120,7 @@
                                                 break;
                                         }
                                     @endphp
-                                    <td class="{{ $statusClass }}">{{ $statusLabel }}</td>
+                                    <td class="{{ $statusClass }}"></td>
                                 </tr>
                             @endforeach
                         </tbody>

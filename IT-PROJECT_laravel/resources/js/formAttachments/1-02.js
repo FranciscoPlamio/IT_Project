@@ -1,7 +1,8 @@
 export default function attachmentsForm102(containerId, form) {
     console.log(form);
     const examType = (form?.certificate_type || "").toLowerCase();
-    console.log(examType);
+    const applicationType = form.application_type;
+    console.log(examType, applicationType);
 
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -32,31 +33,39 @@ export default function attachmentsForm102(containerId, form) {
     };
 
     let labels;
-
-    if (examType.includes("class")) {
-        labels = {
-            ...defaultLabels,
-            coa: "Certificate of attendance of seminar issued by an NTC accredited Amateur Radio Club",
-        };
-    } else if (examType.includes("rtg")) {
-        labels = {
-            ...defaultLabels,
-            transcript_of_records:
-                "Photocopy of Transcript of Records with Special Order (SO)",
-        };
-    } else if (examType.includes("phn")) {
-        labels = {
-            ...defaultLabels,
-            transcript_of_records:
-                "Photocopy of Transcript of Records with Special Order (SO)",
-        };
-    } else if (examType.includes("rroc")) {
+    if (applicationType == "modification") {
         labels = {
             id_picture:
                 "ID picture (1” x 1”) taken within the last six (6) months",
-            pilot_license:
-                "Aircraft pilot’s license OR Student pilot’s license:",
+            radio_operator_certificate_photocopy:
+                "Photocopy of Radio Operator Certificate",
         };
+    } else {
+        if (examType.includes("class")) {
+            labels = {
+                ...defaultLabels,
+                coa: "Certificate of attendance of seminar issued by an NTC accredited Amateur Radio Club",
+            };
+        } else if (examType.includes("rtg")) {
+            labels = {
+                ...defaultLabels,
+                transcript_of_records:
+                    "Photocopy of Transcript of Records with Special Order (SO)",
+            };
+        } else if (examType.includes("phn")) {
+            labels = {
+                ...defaultLabels,
+                transcript_of_records:
+                    "Photocopy of Transcript of Records with Special Order (SO)",
+            };
+        } else if (examType.includes("rroc")) {
+            labels = {
+                id_picture:
+                    "ID picture (1” x 1”) taken within the last six (6) months",
+                pilot_license:
+                    "Aircraft pilot’s license OR Student pilot’s license:",
+            };
+        }
     }
 
     if (!labels) {

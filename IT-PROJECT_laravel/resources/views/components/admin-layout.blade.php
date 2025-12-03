@@ -65,6 +65,11 @@
                 <img src="{{ Route::is('admin.req-management') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
                     alt=""> Request Management
             </a>
+            <a href="{{ route('admin.cert-request') }}"
+                class="menu-item {{ Route::is('admin.cert-request') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.cert-request') ? asset('images/whitecert-icon.png') : asset('images/req-icon.png') }} "
+                    alt=""> Certification Request
+            </a>
             <a href="{{ route('admin.req-history') }}"
                 class="menu-item {{ Route::is('admin.req-history') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.req-history') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "

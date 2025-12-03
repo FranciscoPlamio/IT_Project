@@ -43,17 +43,23 @@ class FormManager
     ) {
         // Gets the Model of Form
         $formModel = self::getFormModel($formType);
-
-        if (self::convertType($formType)) {
-            $transactionData['payment_amount'] = 50;
-        }
         if ($formType === "form1-01") {
+            $transactionData['payment_amount'] = 50;
             $form = $formModel::updateOrCreate(
                 ['form_token' => $formToken],
                 array_merge($formData, [
                     'admission_slip' => null,
                     'or' => null
                 ])
+            );
+        } elseif ($formType === "form1-02") {
+            if ($formData['application_type'] === "modification") {
+                $transactionData['payment_amount'] = 150;
+            }
+
+            $form = $formModel::updateOrCreate(
+                ['form_token' => $formToken],
+                $formData
             );
         } else {
             $form = $formModel::updateOrCreate(

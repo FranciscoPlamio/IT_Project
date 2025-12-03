@@ -181,6 +181,45 @@
                         </div>
                     </div> --}}
 
+                    <!-- Breakdown Free -->
+                    @if ($transactions->form_type === 'form1-02')
+                        @if ($form->application_type === 'modification')
+                            <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
+
+                                <!-- Header -->
+                                <h2 class="text-lg font-semibold text-gray-800">
+                                    Fee Breakdown (Modification)
+                                </h2>
+
+                                <!-- Breakdown Box -->
+                                <div class="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+
+                                    <div class="flex justify-between text-gray-700">
+                                        <span>Modification Fee (MOD)</span>
+                                        <span class="font-medium">₱120.00</span>
+                                    </div>
+
+                                    <div class="flex justify-between text-gray-700">
+                                        <span>Documentary Stamp Tax (DST)</span>
+                                        <span class="font-medium">₱30.00</span>
+                                    </div>
+
+                                    <hr class="border-gray-300">
+
+                                    <div class="flex justify-between text-gray-900 font-semibold text-lg">
+                                        <span>Total</span>
+                                        <span>₱150.00</span>
+                                    </div>
+                                </div>
+
+                                <!-- Payment Notice -->
+                                <p class="text-sm text-gray-500">
+                                    Applicable for modification of any ROC, RROC, SROP, GROC, and related certificates.
+                                </p>
+                            </div>
+                        @endif
+                    @endif
+
                     <!-- GCash Payment Card -->
                     <div class="gcash-card">
                         <p class="gcash-note">Securely complete the payment with your GCash app</p>
@@ -226,14 +265,16 @@
                             <div class="bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 px-6 py-5 text-white">
                                 <p class="text-sm uppercase tracking-[0.2em] font-semibold">Step 3</p>
                                 <h3 class="text-2xl font-bold mt-1">Upload Proof of GCash Payment</h3>
-                                <p class="text-sm text-blue-50 mt-1">Accepted formats: PDF, JPG, PNG (max 5&nbsp;MB)
+                                <p class="text-sm text-blue-50 mt-1">Accepted formats: PDF, JPG, PNG (max
+                                    5&nbsp;MB)
                                 </p>
                             </div>
 
                             <div class="p-6 space-y-5">
                                 <p class="text-sm text-slate-500">
                                     Tip: Take a clear screenshot of your successful GCash transaction showing the
-                                    reference number, amount, and date/time. You can re-upload before final submission
+                                    reference number, amount, and date/time. You can re-upload before final
+                                    submission
                                     if needed.
                                 </p>
 
@@ -255,7 +296,8 @@
                                         Drop your file here or
                                         <span class="text-blue-600 underline decoration-dotted">browse</span>
                                     </p>
-                                    <p class="text-xs text-slate-500 mt-1">Make sure the file clearly shows the payment
+                                    <p class="text-xs text-slate-500 mt-1">Make sure the file clearly shows the
+                                        payment
                                         details.</p>
                                     <input type="file" name="proof_of_payment" id="proof_of_payment"
                                         accept=".pdf,.jpg,.png"
@@ -269,7 +311,8 @@
                                 </div>
 
                                 <ul class="text-sm text-slate-500 space-y-1">
-                                    <li>• Only upload once per transaction. Re-submit if you need to replace the file.
+                                    <li>• Only upload once per transaction. Re-submit if you need to replace the
+                                        file.
                                     </li>
                                     <li>• Keep your reference number handy for faster validation.</li>
                                 </ul>
