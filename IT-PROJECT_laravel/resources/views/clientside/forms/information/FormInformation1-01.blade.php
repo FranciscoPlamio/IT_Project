@@ -1,10 +1,10 @@
 <x-layout :title="'Issuance / Release — Admission Slip & Report of Rating'">
     <main class="max-w-4xl mx-auto bg-white shadow-md rounded-xl p-6 mt-2">
-        <a href="{{ route('display.forms') }}" class="inline-flex items-center hover:underline mb-4">
+        <a href="{{ url()->previous() }}"class="inline-flex items-center hover:underline mb-4">
             &#8592; Back
         </a>
         <header class="mb-2 p-1">
-            <h1 class="text-2xl font-semibold">Issuance / Release — Admission Slip & Report of Rating</h1>
+            <h1 class="text-2xl font-semibold">Issuance / Release — Admission Slip</h1>
         </header>
 
         <section class="space-y-4">
@@ -18,7 +18,6 @@
                             <li>Amateur</li>
                         </ul>
 
-                        <div class="mt-3 font-semibold">B. Report of Rating (except NTC-NCR)</div>
                     </div>
                 </div>
             </div>
@@ -33,11 +32,7 @@
                         the holder
                         to take the commercial or non-commercial radio operator examination.
                     </p>
-                    <p class="">
-                        The <span class="font-semibold">Report of Rating</span> is issued to a Radio Operator Examinee
-                        indicating the result of his/her
-                        examination.
-                    </p>
+
                 </div>
             </div>
 
@@ -87,10 +82,6 @@
                         </ul>
                     </div>
 
-                    <div>
-                        <div class="font-semibold">B.</div>
-                        <div class="mt-1">All Examinees</div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -271,32 +262,6 @@ Requirements -->
                 </div>
             </div>
 
-            <!-- B - Requirements -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700">
-                <div class="space-y-4">
-                    <div>
-                        <div class="font-semibold">B. Release of Report of Rating</div>
-                        <ol class="list-decimal pl-8 space-y-3">
-                            <li>
-                                Admission Slip or any valid government ID
-                            </li>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Supporting Documents for Representative(s)-->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700">
-                <div class="space-y-4">
-                    <div>
-                        <div class="font-semibold">Supporting Documents for Representative(s)</div>
-                        <ol class="list-decimal pl-8 space-y-3">
-                            <li>
-                                Authorization letter duly signed by the applicant and
-                                valid ID of the authorized representative.
-                            </li>
-                    </div>
-                </div>
-            </div>
 
         </section>
         <div class="flex justify-between mt-6">

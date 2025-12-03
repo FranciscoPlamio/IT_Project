@@ -5,8 +5,11 @@
             <a href="{{ url('/') }}">Home</a>
         </li>
         {{-- {{ dd(Route::currentRouteName()) }} --}}
+        <li class="{{ Route::is('services') ? 'active' : '' }}">
+            <a href="{{ route('services') }}">Services</a>
+        </li>
         <li class="{{ Route::is('display.forms') ? 'active' : '' }}">
-            <a href="{{ route('display.forms') }}">Apply</a>
+            <a href="{{ route('display.forms') }}">Forms</a>
         </li>
         <li>
             <a href="https://car.ntc.gov.ph/category/announcements/news-and-updates/" target="_blank"

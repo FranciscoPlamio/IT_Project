@@ -130,7 +130,7 @@ class FormsController extends Controller
     }
 
 
-    public function show($formType)
+    public function show(Request $request, $formType)
     {
         if (self::userHasFormTransaction()) {
             return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
@@ -156,7 +156,9 @@ class FormsController extends Controller
             $form = session('form_' . $oldFormType . '_' . $formToken);
             return redirect()->route('forms.validation', ['formType' => $oldFormType, 'token' => $formToken, 'targetFormType' => $formType])->with('message', 'Please finish your current form before signing up a new form');
         } else {
-            return view("clientside.forms.Form{$formType}", compact('formType'));
+
+            $category = $request->query('category', null);
+            return view("clientside.forms.Form{$formType}", compact('formType', 'category'));
         }
     }
 

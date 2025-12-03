@@ -13,6 +13,10 @@ Route::get('/requirements', function () {
     return view('requirements');
 })->name('requirements');
 
+//Services page
+Route::get('/services', function () {
+    return view('services');
+})->name('services');
 
 
 // Email Authentication routes

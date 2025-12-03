@@ -48,7 +48,7 @@ class Form1_02Rules
                 'employment_status' => ['required', 'string'],
                 'employment_type' => ['required', 'string'],
                 'application_type' => ['required', 'string'],
-                'modification_reason' => ['nullable', 'string'],
+                'modification_reason' => ['required_if:application_type,modification', 'string'],
                 'years' => ['nullable', 'integer'],
                 'certificate_type' => ['required', 'string'],
 

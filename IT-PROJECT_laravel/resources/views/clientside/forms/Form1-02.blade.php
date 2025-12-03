@@ -128,7 +128,8 @@
 
                                 <fieldset class="fieldset-compact">
                                     <!-- Application type fields -->
-                                    <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                                    <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType"
+                                        :category="$category" />
                                 </fieldset>
 
                                 <div class="form-field" data-require-one="input[type=radio]">
@@ -140,47 +141,117 @@
                                     @php
                                         $certificateType = old('certificate_type', $form['certificate_type'] ?? null);
                                     @endphp
+                                    @if ($category === 'roc')
+                                        <label>
+                                            <input type="radio" name="certificate_type" value="1RTG"
+                                                {{ $certificateType == 'new' ? 'checked' : '' }}>
+                                            1RTG (First-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
+                                            2RTG (Second-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
+                                            3RTG (Third-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
+                                            1PHN (First-class Radiotelephone Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
+                                            2PHN (Second-class Radiotelephone Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
+                                            3PHN (Third-class Radiotelephone Operator Certificate)
+                                        </label>
+                                    @elseif ($category === 'rroc')
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}
+                                                checked>
+                                            RROC-Aircraft (Restricted Radiotelephone Operator’s Certificate – Aircraft)
+                                        </label>
+                                    @elseif ($category === 'tprroc')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}
+                                                checked>
+                                            TP RROC-Aircraft (Foreign Pilot)
+                                        </label>
+                                    @elseif ($category === 'srop')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}
+                                                checked>
+                                            SROP (Special Radio Operator's Permit)</label>
+                                    @elseif ($category === 'groc')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}
+                                                checked>
+                                            GROC
+                                            (Government Radio Operator Certificate)
+                                        </label>
+                                    @elseif ($category === 'rrocrlm')
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}
+                                                checked>
+                                            RROC-Land Mobile (Restricted Radiotelephone Operator’s Certificate for
+                                            Land Mobile Station )</label>
+                                    @elseif ($category === 'mod')
+                                        <label>
+                                            <input type="radio" name="certificate_type" value="1RTG"
+                                                {{ $certificateType == 'new' ? 'checked' : '' }}>
+                                            1RTG (First-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
+                                            2RTG (Second-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
+                                            3RTG (Third-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
+                                            1PHN (First-class Radiotelephone Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
+                                            2PHN (Second-class Radiotelephone Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
+                                            3PHN (Third-class Radiotelephone Operator Certificate)</label>
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}>
+                                            RROC-Aircraft (Restricted Radiotelephone Operator’s Certificate – Aircraft)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}>
+                                            TP RROC-Aircraft (Foreign Pilot)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}>
+                                            SROP (Special Radio Operator's Permit)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}>
+                                            GROC
+                                            (Government Radio Operator Certificate)
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}>
+                                            RROC-Land Mobile (Restricted Radiotelephone Operator’s Certificate for
+                                            Land Mobile Station )</label>
+                                    @endif
 
-                                    <label>
-                                        <input type="radio" name="certificate_type" value="1RTG"
-                                            {{ $certificateType == 'new' ? 'checked' : '' }}>
-                                        1RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
-                                        2RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
-                                        3RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
-                                        1PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
-                                        2PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
-                                        3PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}>
-                                        SROP</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}>
-                                        RROC-Land Mobile (RLM)</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}>
-                                        RROC-Aircraft</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}> GROC
-                                        (Government)</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}>
-                                        TP RROC-Aircraft (Foreign Pilot)</label>
-                                    <label><input type="radio" name="certificate_type"
+
+
+
+                                    {{-- <label><input type="radio" name="certificate_type"
                                             value="others"{{ $certificateType == 'others' ? 'checked' : '' }}>
                                         OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
-                                        placeholder="Specify if others">
+                                        placeholder="Specify if others"> --}}
                                 </div>
                             </div>
                             <div class="step-actions">
@@ -315,6 +386,7 @@
                         li.classList.remove('completed');
                         li.querySelector('.step-status').textContent = '';
                     }
+                    console.log(valid);
                     return valid;
                 }
 
