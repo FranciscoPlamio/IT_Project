@@ -29,41 +29,72 @@ export default function attachmentsForm102(containerId, form) {
 
     const defaultLabels = {
         id_picture: "ID picture (1” x 1”) taken within the last six (6) months",
-        proof_of_identity: "Photocopy of any of the following:",
     };
 
     let labels;
-    if (applicationType == "modification") {
+    if (examType.includes("tp")) {
         labels = {
             id_picture:
                 "ID picture (1” x 1”) taken within the last six (6) months",
             radio_operator_certificate_photocopy:
                 "Photocopy of Radio Operator Certificate",
+            certificate_of_employment: "Certificate of Employment",
         };
-    } else {
-        if (examType.includes("class")) {
-            labels = {
-                ...defaultLabels,
-                coa: "Certificate of attendance of seminar issued by an NTC accredited Amateur Radio Club",
-            };
-        } else if (examType.includes("rtg")) {
-            labels = {
-                ...defaultLabels,
-                transcript_of_records:
-                    "Photocopy of Transcript of Records with Special Order (SO)",
-            };
-        } else if (examType.includes("phn")) {
-            labels = {
-                ...defaultLabels,
-                transcript_of_records:
-                    "Photocopy of Transcript of Records with Special Order (SO)",
-            };
-        } else if (examType.includes("rroc")) {
+
+        //Modification
+    } else if (applicationType == "modification") {
+        labels = {
+            id_picture:
+                "ID picture (1” x 1”) taken within the last six (6) months",
+        };
+
+        //Renewal
+    } else if (applicationType == "renewal") {
+        if (examType.includes("groc") || examType.includes("rlm")) {
             labels = {
                 id_picture:
                     "ID picture (1” x 1”) taken within the last six (6) months",
-                pilot_license:
-                    "Aircraft pilot’s license OR Student pilot’s license:",
+                radio_operator_certificate_photocopy:
+                    "Photocopy of Radio Operator Certificate",
+                certificate_of_employment: "Certificate of Employment",
+            };
+        } else if (
+            examType.includes("rtg") ||
+            examType.includes("phn") ||
+            examType == "rroc-aircraft" ||
+            examType.includes("srop")
+        ) {
+            labels = {
+                id_picture:
+                    "ID picture (1” x 1”) taken within the last six (6) months",
+                radio_operator_certificate_photocopy:
+                    "Photocopy of Radio Operator Certificate",
+            };
+        }
+    } else if (applicationType == "new") {
+        if (examType.includes("groc")) {
+            labels = {
+                ...defaultLabels,
+                service_record: "Service Record",
+                good_moral_certificate: "Certificate of Good Moral Character",
+                government_service_radio_operator_certificate:
+                    "Government service as a radio operator certificate",
+            };
+        } else if (examType.includes("srop")) {
+            labels = {
+                ...defaultLabels,
+                completion_of_seminar_certificate:
+                    "Photocopy of Certificate of Completion of seminar",
+            };
+        } else if (
+            examType.includes("rtg") ||
+            examType.includes("phn") ||
+            examType == "rroc-aircraft" ||
+            examType.includes("rlm")
+        ) {
+            labels = {
+                ...defaultLabels,
+                report_of_rating: "Photocopy of valid Report of Rating",
             };
         }
     }
