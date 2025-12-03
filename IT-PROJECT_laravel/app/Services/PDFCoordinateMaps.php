@@ -12,6 +12,14 @@ class PDFCoordinateMaps
     const A4_HEIGHT = 841.89;
 
     /**
+     * Certificate page dimensions in points (A4 Landscape)
+     * Certificate = 11.69" × 8.28" (landscape) = 841.89 × 596.16 points
+     * Page count: 1
+     */
+    const CERT_WIDTH = 297.24;
+    const CERT_HEIGHT = 210.16;
+
+    /**
      * Get A4 page size information
      */
     public static function getA4PageSize()
@@ -22,6 +30,21 @@ class PDFCoordinateMaps
             'width_inches' => 8.27,
             'height_inches' => 11.69,
             'orientation' => 'portrait'
+        ];
+    }
+
+    /**
+     * Get Certificate page size information
+     */
+    public static function getCertificatePageSize()
+    {
+        return [
+            'width' => self::CERT_WIDTH,
+            'height' => self::CERT_HEIGHT,
+            'width_inches' => 11.69,
+            'height_inches' => 8.28,
+            'orientation' => 'landscape',
+            'page_count' => 1
         ];
     }
 
@@ -846,5 +869,20 @@ class PDFCoordinateMaps
     public static function getAvailableFormTypes()
     {
         return array_keys(self::getAllMaps());
+    }
+
+    /**
+     * Get certificate coordinates for Form 1-02
+     * These are placeholder coordinates - adjust based on actual Sample_Cert.pdf template
+     */
+    public static function getCertificateCoordinates($formType)
+    {
+        // Placeholder coordinates for certificate fields
+        // TODO: Adjust these coordinates to match the exact positions on Sample_Cert.pdf
+        return [
+            'last_name' => [61.24, 77.26],    // X: 50mm, Y: 100mm - PLACEHOLDER
+            'first_name' => [61.24, 108.34],   // X: 50mm, Y: 110mm - PLACEHOLDER
+            'middle_name' => [61.24, 139.66],  // X: 50mm, Y: 120mm - PLACEHOLDER
+        ];
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\FormsController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('get-form-data', [AdminController::class, 'getFormData'])->name('admin.getFormData');
     Route::get('download-form', [AdminController::class, 'downloadFormPDF'])->name('admin.downloadForm');
     Route::get('test', [AdminController::class, 'test'])->name('test');
+
+    // Certificate generation route
+    Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
 });
 
 
@@ -53,6 +57,7 @@ Route::post('/adminside/logout', [AdminController::class, 'logout'])->name('admi
 
 Route::post('/adminside/set-paid', [AdminController::class, 'setPaid'])->name('adminside.setPaid');
 Route::post('/adminside/set-amount', [AdminController::class, 'setAmount'])->name('adminside.setAmount');
+
 
 Route::prefix('adminside')
     ->middleware(\App\Http\Middleware\BlockMobileDevices::class)

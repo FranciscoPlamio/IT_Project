@@ -576,4 +576,44 @@ class FormsController extends Controller
         $user = $this->getUser();
         return $user->hasFormTransaction();
     }
+
+    /**
+     * Generate certificate PDF for Form 1-02
+     */
+    public function generateCertificate(Request $request)
+    {
+        $formToken = $request->query('token');
+        $formType = '1-02'; // Form 2 as specified
+
+        if (!$formToken) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        try {
+            // Retrieve form data from database
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $formToken)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Convert model to array for PDF generation
+            $formData = $dbForm->toArray();
+
+
+            // Generate certificate PDF using the Sample_Cert.pdf template
+            $pdfGenerator = new \App\Services\PDFCertificateGenerator();
+            $pdf = $pdfGenerator->generateCertificate($formData, $formType);
+
+            // Generate filename
+            $filename = "Certificate_{$formData['last_name']}_{$formData['first_name']}_" . date('Y-m-d_H-i-s') . ".pdf";
+
+            // Stream inline when preview=1, otherwise force download
+            $destination = $request->boolean('preview') ? 'I' : 'D';
+            $pdf->Output($destination, $filename);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
+        }
+    }
 }

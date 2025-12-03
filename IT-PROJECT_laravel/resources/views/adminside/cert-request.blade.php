@@ -121,6 +121,15 @@
                                         }
                                     @endphp
                                     <td class="{{ $statusClass }}"></td>
+                                    <td>
+                                        @if (strtolower($req->form_type) === 'form1-02')
+                                            <a href="{{ route('admin.generate-certificate', ['token' => $req->form_token]) }}"
+                                                class="btn btn-primary btn-sm" target="_blank"
+                                                style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;">
+                                                Generate Certificate
+                                            </a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
