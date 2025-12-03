@@ -213,6 +213,37 @@ class AdminController extends Controller   // <-- rename this
         return view('adminside.req-history', compact('user', 'historyRequests', 'highlight'));
     }
 
+    public function certRequest(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+        $highlight = $request->query('highlight');
+
+        return view('adminside.cert-request', compact('user', 'latestRequests', 'highlight'));
+    }
+
     public function admissionSlip(Request $request)
     {
         if (!$request->session()->has('admin')) {
@@ -511,7 +542,7 @@ class AdminController extends Controller   // <-- rename this
             $fileName = "NTC_Form_{$formTransactions->form_type}.pdf";
 
 
-
+            // For Form 1
             Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName) {
                 $message->to($form->user->email)
                     ->subject('Your Form Has Been Approved')

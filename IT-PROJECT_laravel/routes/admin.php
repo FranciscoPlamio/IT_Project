@@ -10,6 +10,8 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Dashboard 
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
+    Route::get('cert-request', [AdminController::class, 'certRequest'])->name('cert-request');
+
     //Request management
     Route::get('req-management', [AdminController::class, 'requestManagement'])->name('req-management');
     Route::get('req-management/{formToken}', [AdminController::class, 'showRequestAttachments'])->name('req.attachments');

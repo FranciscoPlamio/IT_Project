@@ -386,6 +386,10 @@ class FormsController extends Controller
             return redirect()->route('homepage');
         }
 
+        //testing
+        // $form["application_type"] = "new";
+        // $form["certificate_type"] = "groc";
+
         // Return view with no-cache headers
         return response()
             ->view('clientside.forms.Validation', [

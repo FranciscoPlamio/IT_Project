@@ -248,10 +248,12 @@
                                                             of Payment Received!</a></span>
                                                 </div>
                                             @else
-                                                <div class="status-badge progress">
-                                                    <img src="{{ asset('images/In-prog.png') }}">
-                                                    <span>Waiting for Payment</span>
-                                                </div>
+                                                @if ($req->status != 'pending')
+                                                    <div class="status-badge progress">
+                                                        <img src="{{ asset('images/In-prog.png') }}">
+                                                        <span>Waiting for Payment</span>
+                                                    </div>
+                                                @endif
                                             @endif
                                             <x-admin.req-management-status :req="$req" />
                                         @else
