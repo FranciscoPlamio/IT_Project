@@ -71,59 +71,78 @@
 
         <section class="space-y-6">
             <!-- Temporary Permit to Demonstrate and Propagate -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Temporary Permit to Demonstrate and Propagate</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR TEMPORARY PERMIT TO PROPAGATE / DEMONSTRATE
-                        <span class="italic">(Form No. NTC 1-14)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Engineering Plans signed and sealed by a duly licensed Professional Electronics Engineer
-                        (PECE), to wit:
-                        <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
-                            <li>
-                                Network Diagram indicating locations of all stations and the proposed frequency band
-                            </li>
-                            <li>
-                                Map showing exact location (Region, Province, City / Municipality, Barangay) of all
-                                stations with geographical coordinates (Longitude / Latitude in Degrees / Minutes /
-                                Seconds)
-                            </li>
-                        </ol>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: PECE / Applicant
-                        </span>
-                    </li>
-                    <li>
-                        Datasheet of proposed radio equipment
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Radio Dealer / Applicant
-                        </span>
-                    </li>
-                    <li>
-                        If VSAT Outdoor Unit will be utilized in the Demo, Transponder Lease Agreement (TLA) with any
-                        satellite operator
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Temporary Permit to Demonstrate and Propagate
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR TEMPORARY PERMIT TO PROPAGATE / DEMONSTRATE
+                            <span class="italic">(Form No. NTC 1-14)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            Engineering Plans signed and sealed by a duly licensed Professional Electronics Engineer
+                            (PECE), to wit:
+                            <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
+                                <li>
+                                    Network Diagram indicating locations of all stations and the proposed frequency band
+                                </li>
+                                <li>
+                                    Map showing exact location (Region, Province, City / Municipality, Barangay) of all
+                                    stations with geographical coordinates (Longitude / Latitude in Degrees / Minutes /
+                                    Seconds)
+                                </li>
+                            </ol>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: PECE / Applicant
+                            </span>
+                        </li>
+                        <li>
+                            Datasheet of proposed radio equipment
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Radio Dealer / Applicant
+                            </span>
+                        </li>
+                        <li>
+                            If VSAT Outdoor Unit will be utilized in the Demo, Transponder Lease Agreement (TLA) with
+                            any
+                            satellite operator
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-14', 'category' => 'temporary-permit-demonstrate-propagate']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-14 (Temporary Permit to Propagate/Demonstrate)
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

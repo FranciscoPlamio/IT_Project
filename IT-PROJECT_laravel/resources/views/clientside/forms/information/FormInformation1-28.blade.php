@@ -18,7 +18,7 @@
                 <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
                     <div class="font-semibold">Service Name</div>
                     <p>
-                         Issuance of:
+                        Issuance of:
                     </p>
                     <ul class="list-disc pl-6 space-y-1">
                         <li>Authenticated Copy of Certificates, Permits and Licenses</li>
@@ -80,58 +80,89 @@
 
         <section class="space-y-6">
             <!-- A. Authenticated Copy -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">A. Authenticated Copy of Certificates, Permits and Licenses</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Photocopy of document to be authenticated
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    A. Authenticated Copy of Certificates, Permits and Licenses
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Photocopy of document to be authenticated
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
 
             <!-- B. Duplicate Copy -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">B. Duplicate Copy of Certificates, Permits and Licenses</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR DUPLICATE OF PERMIT / LICENSE / CERTIFICATE
-                        <span class="italic">(Form No. NTC 1-21)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        For Radio Operator Certificate, Three (3) ID pictures (1” x 1”) taken within the last six (6)
-                        months
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    B. Duplicate Copy of Certificates, Permits and Licenses
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR DUPLICATE OF PERMIT / LICENSE / CERTIFICATE
+                            <span class="italic">(Form No. NTC 1-21)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            For Radio Operator Certificate, Three (3) ID pictures (1” x 1”) taken within the last six
+                            (6)
+                            months
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-21', 'category' => 'duplicate-copy']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-21 (Application for Duplicate of Permit/License/Certificate)
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- C. Certification -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">C. Certification of Documents Issued by the Commission</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Letter Request
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    C. Certification of Documents Issued by the Commission
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Letter Request
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 
@@ -149,5 +180,3 @@
         </div>
     </main>
 </x-layout>
-
-

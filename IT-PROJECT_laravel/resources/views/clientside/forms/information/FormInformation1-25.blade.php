@@ -82,37 +82,13 @@
 
         <section class="space-y-6">
             <!-- A. TVRO Registration Certificate (Non‑Commercial) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">A. TVRO Registration Certificate (Non‑Commercial)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
-                        CATV STATION LICENSE
-                        <span class="italic">(Form No. NTC 1-22)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
-                        prepared and signed by a duly licensed Professional Electronics Engineer (PECE) /
-                        Electronics Engineer (ECE)
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: PECE / Applicant
-                        </span>
-                    </li>
-                </ol>
-            </div>
-
-            <!-- B. TVRO Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">B. TVRO Station License</div>
-
-                <!-- B.1 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.1 TVRO Station License (RENEWAL)</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    A. TVRO Registration Certificate (Non‑Commercial)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
                     <ol class="list-decimal pl-6 space-y-1">
                         <li>
                             Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
@@ -125,162 +101,234 @@
                             </span>
                         </li>
                         <li>
-                            Photocopy of TVRO Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Provisional Authority (PA)
-                            <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of PA
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
                             List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
-                            prepared and signed by a duly licensed PECE / ECE
+                            prepared and signed by a duly licensed Professional Electronics Engineer (PECE) /
+                            Electronics Engineer (ECE)
                             <span class="block text-sm text-gray-600">
                                 Where to secure: PECE / Applicant
                             </span>
                         </li>
                     </ol>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-22', 'category' => 'tvro-registration-certificate-non-commercial']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-22 (TVRO Registration Certificate/TVRO Station License/CATV Station
+                            License)
+                        </a>
+                    </div>
                 </div>
+            </div>
 
-                <!-- B.2 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.2 TVRO Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
-                            CATV STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-22)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of TVRO Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            For modification due to <span class="font-semibold">Change of Ownership</span>,
-                            Photocopy of Order / Decision approving the change of ownership
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
+            <!-- B. TVRO Station License -->
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    B. TVRO Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
+
+                    <!-- B.1 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.1 TVRO Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
+                                CATV STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-22)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of TVRO Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Provisional Authority (PA)
+                                <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of
+                                PA
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
+                                prepared and signed by a duly licensed PECE / ECE
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: PECE / Applicant
+                                </span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- B.2 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.2 TVRO Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
+                                CATV STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-22)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of TVRO Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                For modification due to <span class="font-semibold">Change of Ownership</span>,
+                                Photocopy of Order / Decision approving the change of ownership
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-22', 'category' => 'tvro-station-license']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-22 (TVRO Registration Certificate/TVRO Station License/CATV Station
+                            License)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- C. CATV Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">C. CATV Station License</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    C. CATV Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
 
-                <!-- C.1 New -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.1 CATV Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
-                            CATV STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-22)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Certificate of Authority (CA)
-                            <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of CA
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
-                            prepared and signed by a duly licensed PECE / ECE
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: PECE / Applicant
-                            </span>
-                        </li>
-                        <li>
-                            List of Programs Offered – Channel, Program and Signal Source
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- C.1 New -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.1 CATV Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
+                                CATV STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-22)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Certificate of Authority (CA)
+                                <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of
+                                CA
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
+                                prepared and signed by a duly licensed PECE / ECE
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: PECE / Applicant
+                                </span>
+                            </li>
+                            <li>
+                                List of Programs Offered – Channel, Program and Signal Source
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.2 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.2 CATV Station License (RENEWAL)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
-                            CATV STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-22)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of CATV Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Certificate of Authority (CA)
-                            <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of CA
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
-                            prepared and signed by a duly licensed PECE / ECE
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: PECE / Applicant
-                            </span>
-                        </li>
-                        <li>
-                            List of Programs Offered – Channel, Program and Signal Source
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- C.2 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.2 CATV Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
+                                CATV STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-22)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of CATV Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Certificate of Authority (CA)
+                                <span class="font-semibold">OR</span> Photocopy of duly received Motion for Renewal of
+                                CA
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                List of Combiner, Satellite Receivers, Modulators, LNA/LNB and other Head‑End Equipment
+                                prepared and signed by a duly licensed PECE / ECE
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: PECE / Applicant
+                                </span>
+                            </li>
+                            <li>
+                                List of Programs Offered – Channel, Program and Signal Source
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.3 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.3 CATV Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
-                            CATV STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-22)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of CATV Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            For modification due to <span class="font-semibold">Change of Ownership</span>,
-                            Photocopy of Order / Decision approving the change of ownership
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
+                    <!-- C.3 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.3 CATV Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR TVRO REGISTRATION CERTIFICATE / TVRO STATION LICENSE /
+                                CATV STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-22)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of CATV Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                For modification due to <span class="font-semibold">Change of Ownership</span>,
+                                Photocopy of Order / Decision approving the change of ownership
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-22', 'category' => 'catv-station-license']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-22 (TVRO Registration Certificate/TVRO Station License/CATV Station
+                            License)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
 
             <p class="text-xs text-gray-600">

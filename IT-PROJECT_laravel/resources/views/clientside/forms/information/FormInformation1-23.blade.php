@@ -74,88 +74,105 @@
 
         <section class="space-y-6">
             <!-- A. Certificate of Registration for RFID, SRD, WDN Devices – Indoor -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     A. Certificate of Registration for RFID, SRD, WDN Devices – Indoor
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
 
-                <!-- A.1 Dealers -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.1 Certificate of Registration (For Dealers)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CERTIFICATE OF REGISTRATION (WDN/SRD/RFID/SRRS/PUBLIC
-                            TRUNK RADIO)
-                            <span class="italic">(Form No. NTC 1-19)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Dealer Permit
-                            <span class="font-semibold">OR</span> Manufacturer Permit
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            For imported equipment:
-                            <ol class="list-decimal pl-6 mt-1 text-sm space-y-1">
-                                <li>Photocopy of Permit to Import</li>
-                                <li>Photocopy of Invoice</li>
-                                <li>
-                                    Photocopy of Bureau of Customs (BOC) Release Clearance and Import Entry Declaration
-                                </li>
-                            </ol>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Supplier / BOC
-                            </span>
-                        </li>
-                        <li>
-                            For locally-manufactured equipment, Sales and Stocks Report
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- A.1 Dealers -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.1 Certificate of Registration (For Dealers)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CERTIFICATE OF REGISTRATION (WDN/SRD/RFID/SRRS/PUBLIC
+                                TRUNK RADIO)
+                                <span class="italic">(Form No. NTC 1-19)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Dealer Permit
+                                <span class="font-semibold">OR</span> Manufacturer Permit
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                For imported equipment:
+                                <ol class="list-decimal pl-6 mt-1 text-sm space-y-1">
+                                    <li>Photocopy of Permit to Import</li>
+                                    <li>Photocopy of Invoice</li>
+                                    <li>
+                                        Photocopy of Bureau of Customs (BOC) Release Clearance and Import Entry
+                                        Declaration
+                                    </li>
+                                </ol>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Supplier / BOC
+                                </span>
+                            </li>
+                            <li>
+                                For locally-manufactured equipment, Sales and Stocks Report
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- A.2 Non-Dealers -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.2 Certificate of Registration (For Non‑Dealers)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CERTIFICATE OF REGISTRATION (WDN/SRD/RFID/SRRS/PUBLIC
-                            TRUNK RADIO)
-                            <span class="italic">(Form No. NTC 1-19)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Invoice of equipment to be registered
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Supplier
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Bureau of Customs (BOC) Release Clearance and Import Entry Declaration
-                            <span class="block text-sm text-gray-600">Where to secure: BOC</span>
-                        </li>
-                    </ol>
+                    <!-- A.2 Non-Dealers -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.2 Certificate of Registration (For Non‑Dealers)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CERTIFICATE OF REGISTRATION (WDN/SRD/RFID/SRRS/PUBLIC
+                                TRUNK RADIO)
+                                <span class="italic">(Form No. NTC 1-19)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Invoice of equipment to be registered
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Supplier
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Bureau of Customs (BOC) Release Clearance and Import Entry Declaration
+                                <span class="block text-sm text-gray-600">Where to secure: BOC</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-19', 'category' => 'rfid-srd-wdn-indoor']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-19 (Certificate of Registration - WDN/SRD/RFID/SRRS/Public Trunk Radio)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

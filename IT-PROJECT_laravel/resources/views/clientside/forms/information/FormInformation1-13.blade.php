@@ -86,218 +86,251 @@
 
         <section class="space-y-6">
             <!-- A. Public Coastal Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">A. Public Coastal Station License</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    A. Public Coastal Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
 
-                <!-- A.1 Permit to Purchase/Possess -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.1 Permit to Purchase/Possess</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Engineering Plans signed and sealed by a duly licensed Professional Electronics Engineer
-                            (PECE), to wit:
-                            <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
-                                <li>
-                                    Network Diagram indicating locations of all stations and the proposed frequency
-                                    band
-                                </li>
-                                <li>
-                                    Map showing exact location (region, province, city/municipality, barangay) of all
-                                    stations with geographical coordinates in degrees/minutes/seconds (Longitude /
-                                    Latitude)
-                                </li>
-                                <li>
-                                    Antenna System Plan (type, gain, diameter, beamwidth, azimuth, height above ground,
-                                    polarization)
-                                </li>
-                            </ol>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: PECE / Applicant
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Provisional Authority <span class="font-semibold">OR</span> Certificate
-                            of Public Convenience and Necessity
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- A.1 Permit to Purchase/Possess -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.1 Permit to Purchase/Possess</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Engineering Plans signed and sealed by a duly licensed Professional Electronics Engineer
+                                (PECE), to wit:
+                                <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
+                                    <li>
+                                        Network Diagram indicating locations of all stations and the proposed frequency
+                                        band
+                                    </li>
+                                    <li>
+                                        Map showing exact location (region, province, city/municipality, barangay) of
+                                        all
+                                        stations with geographical coordinates in degrees/minutes/seconds (Longitude /
+                                        Latitude)
+                                    </li>
+                                    <li>
+                                        Antenna System Plan (type, gain, diameter, beamwidth, azimuth, height above
+                                        ground,
+                                        polarization)
+                                    </li>
+                                </ol>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: PECE / Applicant
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Provisional Authority <span class="font-semibold">OR</span>
+                                Certificate
+                                of Public Convenience and Necessity
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- A.2 Public Coastal Station License (NEW) -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.2 Public Coastal Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Permit to Purchase/Possess
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of document indicating source of equipment:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
-                                    Radio Dealer, <span class="font-semibold">OR</span>
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Authorized Radio Dealer
-                                    </span>
-                                </li>
-                                <li>
-                                    For imported equipment, Photocopy of Invoice from the supplier
-                                    <span class="font-semibold">AND</span> Photocopy of Permit to Import,
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Supplier / Applicant
-                                    </span>
-                                </li>
-                                <li>
-                                    For registered equipment, Copy of Permit to Possess
-                                    <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- A.2 Public Coastal Station License (NEW) -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.2 Public Coastal Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Permit to Purchase/Possess
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of document indicating source of equipment:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
+                                        Radio Dealer, <span class="font-semibold">OR</span>
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Authorized Radio Dealer
+                                        </span>
+                                    </li>
+                                    <li>
+                                        For imported equipment, Photocopy of Invoice from the supplier
+                                        <span class="font-semibold">AND</span> Photocopy of Permit to Import,
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Supplier / Applicant
+                                        </span>
+                                    </li>
+                                    <li>
+                                        For registered equipment, Copy of Permit to Possess
+                                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- A.3 Public Coastal Station License (MODIFICATION) -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.3 Public Coastal Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
-                            <span class="italic">(Form No. NTC 1-13)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of RSL
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If modification is due to:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    <span class="font-semibold">Change of Licensee</span> – Photocopy of SEC
-                                    Registration, <span class="font-semibold">OR</span> DTI Registration,
-                                    <span class="font-semibold">OR</span> valid Business / Mayor’s Permit
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: SEC / DTI / Office of the Mayor
-                                    </span>
-                                </li>
-                                <li>
-                                    <span class="font-semibold">Change of Equipment and/or Additional Equipment</span>
-                                    <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
-                                        <li>Photocopy of valid Permit to Purchase/Possess</li>
-                                        <li>
-                                            Photocopy of document indicating source of equipment:
-                                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                                <li>
-                                                    For locally-sourced equipment, Official Receipt or Sales Invoice
-                                                    from authorized Radio Dealer, <span class="font-semibold">OR</span>
-                                                    <span class="block text-gray-600">
-                                                        Where to secure: Authorized Radio Dealer
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    For imported equipment, Photocopy of Invoice from the supplier
-                                                    <span class="font-semibold">AND</span> Photocopy of Permit to
-                                                    Import,
-                                                    <span class="block text-gray-600">
-                                                        Where to secure: Supplier / Applicant
-                                                    </span>
-                                                </li>
-                                                <li>
-                                                    For registered equipment, Copy of Permit to Possess
-                                                    <span class="block text-gray-600">Where to secure: Applicant</span>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-                                </li>
-                                <li>
-                                    <span class="font-semibold">Change of Location</span> – Engineering Plans signed and
-                                    sealed by PECE, including:
-                                    <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
-                                        <li>
-                                            Network Diagram indicating locations of all stations and proposed frequency
-                                            band
-                                        </li>
-                                        <li>
-                                            Map showing exact location (region, province, city/municipality, barangay)
-                                            of all stations with geographical coordinates in degrees/minutes/seconds
-                                            (Longitude / Latitude)
-                                        </li>
-                                        <li>
-                                            Antenna System Plan (type, gain, diameter, beamwidth, azimuth, height above
-                                            ground, polarization)
-                                        </li>
-                                    </ol>
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: PECE / Applicant
-                                    </span>
-                                </li>
-                            </ul>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- A.3 Public Coastal Station License (MODIFICATION) -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.3 Public Coastal Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
+                                <span class="italic">(Form No. NTC 1-13)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If modification is due to:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        <span class="font-semibold">Change of Licensee</span> – Photocopy of SEC
+                                        Registration, <span class="font-semibold">OR</span> DTI Registration,
+                                        <span class="font-semibold">OR</span> valid Business / Mayor’s Permit
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: SEC / DTI / Office of the Mayor
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <span class="font-semibold">Change of Equipment and/or Additional
+                                            Equipment</span>
+                                        <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
+                                            <li>Photocopy of valid Permit to Purchase/Possess</li>
+                                            <li>
+                                                Photocopy of document indicating source of equipment:
+                                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                                    <li>
+                                                        For locally-sourced equipment, Official Receipt or Sales Invoice
+                                                        from authorized Radio Dealer, <span
+                                                            class="font-semibold">OR</span>
+                                                        <span class="block text-gray-600">
+                                                            Where to secure: Authorized Radio Dealer
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        For imported equipment, Photocopy of Invoice from the supplier
+                                                        <span class="font-semibold">AND</span> Photocopy of Permit to
+                                                        Import,
+                                                        <span class="block text-gray-600">
+                                                            Where to secure: Supplier / Applicant
+                                                        </span>
+                                                    </li>
+                                                    <li>
+                                                        For registered equipment, Copy of Permit to Possess
+                                                        <span class="block text-gray-600">Where to secure:
+                                                            Applicant</span>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                        </ol>
+                                    </li>
+                                    <li>
+                                        <span class="font-semibold">Change of Location</span> – Engineering Plans signed
+                                        and
+                                        sealed by PECE, including:
+                                        <ol class="list-decimal pl-6 space-y-1 mt-1 text-sm">
+                                            <li>
+                                                Network Diagram indicating locations of all stations and proposed
+                                                frequency
+                                                band
+                                            </li>
+                                            <li>
+                                                Map showing exact location (region, province, city/municipality,
+                                                barangay)
+                                                of all stations with geographical coordinates in degrees/minutes/seconds
+                                                (Longitude / Latitude)
+                                            </li>
+                                            <li>
+                                                Antenna System Plan (type, gain, diameter, beamwidth, azimuth, height
+                                                above
+                                                ground, polarization)
+                                            </li>
+                                        </ol>
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: PECE / Applicant
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- A.4 Permit to Sell/Transfer -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.4 Permit to Sell/Transfer</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of RSL <span class="font-semibold">OR</span> Copy of Permit to Possess
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
+                    <!-- A.4 Permit to Sell/Transfer -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.4 Permit to Sell/Transfer</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL <span class="font-semibold">OR</span> Copy of Permit to Possess
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'public-coastal-station']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-11 (Public Coastal Station License)
+                        </a>
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'public-coastal-permit']) }}"
+                            class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                            Apply using Form 1-09 (Permit to Purchase/Possess/Sell/Transfer)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-2 text-gray-700">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

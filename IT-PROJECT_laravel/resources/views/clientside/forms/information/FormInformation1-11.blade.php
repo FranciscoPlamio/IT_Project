@@ -91,337 +91,398 @@
 
         <section class="space-y-6">
             <!-- A. Permit to Purchase/Possess -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-3">
-                <div class="font-semibold text-lg">A. Permit to Purchase/Possess</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR PERMIT TO
-                        PURCHASE/POSSESS/SELL/TRANSFER
-                        <span class="italic">(Form No. NTC 1-09)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Photocopy of valid Aircraft Station License(s)
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                    <li>
-                        For new Aeronautical Fixed Station, Frequency assignment/allocation issued by the Civil
-                        Aviation Authority of the Philippines (CAAP)
-                        <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                    </li>
-                    <li>
-                        For Change of Equipment and/or Additional Equipment for Fixed Aeronautical Station,
-                        Photocopy of valid RSL
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    A. Permit to Purchase/Possess
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-3 text-gray-700">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR PERMIT TO
+                            PURCHASE/POSSESS/SELL/TRANSFER
+                            <span class="italic">(Form No. NTC 1-09)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            Photocopy of valid Aircraft Station License(s)
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                        <li>
+                            For new Aeronautical Fixed Station, Frequency assignment/allocation issued by the Civil
+                            Aviation Authority of the Philippines (CAAP)
+                            <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                        </li>
+                        <li>
+                            For Change of Equipment and/or Additional Equipment for Fixed Aeronautical Station,
+                            Photocopy of valid RSL
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'aero-permit']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑09 (Permit to Purchase/Possess)
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- B. Fixed Aeronautical Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">B. Fixed Aeronautical Station License</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    B. Fixed Aeronautical Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- B.1 New -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.1 Fixed Aeronautical Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Authenticated copy of existing aircraft station license
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Permit to Purchase/Possess
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of document indicating source of equipment:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
+                                        Radio Dealer, <span class="font-semibold">OR</span>
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Authorized Radio Dealer
+                                        </span>
+                                    </li>
+                                    <li>
+                                        For imported equipment, Photocopy of Invoice from the supplier
+                                        <span class="font-semibold">AND</span> Photocopy of Permit to Import
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Supplier / Applicant
+                                        </span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.1 New -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.1 Fixed Aeronautical Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Authenticated copy of existing aircraft station license
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Permit to Purchase/Possess
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of document indicating source of equipment:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
-                                    Radio Dealer, <span class="font-semibold">OR</span>
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Authorized Radio Dealer
-                                    </span>
-                                </li>
-                                <li>
-                                    For imported equipment, Photocopy of Invoice from the supplier
-                                    <span class="font-semibold">AND</span> Photocopy of Permit to Import
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Supplier / Applicant
-                                    </span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- B.2 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.2 Fixed Aeronautical Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.2 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.2 Fixed Aeronautical Station License (RENEWAL)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of RSL
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- B.3 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.3 Fixed Aeronautical Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
+                                <span class="italic">(Form No. NTC 1-13)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If modification is due to:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        Change of Licensee – see requirements for B.1
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: SEC / DTI / Office of the Mayor
+                                        </span>
+                                    </li>
+                                    <li>
+                                        Change of Equipment and/or Additional Equipment:
+                                        Photocopy of valid Permit to Purchase/Possess and document indicating source of
+                                        equipment (same as B.1)
+                                    </li>
+                                    <li>
+                                        Change of Frequency Assignment/Allocation or Transfer of Location – duly
+                                        approved
+                                        frequency assignment/allocation issued by CAAP
+                                        <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.3 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.3 Fixed Aeronautical Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
-                            <span class="italic">(Form No. NTC 1-13)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of RSL
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If modification is due to:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    Change of Licensee – see requirements for B.1
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: SEC / DTI / Office of the Mayor
-                                    </span>
-                                </li>
-                                <li>
-                                    Change of Equipment and/or Additional Equipment:
-                                    Photocopy of valid Permit to Purchase/Possess and document indicating source of
-                                    equipment (same as B.1)
-                                </li>
-                                <li>
-                                    Change of Frequency Assignment/Allocation or Transfer of Location – duly approved
-                                    frequency assignment/allocation issued by CAAP
-                                    <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            Photocopy of valid ROC (at least 2PHN) and Certificate of Employment
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                    </ol>
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'fixed-aero']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑11 (Fixed Aeronautical Station)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- C. Aircraft Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">C. Aircraft Station License</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    C. Aircraft Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- C.1 New -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.1 Aircraft Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Certificate of Registration issued by the Civil Aviation Authority of
+                                the
+                                Philippines (CAAP)
+                                <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                            </li>
+                            <li>
+                                Photocopy of latest Radio, Electronics and Instruments (REI) Inspection Report duly
+                                signed
+                                by the authorized Technician of CAAP
+                                <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                            </li>
+                            <li>
+                                Photocopy of valid RROC-Aircraft and Certificate of Employment
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.1 New -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.1 Aircraft Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Certificate of Registration issued by the Civil Aviation Authority of the
-                            Philippines (CAAP)
-                            <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                        </li>
-                        <li>
-                            Photocopy of latest Radio, Electronics and Instruments (REI) Inspection Report duly signed
-                            by the authorized Technician of CAAP
-                            <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                        </li>
-                        <li>
-                            Photocopy of valid RROC-Aircraft and Certificate of Employment
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- C.2 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.2 Aircraft Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Aircraft Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Certificate of Registration issued by CAAP
+                                <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                            </li>
+                            <li>
+                                Photocopy of latest REI Inspection Report duly signed by the authorized Technician of
+                                CAAP
+                                <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                            </li>
+                            <li>
+                                Photocopy of valid RROC-Aircraft and Certificate of Employment
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.2 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.2 Aircraft Station License (RENEWAL)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Aircraft Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Certificate of Registration issued by CAAP
-                            <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                        </li>
-                        <li>
-                            Photocopy of latest REI Inspection Report duly signed by the authorized Technician of CAAP
-                            <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                        </li>
-                        <li>
-                            Photocopy of valid RROC-Aircraft and Certificate of Employment
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- C.3 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.3 Aircraft Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
+                                <span class="italic">(Form No. NTC 1-13)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Aircraft Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If modification is due to:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        Change of Licensee – Photocopy of valid Certificate of Registration issued by
+                                        CAAP
+                                        <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
+                                    </li>
+                                    <li>
+                                        Change of Equipment and/or Additional Equipment – Photocopy of document
+                                        indicating
+                                        source of equipment
+                                        <ul class="list-disc pl-6 mt-1">
+                                            <li>
+                                                For locally-sourced equipment, Official Receipt or Sales Invoice from
+                                                authorized Radio Dealer, <span class="font-semibold">OR</span>
+                                                <span class="block text-sm text-gray-600">
+                                                    Where to secure: Authorized Radio Dealer
+                                                </span>
+                                            </li>
+                                            <li>
+                                                For registered equipment, Photocopy of Permit to Possess
+                                                <span class="block text-sm text-gray-600">Where to secure:
+                                                    Applicant</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.3 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.3 Aircraft Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
-                            <span class="italic">(Form No. NTC 1-13)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Aircraft Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If modification is due to:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    Change of Licensee – Photocopy of valid Certificate of Registration issued by CAAP
-                                    <span class="block text-sm text-gray-600">Where to secure: CAAP</span>
-                                </li>
-                                <li>
-                                    Change of Equipment and/or Additional Equipment – Photocopy of document indicating
-                                    source of equipment
-                                    <ul class="list-disc pl-6 mt-1">
-                                        <li>
-                                            For locally-sourced equipment, Official Receipt or Sales Invoice from
-                                            authorized Radio Dealer, <span class="font-semibold">OR</span>
-                                            <span class="block text-sm text-gray-600">
-                                                Where to secure: Authorized Radio Dealer
-                                            </span>
-                                        </li>
-                                        <li>
-                                            For registered equipment, Photocopy of Permit to Possess
-                                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ol>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'aircraft-station']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑11 (Aircraft Station)
+                        </a>
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'aircraft-permit']) }}"
+                            class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                            Apply using Form 1‑09 (Permit to Purchase/Possess)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- D. Permit to Possess for Storage & Supporting Docs -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div>
-                    <div class="font-semibold text-lg">D. Permit to Possess for Storage</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid RSL or ASL
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    D. Permit to Possess for Storage
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid RSL or ASL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <div>
-                    <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Authorization letter duly signed by the applicant and valid ID of the authorized
-                            representative.
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
+                    <div>
+                        <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Authorization letter duly signed by the applicant and valid ID of the authorized
+                                representative.
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'aero-storage']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑09 (Storage Permit)
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>

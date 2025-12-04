@@ -74,9 +74,14 @@
         </header>
 
         <section class="space-y-6">
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Certificate of Registration as VAS Provider (RENEWAL)</div>
-                <ol class="list-decimal pl-6 space-y-1">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Certificate of Registration as VAS Provider (RENEWAL)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
                     <li>
                         Duly accomplished APPLICATION FOR CERTIFICATE OF REGISTRATION (VAS/PCSP/OSP/VNP)
                         <span class="italic">(Form No. NTC 1-20)</span>
@@ -100,21 +105,34 @@
                     <li>
                         For Cable TV Operator, Photocopy of valid Provisional Authority (PA) or Certificate of Authority
                         (CA). If expired PA/CA, Photocopy of Motion for Renewal
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        <span class="block text-sm text-gray-600">Where to secure: Applicant                        </span>
                     </li>
                 </ol>
+                <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                    <a href="{{ route('forms.show', ['formType' => '1-20', 'category' => 'vas-provider-renewal']) }}"
+                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Apply using Form 1-20 (Certificate of Registration - VAS/PCSP/OSP/VNP)
+                    </a>
+                </div>
+                </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

@@ -79,140 +79,163 @@
 
         <section class="space-y-6">
             <!-- A. Construction / Radio Station License (NEW) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     A. Construction / Radio Station License (Repeater (RT), Fixed (FX), Land Base (FB),
                     Land Mobile (ML), Portable (PI))
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <div class="font-semibold mt-2">A.1 Construction Permit / Radio Station License (NEW)</div>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                            <span class="italic">(Form No. NTC 1-11)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            Photocopy of valid Permit to Purchase/Possess
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                        <li>
+                            Photocopy of document indicating source of equipment:
+                            <ul class="list-disc pl-6 mt-1 space-y-1">
+                                <li>
+                                    For locally-sourced equipment, Official Receipt or Sales Invoice from Authorized
+                                    Radio
+                                    Dealer, <span class="font-semibold">OR</span>
+                                    <span class="block text-sm text-gray-600">
+                                        Where to secure: Authorized Radio Dealer
+                                    </span>
+                                </li>
+                                <li>
+                                    For imported equipment, Photocopy of Invoice from the supplier
+                                    <span class="font-semibold">AND</span> Photocopy of Permit to Import,
+                                    <span class="block text-sm text-gray-600">
+                                        Where to secure: Supplier / Applicant
+                                    </span>
+                                </li>
+                                <li>
+                                    For registered equipment, Photocopy of Permit to Possess
+                                    <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            For Land mobile station, Photocopy of vehicle’s valid OR/CR
+                            <span class="block text-sm text-gray-600">Where to secure: LTO</span>
+                        </li>
+                    </ol>
+                    <p class="mt-2 text-sm text-gray-600">
+                        Note: The actual operation of any transmitting or receiving apparatus in any radio station shall
+                        be
+                        carried on by persons holding operator licenses required by regulations.
+                    </p>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'construction-rsl-new']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-11 (Construction Permit / Radio Station License)
+                        </a>
+                    </div>
 
-                <div class="font-semibold mt-2">A.1 Construction Permit / Radio Station License (NEW)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                        <span class="italic">(Form No. NTC 1-11)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Photocopy of valid Permit to Purchase/Possess
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                    <li>
-                        Photocopy of document indicating source of equipment:
-                        <ul class="list-disc pl-6 mt-1 space-y-1">
-                            <li>
-                                For locally-sourced equipment, Official Receipt or Sales Invoice from Authorized Radio
-                                Dealer, <span class="font-semibold">OR</span>
-                                <span class="block text-sm text-gray-600">
-                                    Where to secure: Authorized Radio Dealer
-                                </span>
-                            </li>
-                            <li>
-                                For imported equipment, Photocopy of Invoice from the supplier
-                                <span class="font-semibold">AND</span> Photocopy of Permit to Import,
-                                <span class="block text-sm text-gray-600">
-                                    Where to secure: Supplier / Applicant
-                                </span>
-                            </li>
-                            <li>
-                                For registered equipment, Photocopy of Permit to Possess
-                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        For Land mobile station, Photocopy of vehicle’s valid OR/CR
-                        <span class="block text-sm text-gray-600">Where to secure: LTO</span>
-                    </li>
-                </ol>
-                <p class="mt-2 text-sm text-gray-600">
-                    Note: The actual operation of any transmitting or receiving apparatus in any radio station shall be
-                    carried on by persons holding operator licenses required by regulations.
-                </p>
-            </div>
-
-            <!-- A.2 Construction Permit / Radio Station License (MODIFICATION) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold mt-2">
-                    A.2 Construction Permit / Radio Station License (MODIFICATION)
+                    <div class="font-semibold mt-4">A.2 Construction Permit / Radio Station License (MODIFICATION)</div>
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                            <span class="italic">(Form No. NTC 1-11)</span> and FORM B – MODIFICATION
+                            <span class="italic">(Form No. NTC 1-06)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            Photocopy of RSL
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                        <li>
+                            For the following modifications that require issuance of a Construction Permit, Engineering
+                            Plans signed and sealed by a duly licensed Professional Electronics Engineer (PECE) shall be
+                            submitted:
+                            <ul class="list-disc pl-6 mt-1 space-y-1 text-sm">
+                                <li>Change of Location beyond 500 meters from the original location</li>
+                                <li>Change of Mode of Transmission, Change or Addition of Frequency</li>
+                                <li>Change of Point(s) of Communications and Service Area</li>
+                            </ul>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: PECE / Applicant
+                            </span>
+                        </li>
+                        <li>
+                            For modification due to change of vehicle, Photocopy of valid OR/CR
+                            <span class="block text-sm text-gray-600">Where to secure: LTO</span>
+                        </li>
+                        <li>
+                            For modification due to Change of Equipment and/or additional equipment:
+                            <ol class="list-decimal pl-6 mt-1 space-y-1 text-sm">
+                                <li>Photocopy of valid Permit to Purchase/Possess</li>
+                                <li>
+                                    Photocopy of document indicating source of equipment:
+                                    <ul class="list-disc pl-6 mt-1 space-y-1">
+                                        <li>
+                                            For locally-sourced equipment, Official Receipt or Sales Invoice from
+                                            Authorized Radio Dealer, <span class="font-semibold">OR</span>
+                                            <span class="block text-gray-600">
+                                                Where to secure: Authorized Radio Dealer
+                                            </span>
+                                        </li>
+                                        <li>
+                                            For imported equipment, Photocopy of Invoice from the supplier
+                                            <span class="font-semibold">AND</span> Photocopy of Permit to Import,
+                                            <span class="block text-gray-600">
+                                                Where to secure: Supplier / Applicant
+                                            </span>
+                                        </li>
+                                        <li>
+                                            For registered equipment, Photocopy of Permit to Possess
+                                            <span class="block text-gray-600">Where to secure: Applicant</span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'construction-rsl-modification']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1-11 (Construction Permit / Radio Station License)
+                        </a>
+                    </div>
+                    <div class="mmt-3 text-sm text-gray-600 italic text-center">
+                        Note: Online application for <span class="font-semibold">Form No. NTC 1-04 – Ship Earth Station
+                            License</span> is not yet available in this system. Please refer to the List of Harmonized
+                        Forms for the PDF version.
+                    </div>
                 </div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                        <span class="italic">(Form No. NTC 1-11)</span> and FORM B – MODIFICATION
-                        <span class="italic">(Form No. NTC 1-06)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Photocopy of RSL
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                    <li>
-                        For the following modifications that require issuance of a Construction Permit, Engineering
-                        Plans signed and sealed by a duly licensed Professional Electronics Engineer (PECE) shall be
-                        submitted:
-                        <ul class="list-disc pl-6 mt-1 space-y-1 text-sm">
-                            <li>Change of Location beyond 500 meters from the original location</li>
-                            <li>Change of Mode of Transmission, Change or Addition of Frequency</li>
-                            <li>Change of Point(s) of Communications and Service Area</li>
-                        </ul>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: PECE / Applicant
-                        </span>
-                    </li>
-                    <li>
-                        For modification due to change of vehicle, Photocopy of valid OR/CR
-                        <span class="block text-sm text-gray-600">Where to secure: LTO</span>
-                    </li>
-                    <li>
-                        For modification due to Change of Equipment and/or additional equipment:
-                        <ol class="list-decimal pl-6 mt-1 space-y-1 text-sm">
-                            <li>Photocopy of valid Permit to Purchase/Possess</li>
-                            <li>
-                                Photocopy of document indicating source of equipment:
-                                <ul class="list-disc pl-6 mt-1 space-y-1">
-                                    <li>
-                                        For locally-sourced equipment, Official Receipt or Sales Invoice from
-                                        Authorized Radio Dealer, <span class="font-semibold">OR</span>
-                                        <span class="block text-gray-600">
-                                            Where to secure: Authorized Radio Dealer
-                                        </span>
-                                    </li>
-                                    <li>
-                                        For imported equipment, Photocopy of Invoice from the supplier
-                                        <span class="font-semibold">AND</span> Photocopy of Permit to Import,
-                                        <span class="block text-gray-600">
-                                            Where to secure: Supplier / Applicant
-                                        </span>
-                                    </li>
-                                    <li>
-                                        For registered equipment, Photocopy of Permit to Possess
-                                        <span class="block text-gray-600">Where to secure: Applicant</span>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </li>
-                </ol>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

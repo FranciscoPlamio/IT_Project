@@ -92,11 +92,14 @@
 
         <section class="space-y-6">
             <!-- A. RCE Dealer / Manufacturer / Service Center -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     A. Radio Communication Equipment (RCE) Dealer / Manufacturer / Service Center Permit
                     (Radio Transmitter / Transceiver, WDN Indoor / SRD / RFID)
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
 
                 <!-- A.1 NEW -->
                 <div class="space-y-2">
@@ -244,13 +247,23 @@
                         </li>
                     </ol>
                 </div>
+                <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                    <a href="{{ route('forms.show', ['formType' => '1-18', 'category' => 'rce-dealer-manufacturer-service-center']) }}"
+                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Apply using Form 1-18 (Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation)
+                    </a>
+                </div>
+                </div>
             </div>
 
             <!-- B. Customer Premises Equipment (CPE) Supplier Accreditation -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     B. Customer Premises Equipment (CPE) Supplier Accreditation
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
 
                 <!-- B.1 NEW -->
                 <div class="space-y-2">
@@ -370,13 +383,23 @@
                         </li>
                     </ol>
                 </div>
+                <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                    <a href="{{ route('forms.show', ['formType' => '1-18', 'category' => 'cpe-supplier-accreditation']) }}"
+                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Apply using Form 1-18 (Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation)
+                    </a>
+                </div>
+                </div>
             </div>
 
             <!-- C. Dealer, Retailer/Reseller and Service Center of Mobile Phones -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     C. Dealer, Retailer/Reseller and Service Center of Mobile Phones
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-4">
 
                 <!-- C.1 Mobile Phone Dealer Permit (MPDP) -->
                 <div class="space-y-2">
@@ -675,18 +698,31 @@
                         </ol>
                     </div>
                 </div>
+                <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                    <a href="{{ route('forms.show', ['formType' => '1-18', 'category' => 'mobile-phone-dealer-retailer-service-center']) }}"
+                        class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        Apply using Form 1-18 (Dealer/Manufacturer/Service Center/Retailer/Reseller Permit/CPE Supplier Accreditation)
+                    </a>
+                </div>
+                </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized
-                        representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 

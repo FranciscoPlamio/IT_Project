@@ -124,368 +124,549 @@
 
         <section class="space-y-6">
             <!-- A. Permit and Ship Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     A. Permit and Ship Station License (New / Renewal / Modification) for Ship engaged in Domestic Trade
-                </div>
-
-                <!-- A.1 Permit to Purchase/Possess -->
-                <div class="space-y-2">
-                    <div class="font-semibold">A.1 Permit to Purchase/Possess</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by the
-                            Maritime Industry Authority (MARINA), <span class="font-semibold">OR</span> Permit issued by
-                            the Local Government Unit (LGU), <span class="font-semibold">OR</span> Photocopy of valid
-                            Ship Station License
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: MARINA / LGU / Applicant
-                            </span>
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- A.2 Ship Station License (new, without originally installed equipment) -->
-                <div class="space-y-2">
-                    <div class="font-semibold">
-                        A.2 Ship Station License for Ship engaged in Domestic Trade (Ship without originally-installed
-                        equipment) (NEW)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- A.1 Permit to Purchase/Possess -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">A.1 Permit to Purchase/Possess</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by the
+                                Maritime Industry Authority (MARINA), <span class="font-semibold">OR</span> Permit
+                                issued
+                                by
+                                the Local Government Unit (LGU), <span class="font-semibold">OR</span> Photocopy of
+                                valid
+                                Ship Station License
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: MARINA / LGU / Applicant
+                                </span>
+                            </li>
+                        </ol>
                     </div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by MARINA,
-                            <span class="font-semibold">OR</span> Permit issued by the LGU
-                            <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
-                        </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Permit to Purchase/Possess
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of document indicating source of equipment:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
-                                    Radio Dealer, <span class="font-semibold">OR</span>
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Authorized Radio Dealer
-                                    </span>
-                                </li>
-                                <li>
-                                    For imported equipment, Photocopy of Invoice from the supplier
-                                    <span class="font-semibold">AND</span> Photocopy of Permit to Import
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: Supplier / Applicant
-                                    </span>
-                                </li>
-                                <li>
-                                    For registered equipment, Photocopy of Permit to Possess
-                                    <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
 
-                <!-- A.3 Ship Station License (new, with originally installed equipment) -->
-                <div class="space-y-2">
-                    <div class="font-semibold">
-                        A.3 Ship Station License for Ship engaged in Domestic Trade (Ship with originally-installed
-                        equipment) (NEW)
+                    <!-- A.2 Ship Station License (new, without originally installed equipment) -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">
+                            A.2 Ship Station License for Ship engaged in Domestic Trade (Ship without
+                            originally-installed
+                            equipment) (NEW)
+                        </div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by
+                                MARINA,
+                                <span class="font-semibold">OR</span> Permit issued by the LGU
+                                <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Permit to Purchase/Possess
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of document indicating source of equipment:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        For locally-sourced equipment, Official Receipt or Sales Invoice from authorized
+                                        Radio Dealer, <span class="font-semibold">OR</span>
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Authorized Radio Dealer
+                                        </span>
+                                    </li>
+                                    <li>
+                                        For imported equipment, Photocopy of Invoice from the supplier
+                                        <span class="font-semibold">AND</span> Photocopy of Permit to Import
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: Supplier / Applicant
+                                        </span>
+                                    </li>
+                                    <li>
+                                        For registered equipment, Photocopy of Permit to Possess
+                                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
                     </div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                            <span class="italic">(Form No. NTC 1-09)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by MARINA,
-                            <span class="font-semibold">OR</span> Permit issued by the LGU
-                            <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
-                        </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
 
-                <!-- A.4 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">
-                        A.4 Ship Station License for Ship engaged in Domestic Trade (RENEWAL)
+                    <!-- A.3 Ship Station License (new, with originally installed equipment) -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">
+                            A.3 Ship Station License for Ship engaged in Domestic Trade (Ship with originally-installed
+                            equipment) (NEW)
+                        </div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Vessel Registry and Certificate of Ownership issued by
+                                MARINA,
+                                <span class="font-semibold">OR</span> Permit issued by the LGU
+                                <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
                     </div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Ship Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
 
-                <!-- A.5 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">
-                        A.5 Ship Station License for Ship engaged in Domestic Trade (MODIFICATION)
+                    <!-- A.4 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">
+                            A.4 Ship Station License for Ship engaged in Domestic Trade (RENEWAL)
+                        </div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Ship Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
                     </div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of Ship Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If modification is due to:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    Change of Licensee – Photocopy of Certificate of Philippine Registry and Certificate
-                                    of Ownership issued by MARINA, <span class="font-semibold">OR</span> Permit issued
-                                    by the LGU
-                                    <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
-                                </li>
-                                <li>
-                                    Change of Equipment and/or Additional Equipment:
-                                    <ul class="list-disc pl-6 mt-1 space-y-1">
-                                        <li>Photocopy of valid Permit to Purchase/Possess</li>
-                                        <li>
-                                            Photocopy of document indicating source of equipment (same conditions as
-                                            A.2)
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ol>
+
+                    <!-- A.5 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">
+                            A.5 Ship Station License for Ship engaged in Domestic Trade (MODIFICATION)
+                        </div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of Ship Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If modification is due to:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        Change of Licensee – Photocopy of Certificate of Philippine Registry and
+                                        Certificate
+                                        of Ownership issued by MARINA, <span class="font-semibold">OR</span> Permit
+                                        issued
+                                        by the LGU
+                                        <span class="block text-sm text-gray-600">Where to secure: MARINA / LGU</span>
+                                    </li>
+                                    <li>
+                                        Change of Equipment and/or Additional Equipment:
+                                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                                            <li>Photocopy of valid Permit to Purchase/Possess</li>
+                                            <li>
+                                                Photocopy of document indicating source of equipment (same conditions as
+                                                A.2)
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <p class="text-sm text-gray-600 italic">
+                            Note: Online application for <span class="font-semibold">Form No. NTC 1-04 – Ship Station
+                                License</span> is not yet available in this system. Please refer to the List of
+                            Harmonized Forms for the PDF version.
+                        </p>
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'ship-permit']) }}"
+                            class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                            Apply using Form 1‑09 (Permit to Purchase/Possess)
+                        </a>
+                    </div>
                 </div>
             </div>
 
             <!-- B. Ship Earth Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
                     B. Ship Earth Station License for Ship engaged in Domestic Trade
-                </div>
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- B.1 New -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.1 Ship Earth Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Philippine Registry (CPR) issued by MARINA
+                                <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
+                            </li>
+                            <li>
+                                Photocopy of Cargo Ship Safety Radio Certificate issued by the Commission or Recognized
+                                Organization
+                                <span class="block text-sm text-gray-600">Where to secure: NTC / Recognized
+                                    Organization</span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Inclusion from a Recognized Private Operating Agency or
+                                Accounting Authority (AA)
+                                <span class="block text-sm text-gray-600">Where to secure: Recognized AA</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Shore-Based Maintenance Entity (SBME) Agreement from duly accredited
+                                SBME
+                                <span class="block text-sm text-gray-600">Where to secure: Accredited SBME</span>
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Service Activation of Satellite Terminals by the Point of
+                                Service Activation (PSA) Entity
+                                <span class="block text-sm text-gray-600">Where to secure: Authorized PSA</span>
+                            </li>
+                            <li>
+                                Photocopy of General Operator Certificate (GOC) of two (2) Deck Officers (First Officer,
+                                Second Officer, or Third Officer)
+                                <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
+                            </li>
+                            <li>
+                                Photocopy of Contract of Employment of the deck officers issued by POEA or copy of
+                                employment contract issued by the Shipping Company
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: POEA / Applicant
+                                </span>
+                            </li>
+                            <li>
+                                For Long-Range Identification and Tracking (LRIT), Conformance Test Report from Pole
+                                Star
+                                <span class="block text-sm text-gray-600">Where to secure: Pole Star</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.1 New -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.1 Ship Earth Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Philippine Registry (CPR) issued by MARINA
-                            <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
-                        </li>
-                        <li>
-                            Photocopy of Cargo Ship Safety Radio Certificate issued by the Commission or Recognized
-                            Organization
-                            <span class="block text-sm text-gray-600">Where to secure: NTC / Recognized
-                                Organization</span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Inclusion from a Recognized Private Operating Agency or
-                            Accounting Authority (AA)
-                            <span class="block text-sm text-gray-600">Where to secure: Recognized AA</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Shore-Based Maintenance Entity (SBME) Agreement from duly accredited
-                            SBME
-                            <span class="block text-sm text-gray-600">Where to secure: Accredited SBME</span>
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Service Activation of Satellite Terminals by the Point of
-                            Service Activation (PSA) Entity
-                            <span class="block text-sm text-gray-600">Where to secure: Authorized PSA</span>
-                        </li>
-                        <li>
-                            Photocopy of General Operator Certificate (GOC) of two (2) Deck Officers (First Officer,
-                            Second Officer, or Third Officer)
-                            <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
-                        </li>
-                        <li>
-                            Photocopy of Contract of Employment of the deck officers issued by POEA or copy of
-                            employment contract issued by the Shipping Company
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: POEA / Applicant
-                            </span>
-                        </li>
-                        <li>
-                            For Long-Range Identification and Tracking (LRIT), Conformance Test Report from Pole Star
-                            <span class="block text-sm text-gray-600">Where to secure: Pole Star</span>
-                        </li>
-                    </ol>
-                </div>
+                    <!-- B.2 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.2 Ship Earth Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>NTC Inspection Report <span class="block text-sm text-gray-600">NTC</span></li>
+                            <li>
+                                Photocopy of CPR from MARINA
+                                <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
+                            </li>
+                            <li>
+                                Photocopy of Cargo Ship Safety Radio Certificate issued by NTC / Recognized
+                                Organization
+                            </li>
+                            <li>
+                                Photocopy of Certificate of Inclusion from Recognized AA
+                            </li>
+                            <li>
+                                Photocopy of valid SBME Agreement
+                            </li>
+                            <li>
+                                Photocopy of Contract of Employment of officers (similar to B.1)
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.2 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.2 Ship Earth Station License (RENEWAL)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>NTC Inspection Report <span class="block text-sm text-gray-600">NTC</span></li>
-                        <li>
-                            Photocopy of CPR from MARINA
-                            <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
-                        </li>
-                        <li>
-                            Photocopy of Cargo Ship Safety Radio Certificate issued by NTC / Recognized Organization
-                        </li>
-                        <li>
-                            Photocopy of Certificate of Inclusion from Recognized AA
-                        </li>
-                        <li>
-                            Photocopy of valid SBME Agreement
-                        </li>
-                        <li>
-                            Photocopy of Contract of Employment of officers (similar to B.1)
-                        </li>
-                    </ol>
-                </div>
+                    <!-- B.3 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">B.3 Ship Earth Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
+                                RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
+                                <span class="italic">(Form No. NTC 1-04)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Ship Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid Ship Earth Station License
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If applicable, Photocopy of Certificate of Service Activation of Satellite Terminals by
+                                the
+                                PSA Entity
+                                <span class="block text-sm text-gray-600">Where to secure: PSA Entity</span>
+                            </li>
+                            <li>
+                                NTC Inspection Report
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- B.3 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">B.3 Ship Earth Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR SHIP/SHIP-EARTH STATION LICENSE / CARGO SHIP SAFETY
-                            RADIO CERTIFICATE / TEMPORARY PERMIT / FERRYING PERMIT
-                            <span class="italic">(Form No. NTC 1-04)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Ship Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid Ship Earth Station License
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If applicable, Photocopy of Certificate of Service Activation of Satellite Terminals by the
-                            PSA Entity
-                            <span class="block text-sm text-gray-600">Where to secure: PSA Entity</span>
-                        </li>
-                        <li>
-                            NTC Inspection Report
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
+                    <div class="mt-3 text-center text-red-600 font-semibold">
+                        Note: Online application for <span class="font-semibold">Form No. NTC 1-04 – Ship Earth Station
+                            License</span> is not yet available in this system. Please refer to the List of Harmonized
+                        Forms for the PDF version.
+                    </div>
                 </div>
             </div>
 
             <!-- C. Private Coastal Station License -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-4">
-                <div class="font-semibold text-lg">C. Private Coastal Station License</div>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    C. Private Coastal Station License
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-4 text-gray-700">
+                    <!-- C.1 Permit to Purchase/Possess -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.1 Permit to Purchase/Possess</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                                <span class="italic">(Form No. NTC 1-09)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Ship Station License(s) for ship(s) engaged in Domestic Trade
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                        </ol>
+                    </div>
 
-                <!-- C.1 Permit to Purchase/Possess -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.1 Permit to Purchase/Possess</div>
+                    <!-- C.2 New -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.2 Private Coastal Station License (NEW)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of valid Permit to Purchase/Possess
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of document indicating source of equipment (same conditions as A.2)
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- C.3 Renewal -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.3 Private Coastal Station License (RENEWAL)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                Photocopy of valid and appropriate ROC
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Applicant / Applicant’s employer
+                                </span>
+                            </li>
+                            <li>
+                                NTC Inspection Report of the subject radio station
+                                <span class="block text-sm text-gray-600">Where to secure: NTC</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- C.4 Modification -->
+                    <div class="space-y-2">
+                        <div class="font-semibold">C.4 Private Coastal Station License (MODIFICATION)</div>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>
+                                Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
+                                <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
+                                <span class="italic">(Form No. NTC 1-13)</span>
+                                <span class="block text-sm text-gray-600">
+                                    Where to secure: Licensing Unit / Website:
+                                    <a href="https://ntc.gov.ph" target="_blank"
+                                        class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                                </span>
+                            </li>
+                            <li>
+                                Photocopy of RSL
+                                <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                            </li>
+                            <li>
+                                If modification is due to:
+                                <ul class="list-disc pl-6 space-y-1 mt-1">
+                                    <li>
+                                        Change of Licensee – Photocopy of SEC Registration, OR DTI Registration, OR
+                                        valid
+                                        Business / Mayor’s Permit
+                                        <span class="block text-sm text-gray-600">
+                                            Where to secure: SEC / DTI / Office of the Mayor
+                                        </span>
+                                    </li>
+                                    <li>
+                                        Change of Equipment and/or Additional Equipment:
+                                        <ul class="list-disc pl-6 mt-1 space-y-1">
+                                            <li>Photocopy of valid Permit to Purchase/Possess</li>
+                                            <li>Photocopy of document indicating source of equipment (same as A.2)</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-11', 'category' => 'coastal-station']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑11 (Private Coastal Station)
+                        </a>
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'coastal-permit']) }}"
+                            class="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                            Apply using Form 1‑09 (Permit to Purchase/Possess)
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- D. Permit to Possess for Storage -->
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    D. Permit to Possess for Storage
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-2 text-gray-700">
                     <ol class="list-decimal pl-6 space-y-1">
                         <li>
                             Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
@@ -497,196 +678,115 @@
                             </span>
                         </li>
                         <li>
-                            Photocopy of valid Ship Station License(s) for ship(s) engaged in Domestic Trade
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- C.2 New -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.2 Private Coastal Station License (NEW)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Permit to Purchase/Possess
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of document indicating source of equipment (same conditions as A.2)
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- C.3 Renewal -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.3 Private Coastal Station License (RENEWAL)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
                             Photocopy of RSL
                             <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
                         </li>
-                        <li>
-                            Photocopy of valid and appropriate ROC
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant / Applicant’s employer
-                            </span>
-                        </li>
-                        <li>
-                            NTC Inspection Report of the subject radio station
-                            <span class="block text-sm text-gray-600">Where to secure: NTC</span>
-                        </li>
                     </ol>
-                </div>
 
-                <!-- C.4 Modification -->
-                <div class="space-y-2">
-                    <div class="font-semibold">C.4 Private Coastal Station License (MODIFICATION)</div>
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE
-                            <span class="italic">(Form No. NTC 1-11)</span> &amp; FORM D (FOR MODIFICATION)
-                            <span class="italic">(Form No. NTC 1-13)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Licensing Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of RSL
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                        <li>
-                            If modification is due to:
-                            <ul class="list-disc pl-6 space-y-1 mt-1">
-                                <li>
-                                    Change of Licensee – Photocopy of SEC Registration, OR DTI Registration, OR valid
-                                    Business / Mayor’s Permit
-                                    <span class="block text-sm text-gray-600">
-                                        Where to secure: SEC / DTI / Office of the Mayor
-                                    </span>
-                                </li>
-                                <li>
-                                    Change of Equipment and/or Additional Equipment:
-                                    <ul class="list-disc pl-6 mt-1 space-y-1">
-                                        <li>Photocopy of valid Permit to Purchase/Possess</li>
-                                        <li>Photocopy of document indicating source of equipment (same as A.2)</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    </ol>
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'maritime-storage']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑09 (Storage Permit)
+                        </a>
+                    </div>
                 </div>
-            </div>
-
-            <!-- D. Permit to Possess for Storage -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">D. Permit to Possess for Storage</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                        <span class="italic">(Form No. NTC 1-09)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Photocopy of RSL
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
             </div>
 
             <!-- E. Permit to Sell/Transfer -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">E. Permit to Sell/Transfer</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
-                        <span class="italic">(Form No. NTC 1-09)</span>
-                        <span class="block text-sm text-gray-600">
-                            Where to secure: Licensing Unit / Website:
-                            <a href="https://ntc.gov.ph" target="_blank"
-                                class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                        </span>
-                    </li>
-                    <li>
-                        Photocopy of RSL <span class="font-semibold">OR</span> Copy of Permit to Possess
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    E. Permit to Sell/Transfer
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-2 text-gray-700">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR PERMIT TO PURCHASE/POSSESS/SELL/TRANSFER
+                            <span class="italic">(Form No. NTC 1-09)</span>
+                            <span class="block text-sm text-gray-600">
+                                Where to secure: Licensing Unit / Website:
+                                <a href="https://ntc.gov.ph" target="_blank"
+                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
+                            </span>
+                        </li>
+                        <li>
+                            Photocopy of RSL <span class="font-semibold">OR</span> Copy of Permit to Possess
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+
+                    <div class="mt-3 text-center">
+                        <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'maritime-sell-transfer']) }}"
+                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                            Apply using Form 1‑09 (Permit to Sell/Transfer)
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- F. Deletion Certificate -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">F. Deletion Certificate</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Duly accomplished APPLICATION FOR CERTIFICATE OF EXEMPTION / DELETION
-                        <span class="italic">(Form No. NTC 1-08)</span> OR Letter request / justification of request
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                    <li>
-                        Certificate of the vessel’s deletion from the Philippine Registry issued by MARINA
-                        <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
-                    </li>
-                    <li>
-                        Certification from the Accounting Authority that the vessel has no outstanding obligation at the
-                        time of request for deletion, if applicable
-                        <span class="block text-sm text-gray-600">Where to secure: Recognized Accounting
-                            Authority</span>
-                    </li>
-                    <li>
-                        Photocopy of valid RSL / Ship Earth Station Licenses (Inmarsat – C, SSAS, LRIT, Inmarsat Mini-C,
-                        Inmarsat C/F, Fleet Broadband), if applicable
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                    <li>
-                        Certificate of Deactivation of Satellite Terminals by the PSA Entity, if applicable
-                        <span class="block text-sm text-gray-600">Where to secure: Accredited PSA</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    F. Deletion Certificate
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-2 text-gray-700">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Duly accomplished APPLICATION FOR CERTIFICATE OF EXEMPTION / DELETION
+                            <span class="italic">(Form No. NTC 1-08)</span> OR Letter request / justification of
+                            request
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                        <li>
+                            Certificate of the vessel’s deletion from the Philippine Registry issued by MARINA
+                            <span class="block text-sm text-gray-600">Where to secure: MARINA</span>
+                        </li>
+                        <li>
+                            Certification from the Accounting Authority that the vessel has no outstanding obligation at
+                            the
+                            time of request for deletion, if applicable
+                            <span class="block text-sm text-gray-600">Where to secure: Recognized Accounting
+                                Authority</span>
+                        </li>
+                        <li>
+                            Photocopy of valid RSL / Ship Earth Station Licenses (Inmarsat – C, SSAS, LRIT, Inmarsat
+                            Mini-C,
+                            Inmarsat C/F, Fleet Broadband), if applicable
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                        <li>
+                            Certificate of Deactivation of Satellite Terminals by the PSA Entity, if applicable
+                            <span class="block text-sm text-gray-600">Where to secure: Accredited PSA</span>
+                        </li>
+                    </ol>
+
+                    <p class="mt-3 text-sm text-gray-600 italic text-center">
+                        Note: Online application for <span class="font-semibold">Form No. NTC 1-08 – Certificate of
+                            Exemption/Deletion</span> is not yet available in this system. Please refer to the List of
+                        Harmonized Forms for the PDF version.
+                    </p>
+                </div>
             </div>
 
             <!-- Supporting Documents for Representative(s) -->
-            <div class="bg-gray-50 rounded-lg p-4 text-gray-700 space-y-2">
-                <div class="font-semibold text-lg">Supporting Documents for Representative(s)</div>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>
-                        Authorization letter duly signed by the applicant and valid ID of the authorized representative.
-                        <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                    </li>
-                </ol>
+            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
+                <button @click="open = !open"
+                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
+                    Supporting Documents for Representative(s)
+                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
+                </button>
+                <div x-show="open" x-transition class="mt-2 space-y-2 text-gray-700">
+                    <ol class="list-decimal pl-6 space-y-1">
+                        <li>
+                            Authorization letter duly signed by the applicant and valid ID of the authorized
+                            representative.
+                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
+                        </li>
+                    </ol>
+                </div>
             </div>
         </section>
 
