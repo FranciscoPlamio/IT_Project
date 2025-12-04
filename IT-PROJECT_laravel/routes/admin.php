@@ -20,6 +20,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('view-file', [AdminController::class, 'viewFile'])->name('viewFile');
     Route::post('update-status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
     Route::post('forms/{formId}/approve', [AdminController::class, 'approveForm']);
+    Route::post('forms/{formId}/decline', [AdminController::class, 'declineForm']);
 
     //Request history page
     Route::get('req-history', [AdminController::class, 'requestHistory'])->name('req-history');

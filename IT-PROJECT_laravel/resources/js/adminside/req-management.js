@@ -124,6 +124,34 @@ function updateStatus(formId, newStatus) {
         form.submit();
         return;
     }
+    if (newStatus === "declined") {
+        // Create a form element
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = `/admin/forms/${formId}/decline`; // your Laravel route
+
+        // CSRF token
+        const csrfToken = document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content");
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "_token";
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+
+        // Status input
+        const statusInput = document.createElement("input");
+        statusInput.type = "hidden";
+        statusInput.name = "status";
+        statusInput.value = newStatus;
+        form.appendChild(statusInput);
+
+        // Append form to body and submit
+        document.body.appendChild(form);
+        form.submit();
+        return;
+    }
 
     return fetch("/admin/update-status", {
         method: "POST",

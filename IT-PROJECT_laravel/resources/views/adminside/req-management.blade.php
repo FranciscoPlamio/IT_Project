@@ -273,13 +273,17 @@
                                         <span class="action-placeholder">{{ $req->remarks }}</span>
                                     </td>
                                     <td class="action-cell">
-                                        @if ($req->form->admission_slip && $req->form->or)
-                                            <button class="badge-btn progress"
-                                                onclick="openConfirmApproveModal('{{ $req->_id }}')"
-                                                title="Approve Request">
-                                                Approve
-                                            </button>
-                                        @else
+                                        @if ($req->form_type === 'form1-01')
+                                            @if ($req->form->admission_slip && $req->form->or)
+                                                <button class="badge-btn progress"
+                                                    onclick="openConfirmApproveModal('{{ $req->_id }}')"
+                                                    title="Approve Request">
+                                                    Approve
+                                                </button>
+                                            @else
+                                                <span class="muted-text">—</span>
+                                            @endif
+                                        @elseif($req->form_type === 'form1-02')
                                             <span class="muted-text">—</span>
                                         @endif
                                     </td>

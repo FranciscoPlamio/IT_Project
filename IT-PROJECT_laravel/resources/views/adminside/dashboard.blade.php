@@ -21,7 +21,7 @@
             <div class="pie-card cancel">
                 <div class="pie-circle cancel" style="--percent: {{ $percentages['cancel'] }}%;"></div>
                 <div><strong>{{ $percentages['cancel'] }}%</strong></div>
-                <div class="label">Cancelled ({{ $cancel }})</div>
+                <div class="label">Declined ({{ $cancel }})</div>
             </div>
         </section>
 

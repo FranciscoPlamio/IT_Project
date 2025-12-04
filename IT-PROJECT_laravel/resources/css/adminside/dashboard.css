@@ -442,7 +442,7 @@ body {
     border: 1px solid #fed7aa;
 }
 
-.status-badge.cancelled {
+.status-badge.declined {
     background: #fef2f2;
     color: #ef4444;
     border: 1px solid #fecaca;

@@ -73,7 +73,7 @@ class AdminController extends Controller   // <-- rename this
         $progress = FormsTransactions::where('status', new Regex('^processing$', 'i'))
             ->orWhere('status', new Regex('^pending$', 'i'))
             ->count();
-        $cancel = FormsTransactions::where('status', new Regex('^cancelled$', 'i'))->count();
+        $cancel = FormsTransactions::where('status', new Regex('^declined$', 'i'))->count();
 
         $total = $done + $progress + $cancel;
 
@@ -97,8 +97,8 @@ class AdminController extends Controller   // <-- rename this
                     $app->status_icon = 'Done.png';
                     break;
 
-                case 'cancelled':
-                    $app->status_class = 'cancelled';
+                case 'declined':
+                    $app->status_class = 'declined';
                     $app->status_icon = 'Cancel.png';
                     break;
 
@@ -551,6 +551,33 @@ class AdminController extends Controller   // <-- rename this
         }
         return redirect()->back()->with([
             'message' => 'Form approved and email sent',
+        ]);
+    }
+
+    public function declineForm(Request $request, $id)
+    {
+        $formTransactions = FormsTransactions::where('_id', $id)->first();
+
+        $formModel = FormManager::getFormModel(ucfirst($formTransactions->form_type));
+        $form = $formModel::find($formTransactions->form_id);
+
+        $formType = substr($formTransactions->form_type, 4);
+
+        // Mark as approved
+        $formTransactions->status = 'declined';
+        $formTransactions->save();
+
+        // Send email using the Blade view
+        if (!empty($form->email)) {
+
+            // For Decline
+            Mail::send('emails.form-declined', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form) {
+                $message->to($form->user->email)
+                    ->subject('Your Form Has Been Declined');
+            });
+        }
+        return redirect()->back()->with([
+            'message' => 'Form declined and email sent',
         ]);
     }
 

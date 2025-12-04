@@ -1,6 +1,37 @@
 <x-admin-layout :title="'Request History'">
     <x-slot:head>
         @vite(['resources/css/adminside/req-management.css', 'resources/js/adminside/req-management.js'])
+        <style>
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+
+            .status-badge.done {
+                background: #f0fdf4;
+                color: #22c55e;
+                border: 1px solid #bbf7d0;
+            }
+
+            .status-badge.progress {
+                background: #fffbeb;
+                color: #f59e0b;
+                border: 1px solid #fed7aa;
+            }
+
+            .status-badge img {
+                width: 14px;
+                height: 14px;
+            }
+        </style>
     </x-slot:head>
 
     <!-- Main Content -->
@@ -120,7 +151,19 @@
                                                 break;
                                         }
                                     @endphp
-                                    <td class="{{ $statusClass }}"></td>
+                                    <td>
+                                        @if ($req->form->or)
+                                            <div class="status-badge progress">
+                                                <img src="{{ asset('images/In-prog.png') }}">
+                                                <span>Pending Certificate</span>
+                                            </div>
+                                        @else
+                                            <div class="status-badge progress">
+                                                <img src="{{ asset('images/In-prog.png') }}">
+                                                <span>Waiting for Official Receipt</span>
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td>
                                         @if (strtolower($req->form_type) === 'form1-02')
                                             <a href="{{ route('admin.generate-certificate', ['token' => $req->form_token]) }}"
