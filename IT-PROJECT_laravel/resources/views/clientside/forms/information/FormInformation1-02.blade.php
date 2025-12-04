@@ -12,7 +12,7 @@
             <!-- Description -->
             <div>
                 <div class="text-xl font-medium">Description :</div>
-                <div class=" bg-gray-50  rounded-lg p-4 text-gray-700">
+                <div class=" bg-gray-50  rounded-lg p-4 text-gray-700 space-y-4">
                     <p>
                         A <span class="font-semibold">Radio Operator Certificate</span> is a written authority issued by
                         the Commission authorizing

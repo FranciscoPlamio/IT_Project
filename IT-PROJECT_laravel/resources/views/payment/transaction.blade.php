@@ -29,13 +29,13 @@
                                         <span class="detail-label">Status:</span>
                                         @if ($transactions->status == 'processing')
                                             <span class="status-badge pending">{{ $transactions->status }}</span>
-                                        @elseif ($transactions->payment_status == 'paid')
-                                            <span
-                                                class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
-                                        @elseif ($transactions->status == 'pending')
-                                            <span class="status-badge pending">Pending Application</span>
                                         @elseif ($transactions->status == 'declined')
                                             <span class="status-badge pending">Declined</span>
+                                        @elseif ($transactions->status == 'pending')
+                                            <span class="status-badge pending">Pending Application</span>
+                                        @elseif ($transactions->payment_status == 'paid' && $transactions->status == 'done')
+                                            <span
+                                                class="status-badge bg-green-500 text-white">{{ $transactions->payment_status }}</span>
                                         @endif
                                     </div>
                                     <!-- hidden since its not dynamic yet (pj)-->
@@ -72,10 +72,55 @@
 
         </div>
         @if ($transactions->status === 'declined')
-            <div style="text-align:center">
-                Application has been denied.
-                <a href="/display-forms" style="color:blue; text-decoration:underline;">Click here to apply a new
-                    one</a>.
+            <div class="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-lg overflow-hidden">
+                <!-- Header -->
+                <div class="bg-blue-900 text-white text-center px-6 py-8">
+                    <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="mx-auto mb-4 max-w-[120px]">
+                    <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
+                    <p class="text-gray-200 text-sm mt-1">Cordillera Administrative Region, Baguio City Philippines</p>
+                </div>
+
+                <!-- Content -->
+                <div class="px-6 py-8">
+                    <h2 class="text-red-800 text-lg font-semibold mb-4">Your Form Has Been Declined</h2>
+
+                    <p>Hello <strong>{{ $form->last_name }} {{ $form->first_name }}</strong>,</p>
+
+                    <p class="mt-4">
+                        We regret to inform you that your application
+                        <strong>{{ $transactions->payment_reference }}</strong> has been
+                        <span class="text-red-700 font-bold">declined</span>.
+                    </p>
+
+                    <p class="mt-4">Please review the remarks below for the reason:</p>
+
+                    <!-- Remarks Box -->
+                    <div class="mt-4 bg-red-100 border border-red-300 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-800 mb-2">Remarks / Reason for Decline</h3>
+                        <p class="text-red-700">
+                            {{ $transactions->remarks ?? 'No remarks provided.' }}
+                        </p>
+                    </div>
+
+                    <!-- Resubmit Button -->
+                    <div class="mt-6 text-center">
+                        <a href="{{ route('services') }}"
+                            class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition">
+                            Apply Again
+                        </a>
+                    </div>
+
+                    <p class="mt-6 text-sm">
+                        If you believe this was an error or need clarification, contact us at
+                        <strong>car.admin@ntc.gov.ph</strong>.
+                    </p>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 text-center text-gray-500 text-xs px-6 py-4">
+                    <p>This is an automated message from the NTC Forms System.</p>
+                    <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
+                </div>
             </div>
         @endif
 
