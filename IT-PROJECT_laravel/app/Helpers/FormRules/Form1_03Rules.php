@@ -40,22 +40,28 @@ class Form1_03Rules
                 ],
                 // Application type fields
                 'application_type' => ['required', 'string'],
-                'modification_reason' => ['nullable', 'string'],
-                'years' => ['nullable', 'integer'],
+                'modification_reason' => ['required_if:application_type,modification', 'string'],
+                'years' => ['required', 'integer'],
 
                 // Exam fields
                 'exam_place' => ['required', 'string'],
-                'exam_date' => ['required', 'date', 'after_or_equal:today'],
+                'exam_date' => ['required', 'date', 'before_or_equal:today'],
                 'rating' => ['required', 'numeric'],
 
-                'atroc_arsl_no'  => ['required', 'integer'],
-                'call_sign'  => ['required', 'string'],
-                'validity' => ['required', 'date', 'after_or_equal:today'],
-                'station_class'  => ['required', 'string'],
-                'permit_type'  => ['required', 'string'],
+                'atroc_arsl_no'  => ['required_if:application_type,modification,renewal', 'string'],
+                'call_sign'  => ['required_if:application_type,modification,renewal', 'string'],
+                'validity' => ['required_if:application_type,modification,renewal', 'date', 'after_or_equal:today'],
+                'station_class'  => ['required_if:permit_type,atrsl-new,atrsl-renew-mod,temporary-foreign', 'string'],
+                'permit_type'  => ['required', 'string'], //no need
                 'club_name'  => ['nullable', 'string'],
                 'assigned_frequency'  => ['nullable', 'string'],
                 'preferred_call_sign'  => ['nullable', 'string'],
+
+                //equipment
+                'equipment_make_1'   => ['required', 'string'],
+                'equipment_type_1'   => ['required', 'string'],
+                'equipment_serial_1' => ['required', 'string'],
+                'equipment_freq_1'   => ['required', 'string'], // or 'integer' if numeric
             ],
 
             'messages' => [

@@ -1,9 +1,11 @@
 import attachmentsForm101 from "./formAttachments/1-01.js";
 import attachmentsForm102 from "./formAttachments/1-02.js";
+import attachmentsForm103 from "./formAttachments/1-03.js";
 
 const attachmentHandlers = {
     "1-01": attachmentsForm101,
     "1-02": attachmentsForm102,
+    "1-03": attachmentsForm103,
 };
 
 export function createAttachments(formType, containerId) {

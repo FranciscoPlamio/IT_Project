@@ -5,12 +5,13 @@
         'rating' => '',
     ],
 ])
-
-<input class="form1-01-input" type="text" name="exam_place" required
-    value="{{ old('exam_place', $form['exam_place'] ?? '') }}">
-@error('exam_place')
-    <p class="text-red text-sm mt-1">{{ $message }}</p>
-@enderror
+<div class="form-field">
+    <label class="form-label">Place of Exam <span class="text-red"> *</span></label>
+    <input class="form1-01-input" type="text" name="exam_place" required
+        value="{{ old('exam_place', $form['exam_place'] ?? '') }}">
+    @error('exam_place')
+        <p class="text-red text-sm mt-1">{{ $message }}</p>
+    @enderror
 </div>
 <div class="form-field">
     <label class="form-label">Date<span class="text-red"> *</span></label>

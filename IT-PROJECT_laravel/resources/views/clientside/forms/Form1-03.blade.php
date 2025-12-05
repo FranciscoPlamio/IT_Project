@@ -59,34 +59,39 @@
                         <!-- formOne-blueprint-three fields -->
                         <x-forms.formOne-blueprint-three :form="$form ?? []" />
 
-                        <div class="form-grid-3">
+                        @if (str_contains($category, 'renew-mod'))
+                            <div class="form-grid-3">
 
-                            <div class="form-field">
-                                <label class="form-label">Call Sign</label>
-                                <input class="form1-01-input" type="text" name="call_sign"
-                                    value="{{ old('call_sign', $form['call_sign'] ?? '') }}">
-                                @error('call_sign')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="form-field">
-                                <label class="form-label">ATROC/ARSL No.</label>
-                                <input class="form1-01-input" type="text" name="atroc_arsl_no"
-                                    value="{{ old('atroc_arsl_no', $form['atroc_arsl_no'] ?? '') }}">
-                                @error('atroc_arsl_no')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="form-field">
-                                <label class="form-label">Validity</label>
-                                <input class="form1-01-input" type="date" name="validity"
-                                    value="{{ old('validity', $form['validity'] ?? '') }}">
-                                @error('validity')
-                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                @enderror
+                                <div class="form-field">
+                                    <label class="form-label">Call Sign <span class="text-red">*</span></label>
+                                    <input class="form1-01-input" type="text" name="call_sign"
+                                        value="{{ old('call_sign', $form['call_sign'] ?? '') }}">
+                                    @error('call_sign')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">ATROC/ARSL No. <span class="text-red">*</span></label>
+                                    <input class="form1-01-input" type="text" name="atroc_arsl_no"
+                                        value="{{ old('atroc_arsl_no', $form['atroc_arsl_no'] ?? '') }}">
+                                    @error('atroc_arsl_no')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                                <div class="form-field">
+                                    <label class="form-label">Validity <span class="text-red">*</span></label>
+                                    <input class="form1-01-input" type="date" name="validity"
+                                        value="{{ old('validity', $form['validity'] ?? '') }}">
+                                    @error('validity')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
                             </div>
 
-                        </div>
+                            <div></div>
+                        @endif
+
 
                         <!-- address fields format -->
                         <x-forms.address-fields :form="$form ?? []" />
@@ -105,89 +110,121 @@
 
                     <div class="form-grid-2">
                         <fieldset class="fieldset-compact">
-                            <legend>Type of Application</legend>
+                            <legend>Type of Application <span class="text-red">*</span></legend>
                             <!-- Application type fields -->
-                            <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" :show-years="true" />
-                        </fieldset>
-
-
-                        <fieldset class="fieldset-compact">
-                            <legend>Type of Class of Station</legend>
                             <div class="form-field">
-                                <div class="form-field" data-require-one="input[type=radio]">
+
+                                @if (str_contains($category, 'renew-mod'))
                                     <label>
-                                        <input type="radio" name="station_class" value="class_a"
-                                            {{ $stationClassValue == 'class_a' ? 'checked' : '' }}>
-                                        Class A
-                                    </label>
+                                        <input type="radio" name="application_type" value="renewal"
+                                            {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
+                                        RENEWAL</label>
                                     <label>
-                                        <input type="radio" name="station_class" value="class_b"
-                                            {{ $stationClassValue == 'class_b' ? 'checked' : '' }}>
-                                        Class B
+                                        <input type="radio" name="application_type" value="modification"
+                                            {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>MODIFICATION
                                     </label>
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_c"
-                                            {{ $stationClassValue == 'class_c' ? 'checked' : '' }}>
-                                        Class C
-                                    </label>
-                                    <label>
-                                        <input type="radio" name="station_class" value="class_d"
-                                            {{ $stationClassValue == 'class_d' ? 'checked' : '' }}>
-                                        Class D
-                                    </label>
-                                    @error('station_class')
+                                    @error('application_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
-                                </div>
+                                    <input class="form1-01-input mt-4" type="text" name="modification_reason"
+                                        placeholder="Reason"
+                                        value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
+                                    @error('modification_reason')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                @else
+                                    <label>
+                                        <input type="radio" name="application_type" value="new"
+                                            {{ old('application_type', $form['application_type'] ?? '') === 'new' ? 'checked' : '' }}
+                                            checked>
+                                        NEW
+                                    </label>
+                                @endif
+                                @if ($category !== 'mod')
+                                    <label class="form-label">No. of Years <span class="text-red">*</span></label>
+                                    <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
+                                        value="{{ old('years', $form['years'] ?? '') }}">
+                                        <option value="" disabled selected>Select years</option>
+                                        <option value="1"
+                                            {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1
+                                        </option>
+                                        <option value="2"
+                                            {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2
+                                        </option>
+                                        <option value="3"
+                                            {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3
+                                        </option>
+                                    </select>
+                                    @error('years')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                @endif
                             </div>
-
                         </fieldset>
-                    </div>
-                    <fieldset class="fieldset-compact">
-                        <legend>Type of Permit/License/Certificate </legend>
-                        @error('permit_type')
-                            <p class="text-red text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                        <div class="form-field" data-require-one="input[type=radio]">
-                            <label>
-                                <input type="radio" name="permit_type" value="amateur_operator"
-                                    {{ $permitTypeValue == 'amateur_operator' ? 'checked' : '' }}>
-                                Amateur Radio Operator Certificate
-                            </label>
-                            <label>
-                                <input type="radio" name="permit_type" value="amateur_station"
-                                    {{ $permitTypeValue == 'amateur_station' ? 'checked' : '' }}>
-                                Amateur Radio Station License
-                            </label>
-                            <label>
-                                <input type="radio" name="permit_type" value="club_station"
-                                    {{ $permitTypeValue == 'club_station' ? 'checked' : '' }}>
-                                Club Radio Station License
-                            </label>
-                            <div style="margin-left:12px;margin-top:8px;">
-                                <label class="form-label">Name of Club</label>
-                                <input class="form1-01-input" type="text" name="club_name"
-                                    value="{{ old('club_name', $form['club_name'] ?? '') }}">
-                                <label class="form-label">Assigned Freq.</label>
-                                <input class="form1-01-input" type="text" name="assigned_frequency"
-                                    value="{{ old('assigned_frequency', $form['assigned_frequency'] ?? '') }}">
-                            </div>
-                            <label>
-                                <input type="radio" name="permit_type" value="temporary_foreign"
-                                    {{ $permitTypeValue == 'temporary_foreign' ? 'checked' : '' }}>
-                                Temporary Permit for Foreign Visitor
-                            </label>
-                            <label>
-                                <input type="radio" name="permit_type" value="special_vanity"
-                                    {{ $permitTypeValue == 'special_vanity' ? 'checked' : '' }}>
-                                Special Permit for Vanity/Special Call Sign
-                            </label>
-                            <label class="form-label">Preferred Call Sign/s</label>
-                            <input class="form1-01-input" type="text" name="preferred_call_sign"
-                                value="{{ old('preferred_call_sign', $form['preferred_call_sign'] ?? '') }}">
 
-                        </div>
-                    </fieldset>
+                        @if (str_contains($category, 'atrsl'))
+                            <fieldset class="fieldset-compact">
+                                <legend>Type of Class of Station <span class="text-red">*</span></legend>
+                                <div class="form-field">
+                                    <div class="form-field" data-require-one="input[type=radio]">
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_a"
+                                                {{ $stationClassValue == 'class_a' ? 'checked' : '' }}>
+                                            Class A
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_b"
+                                                {{ $stationClassValue == 'class_b' ? 'checked' : '' }}>
+                                            Class B
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_c"
+                                                {{ $stationClassValue == 'class_c' ? 'checked' : '' }}>
+                                            Class C
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_d"
+                                                {{ $stationClassValue == 'class_d' ? 'checked' : '' }}>
+                                            Class D
+                                        </label>
+                                        @error('station_class')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        @elseif($category === 'temporary-foreign')
+                            <fieldset class="fieldset-compact">
+                                <legend>Type of Class of Station</legend>
+                                <div class="form-field">
+                                    <div class="form-field" data-require-one="input[type=radio]">
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_a"
+                                                {{ $stationClassValue == 'class_a' ? 'checked' : '' }}>
+                                            Class A
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_b"
+                                                {{ $stationClassValue == 'class_b' ? 'checked' : '' }}>
+                                            Class B
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_c"
+                                                {{ $stationClassValue == 'class_c' ? 'checked' : '' }}>
+                                            Class C
+                                        </label>
+                                        @error('station_class')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        @endif
+                    </div>
+                    <input type="hidden" name="permit_type" value="{{ $category }}">
+
                     <div class="step-actions"><button type="button" class="btn-secondary"
                             data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button>
                     </div>
@@ -210,18 +247,38 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><input class="table-input" type="text" name="equipment_make_1"
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_make_1"
                                                 value="{{ old('equipment_make_1', $form['equipment_make_1'] ?? '') }}">
+                                            @error('equipment_make_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
                                         </td>
-                                        <td><input class="table-input" type="text" name="equipment_type_1"
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_type_1"
                                                 value="{{ old('equipment_type_1', $form['equipment_type_1'] ?? '') }}">
+                                            @error('equipment_type_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
                                         </td>
-                                        <td><input class="table-input" type="text" name="equipment_serial_1"
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_serial_1"
                                                 value="{{ old('equipment_serial_1', $form['equipment_serial_1'] ?? '') }}">
+                                            @error('equipment_serial_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
                                         </td>
-                                        <td><input class="table-input" type="text" name="equipment_freq_1"
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_freq_1"
                                                 value="{{ old('equipment_freq_1', $form['equipment_freq_1'] ?? '') }}">
+                                            @error('equipment_freq_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
                                         </td>
+
                                     </tr>
                                     <tr>
                                         <td><input class="table-input" type="text" name="equipment_make_2"
@@ -288,20 +345,19 @@
 
                         <!-- Exam fields -->
                         <div class="form-grid-3">
-                            <div class="form-field">
-                                <label class="form-label">Place of Exam</label>
-                                <x-forms.exam-fields :form="$form ?? []" />
 
-                                <div class="step-actions"><button type="button" class="btn-secondary"
-                                        data-prev>Back</button><button type="button" class="btn-primary"
-                                        data-next>Next</button></div>
+                            <x-forms.exam-fields :form="$form ?? []" />
 
-                            </div>
+                            <div class="step-actions"><button type="button" class="btn-secondary"
+                                    data-prev>Back</button><button type="button" class="btn-primary"
+                                    data-next>Next</button></div>
+
                         </div>
-                    </fieldset>
-                </section>
+            </div>
+            </fieldset>
+            </section>
 
-                {{-- <!-- Declaration fields component -->
+            {{-- <!-- Declaration fields component -->
                     <x-forms.declaration-field :form="$form ?? []" /> --}}
             </div>
         </form>

@@ -337,6 +337,7 @@ class FormsController extends Controller
 
         try {
 
+
             $cleaned = $this->cleanInput($request->all());
 
             $request->replace($cleaned);
@@ -388,7 +389,8 @@ class FormsController extends Controller
 
         //testing
         // $form["application_type"] = "new";
-        // $form["certificate_type"] = "groc";
+        // $form["application_type"] = "new";
+        // $form["permit_type"] = "temporary-foreign";
 
         // Return view with no-cache headers
         return response()

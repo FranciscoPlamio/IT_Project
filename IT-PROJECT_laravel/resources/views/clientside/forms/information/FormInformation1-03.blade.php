@@ -178,14 +178,25 @@
                                 </li>
                             </ol>
                         </div>
-                        <div class="mt-2 space-y-4 text-center">
-                            <!-- Apply for AT-ROC Certificate -->
+                        <div class="mt-2 space-y-4 text-center" x-data="{ open: false }">
+                            <!-- Main Certificate Button -->
                             <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atroc']) }}"
-                                    class="block w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
+                                <button @click="open = !open"
+                                    class="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
                                     Apply for AT-ROC Certificate
-                                    <span class="text-sm text-gray-200 font-normal">(New, Renewal, and
-                                        Modification)</span>
+                                    <span class="text-sm text-gray-200 font-normal ml-1">▼</span>
+                                </button>
+                            </div>
+
+                            <!-- Dropdown Options -->
+                            <div x-show="open" x-transition class="space-y-2 mt-2">
+                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atroc-new']) }}"
+                                    class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                    New
+                                </a>
+                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atroc-renew-mod']) }}"
+                                    class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                    Renewal & Modification
                                 </a>
                             </div>
                         </div>
@@ -484,23 +495,55 @@
                             </ol>
                         </div>
                         <div class="mt-2 space-y-4 text-center">
-                            <!-- Apply for Permit AT-ROC -->
-                            <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-02', 'category' => 'rroc']) }}"
-                                    class="block w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-center">
-                                    Apply for Permit AT-RSL <span class="text-sm text-gray-200 font-normal">(Purchase,
-                                        Possess, Sell/Transfer)</span>
-                                </a>
+                            <div class="mt-2 space-y-4 text-center" x-data="{ open: false }">
+                                <!-- Main Permit Button -->
+                                <div class="space-y-1">
+                                    <button @click="open = !open"
+                                        class="w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-center">
+                                        Apply for Permit AT-RSL
+                                        <span class="text-sm text-gray-200 font-normal">(Purchase, Possess,
+                                            Sell/Transfer)</span>
+                                        <span class="text-sm text-gray-200 font-normal ml-1">▼</span>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Options -->
+                                <div x-show="open" x-transition class="space-y-2 mt-2">
+                                    <!-- Purchase / Possess -->
+                                    <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'at-rsl-purchase-possess']) }}"
+                                        class="block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition text-center">
+                                        Purchase / Possess
+                                    </a>
+
+                                    <!-- Sell / Transfer -->
+                                    <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'at-rsl-sell-transfer']) }}"
+                                        class="block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition text-center">
+                                        Sell / Transfer
+                                    </a>
+                                </div>
                             </div>
 
-                            <!-- Apply for AT-ROC Certificate -->
-                            <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atroc']) }}"
-                                    class="block w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
-                                    Apply for AT-RSL Certificate
-                                    <span class="text-sm text-gray-200 font-normal">(New, Renewal, and
-                                        Modification)</span>
-                                </a>
+                            <div class="mt-2 space-y-4 text-center" x-data="{ open: false }">
+                                <!-- Main Certificate Button -->
+                                <div class="space-y-1">
+                                    <button @click="open = !open"
+                                        class="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
+                                        Apply for AT-RSL Certificate
+                                        <span class="text-sm text-gray-200 font-normal ml-1">▼</span>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Options -->
+                                <div x-show="open" x-transition class="space-y-2 mt-2">
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atrsl-new']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        New
+                                    </a>
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'atrsl-renew-mod']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        Renewal & Modification
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -687,19 +730,32 @@
                         <div class="mt-4 space-y-4 text-center">
                             <!-- Apply for Permit (AT-LIFETIME) -->
                             <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-02', 'category' => 'at-lifetime-permit']) }}"
+                                <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'at-lifetime']) }}"
                                     class="block w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-center">
                                     Apply for Permit (AT-LIFETIME)
                                 </a>
                             </div>
+                            <div class="mt-2 space-y-4 text-center" x-data="{ open: false }">
+                                <!-- Main Certificate Button -->
+                                <div class="space-y-1">
+                                    <button @click="open = !open"
+                                        class="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
+                                        Apply for AT-LIFETIME Certificate
+                                        <span class="text-sm text-gray-200 font-normal ml-1">▼</span>
+                                    </button>
+                                </div>
 
-                            <!-- Apply for AT-LIFETIME Certificate -->
-                            <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-lifetime-certificate']) }}"
-                                    class="block w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
-                                    Apply for AT-LIFETIME Certificate
-                                    <span class="text-sm text-gray-200 font-normal">(New/Modification)</span>
-                                </a>
+                                <!-- Dropdown Options -->
+                                <div x-show="open" x-transition class="space-y-2 mt-2">
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-lifetime-new']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        New
+                                    </a>
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-lifetime-modification']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        Modification
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
@@ -932,20 +988,34 @@
                         <div class="mt-4 space-y-4 text-center">
                             <!-- Apply for Permit (AT-CLUB RSL) -->
                             <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-02', 'category' => 'at-club-rsl-permit']) }}"
+                                <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'at-club-rsl']) }}"
                                     class="block w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-center">
                                     Apply for Permit (AT-CLUB RSL) <span
                                         class="text-sm text-gray-200 font-normal">(Purchase/Possess)</span>
                                 </a>
                             </div>
 
-                            <!-- Apply for AT-CLUB RSL Certificate -->
-                            <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-club-rsl-certificate']) }}"
-                                    class="block w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
-                                    Apply for AT-CLUB RSL Certificate
-                                    <span class="text-sm text-gray-200 font-normal">(New/Renewal/Modification)</span>
-                                </a>
+                            <div class="mt-2 space-y-4 text-center" x-data="{ open: false }">
+                                <!-- Main Certificate Button -->
+                                <div class="space-y-1">
+                                    <button @click="open = !open"
+                                        class="w-full bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition text-center">
+                                        Apply for AT-CLUB RSL Certificate
+                                        <span class="text-sm text-gray-200 font-normal ml-1">▼</span>
+                                    </button>
+                                </div>
+
+                                <!-- Dropdown Options -->
+                                <div x-show="open" x-transition class="space-y-2 mt-2">
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-club-rsl-new']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        New
+                                    </a>
+                                    <a href="{{ route('forms.show', ['formType' => '1-03', 'category' => 'at-club-rsl-renew-mod']) }}"
+                                        class="block bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition text-center">
+                                        Renewal & Modification
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1143,7 +1213,7 @@
 
                             <!-- Permit to Possess (Storage) -->
                             <div class="space-y-1">
-                                <a href="{{ route('forms.show', ['formType' => '1-02', 'category' => 'storage-permit']) }}"
+                                <a href="{{ route('forms.show', ['formType' => '1-09', 'category' => 'storage-permit']) }}"
                                     class="block w-full bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-center">
                                     Apply for Permit to Possess
                                 </a>
