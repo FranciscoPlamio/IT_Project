@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //     window.location.href = url;
     //   });
     setTimeout(() => {
-        console.log(1);
         const banner = document.getElementById("top-banner");
         if (banner) {
             banner.classList.add("opacity-0"); // fade effect (Tailwind)

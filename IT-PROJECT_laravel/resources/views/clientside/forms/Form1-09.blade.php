@@ -87,7 +87,9 @@
                             <div class="form-field" data-require-one="input[type=radio]">
                                 <fieldset class="sub-fieldset form-field">
                                     <legend>Type of Application</legend>
-                                    @if (str_contains($category, 'purchase-possess') || $category === 'at-lifetime')
+                                    @if (str_contains($category, 'purchase-possess') ||
+                                            $category === 'at-lifetime' ||
+                                            str_contains($category, 'at-club-rsl'))
                                         <label><input type="radio" name="application_type" value="purchase"
                                                 {{ $applicationTypeValue == 'purchase' ? 'checked' : '' }}>
                                             PURCHASE</label>
@@ -99,6 +101,10 @@
                                                 {{ $applicationTypeValue == 'sell_transfer' ? 'checked' : '' }}
                                                 checked>
                                             SELL/TRANSFER</label>
+                                    @elseif($category === 'storage-permit')
+                                        <label><input type="radio" name="application_type" value="possess"
+                                                {{ $applicationTypeValue == 'possess' ? 'checked' : '' }} checked>
+                                            POSSESS</label>
                                     @endif
                                     @error('application_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
@@ -111,7 +117,10 @@
                             <div class="form-field" data-require-one="input[type=radio]">
                                 <fieldset class="sub-fieldset form-field">
                                     <legend>Type of Radio Service</legend>
-                                    @if (str_contains($category, 'at-rsl') || str_contains($category, 'at-lifetime'))
+                                    @if (str_contains($category, 'at-rsl') ||
+                                            str_contains($category, 'at-lifetime') ||
+                                            str_contains($category, 'at-club-rsl') ||
+                                            $category === 'storage-permit')
                                         <label><input type="radio" name="radio_service" value="amateur"
                                                 {{ $radioServiceValue == 'amateur' ? 'checked' : '' }} checked>
                                             AMATEUR</label>
@@ -144,7 +153,7 @@
                             @php
                                 $natureServiceValue = old('nature_service', $form['nature_service'] ?? '');
                             @endphp
-                            {{-- <div class="form-field" data-require-one="input[type=radio]">
+                            <div class="form-field" data-require-one="input[type=radio]">
                                 <fieldset class="sub-fieldset form-field">
                                     <legend>Nature of Service</legend>
                                     <label><input type="radio" name="nature_service" value="cv_private"
@@ -154,46 +163,127 @@
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </fieldset>
-                            </div> --}}
+                            </div>
                             <div class="form-field">
                                 <fieldset class="sub-fieldset form-field">
                                     <!-- Class of Station field -->
                                     <legend>Class of Station (indicate units)</legend>
-                                    <div class="form-grid-2">
-                                        <div class="form-field">
-                                            <label class="form-label">RT (Radio Telephone)</label>
-                                            <input class="form1-01-input" type="text" name="rt_units"
-                                                placeholder="Units"
-                                                value="{{ old('rt_units', $form['rt_units'] ?? '') }}">
-                                            @error('rt_units')
-                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                            @enderror
+                                    @if ($errors->has('units'))
+                                        <p class="text-red-500 text-sm mb-2">
+                                            {{ $errors->first('units') }}
+                                        </p>
+                                    @endif
+                                    @if (str_contains($category, 'at-club'))
+                                        <div class="form-grid-2">
+                                            <div class="form-field">
+                                                <label class="form-label">RT (Radio Telephone)</label>
+                                                <select class="form1-01-input" name="rt_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('rt_units', $form['rt_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('rt_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <div class="form-field">
+                                                <label class="form-label">FX (Fixed)</label>
+                                                <select class="form1-01-input" name="fx_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('fx_units', $form['fx_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('fx_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
                                         </div>
-                                        <div class="form-field">
-                                            <label class="form-label">FX (Fixed)</label>
-                                            <input class="form1-01-input" type="text" name="fx_units"
-                                                placeholder="Units"
-                                                value="{{ old('fx_units', $form['fx_units'] ?? '') }}">
-                                            @error('fx_units')
-                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                            @enderror
+                                        <div class="form-grid-2">
+                                            <!-- FB (Base Station) -->
+                                            <div class="form-field">
+                                                <label class="form-label">FB (Land Base)</label>
+                                                <select class="form1-01-input" name="fb_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('fb_units', $form['fb_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('fb_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-grid-2">
-                                        <div class="form-field">
-                                            <label class="form-label">FB (Fixed Base)</label>
-                                            <input class="form1-01-input" type="text" name="fb_units"
-                                                placeholder="Units"
-                                                value="{{ old('fb_units', $form['fb_units'] ?? '') }}">
-                                            @error('fb_units')
-                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                            @enderror
+                                    @elseif(str_contains($category, 'at-rsl') || $category === 'at-lifetime' || $category === 'storage-permit')
+                                        <div class="form-grid-2">
+                                            <!-- FB (Base Station) -->
+                                            <div class="form-field">
+                                                <label class="form-label">FB (Land Base)</label>
+                                                <select class="form1-01-input" name="fb_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('fb_units', $form['fb_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('fb_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                            <!-- ML (Mobile Land) -->
+                                            <div class="form-field">
+                                                <label class="form-label">ML (Mobile Land)</label>
+                                                <select class="form1-01-input" name="ml_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('ml_units', $form['ml_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('ml_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="form-grid-2">
+                                            <!-- P (Portable/Handheld) -->
+                                            <div class="form-field">
+                                                <label class="form-label">P (Portable/Handheld)</label>
+                                                <select class="form1-01-input" name="p_units">
+                                                    <option value="">Select Units</option>
+                                                    @for ($i = 1; $i <= 3; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('p_units', $form['p_units'] ?? '') == $i ? 'selected' : '' }}>
+                                                            {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                                @error('p_units')
+                                                    <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    @endif
+
 
 
                                 </fieldset>
                             </div>
+                            <input type="hidden" name="permit_type" value="{{ $category }}">
                         </div>
                         <div class="form-field">
                             <div class="step-actions"><button type="button" class="btn-secondary"
@@ -375,6 +465,39 @@
                                     <label><input type="radio" name="intended_use" value="additional_equipment"
                                             {{ $intendedUseValue == 'additional_equipment' ? 'checked' : '' }} checked>
                                         Additional Equipment</label>
+                                @elseif($category === 'storage-permit')
+                                    <label><input type="radio" name="intended_use" value="storage"
+                                            {{ $intendedUseValue == 'storage' ? 'checked' : '' }} checked> Storage
+                                        at:</label>
+                                    @error('storage_location')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                    <input class="form1-01-input" type="text" name="storage_location"
+                                        placeholder="Location"
+                                        value="{{ old('storage_location', $form['storage_location'] ?? '') }}">
+                                @elseif($category == 'at-club-rsl')
+                                    <label><input type="radio" name="intended_use" value="new_radio_station"
+                                            {{ $intendedUseValue == 'new_radio_station' ? 'checked' : '' }}> New
+                                        Radio Station</label>
+                                    <label><input type="radio" name="intended_use" value="change_equipment"
+                                            {{ $intendedUseValue == 'change_equipment' ? 'checked' : '' }}>
+                                        Change of Equipment</label>
+                                    <label><input type="radio" name="intended_use" value="additional_equipment"
+                                            {{ $intendedUseValue == 'additional_equipment' ? 'checked' : '' }}>
+                                        Additional Equipment</label>
+                                    <label><input type="radio" name="intended_use" value="storage"
+                                            {{ $intendedUseValue == 'storage' ? 'checked' : '' }} checked> Storage
+                                        at:</label>
+                                    @error('storage_location')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                    <input class="form1-01-input" type="text" name="storage_location"
+                                        placeholder="Location"
+                                        value="{{ old('storage_location', $form['storage_location'] ?? '') }}">
+                                @elseif (str_contains($category, 'sell-transfer'))
+                                    <label><input type="radio" name="intended_use" value="sell_transfer"
+                                            {{ $intendedUseValue == 'sell_transfer' ? 'checked' : '' }} checked>
+                                        Sell/Transfer</label>
                                 @endif
 
                                 {{-- <label><input type="radio" name="intended_use" value="additional_radio_station"

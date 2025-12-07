@@ -9,6 +9,9 @@ class Form1_09Rules
         return [
             'rules' => [
                 // Applicant details
+                'applicant' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
+                'cpc_cpcn_pa_rsl_no' => ['required', 'string'],
                 'unit' => ['nullable', 'string'],
                 'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
@@ -23,12 +26,11 @@ class Form1_09Rules
                     'max:30',
                     'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
                 ],
-                'applicant' => ['required', 'string'],
-                'validity' => ['required', 'date', 'after_or_equal:today'],
-                'cpc_cpcn_pa_rsl_no' => ['required', 'string'],
+
 
                 //Application Details
                 'application_type' => ['required', 'string'],
+                'permit_type'  => ['required', 'string'], //no need
                 'radio_service' => ['required', 'string'],
                 'others_specify' => ['nullable', 'string'],
                 'nature_service' => ['required', 'string'],
@@ -66,7 +68,7 @@ class Form1_09Rules
                 // Inteded Use
                 'intended_use' => ['required', 'string'],
                 'others_use_specify' => ['nullable', 'string'],
-                'storage_location' => ['nullable', 'string'],
+                'storage_location' => ['required_if:intended_use,storage', 'string'],
             ],
 
             'messages' => [

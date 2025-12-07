@@ -31,11 +31,13 @@ class TransactionController extends Controller
     public function index()
     {
         $user = $this->getUser();
-
+        $form = null;
         $transactions = FormsTransactions::where('user_id', $user->_id)->whereNotIn('status', ['cancelled'])->latest()->first();
+        if ($transactions) {
 
-        $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
-        $form = $formModel::find($transactions->form_id);
+            $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
+            $form = $formModel::find($transactions->form_id);
+        }
 
         return view('payment.transaction', compact('transactions', 'form'));
     }

@@ -347,6 +347,22 @@ class FormsController extends Controller
                 $rules['messages'],
                 $rules['attributes']
             );
+
+            // Custom check: require at least one unit across all station classes
+            if ($formType === "1-09") {
+                if (
+                    empty($request->rt_units) &&
+                    empty($request->fx_units) &&
+                    empty($request->fb_units) &&
+                    empty($request->ml_units) &&
+                    empty($request->p_units)
+                ) {
+                    // Throw a ValidationException manually
+                    throw ValidationException::withMessages([
+                        'units' => 'You must select at least 1 unit in any station class.'
+                    ]);
+                }
+            }
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
             // dd('Validation failed:', $e->errors(), $e->getMessage());
@@ -381,6 +397,7 @@ class FormsController extends Controller
      */
     public function showValidation(Request $request, $formType)
     {
+
         $form = session('form_' . $formType . '_' . $request->input('token'));
         // If no form is found, redirect safely
         if (!$form) {

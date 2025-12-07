@@ -67,742 +67,811 @@
                         </tr>
                     </tbody>
                 </table>
-            @endif
+                @if ($transactions->status === 'declined')
+                    <div class="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-lg overflow-hidden">
+                        <!-- Header -->
+                        <div class="bg-blue-900 text-white text-center px-6 py-8">
+                            <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="mx-auto mb-4 max-w-[120px]">
+                            <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
+                            <p class="text-gray-200 text-sm mt-1">Cordillera Administrative Region, Baguio City
+                                Philippines</p>
+                        </div>
 
+                        <!-- Content -->
+                        <div class="px-6 py-8">
+                            <h2 class="text-red-800 text-lg font-semibold mb-4">Your Form Has Been Declined</h2>
 
-        </div>
-        @if ($transactions->status === 'declined')
-            <div class="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-lg overflow-hidden">
-                <!-- Header -->
-                <div class="bg-blue-900 text-white text-center px-6 py-8">
-                    <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="mx-auto mb-4 max-w-[120px]">
-                    <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
-                    <p class="text-gray-200 text-sm mt-1">Cordillera Administrative Region, Baguio City Philippines</p>
-                </div>
+                            <p>Hello <strong>{{ $form->last_name }} {{ $form->first_name }}</strong>,</p>
 
-                <!-- Content -->
-                <div class="px-6 py-8">
-                    <h2 class="text-red-800 text-lg font-semibold mb-4">Your Form Has Been Declined</h2>
+                            <p class="mt-4">
+                                We regret to inform you that your application
+                                <strong>{{ $transactions->payment_reference }}</strong> has been
+                                <span class="text-red-700 font-bold">declined</span>.
+                            </p>
 
-                    <p>Hello <strong>{{ $form->last_name }} {{ $form->first_name }}</strong>,</p>
+                            <p class="mt-4">Please review the remarks below for the reason:</p>
 
-                    <p class="mt-4">
-                        We regret to inform you that your application
-                        <strong>{{ $transactions->payment_reference }}</strong> has been
-                        <span class="text-red-700 font-bold">declined</span>.
-                    </p>
-
-                    <p class="mt-4">Please review the remarks below for the reason:</p>
-
-                    <!-- Remarks Box -->
-                    <div class="mt-4 bg-red-100 border border-red-300 p-4 rounded-lg">
-                        <h3 class="font-semibold text-red-800 mb-2">Remarks / Reason for Decline</h3>
-                        <p class="text-red-700">
-                            {{ $transactions->remarks ?? 'No remarks provided.' }}
-                        </p>
-                    </div>
-
-                    <!-- Resubmit Button -->
-                    <div class="mt-6 text-center">
-                        <a href="{{ route('services') }}"
-                            class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition">
-                            Apply Again
-                        </a>
-                    </div>
-
-                    <p class="mt-6 text-sm">
-                        If you believe this was an error or need clarification, contact us at
-                        <strong>car.admin@ntc.gov.ph</strong>.
-                    </p>
-                </div>
-
-                <!-- Footer -->
-                <div class="bg-gray-50 text-center text-gray-500 text-xs px-6 py-4">
-                    <p>This is an automated message from the NTC Forms System.</p>
-                    <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
-                </div>
-            </div>
-        @endif
-
-        <!-- Payment Method Section -->
-        <div class="payment-method-section">
-            @if (optional($transactions)->payment_method === 'gcash' && $transactions->status !== 'declined')
-                <!-- Steps Indicator (GCash) -->
-                <div class="steps steps-gcash">
-                    <ol id="gcash-steps">
-                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid' && $transactions->status === 'done')
-                            <li data-step="1" class="step-item completed">
-                                <span class="step-label">Validation Review</span>
-                            </li>
-                            <li data-step="2" class="step-item completed">
-                                <span class="step-label">Payment Confirmed</span>
-                                <span class="step-sub">GCash payment received.</span>
-                            </li>
-                            <li data-step="3" class="step-item completed">
-                                <span class="step-label">Application Approved</span>
-                                <span class="step-sub">Ready for download.</span>
-                            </li>
-                        @elseif (isset($transactions->payment_amount) &&
-                                $transactions->payment_amount > 0 &&
-                                $transactions->status === 'processing' &&
-                                $transactions->payment_status === 'paid')
-                            <li data-step="1" class="step-item completed">
-                                <span class="step-label">Validation Review</span>
-                            </li>
-                            <li data-step="2" class="step-item completed">
-                                <span class="step-label">Payment Confirmed</span>
-                                <span class="step-sub">GCash payment received.</span>
-                            </li>
-                            <li data-step="3" class="step-item active">
-                                <span class="step-label">Processing Application</span>
-                                <span class="step-sub">Hang tight, we’re finalizing things.</span>
-                            </li>
-                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
-                            <li data-step="1" class="step-item completed">
-                                <span class="step-label">Validation Review</span>
-                                <span class="step-sub">We’ll notify you shortly.</span>
-                            </li>
-                            <li data-step="2" class="step-item active">
-                                <span class="step-label">Make Payment</span>
-                                <span class="step-sub">Settle the amount via GCash.</span>
-                            </li>
-                            <li data-step="3" class="step-item">
-                                <span class="step-label">Processing Application</span>
-                                <span class="step-sub">Next step after payment.</span>
-                            </li>
-                        @else
-                            <li data-step="1" class="step-item active">
-                                <span class="step-label">Validation Review</span>
-                                <span class="step-sub">We’re verifying your submission.</span>
-                            </li>
-                            <li data-step="2" class="step-item">
-                                <span class="step-label">Make Payment</span>
-                                <span class="step-sub">You’ll receive instructions soon.</span>
-                            </li>
-                            <li data-step="3" class="step-item">
-                                <span class="step-label">Processing Application</span>
-                                <span class="step-sub">We’ll update you once done.</span>
-                            </li>
-                        @endif
-                    </ol>
-                    <div>
-                        <button id="gcash-finish" type="button" class="btn-primary" style="display:none;">Send Success
-                            Email</button>
-                    </div>
-                </div>
-                <!-- GCash Step 1: Wait for Validation -->
-                @if ($transactions->status === 'pending')
-                    <div id="gcash-wait" class="validation-wait-message"
-                        style="display:block; text-align:center; margin:24px 0;">
-                        <div
-                            class="mx-auto w-full max-w-2xl rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-white p-6 shadow-[0_20px_60px_rgba(251,191,36,0.25)]">
-                            <div class="flex flex-col items-center text-center gap-4">
-                                <div
-                                    class="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
-                                    <svg class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="1.6"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 9v3m0 4h.01M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-semibold text-amber-700">Please wait for validation</h2>
-                                    <p class="mt-2 text-sm text-amber-600 max-w-xl">
-                                        Our team is reviewing your application details. You’ll receive a notification as
-                                        soon as we’re ready for the next step. Feel free to keep this tab open.
-                                    </p>
-                                </div>
+                            <!-- Remarks Box -->
+                            <div class="mt-4 bg-red-100 border border-red-300 p-4 rounded-lg">
+                                <h3 class="font-semibold text-red-800 mb-2">Remarks / Reason for Decline</h3>
+                                <p class="text-red-700">
+                                    {{ $transactions->remarks ?? 'No remarks provided.' }}
+                                </p>
                             </div>
+
+                            <!-- Resubmit Button -->
+                            <div class="mt-6 text-center">
+                                <a href="{{ route('services') }}"
+                                    class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition">
+                                    Apply Again
+                                </a>
+                            </div>
+
+                            <p class="mt-6 text-sm">
+                                If you believe this was an error or need clarification, contact us at
+                                <strong>car.admin@ntc.gov.ph</strong>.
+                            </p>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="bg-gray-50 text-center text-gray-500 text-xs px-6 py-4">
+                            <p>This is an automated message from the NTC Forms System.</p>
+                            <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
                         </div>
                     </div>
                 @endif
-                <!-- GCash Payment Interface -->
-                <div class="gcash-payment-interface"
-                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
-                    <!-- GCash Header -->
-                    {{-- <div class="gcash-header">
+
+                <!-- Payment Method Section -->
+                <div class="payment-method-section">
+                    @if (optional($transactions)->payment_method === 'gcash' && $transactions->status !== 'declined')
+                        <!-- Steps Indicator (GCash) -->
+                        <div class="steps steps-gcash">
+                            <ol id="gcash-steps">
+                                @if (strtolower($transactions->payment_status ?? 'pending') === 'paid' && $transactions->status === 'done')
+                                    <li data-step="1" class="step-item completed">
+                                        <span class="step-label">Validation Review</span>
+                                    </li>
+                                    <li data-step="2" class="step-item completed">
+                                        <span class="step-label">Payment Confirmed</span>
+                                        <span class="step-sub">GCash payment received.</span>
+                                    </li>
+                                    <li data-step="3" class="step-item completed">
+                                        <span class="step-label">Application Approved</span>
+                                        <span class="step-sub">Ready for download.</span>
+                                    </li>
+                                @elseif (isset($transactions->payment_amount) &&
+                                        $transactions->payment_amount > 0 &&
+                                        $transactions->status === 'processing' &&
+                                        $transactions->payment_status === 'paid')
+                                    <li data-step="1" class="step-item completed">
+                                        <span class="step-label">Validation Review</span>
+                                    </li>
+                                    <li data-step="2" class="step-item completed">
+                                        <span class="step-label">Payment Confirmed</span>
+                                        <span class="step-sub">GCash payment received.</span>
+                                    </li>
+                                    <li data-step="3" class="step-item active">
+                                        <span class="step-label">Processing Application</span>
+                                        <span class="step-sub">Hang tight, we’re finalizing things.</span>
+                                    </li>
+                                @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
+                                    <li data-step="1" class="step-item completed">
+                                        <span class="step-label">Validation Review</span>
+                                        <span class="step-sub">We’ll notify you shortly.</span>
+                                    </li>
+                                    <li data-step="2" class="step-item active">
+                                        <span class="step-label">Make Payment</span>
+                                        <span class="step-sub">Settle the amount via GCash.</span>
+                                    </li>
+                                    <li data-step="3" class="step-item">
+                                        <span class="step-label">Processing Application</span>
+                                        <span class="step-sub">Next step after payment.</span>
+                                    </li>
+                                @else
+                                    <li data-step="1" class="step-item active">
+                                        <span class="step-label">Validation Review</span>
+                                        <span class="step-sub">We’re verifying your submission.</span>
+                                    </li>
+                                    <li data-step="2" class="step-item">
+                                        <span class="step-label">Make Payment</span>
+                                        <span class="step-sub">You’ll receive instructions soon.</span>
+                                    </li>
+                                    <li data-step="3" class="step-item">
+                                        <span class="step-label">Processing Application</span>
+                                        <span class="step-sub">We’ll update you once done.</span>
+                                    </li>
+                                @endif
+                            </ol>
+                            <div>
+                                <button id="gcash-finish" type="button" class="btn-primary" style="display:none;">Send
+                                    Success
+                                    Email</button>
+                            </div>
+                        </div>
+                        <!-- GCash Step 1: Wait for Validation -->
+                        @if ($transactions->status === 'pending')
+                            <div id="gcash-wait" class="validation-wait-message"
+                                style="display:block; text-align:center; margin:24px 0;">
+                                <div
+                                    class="mx-auto w-full max-w-2xl rounded-3xl border border-amber-100 bg-gradient-to-br from-amber-50 via-white to-white p-6 shadow-[0_20px_60px_rgba(251,191,36,0.25)]">
+                                    <div class="flex flex-col items-center text-center gap-4">
+                                        <div
+                                            class="flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600">
+                                            <svg class="h-10 w-10" fill="none" stroke="currentColor"
+                                                stroke-width="1.6" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M12 9v3m0 4h.01M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-2xl font-semibold text-amber-700">Please wait for
+                                                validation</h2>
+                                            <p class="mt-2 text-sm text-amber-600 max-w-xl">
+                                                Our team is reviewing your application details. You’ll receive a
+                                                notification as
+                                                soon as we’re ready for the next step. Feel free to keep this tab open.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <!-- GCash Payment Interface -->
+                        <div class="gcash-payment-interface"
+                            style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
+                            <!-- GCash Header -->
+                            {{-- <div class="gcash-header">
                         <div class="gcash-header-content">
                             <img src="{{ asset('images/white-gcash.png') }}" alt="GCash Logo" class="gcash-logo-img">
                         </div>
                     </div> --}}
 
-                    <!-- Breakdown Free -->
-                    @if ($transactions->form_type === 'form1-02')
-                        @if ($form->application_type === 'modification')
-                            <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
+                            <!-- Breakdown Free -->
+                            @if ($transactions->form_type === 'form1-02')
+                                @if ($form->application_type === 'modification')
+                                    <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
 
-                                <!-- Header -->
-                                <h2 class="text-lg font-semibold text-gray-800">
-                                    Fee Breakdown (Modification)
-                                </h2>
+                                        <!-- Header -->
+                                        <h2 class="text-lg font-semibold text-gray-800">
+                                            Fee Breakdown (Modification)
+                                        </h2>
 
-                                <!-- Breakdown Box -->
-                                <div class="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                        <!-- Breakdown Box -->
+                                        <div class="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
 
-                                    <div class="flex justify-between text-gray-700">
-                                        <span>Modification Fee (MOD)</span>
-                                        <span class="font-medium">₱120.00</span>
+                                            <div class="flex justify-between text-gray-700">
+                                                <span>Modification Fee (MOD)</span>
+                                                <span class="font-medium">₱120.00</span>
+                                            </div>
+
+                                            <div class="flex justify-between text-gray-700">
+                                                <span>Documentary Stamp Tax (DST)</span>
+                                                <span class="font-medium">₱30.00</span>
+                                            </div>
+
+                                            <hr class="border-gray-300">
+
+                                            <div class="flex justify-between text-gray-900 font-semibold text-lg">
+                                                <span>Total</span>
+                                                <span>₱150.00</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Payment Notice -->
+                                        <p class="text-sm text-gray-500">
+                                            Applicable for modification of any ROC, RROC, SROP, GROC, and related
+                                            certificates.
+                                        </p>
                                     </div>
+                                @elseif ($form->application_type === 'new')
+                                    <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
 
-                                    <div class="flex justify-between text-gray-700">
-                                        <span>Documentary Stamp Tax (DST)</span>
-                                        <span class="font-medium">₱30.00</span>
+                                        <!-- Header -->
+                                        <h2 class="text-lg font-semibold text-gray-800">
+                                            Fee Breakdown (New Application)
+                                        </h2>
+
+                                        <!-- Breakdown Box -->
+                                        <div class="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
+
+                                            @php
+                                                $feeTable = [
+                                                    '1RTG' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 180,
+                                                        'dst' => 30,
+                                                    ],
+                                                    '2RTG' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 120,
+                                                        'dst' => 30,
+                                                    ],
+                                                    '3RTG' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 60,
+                                                        'dst' => 30,
+                                                    ],
+                                                    '1PHN' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 120,
+                                                        'dst' => 30,
+                                                    ],
+                                                    '2PHN' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 100,
+                                                        'dst' => 30,
+                                                    ],
+                                                    '3PHN' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 60,
+                                                        'dst' => 30,
+                                                    ],
+                                                    'RROC-AIRCRAFT' => [
+                                                        'ff' => 0,
+                                                        'af' => 0,
+                                                        'sem' => 0,
+                                                        'roc' => 100,
+                                                        'dst' => 30,
+                                                    ],
+                                                    'SROP' => [
+                                                        'ff' => 0,
+                                                        'af' => 20,
+                                                        'sem' => 60,
+                                                        'roc' => 60,
+                                                        'dst' => 30,
+                                                    ],
+                                                    'GROC' => [
+                                                        'ff' => 10,
+                                                        'af' => 20,
+                                                        'sem' => 60,
+                                                        'roc' => 60,
+                                                        'dst' => 30,
+                                                    ],
+                                                    'RROC-RLM' => [
+                                                        'ff' => 10,
+                                                        'af' => 20,
+                                                        'sem' => 60,
+                                                        'roc' => 60,
+                                                        'dst' => 30,
+                                                    ],
+                                                ];
+
+                                                $certificate = $form['certificate_type'];
+                                                $fees = $feeTable[$certificate] ?? [
+                                                    'ff' => 0,
+                                                    'af' => 0,
+                                                    'sem' => 0,
+                                                    'roc' => 0,
+                                                    'dst' => 0,
+                                                ];
+                                                $years = $form['years'] ?? 1;
+
+                                                $roc = $fees['roc'];
+                                                $ff = $fees['ff'];
+                                                $af = $fees['af'];
+                                                $sem = $fees['sem'];
+                                                $dst = $fees['dst'];
+
+                                                $total = $roc * $years + $ff + $af + $sem + $dst;
+                                            @endphp
+
+
+                                            {{-- User Selection Info --}}
+                                            <div class="max-w-md mx-auto bg-blue-50 text-blue-900 p-3 rounded-lg mb-4">
+                                                <p><strong>Certificate Type:</strong> {{ $certificate }}</p>
+                                                <p><strong>Number of Years:</strong> {{ $years }}</p>
+                                            </div>
+
+                                            {{-- Informative: per-year value --}}
+                                            <div class="flex justify-between text-gray-500 italic mb-2">
+                                                <span>Certificate Fee (ROC) per Year ({{ $certificate }})</span>
+                                                <span>₱{{ number_format($roc, 2) }}</span>
+                                            </div>
+
+                                            {{-- ROC × Years --}}
+                                            <div class="flex justify-between text-gray-700">
+                                                <span>Certificate Fee (ROC × Years)</span>
+                                                <span>₱{{ number_format($roc * $years, 2) }}</span>
+                                            </div>
+
+                                            {{-- Optional Fees --}}
+                                            @if ($ff > 0)
+                                                <div class="flex justify-between text-gray-700">
+                                                    <span>Filing Fee (FF)</span>
+                                                    <span>₱{{ number_format($ff, 2) }}</span>
+                                                </div>
+                                            @endif
+
+                                            @if ($af > 0)
+                                                <div class="flex justify-between text-gray-700">
+                                                    <span>Application Fee (AF)</span>
+                                                    <span>₱{{ number_format($af, 2) }}</span>
+                                                </div>
+                                            @endif
+
+                                            @if ($sem > 0)
+                                                <div class="flex justify-between text-gray-700">
+                                                    <span>Seminar Fee (SEM)</span>
+                                                    <span>₱{{ number_format($sem, 2) }}</span>
+                                                </div>
+                                            @endif
+
+                                            {{-- DST --}}
+                                            <div class="flex justify-between text-gray-700">
+                                                <span>Documentary Stamp Tax (DST)</span>
+                                                <span>₱{{ number_format($dst, 2) }}</span>
+                                            </div>
+                                            <hr class="border-gray-300">
+
+                                            {{-- Total --}}
+                                            <div
+                                                class="flex justify-between text-gray-900 font-semibold text-lg border-t border-gray-300 pt-2">
+                                                <span>Total</span>
+                                                <span>₱{{ number_format($total, 2) }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Payment Notice -->
+                                        <p class="text-sm text-gray-500">
+                                            Applicable for new applications of ROC, RROC, SROP, GROC, RROC-RLM, and
+                                            related
+                                            certificates.
+                                        </p>
                                     </div>
+                                @endif
+                            @endif
 
-                                    <hr class="border-gray-300">
+                            <!-- GCash Payment Card -->
+                            <div class="gcash-card">
+                                <p class="gcash-note">Securely complete the payment with your GCash app</p>
+                                <p class="gcash-subnote">Log in to GCash and scan this QR with the QR Scanner.</p>
 
-                                    <div class="flex justify-between text-gray-900 font-semibold text-lg">
-                                        <span>Total</span>
-                                        <span>₱150.00</span>
+                                <div class="gcash-qr">
+                                    <img src="{{ asset('images/Gcash-Form1-01.png') }}" alt="GCash QR Code">
+                                </div>
+                            </div>
+
+                            <!-- GCash Instructions -->
+                            <div class="gcash-instructions">
+                                <h2>How to Pay</h2>
+                                <div class="instructions-grid">
+                                    <div class="instruction-column">
+                                        <h3>Pay via QR code:</h3>
+                                        <ol>
+                                            <li>Open the GCash app and log in to your account.</li>
+                                            <li>Choose <b>Pay QR</b> and tap <b>Scan QR</b>.</li>
+                                            <li>Point your camera at the QR above.</li>
+                                            <li>Enter the amount to pay and review details.</li>
+                                            <li>Tap <b>Pay</b> to complete the transaction.</li>
+                                        </ol>
+                                    </div>
+                                    <div class="instruction-column">
+                                        <h3>Pay via Mobile Number:</h3>
+                                        <ol>
+                                            <li>In GCash, tap <b>Send</b> → <b>Express Send</b>.</li>
+                                            <li>Enter the mobile number <b>0999-XXX-1234</b>.</li>
+                                            <li>Input the amount and an optional note.</li>
+                                            <li>Confirm to send payment.</li>
+                                        </ol>
                                     </div>
                                 </div>
-
-                                <!-- Payment Notice -->
-                                <p class="text-sm text-gray-500">
-                                    Applicable for modification of any ROC, RROC, SROP, GROC, and related certificates.
-                                </p>
                             </div>
-                        @elseif ($form->application_type === 'new')
-                            <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
-
-                                <!-- Header -->
-                                <h2 class="text-lg font-semibold text-gray-800">
-                                    Fee Breakdown (New Application)
-                                </h2>
-
-                                <!-- Breakdown Box -->
-                                <div class="space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-200">
-
-                                    @php
-                                        $feeTable = [
-                                            '1RTG' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 180, 'dst' => 30],
-                                            '2RTG' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 120, 'dst' => 30],
-                                            '3RTG' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 60, 'dst' => 30],
-                                            '1PHN' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 120, 'dst' => 30],
-                                            '2PHN' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 100, 'dst' => 30],
-                                            '3PHN' => ['ff' => 0, 'af' => 0, 'sem' => 0, 'roc' => 60, 'dst' => 30],
-                                            'RROC-AIRCRAFT' => [
-                                                'ff' => 0,
-                                                'af' => 0,
-                                                'sem' => 0,
-                                                'roc' => 100,
-                                                'dst' => 30,
-                                            ],
-                                            'SROP' => ['ff' => 0, 'af' => 20, 'sem' => 60, 'roc' => 60, 'dst' => 30],
-                                            'GROC' => ['ff' => 10, 'af' => 20, 'sem' => 60, 'roc' => 60, 'dst' => 30],
-                                            'RROC-RLM' => [
-                                                'ff' => 10,
-                                                'af' => 20,
-                                                'sem' => 60,
-                                                'roc' => 60,
-                                                'dst' => 30,
-                                            ],
-                                        ];
-
-                                        $certificate = $form['certificate_type'];
-                                        $fees = $feeTable[$certificate] ?? [
-                                            'ff' => 0,
-                                            'af' => 0,
-                                            'sem' => 0,
-                                            'roc' => 0,
-                                            'dst' => 0,
-                                        ];
-                                        $years = $form['years'] ?? 1;
-
-                                        $roc = $fees['roc'];
-                                        $ff = $fees['ff'];
-                                        $af = $fees['af'];
-                                        $sem = $fees['sem'];
-                                        $dst = $fees['dst'];
-
-                                        $total = $roc * $years + $ff + $af + $sem + $dst;
-                                    @endphp
 
 
-                                    {{-- User Selection Info --}}
-                                    <div class="max-w-md mx-auto bg-blue-50 text-blue-900 p-3 rounded-lg mb-4">
-                                        <p><strong>Certificate Type:</strong> {{ $certificate }}</p>
-                                        <p><strong>Number of Years:</strong> {{ $years }}</p>
-                                    </div>
-
-                                    {{-- Informative: per-year value --}}
-                                    <div class="flex justify-between text-gray-500 italic mb-2">
-                                        <span>Certificate Fee (ROC) per Year ({{ $certificate }})</span>
-                                        <span>₱{{ number_format($roc, 2) }}</span>
-                                    </div>
-
-                                    {{-- ROC × Years --}}
-                                    <div class="flex justify-between text-gray-700">
-                                        <span>Certificate Fee (ROC × Years)</span>
-                                        <span>₱{{ number_format($roc * $years, 2) }}</span>
-                                    </div>
-
-                                    {{-- Optional Fees --}}
-                                    @if ($ff > 0)
-                                        <div class="flex justify-between text-gray-700">
-                                            <span>Filing Fee (FF)</span>
-                                            <span>₱{{ number_format($ff, 2) }}</span>
-                                        </div>
-                                    @endif
-
-                                    @if ($af > 0)
-                                        <div class="flex justify-between text-gray-700">
-                                            <span>Application Fee (AF)</span>
-                                            <span>₱{{ number_format($af, 2) }}</span>
-                                        </div>
-                                    @endif
-
-                                    @if ($sem > 0)
-                                        <div class="flex justify-between text-gray-700">
-                                            <span>Seminar Fee (SEM)</span>
-                                            <span>₱{{ number_format($sem, 2) }}</span>
-                                        </div>
-                                    @endif
-
-                                    {{-- DST --}}
-                                    <div class="flex justify-between text-gray-700">
-                                        <span>Documentary Stamp Tax (DST)</span>
-                                        <span>₱{{ number_format($dst, 2) }}</span>
-                                    </div>
-                                    <hr class="border-gray-300">
-
-                                    {{-- Total --}}
+                            <form action="{{ route('transactions.submit.gcash.proof') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div id="attachments-container"
+                                    class="mb-8 w-full max-w-2xl mx-auto rounded-3xl border border-blue-100 bg-white/90 shadow-[0_25px_60px_rgba(15,23,42,0.08)] overflow-hidden">
                                     <div
-                                        class="flex justify-between text-gray-900 font-semibold text-lg border-t border-gray-300 pt-2">
-                                        <span>Total</span>
-                                        <span>₱{{ number_format($total, 2) }}</span>
+                                        class="bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 px-6 py-5 text-white">
+                                        <p class="text-sm uppercase tracking-[0.2em] font-semibold">Step 3</p>
+                                        <h3 class="text-2xl font-bold mt-1">Upload Proof of GCash Payment</h3>
+                                        <p class="text-sm text-blue-50 mt-1">Accepted formats: PDF, JPG, PNG (max
+                                            5&nbsp;MB)
+                                        </p>
                                     </div>
+
+                                    <div class="p-6 space-y-5">
+                                        <p class="text-sm text-slate-500">
+                                            Tip: Take a clear screenshot of your successful GCash transaction showing
+                                            the
+                                            reference number, amount, and date/time. You can re-upload before final
+                                            submission
+                                            if needed.
+                                        </p>
+
+                                        <label class="block text-base font-semibold text-slate-800"
+                                            for="proof_of_payment">
+                                            Send Proof of Payment
+                                        </label>
+
+                                        <div
+                                            class="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/70 px-6 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/60">
+                                            <div
+                                                class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-inner">
+                                                <svg class="h-8 w-8 text-blue-500" fill="none"
+                                                    stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M12 16V4m0 0 4 4m-4-4-4 4M6 12H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2h-1" />
+                                                </svg>
+                                            </div>
+                                            <p class="text-base font-semibold text-slate-800">
+                                                Drop your file here or
+                                                <span class="text-blue-600 underline decoration-dotted">browse</span>
+                                            </p>
+                                            <p class="text-xs text-slate-500 mt-1">Make sure the file clearly shows the
+                                                payment
+                                                details.</p>
+                                            <input type="file" name="proof_of_payment" id="proof_of_payment"
+                                                accept=".pdf,.jpg,.png"
+                                                class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                                                required>
+                                        </div>
+
+                                        <div id="proofMeta"
+                                            class="hidden rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                                            <p class="font-medium text-slate-800">Ready to submit</p>
+                                            <p class="file-name truncate"></p>
+                                        </div>
+
+                                        <ul class="text-sm text-slate-500 space-y-1">
+                                            <li>• Only upload once per transaction. Re-submit if you need to replace the
+                                                file.
+                                            </li>
+                                            <li>• Keep your reference number handy for faster validation.</li>
+                                        </ul>
+
+                                        <div
+                                            class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                            <span id="uploadStatus"
+                                                class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                                                Waiting for file
+                                            </span>
+
+                                            <button id="submitBtn"
+                                                class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+                                                disabled>
+                                                Submit Payment Proof
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden input to pass transaction id -->
+                                    <input type="hidden" name="form_token" value="{{ $transactions->form_token }}">
                                 </div>
+                            </form>
 
-                                <!-- Payment Notice -->
-                                <p class="text-sm text-gray-500">
-                                    Applicable for new applications of ROC, RROC, SROP, GROC, RROC-RLM, and related
-                                    certificates.
-                                </p>
-                            </div>
-                        @endif
-                    @endif
-
-                    <!-- GCash Payment Card -->
-                    <div class="gcash-card">
-                        <p class="gcash-note">Securely complete the payment with your GCash app</p>
-                        <p class="gcash-subnote">Log in to GCash and scan this QR with the QR Scanner.</p>
-
-                        <div class="gcash-qr">
-                            <img src="{{ asset('images/Gcash-Form1-01.png') }}" alt="GCash QR Code">
                         </div>
-                    </div>
-
-                    <!-- GCash Instructions -->
-                    <div class="gcash-instructions">
-                        <h2>How to Pay</h2>
-                        <div class="instructions-grid">
-                            <div class="instruction-column">
-                                <h3>Pay via QR code:</h3>
-                                <ol>
-                                    <li>Open the GCash app and log in to your account.</li>
-                                    <li>Choose <b>Pay QR</b> and tap <b>Scan QR</b>.</li>
-                                    <li>Point your camera at the QR above.</li>
-                                    <li>Enter the amount to pay and review details.</li>
-                                    <li>Tap <b>Pay</b> to complete the transaction.</li>
-                                </ol>
-                            </div>
-                            <div class="instruction-column">
-                                <h3>Pay via Mobile Number:</h3>
-                                <ol>
-                                    <li>In GCash, tap <b>Send</b> → <b>Express Send</b>.</li>
-                                    <li>Enter the mobile number <b>0999-XXX-1234</b>.</li>
-                                    <li>Input the amount and an optional note.</li>
-                                    <li>Confirm to send payment.</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <form action="{{ route('transactions.submit.gcash.proof') }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div id="attachments-container"
-                            class="mb-8 w-full max-w-2xl mx-auto rounded-3xl border border-blue-100 bg-white/90 shadow-[0_25px_60px_rgba(15,23,42,0.08)] overflow-hidden">
-                            <div class="bg-gradient-to-r from-blue-600 via-indigo-500 to-sky-500 px-6 py-5 text-white">
-                                <p class="text-sm uppercase tracking-[0.2em] font-semibold">Step 3</p>
-                                <h3 class="text-2xl font-bold mt-1">Upload Proof of GCash Payment</h3>
-                                <p class="text-sm text-blue-50 mt-1">Accepted formats: PDF, JPG, PNG (max
-                                    5&nbsp;MB)
-                                </p>
-                            </div>
-
-                            <div class="p-6 space-y-5">
-                                <p class="text-sm text-slate-500">
-                                    Tip: Take a clear screenshot of your successful GCash transaction showing the
-                                    reference number, amount, and date/time. You can re-upload before final
-                                    submission
-                                    if needed.
-                                </p>
-
-                                <label class="block text-base font-semibold text-slate-800" for="proof_of_payment">
-                                    Send Proof of Payment
-                                </label>
-
-                                <div
-                                    class="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/70 px-6 py-8 text-center transition hover:border-blue-300 hover:bg-blue-50/60">
+                        <!-- GCash Step 3: Payment Success Message -->
+                        @if ($transactions->status === 'processing')
+                            <div id="gcash-confirm" class="validation-wait-message"
+                                style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
+                                @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
                                     <div
-                                        class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-inner">
-                                        <svg class="h-8 w-8 text-blue-500" fill="none" stroke="currentColor"
-                                            stroke-width="1.5" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M12 16V4m0 0 4 4m-4-4-4 4M6 12H5a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2h-1" />
-                                        </svg>
+                                        class="mx-auto w-full max-w-3xl rounded-3xl border border-emerald-100 bg-white p-8 text-center shadow-[0_25px_80px_rgba(16,185,129,0.25)]">
+                                        <div
+                                            class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
+                                            <svg class="h-10 w-10" fill="none" stroke="currentColor"
+                                                stroke-width="1.5" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m4.5 12.75 5.25 5.25L19.5 8.25" />
+                                            </svg>
+                                        </div>
+                                        <h2 class="text-3xl font-semibold text-emerald-600">Payment sent successfully!
+                                        </h2>
+                                        <p class="mt-3 text-base text-slate-600">
+                                            We’ve received your GCash payment and will finish reviewing your application
+                                            shortly.
+                                            Once approved, you can download your form anytime.
+                                        </p>
+                                        <div
+                                            class="mt-6 flex flex-col items-center gap-3 text-sm text-slate-500 sm:flex-row sm:justify-center">
+                                            <span
+                                                class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-600">
+                                                Reference: {{ $transactions->payment_reference }}
+                                            </span>
+                                            <span>Total Cost:
+                                                ₱{{ number_format($transactions->payment_amount, 2) }}</span>
+                                        </div>
+                                        <div class="mt-8 flex flex-wrap justify-center gap-3">
+                                            <a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/"
+                                                target="_blank" rel="noopener"
+                                                class="inline-flex items-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300">
+                                                Need help? Contact us
+                                            </a>
+                                        </div>
                                     </div>
-                                    <p class="text-base font-semibold text-slate-800">
-                                        Drop your file here or
-                                        <span class="text-blue-600 underline decoration-dotted">browse</span>
-                                    </p>
-                                    <p class="text-xs text-slate-500 mt-1">Make sure the file clearly shows the
-                                        payment
-                                        details.</p>
-                                    <input type="file" name="proof_of_payment" id="proof_of_payment"
-                                        accept=".pdf,.jpg,.png"
-                                        class="absolute inset-0 h-full w-full cursor-pointer opacity-0" required>
+                                @endif
+                            </div>
+                        @elseif ($transactions->status === 'done')
+                            <div id="gcash-confirm" class="validation-wait-message"
+                                style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }};  margin:24px 0;">
+
+                                <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+                                    <!-- Header -->
+                                    <div class="text-center p-8 bg-blue-900 text-white">
+                                        <img src="{{ asset('images/logo.png') }}" alt="NTC Logo"
+                                            class="mx-auto mb-4 max-w-[120px]">
+                                        <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
+                                        <p class="text-sm text-gray-300">Cordillera Administrative Region, Baguio City
+                                            Philippines</p>
+                                    </div>
+
+                                    <!-- Content -->
+                                    <div class="p-8 text-gray-800">
+                                        <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been
+                                            Approved</h2>
+
+                                        <p class="text-base mb-4">Hello {{ $form->last_name }}
+                                            {{ $form->first_name }},</p>
+
+                                        <p class="text-base mb-4">
+                                            Your payment was successful. Your transaction has been recorded
+                                            successfully.
+                                        </p>
+
+                                        <p class="text-base mb-4">
+                                            Your application <strong>{{ $transactions->payment_reference }}</strong>
+                                            has been
+                                            approved.
+                                            Below are the details:
+                                        </p>
+
+                                        <!-- Payment Details -->
+                                        <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                            <p><strong>Reference Number:</strong>
+                                                {{ $transactions->payment_reference }}</p>
+                                            <p><strong>Method:</strong>
+                                                {{ ucfirst($transactions->payment_method ?? '—') }}</p>
+                                            <p>
+                                                <strong>Amount:</strong>
+                                                {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                            </p>
+                                        </div>
+
+                                        <!-- OR + Admission Details -->
+                                        <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                            <h3 class="text-lg font-semibold mb-2">OR Details</h3>
+                                            <ul class="list-disc pl-5 space-y-1">
+                                                <li>OR Number: {{ $form->or['or_no'] ?? '-' }}</li>
+                                                <li>OR Amount: {{ $form->or['or_amount'] ?? '-' }}</li>
+                                                <li>Collecting Officer: {{ $form->or['collecting_officer'] ?? '-' }}
+                                                </li>
+                                                <li>Date: {{ $form->or['or_date'] ?? '-' }}</li>
+                                            </ul>
+
+                                            <h3 class="text-lg font-semibold mt-4 mb-2">Admission Slip Details</h3>
+                                            <ul class="list-disc pl-5 space-y-1">
+                                                <li>Name: {{ $form->last_name }} {{ $form->first_name }}</li>
+                                                <li>Exam For: {{ $form->exam_type }}</li>
+                                                <li>Place of Exam: {{ $form->admission_slip['place_of_exam'] ?? '-' }}
+                                                </li>
+                                                <li>Date: {{ $form->admission_slip['date_of_exam'] ?? '-' }}</li>
+                                                <li>Time: {{ $form->admission_slip['time_of_exam'] ?? '-' }}</li>
+                                                <li>Authorized Officer:
+                                                    {{ $form->admission_slip['authorized_officer'] ?? '-' }}</li>
+                                            </ul>
+                                        </div>
+
+
+                                        @php
+
+                                            // Format date
+                                            $examDate = $form->admission_slip['date_of_exam'] ?? null;
+                                            if ($examDate) {
+                                                $formattedDate = \Carbon\Carbon::parse($examDate)->format('F j, Y'); // e.g., November 4, 2025
+                                            } else {
+                                                $formattedDate = '-';
+                                            }
+
+                                            // Format time
+                                            $examTime = $form->admission_slip['time_of_exam'] ?? null;
+                                            if ($examTime) {
+                                                // Append seconds to parse correctly if missing
+                                                $formattedTime = \Carbon\Carbon::createFromFormat(
+                                                    'H:i',
+                                                    $examTime,
+                                                )->format('g:i A'); // e.g., 10:49 AM
+                                            } else {
+                                                $formattedTime = '-';
+                                            }
+                                        @endphp
+                                        <!-- Schedule Warning -->
+                                        <div class="bg-yellow-100 border border-yellow-300 p-5 rounded-lg mb-6">
+                                            <p class="text-lg font-bold mb-2">📌 Please take note of your exam
+                                                schedule:</p>
+                                            <p class="text-base leading-relaxed">
+                                                <strong>Place of Exam:</strong>
+                                                {{ $form->admission_slip['place_of_exam'] ?? '-' }} <br>
+                                                <strong>Date and Time:</strong> {{ $formattedDate ?? '-' }}
+                                                {{ $formattedTime ?? '-' }}
+                                            </p>
+                                        </div>
+
+                                        <hr class="border-gray-300 my-6">
+
+                                        <p class="text-sm leading-6 mb-4">
+                                            If you have any questions or concerns, feel free to contact us at
+                                            <strong>car.admin@ntc.gov.ph</strong>.
+                                        </p>
+
+                                        <p class="text-base">Thank you for using the NTC Forms System.</p>
+                                    </div>
+
+                                    <!-- Footer -->
+                                    <div class="text-center text-xs text-gray-500 p-6">
+                                        <p>This is an automated message from the NTC Forms System.</p>
+                                        <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
+                                    </div>
                                 </div>
-
-                                <div id="proofMeta"
-                                    class="hidden rounded-2xl border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                                    <p class="font-medium text-slate-800">Ready to submit</p>
-                                    <p class="file-name truncate"></p>
-                                </div>
-
-                                <ul class="text-sm text-slate-500 space-y-1">
-                                    <li>• Only upload once per transaction. Re-submit if you need to replace the
-                                        file.
-                                    </li>
-                                    <li>• Keep your reference number handy for faster validation.</li>
-                                </ul>
-
-                                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                    <span id="uploadStatus"
-                                        class="inline-flex items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                                        Waiting for file
-                                    </span>
-
-                                    <button id="submitBtn"
-                                        class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
-                                        disabled>
-                                        Submit Payment Proof
+                                <div class="flex justify-center flex-col items-center mt-6">
+                                    <p> You can download your form by clicking the button below.</p>
+                                    <button class="form1-01-btn w-50" type="button" id="downloadPDFBtn"
+                                        style="background-color: #28a745; margin: 0 10px;">Download Form
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Hidden input to pass transaction id -->
-                            <input type="hidden" name="form_token" value="{{ $transactions->form_token }}">
-                        </div>
-                    </form>
-
-                </div>
-                <!-- GCash Step 3: Payment Success Message -->
-                @if ($transactions->status === 'processing')
-                    <div id="gcash-confirm" class="validation-wait-message"
-                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
-                        @if (strtolower($transactions->payment_status ?? 'pending') === 'paid')
-                            <div
-                                class="mx-auto w-full max-w-3xl rounded-3xl border border-emerald-100 bg-white p-8 text-center shadow-[0_25px_80px_rgba(16,185,129,0.25)]">
-                                <div
-                                    class="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-500">
-                                    <svg class="h-10 w-10" fill="none" stroke="currentColor" stroke-width="1.5"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="m4.5 12.75 5.25 5.25L19.5 8.25" />
-                                    </svg>
-                                </div>
-                                <h2 class="text-3xl font-semibold text-emerald-600">Payment sent successfully!</h2>
-                                <p class="mt-3 text-base text-slate-600">
-                                    We’ve received your GCash payment and will finish reviewing your application
-                                    shortly.
-                                    Once approved, you can download your form anytime.
-                                </p>
-                                <div
-                                    class="mt-6 flex flex-col items-center gap-3 text-sm text-slate-500 sm:flex-row sm:justify-center">
-                                    <span
-                                        class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-600">
-                                        Reference: {{ $transactions->payment_reference }}
-                                    </span>
-                                    <span>Total Cost: ₱{{ number_format($transactions->payment_amount, 2) }}</span>
-                                </div>
-                                <div class="mt-8 flex flex-wrap justify-center gap-3">
-                                    <a href="https://car.ntc.gov.ph/list-of-officials-position-designation-and-contact-information/"
-                                        target="_blank" rel="noopener"
-                                        class="inline-flex items-center rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300">
-                                        Need help? Contact us
-                                    </a>
-                                </div>
-                            </div>
                         @endif
-                    </div>
-                @elseif ($transactions->status === 'done')
-                    <div id="gcash-confirm" class="validation-wait-message"
-                        style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }};  margin:24px 0;">
-
-                        <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-                            <!-- Header -->
-                            <div class="text-center p-8 bg-blue-900 text-white">
-                                <img src="{{ asset('images/logo.png') }}" alt="NTC Logo"
-                                    class="mx-auto mb-4 max-w-[120px]">
-                                <h1 class="text-xl font-semibold">National Telecommunication Commission</h1>
-                                <p class="text-sm text-gray-300">Cordillera Administrative Region, Baguio City
-                                    Philippines</p>
-                            </div>
-
-                            <!-- Content -->
-                            <div class="p-8 text-gray-800">
-                                <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been Approved</h2>
-
-                                <p class="text-base mb-4">Hello {{ $form->last_name }} {{ $form->first_name }},</p>
-
-                                <p class="text-base mb-4">
-                                    Your payment was successful. Your transaction has been recorded successfully.
-                                </p>
-
-                                <p class="text-base mb-4">
-                                    Your application <strong>{{ $transactions->payment_reference }}</strong> has been
-                                    approved.
-                                    Below are the details:
-                                </p>
-
-                                <!-- Payment Details -->
-                                <div class="bg-gray-100 p-4 rounded-lg mb-6">
-                                    <p><strong>Reference Number:</strong> {{ $transactions->payment_reference }}</p>
-                                    <p><strong>Method:</strong> {{ ucfirst($transactions->payment_method ?? '—') }}</p>
-                                    <p>
-                                        <strong>Amount:</strong>
-                                        {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
-                                    </p>
-                                </div>
-
-                                <!-- OR + Admission Details -->
-                                <div class="bg-gray-100 p-4 rounded-lg mb-6">
-                                    <h3 class="text-lg font-semibold mb-2">OR Details</h3>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <li>OR Number: {{ $form->or['or_no'] ?? '-' }}</li>
-                                        <li>OR Amount: {{ $form->or['or_amount'] ?? '-' }}</li>
-                                        <li>Collecting Officer: {{ $form->or['collecting_officer'] ?? '-' }}</li>
-                                        <li>Date: {{ $form->or['or_date'] ?? '-' }}</li>
-                                    </ul>
-
-                                    <h3 class="text-lg font-semibold mt-4 mb-2">Admission Slip Details</h3>
-                                    <ul class="list-disc pl-5 space-y-1">
-                                        <li>Name: {{ $form->last_name }} {{ $form->first_name }}</li>
-                                        <li>Exam For: {{ $form->exam_type }}</li>
-                                        <li>Place of Exam: {{ $form->admission_slip['place_of_exam'] ?? '-' }}</li>
-                                        <li>Date: {{ $form->admission_slip['date_of_exam'] ?? '-' }}</li>
-                                        <li>Time: {{ $form->admission_slip['time_of_exam'] ?? '-' }}</li>
-                                        <li>Authorized Officer:
-                                            {{ $form->admission_slip['authorized_officer'] ?? '-' }}</li>
-                                    </ul>
-                                </div>
-
-
-                                @php
-
-                                    // Format date
-                                    $examDate = $form->admission_slip['date_of_exam'] ?? null;
-                                    if ($examDate) {
-                                        $formattedDate = \Carbon\Carbon::parse($examDate)->format('F j, Y'); // e.g., November 4, 2025
-                                    } else {
-                                        $formattedDate = '-';
-                                    }
-
-                                    // Format time
-                                    $examTime = $form->admission_slip['time_of_exam'] ?? null;
-                                    if ($examTime) {
-                                        // Append seconds to parse correctly if missing
-                                        $formattedTime = \Carbon\Carbon::createFromFormat('H:i', $examTime)->format(
-                                            'g:i A',
-                                        ); // e.g., 10:49 AM
-                                    } else {
-                                        $formattedTime = '-';
-                                    }
-                                @endphp
-                                <!-- Schedule Warning -->
-                                <div class="bg-yellow-100 border border-yellow-300 p-5 rounded-lg mb-6">
-                                    <p class="text-lg font-bold mb-2">📌 Please take note of your exam schedule:</p>
-                                    <p class="text-base leading-relaxed">
-                                        <strong>Place of Exam:</strong>
-                                        {{ $form->admission_slip['place_of_exam'] ?? '-' }} <br>
-                                        <strong>Date and Time:</strong> {{ $formattedDate ?? '-' }}
-                                        {{ $formattedTime ?? '-' }}
-                                    </p>
-                                </div>
-
-                                <hr class="border-gray-300 my-6">
-
-                                <p class="text-sm leading-6 mb-4">
-                                    If you have any questions or concerns, feel free to contact us at
-                                    <strong>car.admin@ntc.gov.ph</strong>.
-                                </p>
-
-                                <p class="text-base">Thank you for using the NTC Forms System.</p>
-                            </div>
-
-                            <!-- Footer -->
-                            <div class="text-center text-xs text-gray-500 p-6">
-                                <p>This is an automated message from the NTC Forms System.</p>
-                                <p>© {{ date('Y') }} National Telecommunication Commission - CAR</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-center flex-col items-center mt-6">
-                            <p> You can download your form by clicking the button below.</p>
-                            <button class="form1-01-btn w-50" type="button" id="downloadPDFBtn"
-                                style="background-color: #28a745; margin: 0 10px;">Download Form
-                            </button>
-                        </div>
-                    </div>
-                @endif
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="transaction-actions" style="display:none;">
-            <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
-        </div>
-    @elseif(optional($transactions)->payment_method === 'cash')
-        <!-- Steps Indicator (Cash) -->
-        <div class="steps steps-cash">
-            <ol id="cash-steps">
-                @if (strtolower($transactions->status ?? 'pending') === 'done')
-                    <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                    <li data-step="2" class="step-item completed">Payment</li>
-                    <li data-step="3" class="step-item active">Processing Application
-                    </li>
-                @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
-                    <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
-                    <li data-step="2" class="step-item active">Payment</li>
-                    <li data-step="3" class="step-item">Processing Application</li>
-                @else
-                    <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
-                    <li data-step="2" class="step-item">Payment</li>
-                    <li data-step="3" class="step-item">Processing Application</li>
-                @endif
-            </ol>
-            <div>
-                <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
-                    Success
-                    Email</button>
-            </div>
-        </div>
-        <!-- Step 1: Wait for Validation Message -->
-        @if ($transactions->status === 'pending')
-            <div id="cash-wait" class="validation-wait-message"
-                style="display:block; text-align:center; margin:24px 0;">
-                <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
-            </div>
-        @endif
-        <!-- Cash Payment Interface -->
-        <div class="cash-payment-interface"
-            style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
-            <div class="cash-payment-container">
-                <!-- Top Header -->
-                <div class="cash-header-section">
-                    <div class="success-icon">✓</div>
-                    <div class="header-content">
-                        <h2>Cash Payment Selected</h2>
-                        <p>You have chosen to pay in cash. Please visit our office during business hours
-                            to
-                            complete your payment.</p>
-                    </div>
                 </div>
 
-                <!-- Main Content Grid -->
-                <div class="cash-content-grid">
-                    <!-- Left Column - Payment Info & Office Hours -->
-                    <div class="cash-left-column">
-                        <div class="payment-info">
-                            <h3>Payment Information</h3>
-                            <div class="info-item">
-                                <span class="info-label">Payment Method:</span>
-                                <span class="info-value">Cash</span>
-                            </div>
-                            <div class="info-item amount-highlight">
-                                <span class="info-label">Amount:</span>
-                                <span
-                                    class="info-value amount-value">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">Status:</span>
-                                <span class="info-value">Pending</span>
-                            </div>
-                        </div>
-
-                        <div class="office-hours">
-                            <h4>Office Hours</h4>
-                            <p><strong>Monday - Friday:</strong> 8:00 AM - 5:00 PM</p>
-                            <p><strong>Saturday:</strong> 8:00 AM - 12:00 PM</p>
-                            <p><strong>Sunday:</strong> Closed</p>
-                        </div>
-                    </div>
-
-                    <!-- Right Column - Google Maps -->
-                    <div class="cash-right-column">
-                        <div class="office-location">
-                            <h4>Office Location</h4>
-                            <div class="location-content">
-                                <!-- Google Maps Embed -->
-                                <div class="maps-container">
-                                    <iframe
-                                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.1691931618943!2d120.61167997460701!3d16.416231330056114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a1543cf37fcf%3A0x643f8ec7f155d470!2sNational%20Telecommunications%20Commission!5e0!3m2!1sen!2sph!4v1761151402669!5m2!1sen!2sph"
-                                        width="100%" height="375" style="border:0;" allowfullscreen=""
-                                        loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                                    </iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Action Buttons -->
+                <div class="transaction-actions" style="display:none;">
+                    <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
                 </div>
-
-                <div class="cash-bottom-section">
-                    <div class="payment-instructions">
-                        <h4 style="text-align: center;">How to Pay</h4>
-                        <ul class="instruction-list" style="list-style-type: bullet;">
-                            <li>Please bring a valid identification card along with all required
-                                documents.
+            @elseif(optional($transactions)->payment_method === 'cash')
+                <!-- Steps Indicator (Cash) -->
+                <div class="steps steps-cash">
+                    <ol id="cash-steps">
+                        @if (strtolower($transactions->status ?? 'pending') === 'done')
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item completed">Payment</li>
+                            <li data-step="3" class="step-item active">Processing Application
                             </li>
-                            <li>Present your reference number upon arrival.</li>
-                            <li>Pay the required amount.</li>
-                            <li>Obtain your official receipt.</li>
-                        </ul>
-                    </div>
-
-                    <div class="important-notes">
-                        <h4 style="text-align: center;">Reminders</h4>
-                        <ul class="notes-list" style="list-style-type: bullet;">
-                            <li>Arrive at least 30 minutes prior to closing time.</li>
-                            <li>Your application will be processed only after the payment has been
-                                completed.</li>
-                            <li>For any inquiries, please do not hesitate to contact us.</li>
-                        </ul>
+                        @elseif (isset($transactions->payment_amount) && $transactions->payment_amount > 0 && $transactions->status === 'processing')
+                            <li data-step="1" class="step-item completed">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item active">Payment</li>
+                            <li data-step="3" class="step-item">Processing Application</li>
+                        @else
+                            <li data-step="1" class="step-item active">PLEASE WAIT FOR VALIDATION</li>
+                            <li data-step="2" class="step-item">Payment</li>
+                            <li data-step="3" class="step-item">Processing Application</li>
+                        @endif
+                    </ol>
+                    <div>
+                        <button id="cash-finish" type="button" class="btn-primary" style="display:none;">Send
+                            Success
+                            Email</button>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!-- Cash Step 3: Payment Success Message -->
-        <div id="cash-confirm" class="validation-wait-message"
-            style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
-            <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
-            <p>Your payment has been confirmed. You can now download your form by clicking the button below.
-            </p>
-            <div style="display: flex; justify-content: center;">
-                <button class="form1-01-btn" type="button" id="downloadPDFBtn"
-                    style="background-color: #28a745; margin: 0 10px;">Download Form
-                </button>
-            </div>
-        </div>
-        <!-- Action Buttons -->
-        <div class="transaction-actions" style="display:none;">
-            <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+                <!-- Step 1: Wait for Validation Message -->
+                @if ($transactions->status === 'pending')
+                    <div id="cash-wait" class="validation-wait-message"
+                        style="display:block; text-align:center; margin:24px 0;">
+                        <h2 style="font-size:28px;">PLEASE WAIT FOR VALIDATION</h2>
+                    </div>
+                @endif
+                <!-- Cash Payment Interface -->
+                <div class="cash-payment-interface"
+                    style="display:{{ isset($transactions->payment_amount) && $transactions->payment_amount > 0 && strtolower($transactions->status ?? 'pending') === 'processing' && $transactions->payment_status !== 'paid' ? 'block' : 'none' }};">
+                    <div class="cash-payment-container">
+                        <!-- Top Header -->
+                        <div class="cash-header-section">
+                            <div class="success-icon">✓</div>
+                            <div class="header-content">
+                                <h2>Cash Payment Selected</h2>
+                                <p>You have chosen to pay in cash. Please visit our office during business hours
+                                    to
+                                    complete your payment.</p>
+                            </div>
+                        </div>
+
+                        <!-- Main Content Grid -->
+                        <div class="cash-content-grid">
+                            <!-- Left Column - Payment Info & Office Hours -->
+                            <div class="cash-left-column">
+                                <div class="payment-info">
+                                    <h3>Payment Information</h3>
+                                    <div class="info-item">
+                                        <span class="info-label">Payment Method:</span>
+                                        <span class="info-value">Cash</span>
+                                    </div>
+                                    <div class="info-item amount-highlight">
+                                        <span class="info-label">Amount:</span>
+                                        <span
+                                            class="info-value amount-value">₱{{ number_format($transactions->payment_amount ?? 0, 2, '.', ',') }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <span class="info-label">Status:</span>
+                                        <span class="info-value">Pending</span>
+                                    </div>
+                                </div>
+
+                                <div class="office-hours">
+                                    <h4>Office Hours</h4>
+                                    <p><strong>Monday - Friday:</strong> 8:00 AM - 5:00 PM</p>
+                                    <p><strong>Saturday:</strong> 8:00 AM - 12:00 PM</p>
+                                    <p><strong>Sunday:</strong> Closed</p>
+                                </div>
+                            </div>
+
+                            <!-- Right Column - Google Maps -->
+                            <div class="cash-right-column">
+                                <div class="office-location">
+                                    <h4>Office Location</h4>
+                                    <div class="location-content">
+                                        <!-- Google Maps Embed -->
+                                        <div class="maps-container">
+                                            <iframe
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3827.1691931618943!2d120.61167997460701!3d16.416231330056114!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3391a1543cf37fcf%3A0x643f8ec7f155d470!2sNational%20Telecommunications%20Commission!5e0!3m2!1sen!2sph!4v1761151402669!5m2!1sen!2sph"
+                                                width="100%" height="375" style="border:0;" allowfullscreen=""
+                                                loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                                            </iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cash-bottom-section">
+                            <div class="payment-instructions">
+                                <h4 style="text-align: center;">How to Pay</h4>
+                                <ul class="instruction-list" style="list-style-type: bullet;">
+                                    <li>Please bring a valid identification card along with all required
+                                        documents.
+                                    </li>
+                                    <li>Present your reference number upon arrival.</li>
+                                    <li>Pay the required amount.</li>
+                                    <li>Obtain your official receipt.</li>
+                                </ul>
+                            </div>
+
+                            <div class="important-notes">
+                                <h4 style="text-align: center;">Reminders</h4>
+                                <ul class="notes-list" style="list-style-type: bullet;">
+                                    <li>Arrive at least 30 minutes prior to closing time.</li>
+                                    <li>Your application will be processed only after the payment has been
+                                        completed.</li>
+                                    <li>For any inquiries, please do not hesitate to contact us.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cash Step 3: Payment Success Message -->
+                <div id="cash-confirm" class="validation-wait-message"
+                    style="display:{{ strtolower($transactions->payment_status ?? 'pending') === 'paid' ? 'block' : 'none' }}; margin:24px 0;">
+                    <h2 style="font-size:28px;">PAYMENT SUCCESSFUL</h2>
+                    <p>Your payment has been confirmed. You can now download your form by clicking the button below.
+                    </p>
+                    <div style="display: flex; justify-content: center;">
+                        <button class="form1-01-btn" type="button" id="downloadPDFBtn"
+                            style="background-color: #28a745; margin: 0 10px;">Download Form
+                        </button>
+                    </div>
+                </div>
+                <!-- Action Buttons -->
+                <div class="transaction-actions" style="display:none;">
+                    <a href="{{ route('display.forms') }}" class="btn-primary">Continue to Forms</a>
+
+                </div>
+            @endif
+            @endif
+
 
         </div>
-        @endif
-    </div>
-
 
     </div>
 

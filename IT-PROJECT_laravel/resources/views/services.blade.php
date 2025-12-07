@@ -30,10 +30,19 @@
                 <a href="{{ route('showFormInformation', ['formType' => '1-03']) }}"
                     class="block bg-gray-50 hover:bg-gray-100 transition rounded-lg p-4 shadow-sm">
                     <div class="font-semibold text-lg">
-                        Issuance of Certificates, Permits and Licenses in the Amateur Service
+                        Amateur Service Certificates & Permits
                     </div>
                     <p class="text-gray-600 text-sm">
-                        View requirements and details for Amateur Radio certificates, permits, and licenses.
+                        Apply for Amateur Radio certificates, permits, and licenses.
+                    </p>
+                </a>
+                <a href="{{ route('showFormInformation', ['formType' => '1-29']) }}"
+                    class="block bg-gray-50 hover:bg-gray-100 transition rounded-lg p-4 shadow-sm">
+                    <div class="font-semibold text-lg">
+                        Consumer Complaints
+                    </div>
+                    <p class="text-gray-600 text-sm">
+                        File a complaint about text scams, spam messages, telecom services, or related issues.
                     </p>
                 </a>
 
