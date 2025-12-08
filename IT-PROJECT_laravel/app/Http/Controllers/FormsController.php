@@ -391,6 +391,34 @@ class FormsController extends Controller
         session(["form_{$formType}_$formToken" => $validated]);
         return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken]);
     }
+    public function testSaveForm(Request $request)
+    {
+        // Validate minimal required inputs
+        $request->validate([
+            'formType' => 'required|string',
+            'formToken' => 'required|string',
+            'userId' => 'required|string',
+            'paymentMethod' => 'required|string',
+            'formData' => 'required|array'
+        ]);
+
+        // Call FormManager directly using the request's formType and formToken
+        $result = FormManager::saveForm(
+            $request->input('formType'),
+            $request->input('formToken'),
+            $request->input('formData'),
+            $request->input('userId'),
+            $request->input('paymentMethod')
+        );
+
+        // Return JSON response for Postman
+        return response()->json([
+            'message' => 'Form processed successfully',
+            'form_token' => $request->input('formToken'),
+            'form' => $result['form'],
+            'meta' => $result['meta'],
+        ], 200);
+    }
 
     /**
      * Show Validation page using latest data from DB.

@@ -98,6 +98,61 @@ class FormManager
                     'or' => null
                 ])
             );
+        } elseif ($formType === "form1-03") {
+            $typeRaw = strtoupper($formData['permit_type']); // e.g., "AT-RSL"
+            $years = (int) ($formData['years'] ?? 1);
+
+
+            $feeTable = [
+                "AT-ROC" => ["ff" => 0, "cpf" => 0, "lf" => 60, "roc" => 30, "dst" => 30],
+                "AT-LIFETIME-NEW" => ["ff" => 60, "cpf" => 0, "lf" => 50, "roc" => 0, "dst" => 30],
+                "AT-CLUB-RSL-NEW" => ["ff" => 180, "cpf" => 600, "lf" => 700, "roc" => 0, "dst" => 30],
+                "TEMP-A" => ["ff" => 60, "cpf" => 0, "lf" => 120, "roc" => 60, "dst" => 30],
+                "TEMP-B" => ["ff" => 60, "cpf" => 0, "lf" => 132, "roc" => 60, "dst" => 30],
+                "TEMP-C" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+            ];
+
+            // AT-RSL 
+            if (Str::contains($typeRaw, 'ATRSL')) {
+                $stationClass = strtoupper($formData['station_class'] ?? 'A');
+                $rslTable = [
+                    "RSL-CLASS_A" => ["ff" => 60, "cpf" => 0, "lf" => 120, "roc" => 60, "dst" => 30],
+                    "RSL-CLASS_B" => ["ff" => 60, "cpf" => 0, "lf" => 132, "roc" => 60, "dst" => 30],
+                    "RSL-CLASS_C" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+                    "RSL-CLASS_D" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+                ];
+                $matchedKey = "RSL-" . $stationClass;
+                $row = $rslTable[$matchedKey] ?? $rslTable["RSL-A"];
+            } else {
+
+                $row = $feeTable[$typeRaw] ?? null;
+            }
+
+
+            if ($row) {
+                $isNew = $formData['application_type'] === 'new';
+
+                $ff = $isNew ? ($row['ff'] ?? 0) : 0;
+                $cpf = $isNew ? ($row['cpf'] ?? 0) : 0;
+                $lf_total = ($row['lf'] ?? 0) * $years;
+                $roc_total = ($row['roc'] ?? 0) * $years;
+                $dst = $row['dst'] ?? 0;
+
+                $fee = $ff + $cpf + $lf_total + $roc_total + $dst;
+
+                $transactionData['payment_amount'] = $fee;
+            }
+
+            dd($transactionData['payment_amount'], $formData);
+            dd(1);
+            $form = $formModel::updateOrCreate(
+                ['form_token' => $formToken],
+                array_merge($formData, [
+                    'certificate' => $typeRaw,
+                    'station_class' => $formData['station_class'] ?? null,
+                    'or' => null,
+                ])
+            );
         } else {
             $form = $formModel::updateOrCreate(
                 ['form_token' => $formToken],

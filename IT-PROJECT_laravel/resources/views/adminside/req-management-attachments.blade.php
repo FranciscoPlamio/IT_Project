@@ -85,8 +85,15 @@
                             @endphp
                             <article class="info-item">
                                 <p class="info-label">{{ formatKey($key) }}</p>
-                                <p class="info-value">{{ getDisplayValue($key, $value, $licenseDescriptions) ?: '—' }}
-                                </p>
+                                @if ($form->form_type === 'form1-01')
+                                    <p class="info-value">
+                                        {{ getDisplayValue($key, $value, $licenseDescriptions) ?: '—' }}
+                                    </p>
+                                @elseif ($form->form_type === 'form1-03')
+                                    <p class="info-value">
+                                        {{ $value ?: '—' }}
+                                    </p>
+                                @endif
                             </article>
                         @endforeach
                     </div>
@@ -171,8 +178,13 @@
                         <h2>Uploaded Requirements</h2>
                         <p class="section-description">
                             Cross-check every attachment before marking the request as done.
-                            <a href="{{ route('showFormInformation', ['formType' => '1-01']) }}" target="_blank"
-                                class="inline-link">View requirement list</a>
+                            @if ($form->form_type === 'form1-01')
+                                <a href="{{ route('showFormInformation', ['formType' => '1-01']) }}" target="_blank"
+                                    class="inline-link">View requirement list</a>
+                            @elseif ($form->form_type === 'form1-03')
+                                <a href="{{ route('showFormInformation', ['formType' => '1-03']) }}" target="_blank"
+                                    class="inline-link">View requirement list</a>
+                            @endif
                         </p>
                     </div>
                     <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="true">

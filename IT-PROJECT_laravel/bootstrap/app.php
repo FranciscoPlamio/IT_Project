@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
             __DIR__ . '/../routes/transactions.php',
             __DIR__ . '/../routes/form.php',
         ],
+        api: [
+            __DIR__ . '/../routes/api.php',   //  ✅ ADD THIS
+        ],
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\FormsController;
 use Illuminate\Support\Facades\Route;
-
 // Form showcase
 Route::get('/display-forms', [FormsController::class, 'index'])->name('display.forms');
 Route::get('{formType}/information', [FormsController::class, 'showFormInformation'])->name('showFormInformation');

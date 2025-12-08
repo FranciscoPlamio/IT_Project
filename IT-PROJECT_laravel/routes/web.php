@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailController;
 
+
 // Default index route
 Route::get('/', function () {
     return view('homepage');
