@@ -79,5 +79,59 @@ class PDFCertificateGenerator
             $pdf->SetXY(0, $coordinates['middle_name'][1]);
             $pdf->Cell($pageWidth, 10, strtoupper($formData['middle_name']), 0, 0, 'C');
         }
+
+        // Write certificate type if available (centered)
+        if (!empty($formData['certificate_type']) && !empty($coordinates['certificate_type'])) {
+            $certificateTypeFormatted = $this->formatCertificateType($formData['certificate_type']);
+            $pdf->SetXY(0, $coordinates['certificate_type'][1]);
+            $pdf->Cell($pageWidth, 10, strtoupper($certificateTypeFormatted), 0, 0, 'C');
+        }
+
+        // Calculate and write issuance date (current date)
+        if (!empty($coordinates['issuance_date'])) {
+            $pdf->SetFont('Times', 'B', 25); // Change font size for dates (default was 50)
+            $issuanceDate = date('F j, Y'); // e.g., "December 8, 2025"
+            $pdf->SetXY($coordinates['issuance_date'][0], $coordinates['issuance_date'][1]);
+            $pdf->Cell(0, 10, strtoupper($issuanceDate), 0, 0, 'L');
+
+            // Add label below the date
+            $pdf->SetFont('Times', 'I', 12); // Smaller font for label
+            $pdf->SetXY($coordinates['issuance_date'][0], $coordinates['issuance_date'][1] + 8);
+            $pdf->Cell(0, 10, 'DATE ISSUED', 0, 0, 'L');
+        }
+
+        // Calculate and write expiry date (issuance date + years)
+        if (!empty($coordinates['expiry_date'])) {
+            $pdf->SetFont('Times', 'B', 25); // Same font size as issuance date
+            $years = isset($formData['years']) ? (int)$formData['years'] : 0;
+            $expiryDate = date('F j, Y', strtotime("+{$years} years")); // e.g., "December 8, 2027"
+            $pdf->SetXY($coordinates['expiry_date'][0], $coordinates['expiry_date'][1]);
+            $pdf->Cell(0, 10, strtoupper($expiryDate), 0, 0, 'L');
+
+            // Add label below the date
+            $pdf->SetFont('Times', 'I', 12); // Smaller font for label
+            $pdf->SetXY($coordinates['expiry_date'][0], $coordinates['expiry_date'][1] + 8);
+            $pdf->Cell(0, 10, 'EXPIRY DATE', 0, 0, 'L');
+        }
+    }
+
+    /**
+     * Format certificate type for display
+     */
+    private function formatCertificateType($type)
+    {
+        $types = [
+            '1rtg_e1256_code25' => '1RTG',
+            '1rtg_code25' => '1RTG',
+            '2rtg_e1256_code16' => '2RTG',
+            '2rtg_code16' => '2RTG',
+            '3rtg_e125_code16' => '3RTG',
+            '3rtg_code16' => '3RTG',
+            '1phn_e1234' => '1PHN',
+            '2phn_e123' => '2PHN',
+            '3phn_e12' => '3PHN',
+        ];
+
+        return $types[$type] ?? strtoupper(str_replace('_', ' ', $type));
     }
 }

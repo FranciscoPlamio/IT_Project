@@ -612,94 +612,174 @@
 
                                     <!-- Content -->
                                     <div class="p-8 text-gray-800">
-                                        <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been
-                                            Approved</h2>
+                                        @if ($transactions->form_type === 'form1-02')
+                                            {{-- Form 1-02: Certificate Generated --}}
+                                            <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Certificate Has
+                                                Been Generated</h2>
 
-                                        <p class="text-base mb-4">Hello {{ $form->last_name }}
-                                            {{ $form->first_name }},</p>
+                                            <p class="text-base mb-4">Hello {{ $form->last_name }}
+                                                {{ $form->first_name }},</p>
 
-                                        <p class="text-base mb-4">
-                                            Your payment was successful. Your transaction has been recorded
-                                            successfully.
-                                        </p>
-
-                                        <p class="text-base mb-4">
-                                            Your application <strong>{{ $transactions->payment_reference }}</strong>
-                                            has been
-                                            approved.
-                                            Below are the details:
-                                        </p>
-
-                                        <!-- Payment Details -->
-                                        <div class="bg-gray-100 p-4 rounded-lg mb-6">
-                                            <p><strong>Reference Number:</strong>
-                                                {{ $transactions->payment_reference }}</p>
-                                            <p><strong>Method:</strong>
-                                                {{ ucfirst($transactions->payment_method ?? '—') }}</p>
-                                            <p>
-                                                <strong>Amount:</strong>
-                                                {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                            <p class="text-base mb-4">
+                                                Your payment was successful. Your transaction has been recorded
+                                                successfully.
                                             </p>
-                                        </div>
 
-                                        <!-- OR + Admission Details -->
-                                        <div class="bg-gray-100 p-4 rounded-lg mb-6">
-                                            <h3 class="text-lg font-semibold mb-2">OR Details</h3>
-                                            <ul class="list-disc pl-5 space-y-1">
-                                                <li>OR Number: {{ $form->or['or_no'] ?? '-' }}</li>
-                                                <li>OR Amount: {{ $form->or['or_amount'] ?? '-' }}</li>
-                                                <li>Collecting Officer: {{ $form->or['collecting_officer'] ?? '-' }}
-                                                </li>
-                                                <li>Date: {{ $form->or['or_date'] ?? '-' }}</li>
-                                            </ul>
-
-                                            <h3 class="text-lg font-semibold mt-4 mb-2">Admission Slip Details</h3>
-                                            <ul class="list-disc pl-5 space-y-1">
-                                                <li>Name: {{ $form->last_name }} {{ $form->first_name }}</li>
-                                                <li>Exam For: {{ $form->exam_type }}</li>
-                                                <li>Place of Exam: {{ $form->admission_slip['place_of_exam'] ?? '-' }}
-                                                </li>
-                                                <li>Date: {{ $form->admission_slip['date_of_exam'] ?? '-' }}</li>
-                                                <li>Time: {{ $form->admission_slip['time_of_exam'] ?? '-' }}</li>
-                                                <li>Authorized Officer:
-                                                    {{ $form->admission_slip['authorized_officer'] ?? '-' }}</li>
-                                            </ul>
-                                        </div>
-
-
-                                        @php
-
-                                            // Format date
-                                            $examDate = $form->admission_slip['date_of_exam'] ?? null;
-                                            if ($examDate) {
-                                                $formattedDate = \Carbon\Carbon::parse($examDate)->format('F j, Y'); // e.g., November 4, 2025
-                                            } else {
-                                                $formattedDate = '-';
-                                            }
-
-                                            // Format time
-                                            $examTime = $form->admission_slip['time_of_exam'] ?? null;
-                                            if ($examTime) {
-                                                // Append seconds to parse correctly if missing
-                                                $formattedTime = \Carbon\Carbon::createFromFormat(
-                                                    'H:i',
-                                                    $examTime,
-                                                )->format('g:i A'); // e.g., 10:49 AM
-                                            } else {
-                                                $formattedTime = '-';
-                                            }
-                                        @endphp
-                                        <!-- Schedule Warning -->
-                                        <div class="bg-yellow-100 border border-yellow-300 p-5 rounded-lg mb-6">
-                                            <p class="text-lg font-bold mb-2">📌 Please take note of your exam
-                                                schedule:</p>
-                                            <p class="text-base leading-relaxed">
-                                                <strong>Place of Exam:</strong>
-                                                {{ $form->admission_slip['place_of_exam'] ?? '-' }} <br>
-                                                <strong>Date and Time:</strong> {{ $formattedDate ?? '-' }}
-                                                {{ $formattedTime ?? '-' }}
+                                            <p class="text-base mb-4">
+                                                Your application
+                                                <strong>{{ $transactions->payment_reference }}</strong> has been
+                                                approved and your certificate has been generated. Below are the details:
                                             </p>
-                                        </div>
+
+                                            <!-- Payment Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <h3 class="text-lg font-semibold mb-2">Payment Details</h3>
+                                                <p><strong>Reference Number:</strong>
+                                                    {{ $transactions->payment_reference }}</p>
+                                                <p><strong>Method:</strong>
+                                                    {{ ucfirst($transactions->payment_method ?? '—') }}</p>
+                                                <p><strong>Amount:</strong>
+                                                    {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                                </p>
+                                            </div>
+
+                                            <!-- Certificate Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <h3 class="text-lg font-semibold mb-2">Certificate Details</h3>
+                                                @php
+                                                    // Format certificate type
+                                                    $certificateTypes = [
+                                                        '1rtg_e1256_code25' =>
+                                                            '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+                                                        '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+                                                        '2rtg_e1256_code16' =>
+                                                            '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+                                                        '2rtg_code16' => '2RTG - Code (16 wpm)',
+                                                        '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+                                                        '3rtg_code16' => '3RTG - Code (16 wpm)',
+                                                        '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+                                                        '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+                                                        '3phn_e12' => '3PHN - Elements 1 & 2',
+                                                    ];
+                                                    $certificateTypeDisplay =
+                                                        $certificateTypes[$form->certificate_type ?? ''] ??
+                                                        ucwords(
+                                                            str_replace('_', ' ', $form->certificate_type ?? 'N/A'),
+                                                        );
+
+                                                    // Calculate dates
+                                                    $issuanceDate = date('F j, Y');
+                                                    $years = isset($form->years) ? (int) $form->years : 0;
+                                                    $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+                                                @endphp
+                                                <ul class="list-disc pl-5 space-y-1">
+                                                    <li><strong>Name:</strong> {{ $form->last_name }}
+                                                        {{ $form->first_name }} {{ $form->middle_name ?? '' }}</li>
+                                                    <li><strong>Certificate Type:</strong>
+                                                        {{ $certificateTypeDisplay }}</li>
+                                                    <li><strong>Date Issued:</strong> {{ $issuanceDate }}</li>
+                                                    <li><strong>Expiry Date:</strong> {{ $expiryDate }}</li>
+                                                    <li><strong>OR Number:</strong> {{ $form->or['or_no'] ?? '-' }}
+                                                    </li>
+                                                    <li><strong>OR Date:</strong> {{ $form->or['or_date'] ?? '-' }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <!-- Success Banner -->
+                                            <div class="bg-green-100 border border-green-300 p-5 rounded-lg mb-6">
+                                                <p class="text-lg font-bold mb-2">🎉 Congratulations!</p>
+                                                <p class="text-base leading-relaxed">
+                                                    Your certificate has been successfully generated. Please download it
+                                                    using the button below and keep it for your records.
+                                                </p>
+                                            </div>
+                                        @else
+                                            {{-- Form 1-01: Admission Slip --}}
+                                            <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been
+                                                Approved</h2>
+
+                                            <p class="text-base mb-4">Hello {{ $form->last_name }}
+                                                {{ $form->first_name }},</p>
+
+                                            <p class="text-base mb-4">
+                                                Your payment was successful. Your transaction has been recorded
+                                                successfully.
+                                            </p>
+
+                                            <p class="text-base mb-4">
+                                                Your application
+                                                <strong>{{ $transactions->payment_reference }}</strong> has been
+                                                approved. Below are the details:
+                                            </p>
+
+                                            <!-- Payment Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <p><strong>Reference Number:</strong>
+                                                    {{ $transactions->payment_reference }}</p>
+                                                <p><strong>Method:</strong>
+                                                    {{ ucfirst($transactions->payment_method ?? '—') }}</p>
+                                                <p><strong>Amount:</strong>
+                                                    {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                                </p>
+                                            </div>
+
+                                            <!-- OR + Admission Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <h3 class="text-lg font-semibold mb-2">OR Details</h3>
+                                                <ul class="list-disc pl-5 space-y-1">
+                                                    <li>OR Number: {{ $form->or['or_no'] ?? '-' }}</li>
+                                                    <li>OR Amount: {{ $form->or['or_amount'] ?? '-' }}</li>
+                                                    <li>Collecting Officer:
+                                                        {{ $form->or['collecting_officer'] ?? '-' }}</li>
+                                                    <li>Date: {{ $form->or['or_date'] ?? '-' }}</li>
+                                                </ul>
+
+                                                <h3 class="text-lg font-semibold mt-4 mb-2">Admission Slip Details</h3>
+                                                <ul class="list-disc pl-5 space-y-1">
+                                                    <li>Name: {{ $form->last_name }} {{ $form->first_name }}</li>
+                                                    <li>Exam For: {{ $form->exam_type }}</li>
+                                                    <li>Place of Exam:
+                                                        {{ $form->admission_slip['place_of_exam'] ?? '-' }}</li>
+                                                    <li>Date: {{ $form->admission_slip['date_of_exam'] ?? '-' }}</li>
+                                                    <li>Time: {{ $form->admission_slip['time_of_exam'] ?? '-' }}</li>
+                                                    <li>Authorized Officer:
+                                                        {{ $form->admission_slip['authorized_officer'] ?? '-' }}</li>
+                                                </ul>
+                                            </div>
+
+                                            @php
+                                                // Format date
+                                                $examDate = $form->admission_slip['date_of_exam'] ?? null;
+                                                if ($examDate) {
+                                                    $formattedDate = \Carbon\Carbon::parse($examDate)->format('F j, Y');
+                                                } else {
+                                                    $formattedDate = '-';
+                                                }
+
+                                                // Format time
+                                                $examTime = $form->admission_slip['time_of_exam'] ?? null;
+                                                if ($examTime) {
+                                                    $formattedTime = \Carbon\Carbon::createFromFormat(
+                                                        'H:i',
+                                                        $examTime,
+                                                    )->format('g:i A');
+                                                } else {
+                                                    $formattedTime = '-';
+                                                }
+                                            @endphp
+                                            <!-- Schedule Warning -->
+                                            <div class="bg-yellow-100 border border-yellow-300 p-5 rounded-lg mb-6">
+                                                <p class="text-lg font-bold mb-2">📌 Please take note of your exam
+                                                    schedule:</p>
+                                                <p class="text-base leading-relaxed">
+                                                    <strong>Place of Exam:</strong>
+                                                    {{ $form->admission_slip['place_of_exam'] ?? '-' }} <br>
+                                                    <strong>Date and Time:</strong> {{ $formattedDate ?? '-' }}
+                                                    {{ $formattedTime ?? '-' }}
+                                                </p>
+                                            </div>
+                                        @endif
 
                                         <hr class="border-gray-300 my-6">
 
@@ -929,13 +1009,14 @@
                     downloadPDFBtn.textContent = 'Generating PDF...';
                     downloadPDFBtn.disabled = true;
 
-                    // Get form type
+                    // Get form type and remove 'form' prefix
                     let formType = "{{ $transactions?->form_type }}";
-                    formType = formType.substring(4);
+                    formType = formType.substring(4); // Remove 'form' prefix (e.g., 'form1-02' -> '1-02')
 
-                    // Create download URL
+                    // Create download URL for application form template
                     const baseUrl = "{{ route('forms.template-pdf', ['formType' => 'PLACEHOLDER']) }}";
                     const downloadUrl = baseUrl.replace('PLACEHOLDER', formType) + `?token=${token}`;
+                    console.log(downloadUrl);
 
                     // Create a temporary link to trigger download
                     const link = document.createElement('a');

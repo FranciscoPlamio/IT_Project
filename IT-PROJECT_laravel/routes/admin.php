@@ -42,6 +42,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
 
     // Certificate generation route
     Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
+    Route::get('get-certificate-data/{token}', [FormsController::class, 'getCertificateData'])->name('get-certificate-data');
 });
 
 

@@ -15,6 +15,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Http;
 
@@ -511,7 +512,7 @@ class FormsController extends Controller
 
         // Try to get form data from session first (for in-progress forms)
         $form = session('form_' . $formType . '_' . $token);
-
+        // dd(session()->all());
         // If not in session, retrieve from database
         if (!$form) {
             try {
@@ -529,6 +530,7 @@ class FormsController extends Controller
 
                 // Convert model to array for PDF generation
                 $form = $dbForm->toArray();
+                // dd($form);
             } catch (\Exception $e) {
                 return response()->json(['error' => 'Form not found: ' . $e->getMessage()], 404);
             }
@@ -540,6 +542,10 @@ class FormsController extends Controller
         }
 
         try {
+            // Ensure form data has required structure for each form type
+            $form = $this->normalizeFormData($form, $formType);
+            // dd($form);
+
             $pdfGenerator = new \App\Services\PDFGenerator();
 
             // Check if template exists
@@ -553,12 +559,54 @@ class FormsController extends Controller
             // Generate filename
             $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
 
-            // Stream inline when preview=1, otherwise force download
-            $destination = $request->boolean('preview') ? 'I' : 'D';
-            $pdf->Output($destination, $filename);
+            // Always stream inline (user changed from conditional)
+            $pdf->Output('I', $filename);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Normalize form data to ensure all required fields exist for each form type
+     * 
+     * if theres no values in the form, it will be set to empty string, just add a default value.
+     */
+    private function normalizeFormData($form, $formType)
+    {
+        // Common fields that should always exist
+        $defaults = [
+            'first_name' => '',
+            'last_name' => '',
+            'middle_name' => '',
+            'email' => '',
+            'contact_number' => '',
+        ];
+
+        // Form-specific defaults
+        if ($formType === '1-01') {
+            // Form 1-01 specific fields
+            $defaults = array_merge($defaults, [
+                'exam_type' => '',
+                'admission_slip' => [
+                    'admit_name' => '',
+                    'place_of_exam' => '',
+                    'date_of_exam' => '',
+                    'time_of_exam' => '',
+                    'authorized_officer' => '',
+                    'mailing_address' => '',
+                ],
+            ]);
+        } elseif ($formType === '1-02') {
+            // Form 1-02 specific fields
+            $defaults = array_merge($defaults, [
+                'certificate_type' => '',
+                'years' => 0,
+                'mailing_address' => '',
+            ]);
+        }
+
+        // Merge defaults with actual form data (actual data takes precedence)
+        return array_merge($defaults, $form);
     }
 
     public function getUser()
@@ -601,6 +649,62 @@ class FormsController extends Controller
     }
 
     /**
+     * Get certificate data for validation modal
+     */
+    public function getCertificateData($token)
+    {
+        try {
+            $formType = '1-02';
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $token)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Get certificate type display name
+            $certificateTypeDisplay = $this->formatCertificateType($dbForm->certificate_type ?? '');
+
+            // Calculate dates
+            $issuanceDate = date('F j, Y'); // Current date
+            $years = isset($dbForm->years) ? (int)$dbForm->years : 0;
+            $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+
+            return response()->json([
+                'first_name' => $dbForm->first_name,
+                'last_name' => $dbForm->last_name,
+                'middle_name' => $dbForm->middle_name ?? '',
+                'certificate_type' => $certificateTypeDisplay,
+                'certificate_type_raw' => $dbForm->certificate_type ?? '',
+                'issuance_date' => $issuanceDate,
+                'expiry_date' => $expiryDate,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch form data: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Format certificate type for display
+     */
+    private function formatCertificateType($type)
+    {
+        $types = [
+            '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+            '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+            '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+            '2rtg_code16' => '2RTG - Code (16 wpm)',
+            '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+            '3rtg_code16' => '3RTG - Code (16 wpm)',
+            '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+            '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+            '3phn_e12' => '3PHN - Elements 1 & 2',
+        ];
+
+        return $types[$type] ?? ucwords(str_replace('_', ' ', $type));
+    }
+
+    /**
      * Generate certificate PDF for Form 1-02
      */
     public function generateCertificate(Request $request)
@@ -624,7 +728,6 @@ class FormsController extends Controller
             // Convert model to array for PDF generation
             $formData = $dbForm->toArray();
 
-
             // Generate certificate PDF using the Sample_Cert.pdf template
             $pdfGenerator = new \App\Services\PDFCertificateGenerator();
             $pdf = $pdfGenerator->generateCertificate($formData, $formType);
@@ -632,9 +735,18 @@ class FormsController extends Controller
             // Generate filename
             $filename = "Certificate_{$formData['last_name']}_{$formData['first_name']}_" . date('Y-m-d_H-i-s') . ".pdf";
 
-            // Stream inline when preview=1, otherwise force download
-            $destination = $request->boolean('preview') ? 'I' : 'D';
-            $pdf->Output($destination, $filename);
+            // Stream inline when preview=1, otherwise save to attachments and download
+            if ($request->boolean('preview')) {
+                $pdf->Output('I', $filename);
+            } else {
+                // Save to attachments folder
+                $attachmentPath = "forms/{$formToken}/certificate_" . date('Y-m-d_H-i-s') . ".pdf";
+                $pdfContent = $pdf->Output('S'); // Get PDF as string
+                \Storage::disk('local')->put($attachmentPath, $pdfContent);
+
+                // Download to user
+                $pdf->Output('D', $filename);
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
         }

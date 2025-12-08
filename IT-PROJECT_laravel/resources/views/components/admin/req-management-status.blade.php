@@ -35,7 +35,22 @@
             <img src="{{ asset('images/Done.png') }}">
             <span>Official Receipt Completed</span>
         </div>
-        @if ($req->form->certificate)
+        @php
+            // Check if certificate has been generated (exists in attachments folder)
+            $certificateExists = false;
+            try {
+                $files = Storage::disk('local')->files("forms/{$req->form_token}");
+                foreach ($files as $file) {
+                    if (str_contains($file, 'certificate_')) {
+                        $certificateExists = true;
+                        break;
+                    }
+                }
+            } catch (\Exception $e) {
+                $certificateExists = false;
+            }
+        @endphp
+        @if ($certificateExists)
             <div class="status-badge done">
                 <img src="{{ asset('images/Done.png') }}">
                 <span>Certificate Completed</span>
