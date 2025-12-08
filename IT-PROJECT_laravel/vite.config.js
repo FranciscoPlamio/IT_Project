@@ -20,6 +20,8 @@ export default defineConfig({
                 "resources/css/adminside/declaration.css",
                 "resources/js/adminside/admission-slip.js",
                 "resources/css/adminside/admission-slip.css",
+                "resources/css/adminside/form-fees.css",
+                "resources/js/adminside/form-fees.js",
             ],
             refresh: true,
         }),

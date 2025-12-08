@@ -187,7 +187,7 @@ class PDFCoordinateMaps
             'sex' => [30.30, 163.50],
             'sex_positions' => [
                 'male' => [30.30, 163.50],
-                'female' => [35.30, 163.50], // placeholder
+                'female' => [70.75, 163.50], // placeholder
             ],
             'nationality' => [30.30, 168.90],
 
@@ -209,19 +209,40 @@ class PDFCoordinateMaps
                 'modification' => [23, 111]
             ],
             'modification_reason' => [50, 175], // placeholder
-            'years' => [50, 180], // placeholder
+            'years' => [40.87, 126.89], // placeholder
 
             // Physical info
             'height' => [187, 152.70], // placeholder
             'weight' => [144, 152.70], // placeholder
-            'employment_status' => [170, 158.30], // placeholder for unemployed
-            //Need coords for employed status
-            'employment_type' => [145, 163.30], // placeholder
-            //Need coords for foreign
 
-            // Certificate info
-            'certificate_type' => [100, 100], // placeholder
-            //Needs dynamic placing for diff exam types here
+            // Employment status checkboxes
+            'employment_status_positions' => [
+                'unemployed' => [171.90, 157.96], // checkbox for unemployed
+                'employed' => [135.87, 157.96],   // checkbox for employed (adjust Y coordinate as needed)
+            ],
+
+            // Employment type checkboxes
+            'employment_type_positions' => [
+                'local' => [145, 163.30],   // checkbox for local
+                'foreign' => [145, 168.90], // checkbox for foreign (adjust Y coordinate as needed)
+            ],
+
+            // Certificate type checkboxes - positions for each option
+            'certificate_type_positions' => [
+                // ROC variants (uppercase as used in form)
+                '1RTG' => [101.32, 100.12],              // 1RTG (First-class Radiotelegraph Operator Certificate)
+                '2RTG' => [101.32, 105.86],              // 2RTG (Second-class Radiotelegraph Operator Certificate)
+                '3RTG' => [101.32, 111.20],              // 3RTG (Third-class Radiotelegraph Operator Certificate)
+                '1PHN' => [101.32, 116.60],              // 1PHN (First-class Radiotelephone Operator Certificate)
+                '2PHN' => [101.32, 122.20],              // 2PHN (Second-class Radiotelephone Operator Certificate)
+                '3PHN' => [101.32, 127.80],              // 3PHN (Third-class Radiotelephone Operator Certificate)
+                // RROC, SROP, GROC variants (as used in form)
+                'SROP' => [136.24, 100.12],              // SROP (Special Radio Operator's Permit)
+                'RROC-Land Mobile' => [136.24, 105.30],  // RROC-Land Mobile (Restricted Radiotelephone Operator's Certificate for Land Mobile Station)
+                'RROC-Aircraft' => [136.24, 111.30],     // RROC-Aircraft (Restricted Radiotelephone Operator's Certificate – Aircraft)
+                'GROC' => [136.24, 116.70],              // GROC (Government Radio Operator Certificate)
+                'TP RROC-Aircraft' => [136.24, 121.60],  // TP RROC-Aircraft (Foreign Pilot)
+            ],
 
             // Exam fields
             'exam_place' => [48, 201], // placeholder
@@ -851,6 +872,16 @@ class PDFCoordinateMaps
             ],
         ];
 
+        $overrides = [
+            '1-02' => [
+                'or_no' => [166.50, 233.05],
+                'or_amount' => [158.52, 243.06],
+                'collecting_officer' => [152.22, 248.81],
+                'or_date' => [164.16, 238.61],
+                'or_year_suffix' => [183.67, 238.61],
+            ],
+        ];
+
         return $overrides[$formType] ?? $default;
     }
 
@@ -883,6 +914,9 @@ class PDFCoordinateMaps
             'last_name' => [61.24, 77.26],    // X: 50mm, Y: 100mm - PLACEHOLDER
             'first_name' => [61.24, 108.34],   // X: 50mm, Y: 110mm - PLACEHOLDER
             'middle_name' => [61.24, 139.66],  // X: 50mm, Y: 120mm - PLACEHOLDER
+            'certificate_type' => [61.24, 23.83],  // X: 50mm, Y: 130mm - PLACEHOLDER
+            'issuance_date' => [30.34, 161.57],  // X: 50mm, Y: 140mm - PLACEHOLDER
+            'expiry_date' => [175.62, 161.57],  // X: 50mm, Y: 150mm - PLACEHOLDER
         ];
     }
 }

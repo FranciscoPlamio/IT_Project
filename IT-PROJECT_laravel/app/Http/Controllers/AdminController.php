@@ -531,23 +531,68 @@ class AdminController extends Controller   // <-- rename this
         // Send email using the Blade view
         if (!empty($form->email)) {
 
-            //Generate PDF
-            // STEP 1: Generate PDF raw data
-            $pdfService = new \App\Services\PDFGenerator();
-            $pdf = $pdfService->generatePDF($form->toArray(), $formType);
+            // Handle Form 1-01 (Admission Slip)
+            if ($formTransactions->form_type === 'form1-01') {
+                //Generate PDF
+                // STEP 1: Generate PDF raw data
+                $pdfService = new \App\Services\PDFGenerator();
+                $pdf = $pdfService->generatePDF($form->toArray(), $formType);
 
-            // Return PDF string instead of streaming
-            $pdfData = $pdf->Output('S'); // <--- IMPORTANT
+                // Return PDF string instead of streaming
+                $pdfData = $pdf->Output('S'); // <--- IMPORTANT
 
-            $fileName = "NTC_Form_{$formTransactions->form_type}.pdf";
+                $fileName = "NTC_Form_{$formTransactions->form_type}.pdf";
 
+                // For Form 1-01
+                Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName) {
+                    $message->to($form->user->email)
+                        ->subject('Your Form Has Been Approved')
+                        ->attachData($pdfData, $fileName, ['mime' => 'application/pdf']);
+                });
+            }
+            // Handle Form 1-02 (Certificate)
+            elseif ($formTransactions->form_type === 'form1-02') {
+                // Generate certificate PDF
+                $pdfGenerator = new \App\Services\PDFCertificateGenerator();
+                $certificatePdf = $pdfGenerator->generateCertificate($form->toArray(), $formType);
 
-            // For Form 1
-            Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName) {
-                $message->to($form->user->email)
-                    ->subject('Your Form Has Been Approved')
-                    ->attachData($pdfData, $fileName, ['mime' => 'application/pdf']);
-            });
+                // Get PDF as string
+                $certificateData = $certificatePdf->Output('S');
+                $certificateFileName = "Certificate_{$form->last_name}_{$form->first_name}.pdf";
+
+                // Format certificate type for email
+                $certificateTypes = [
+                    '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+                    '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+                    '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+                    '2rtg_code16' => '2RTG - Code (16 wpm)',
+                    '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+                    '3rtg_code16' => '3RTG - Code (16 wpm)',
+                    '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+                    '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+                    '3phn_e12' => '3PHN - Elements 1 & 2',
+                ];
+
+                $certificateTypeDisplay = $certificateTypes[$form->certificate_type ?? ''] ?? ucwords(str_replace('_', ' ', $form->certificate_type ?? 'N/A'));
+
+                // Calculate dates
+                $issuanceDate = date('F j, Y');
+                $years = isset($form->years) ? (int)$form->years : 0;
+                $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+
+                // For Form 1-02
+                Mail::send('emails.certificate-generated', [
+                    'form' => $form,
+                    'transaction' => $formTransactions,
+                    'certificateType' => $certificateTypeDisplay,
+                    'issuanceDate' => $issuanceDate,
+                    'expiryDate' => $expiryDate,
+                ], function ($message) use ($form, $certificateData, $certificateFileName) {
+                    $message->to($form->user->email)
+                        ->subject('Your Certificate Has Been Generated')
+                        ->attachData($certificateData, $certificateFileName, ['mime' => 'application/pdf']);
+                });
+            }
         }
         return redirect()->back()->with([
             'message' => 'Form approved and email sent',

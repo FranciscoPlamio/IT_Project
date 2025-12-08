@@ -152,7 +152,30 @@
                                         }
                                     @endphp
                                     <td>
-                                        @if ($req->form->or)
+                                        @php
+                                            // Check if certificate has been generated for Form 1-02
+                                            $certificateExists = false;
+                                            if (strtolower($req->form_type) === 'form1-02') {
+                                                try {
+                                                    $files = Storage::disk('local')->files("forms/{$req->form_token}");
+                                                    foreach ($files as $file) {
+                                                        if (str_contains($file, 'certificate_')) {
+                                                            $certificateExists = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    $certificateExists = false;
+                                                }
+                                            }
+                                        @endphp
+
+                                        @if ($certificateExists)
+                                            <div class="status-badge done">
+                                                <img src="{{ asset('images/Done.png') }}">
+                                                <span>Certificate Generated</span>
+                                            </div>
+                                        @elseif ($req->form->or)
                                             <div class="status-badge progress">
                                                 <img src="{{ asset('images/In-prog.png') }}">
                                                 <span>Pending Certificate</span>
@@ -166,11 +189,11 @@
                                     </td>
                                     <td>
                                         @if (strtolower($req->form_type) === 'form1-02')
-                                            <a href="{{ route('admin.generate-certificate', ['token' => $req->form_token]) }}"
-                                                class="btn btn-primary btn-sm" target="_blank"
-                                                style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;">
+                                            <button onclick="openCertificateModal('{{ $req->form_token }}')"
+                                                class="btn btn-primary btn-sm"
+                                                style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;border:none;cursor:pointer;">
                                                 Generate Certificate
-                                            </a>
+                                            </button>
                                         @endif
                                     </td>
                                 </tr>
@@ -181,4 +204,146 @@
             </section>
         </div>
     </div>
+
+    <!-- Certificate Validation Modal -->
+    <div class="certificate-modal" id="certificateModal" style="display:none;">
+        <div class="certificate-modal__content">
+            <h3 style="margin-bottom:20px;font-size:20px;font-weight:600;">Certificate Information</h3>
+            <p style="margin-bottom:15px;color:#64748b;">Please verify the information before generating the
+                certificate.</p>
+
+            <div style="margin-bottom:20px;">
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">Last Name:</label>
+                    <span id="cert_last_name"
+                        style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">First Name:</label>
+                    <span id="cert_first_name"
+                        style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">Middle Name:</label>
+                    <span id="cert_middle_name"
+                        style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">Certificate
+                        Class:</label>
+                    <span id="cert_type" style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">Issuance
+                        Date:</label>
+                    <span id="cert_issuance_date"
+                        style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="display:block;font-weight:600;margin-bottom:4px;font-size:14px;">Expiry Date:</label>
+                    <span id="cert_expiry_date"
+                        style="display:block;padding:8px;background:#f1f5f9;border-radius:6px;"></span>
+                </div>
+            </div>
+
+            <div style="display:flex;gap:10px;justify-content:flex-end;">
+                <button id="closeCertModal"
+                    style="border:none;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;background:#e5e7eb;color:#374151;">
+                    Cancel
+                </button>
+                <button id="previewCertificate"
+                    style="border:none;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;background:#3b82f6;color:#fff;">
+                    Preview Certificate
+                </button>
+                <button id="generateCertificate"
+                    style="border:none;border-radius:8px;padding:10px 18px;font-weight:600;cursor:pointer;background:#28a745;color:#fff;">
+                    Generate Certificate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .certificate-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .certificate-modal__content {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .certificate-modal button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -15px rgba(15, 23, 42, 0.8);
+        }
+    </style>
+
+    <script>
+        let currentCertificateToken = null;
+
+        function openCertificateModal(token) {
+            currentCertificateToken = token;
+
+            // Fetch form data
+            fetch(`/admin/get-certificate-data/${token}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                        return;
+                    }
+
+                    document.getElementById('cert_last_name').textContent = data.last_name || '—';
+                    document.getElementById('cert_first_name').textContent = data.first_name || '—';
+                    document.getElementById('cert_middle_name').textContent = data.middle_name || '—';
+                    document.getElementById('cert_type').textContent = data.certificate_type || '—';
+                    document.getElementById('cert_issuance_date').textContent = data.issuance_date || '—';
+                    document.getElementById('cert_expiry_date').textContent = data.expiry_date || '—';
+
+                    document.getElementById('certificateModal').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load form data');
+                });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('closeCertModal').addEventListener('click', () => {
+                document.getElementById('certificateModal').style.display = 'none';
+                currentCertificateToken = null;
+            });
+
+            document.getElementById('previewCertificate').addEventListener('click', () => {
+                if (currentCertificateToken) {
+                    window.open(`/admin/generate-certificate?token=${currentCertificateToken}&preview=1`,
+                        '_blank');
+                }
+            });
+
+            document.getElementById('generateCertificate').addEventListener('click', () => {
+                if (currentCertificateToken) {
+                    window.location.href =
+                        `/admin/generate-certificate?token=${currentCertificateToken}&preview=0`;
+                    // Close modal and reload page after download starts
+                    setTimeout(() => {
+                        document.getElementById('certificateModal').style.display = 'none';
+                        currentCertificateToken = null;
+                        // Reload page to update status
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        });
+    </script>
 </x-admin-layout>

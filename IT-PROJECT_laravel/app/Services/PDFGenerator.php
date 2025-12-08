@@ -170,6 +170,56 @@ class PDFGenerator
             }
         }
 
+        // Special handling for application_type: checkbox for new/renewal/modification
+        if (!empty($formData['application_type'])) {
+            $appTypeValue = strtolower(trim((string)$formData['application_type']));
+            if (!empty($coordinates['application_type_positions']) && is_array($coordinates['application_type_positions'])) {
+                $map = $coordinates['application_type_positions'];
+                $target = null;
+                if ($appTypeValue === 'new' && !empty($map['new'])) {
+                    $target = $map['new'];
+                } elseif ($appTypeValue === 'renewal' && !empty($map['renewal'])) {
+                    $target = $map['renewal'];
+                } elseif ($appTypeValue === 'modification' && !empty($map['modification'])) {
+                    $target = $map['modification'];
+                }
+                if ($target && is_array($target)) {
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($target[0], $target[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['application_type']) && is_array($coordinates['application_type'])) {
+                // Fallback to single coordinate
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($coordinates['application_type'][0], $coordinates['application_type'][1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
+
+        // Special handling for certificate_type: checkbox for different certificate types
+        if (!empty($formData['certificate_type'])) {
+            // Keep the original case for certificate_type as form uses uppercase values
+            $certTypeValue = trim((string)$formData['certificate_type']);
+            if (!empty($coordinates['certificate_type_positions']) && is_array($coordinates['certificate_type_positions'])) {
+                $map = $coordinates['certificate_type_positions'];
+                if (!empty($map[$certTypeValue]) && is_array($map[$certTypeValue])) {
+                    $target = $map[$certTypeValue];
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($target[0], $target[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['certificate_type']) && is_array($coordinates['certificate_type'])) {
+                // Fallback to single coordinate
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($coordinates['certificate_type'][0], $coordinates['certificate_type'][1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
+
         // Special handling for sex: place check mark at the appropriate position
         if (!empty($formData['sex'])) {
             $sexValue = strtolower(trim((string)$formData['sex']));
@@ -236,6 +286,58 @@ class PDFGenerator
             }
         }
 
+        // Special handling for employment_status: checkbox for employed/unemployed
+        if (!empty($formData['employment_status'])) {
+            $statusValue = strtolower(trim((string)$formData['employment_status']));
+            if (!empty($coordinates['employment_status_positions']) && is_array($coordinates['employment_status_positions'])) {
+                $map = $coordinates['employment_status_positions'];
+                $target = null;
+                if ($statusValue === 'employed' && !empty($map['employed'])) {
+                    $target = $map['employed'];
+                } elseif ($statusValue === 'unemployed' && !empty($map['unemployed'])) {
+                    $target = $map['unemployed'];
+                }
+                if ($target && is_array($target)) {
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($target[0], $target[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['employment_status']) && is_array($coordinates['employment_status'])) {
+                // Fallback to single coordinate
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($coordinates['employment_status'][0], $coordinates['employment_status'][1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
+
+        // Special handling for employment_type: checkbox for local/foreign
+        if (!empty($formData['employment_type'])) {
+            $typeValue = strtolower(trim((string)$formData['employment_type']));
+            if (!empty($coordinates['employment_type_positions']) && is_array($coordinates['employment_type_positions'])) {
+                $map = $coordinates['employment_type_positions'];
+                $target = null;
+                if ($typeValue === 'local' && !empty($map['local'])) {
+                    $target = $map['local'];
+                } elseif ($typeValue === 'foreign' && !empty($map['foreign'])) {
+                    $target = $map['foreign'];
+                }
+                if ($target && is_array($target)) {
+                    $pdf->SetFont('ZapfDingbats', '', 12);
+                    $pdf->SetXY($target[0], $target[1]);
+                    $pdf->Write(0, '4');
+                    $pdf->SetFont('Arial', '', 10);
+                }
+            } elseif (!empty($coordinates['employment_type']) && is_array($coordinates['employment_type'])) {
+                // Fallback to single coordinate
+                $pdf->SetFont('ZapfDingbats', '', 12);
+                $pdf->SetXY($coordinates['employment_type'][0], $coordinates['employment_type'][1]);
+                $pdf->Write(0, '4');
+                $pdf->SetFont('Arial', '', 10);
+            }
+        }
+
         // Render remaining fields normally (skip exam_type, sex, and needs to avoid duplicate text)
         foreach ($coordinates as $fieldName => $coords) {
             if ($fieldName === 'mailing_address') {
@@ -262,8 +364,12 @@ class PDFGenerator
             $isAttachmentSlot = strpos($fieldName, 'id_picture_slot') === 0;
             if (
                 $fieldName === 'exam_type' || $fieldName === 'exam_type_positions' ||
+                $fieldName === 'application_type' || $fieldName === 'application_type_positions' ||
+                $fieldName === 'certificate_type' || $fieldName === 'certificate_type_positions' ||
                 $fieldName === 'sex' || $fieldName === 'sex_positions' ||
                 $fieldName === 'needs' || $fieldName === 'needs_positions' ||
+                $fieldName === 'employment_status' || $fieldName === 'employment_status_positions' ||
+                $fieldName === 'employment_type' || $fieldName === 'employment_type_positions' ||
                 $fieldName === 'mailing_address_line2' ||
                 $fieldName === 'or_year_suffix' ||
                 $isAttachmentSlot

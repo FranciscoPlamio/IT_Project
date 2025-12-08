@@ -90,12 +90,12 @@
                 <img src="{{ Route::is('admin.declaration') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
                     alt=""> Declaration
             </a>
-            <a href="{{ route('admin.form-fees') }}"
+            {{-- <a href="{{ route('admin.form-fees') }}"
                 class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt=""> Form Fees & Breakdown
-            </a>
-            <a href="{{ route('admin.test') }}">test</a>
+            </a> --}}
+            {{-- <a href="{{ route('admin.test') }}">test</a> --}}
 
         </nav>
         <div class="bottom-links">
