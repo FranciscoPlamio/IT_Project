@@ -33,12 +33,16 @@
             certificates.
         </p>
     </div>
-@elseif ($form->application_type === 'new')
+@elseif ($form->application_type === 'new' || $form->application_type === 'renewal')
     <div class="max-w-md mx-auto bg-white shadow rounded-lg p-4 space-y-4 mb-2">
 
         <!-- Header -->
         <h2 class="text-lg font-semibold text-gray-800">
-            Fee Breakdown (New Application)
+            @if ($form->application_type === 'new')
+                Fee Breakdown (New Application)
+            @elseif($form->application_type === 'renewal')
+                Fee Breakdown (Renewal)
+            @endif
         </h2>
 
         <!-- Breakdown Box -->

@@ -93,6 +93,10 @@
                                     <p class="info-value">
                                         {{ $value ?: '—' }}
                                     </p>
+                                @else
+                                    <p class="info-value">
+                                        {{ getDisplayValue($key, $value, $licenseDescriptions) ?: '—' }}
+                                    </p>
                                 @endif
                             </article>
                         @endforeach
@@ -223,7 +227,8 @@
                                     @endif
                                 </div>
                                 <div class="attachment-actions">
-                                    <a href="{{ $url }}" target="_blank" class="btn btn-primary">Open in new
+                                    <a href="{{ $url }}" target="_blank" class="btn btn-primary">Open in
+                                        new
                                         tab</a>
                                 </div>
                             </article>

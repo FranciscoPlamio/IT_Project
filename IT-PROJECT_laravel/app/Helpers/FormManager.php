@@ -62,7 +62,7 @@ class FormManager
                 $transactionData['payment_amount'] = 150;
 
                 //New
-            } else if ($formData['application_type'] === "new") {
+            } else if ($formData['application_type'] === "new" || $formData['application_type'] === "renewal") {
                 $feeTable = [
                     "1RTG" => ["roc" => 180, "dst" => 30],
                     "2RTG" => ["roc" => 120, "dst" => 30],

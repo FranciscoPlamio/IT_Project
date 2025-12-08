@@ -38,7 +38,6 @@ class TransactionController extends Controller
             $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
             $form = $formModel::find($transactions->form_id);
         }
-
         return view('payment.transaction', compact('transactions', 'form'));
     }
 

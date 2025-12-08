@@ -228,7 +228,7 @@
 
                             <!-- Breakdown Free -->
                             @if ($transactions->form_type === 'form1-02')
-                                <x-forms.payment-breakdown.1-02 />
+                                <x-forms.payment-breakdown.1-02 :form="$form" />
                             @elseif ($transactions->form_type === 'form1-03')
                                 <x-forms.payment-breakdown.1-03 :form="$form" />
                             @endif
