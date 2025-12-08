@@ -46,7 +46,7 @@
                     </p>
                 </a>
 
-                <!-- Menu Item 4 -->
+                {{-- <!-- Menu Item 4 -->
                 <a href="{{ route('showFormInformation', ['formType' => '1-11']) }}"
                     class="block bg-gray-50 hover:bg-gray-100 transition rounded-lg p-4 shadow-sm">
                     <div class="font-semibold text-lg">
@@ -273,7 +273,7 @@
                         View requirements for requests to block/unblock IMEI and SIM of lost/stolen mobile phones and
                         for filing complaints on text spam/scam and services offered by telecom or broadcast providers.
                     </p>
-                </a>
+                </a> --}}
             </div>
         </div>
     </main>
