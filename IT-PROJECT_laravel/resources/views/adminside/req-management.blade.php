@@ -60,12 +60,18 @@
                 align-items: center;
                 z-index: 999;
             }
+            .confirm-modal h3 {
+                margin-bottom: 15px;
+            }
+            .confirm-modal p {
+                margin-bottom: 15px;
+            }
 
             .confirm-modal__content {
                 background: white;
                 padding: 20px 25px;
                 border-radius: 10px;
-                width: 320px;
+                width: 420px;
                 text-align: center;
             }
 
@@ -320,39 +326,67 @@
         </div>
     </div>
     <div class="confirm-modal" id="confirmApproveModal" style="display:none;">
-        <div class="confirm-modal__content">
-            <h3>Approve Request</h3>
-            <p>Are you sure you want to approve this request?</p>
+    <div class="confirm-modal__content">
+        <h3>Approve Request</h3>
+        <p>Type <strong>"Confirm"</strong> to appove request</p>
 
-            <div class="confirm-actions">
-                <button id="confirmApproveCancel" class="btn-secondary">Cancel</button>
-                <button id="confirmApproveYes" class="btn-primary">Yes,
-                    Approve</button>
-            </div>
+        <input type="text" id="confirmInput" placeholder="Type Confirm" 
+               style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; justify-content: center;">
+
+        <p id="confirmWarning" style="color: red; font-size: 0.9rem; display:none; margin-top:8px;">
+            Incorrect input. Please type "Confirm".
+        </p>
+
+        <div class="confirm-actions" style="margin-top: 15px;">
+            <button id="confirmApproveCancel" class="btn-secondary">Cancel</button>
+
+            <button id="confirmApproveYes" class="btn-primary" disabled>Approve</button>
         </div>
     </div>
+</div>
     <script>
         let approveId = null;
 
-        function openConfirmApproveModal(id) {
-            approveId = id;
-            document.getElementById("confirmApproveModal").style.display = "flex";
+function openConfirmApproveModal(id) {
+    approveId = id;
+    document.getElementById("confirmApproveModal").style.display = "flex";
+
+    // Reset input and button state
+    document.getElementById("confirmInput").value = "";
+    document.getElementById("confirmWarning").style.display = "none";
+    document.getElementById("confirmApproveYes").disabled = true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    const confirmInput = document.getElementById("confirmInput");
+    const confirmButton = document.getElementById("confirmApproveYes");
+    const warning = document.getElementById("confirmWarning");
+
+    // Live validation
+    confirmInput.addEventListener("input", () => {
+        if (confirmInput.value.trim() === "Confirm") {
+            confirmButton.disabled = false;
+            warning.style.display = "none";
+        } else {
+            confirmButton.disabled = true;
+
+            // Only show warning when input is NOT empty
+            warning.style.display = confirmInput.value.trim() !== "" ? "block" : "none";
         }
-        document.addEventListener('DOMContentLoaded', () => {
+    });
 
-            // Close modal
-            document.getElementById("confirmApproveCancel").addEventListener("click", () => {
-                document.getElementById("confirmApproveModal").style.display = "none";
-                approveId = null;
-            });
+    // Cancel Modal
+    document.getElementById("confirmApproveCancel").addEventListener("click", () => {
+        document.getElementById("confirmApproveModal").style.display = "none";
+        approveId = null;
+    });
 
-            // Confirm approve
-            document.getElementById("confirmApproveYes").addEventListener("click", () => {
-                document.getElementById("confirmApproveModal").style.display = "none";
-
-
-                approveRequest(approveId);
-            });
-        })
+    // Confirm Approve
+    confirmButton.addEventListener("click", () => {
+        document.getElementById("confirmApproveModal").style.display = "none";
+        approveRequest(approveId);
+    });
+});
     </script>
 </x-admin-layout>
