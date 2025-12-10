@@ -652,24 +652,28 @@ class FormsController extends Controller
     }
 
     public function verifyRecaptcha(Request $request)
-    {
-        $token = $request->input('g-recaptcha-response');
+{
+    $token = $request->input('g-recaptcha-response');
 
-        if (!$token) {
-            return false; // No token means CAPTCHA was not completed
-        }
+    if (!$token) {
+        return false; // No token means CAPTCHA was not completed
+    }
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+    // FIX #2 — Disable SSL verification temporarily for local development
+    $response = Http::withoutVerifying()->asForm()->post(
+        'https://www.google.com/recaptcha/api/siteverify',
+        [
             'secret' => env('RECAPTCHA_SECRET_KEY'),
             'response' => $token,
             'remoteip' => $request->ip(),
-        ]);
-        // dd($response); // for debugging (security checking eg. Local IP address on handlerstats)
+        ]
+    );
 
-        $result = $response->json();
-        // dd($result); // for debugging (whether the CAPTCHA was successful or not)
-        return isset($result['success']) && $result['success'] === true;
-    }
+    $result = $response->json();
+
+    return isset($result['success']) && $result['success'] === true;
+}
+
 
     public function userHasFormTransaction()
     {
