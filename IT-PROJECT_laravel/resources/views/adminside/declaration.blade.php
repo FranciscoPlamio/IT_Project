@@ -285,7 +285,12 @@
                                     </td>
 
                                     <td>
-                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @if ($req->form->applicant)
+                                            {{ $req->form->applicant }}
+                                        @else
+                                            {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @endif
+
                                     </td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';

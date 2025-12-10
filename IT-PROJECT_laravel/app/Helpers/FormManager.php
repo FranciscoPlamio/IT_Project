@@ -42,6 +42,7 @@ class FormManager
         string $paymentMethod,
         array $transactionData = [],
     ) {
+
         // Gets the Model of Form
         $formModel = self::getFormModel($formType);
 
@@ -188,6 +189,42 @@ class FormManager
                     'or' => null,
                 ])
             );
+        } elseif ($formType === "form1-09") {
+
+            // Always amateur radio service (fixed)
+            $radioService = strtolower($formData['radio_service'] ?? '');
+
+            // Count any field that ends with "_units"
+            $totalUnits = 0;
+
+            foreach ($formData as $key => $value) {
+                if (str_ends_with($key, '_units')) {
+                    $totalUnits += (int) $value;
+                }
+            }
+
+            // Fees for amateur service
+            $feePerUnit = 50;
+            $DST = 30;
+
+            // Compute total
+            $total = ($totalUnits * $feePerUnit) + $DST;
+
+            // Add to transaction
+            $transactionData['payment_amount'] = $total;
+            foreach ($formData as $key => $value) {
+                if (is_array($value)) {
+                    dd("Form key '$key' contains an array", $value);
+                }
+            }
+
+            // Save form data
+            $form = $formModel::updateOrCreate(
+                ['form_token' => $formToken],
+                array_merge($formData, [
+                    'or' => null
+                ])
+            );
         } else {
             // dd($formData, $transactionData);
             $form = $formModel::updateOrCreate(
@@ -196,7 +233,6 @@ class FormManager
             );
         }
         // Save or update the main form
-
 
         // Default meta fields
         $defaultMeta = [

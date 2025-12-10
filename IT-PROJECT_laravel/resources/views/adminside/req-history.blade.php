@@ -94,7 +94,13 @@
                                             more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
 
                                     </td>
-                                    <td> {{ $req->form->last_name }} {{ $req->form->first_name }}</td>
+                                    <td>
+                                        @if ($req->form->applicant)
+                                            {{ $req->form->applicant }}
+                                        @else
+                                            {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @endif
+                                    </td>
 
                                     </td>
                                     @php

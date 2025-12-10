@@ -367,7 +367,7 @@ class FormsController extends Controller
             }
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
-            dd('Validation failed:', $e->errors(), $e->getMessage());
+            // dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // // or log it instead of dumping:
             // Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -403,7 +403,6 @@ class FormsController extends Controller
             'paymentMethod' => 'required|string',
             'formData' => 'required|array'
         ]);
-
         // Call FormManager directly using the request's formType and formToken
         $result = FormManager::saveForm(
             $request->input('formType'),
@@ -412,7 +411,6 @@ class FormsController extends Controller
             $request->input('userId'),
             $request->input('paymentMethod')
         );
-
         // Return JSON response for Postman
         return response()->json([
             'message' => 'Form processed successfully',
@@ -652,27 +650,27 @@ class FormsController extends Controller
     }
 
     public function verifyRecaptcha(Request $request)
-{
-    $token = $request->input('g-recaptcha-response');
+    {
+        $token = $request->input('g-recaptcha-response');
 
-    if (!$token) {
-        return false; // No token means CAPTCHA was not completed
+        if (!$token) {
+            return false; // No token means CAPTCHA was not completed
+        }
+
+        // FIX #2 — Disable SSL verification temporarily for local development
+        $response = Http::withoutVerifying()->asForm()->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]
+        );
+
+        $result = $response->json();
+
+        return isset($result['success']) && $result['success'] === true;
     }
-
-    // FIX #2 — Disable SSL verification temporarily for local development
-    $response = Http::withoutVerifying()->asForm()->post(
-        'https://www.google.com/recaptcha/api/siteverify',
-        [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $token,
-            'remoteip' => $request->ip(),
-        ]
-    );
-
-    $result = $response->json();
-
-    return isset($result['success']) && $result['success'] === true;
-}
 
 
     public function userHasFormTransaction()
