@@ -412,7 +412,7 @@
 
                                     <!-- Content -->
                                     <div class="p-8 text-gray-800">
-                                        @if ($transactions->form_type === 'form1-02')
+                                        @if ($transactions->form_type === 'form1-02' || $transactions->form_type === 'form1-03')
                                             {{-- Form 1-02: Certificate Generated --}}
                                             <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Certificate Has
                                                 Been Generated</h2>

@@ -155,11 +155,14 @@
                                         @php
                                             // Check if certificate has been generated for Form 1-02
                                             $certificateExists = false;
-                                            if (strtolower($req->form_type) === 'form1-02') {
+                                            if (
+                                                strtolower($req->form_type) === 'form1-02' ||
+                                                strtolower($req->form_type) === 'form1-03'
+                                            ) {
                                                 try {
                                                     $files = Storage::disk('local')->files("forms/{$req->form_token}");
                                                     foreach ($files as $file) {
-                                                        if (str_contains($file, 'certificate_')) {
+                                                        if (Str::startsWith(basename($file), 'certificate_')) {
                                                             $certificateExists = true;
                                                             break;
                                                         }
@@ -188,12 +191,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if (strtolower($req->form_type) === 'form1-02')
-                                            <button onclick="openCertificateModal('{{ $req->form_token }}')"
-                                                class="btn btn-primary btn-sm"
-                                                style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;border:none;cursor:pointer;">
-                                                Generate Certificate
-                                            </button>
+                                        @if (strtolower($req->form_type) === 'form1-02' || strtolower($req->form_type) === 'form1-03')
+                                            @if (!$certificateExists)
+                                                <button onclick="openCertificateModal('{{ $req->form_token }}')"
+                                                    class="btn btn-primary btn-sm"
+                                                    style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;border:none;cursor:pointer;">
+                                                    Generate Certificate
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

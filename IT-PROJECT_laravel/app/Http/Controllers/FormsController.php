@@ -11,6 +11,7 @@ use App\Models\Forms\Form1_01\ApplicantDetails;
 use App\Models\Forms\Form1_01\RequestAssistance;
 use App\Models\Forms\Form1_01\Declaration;
 use App\Models\Forms\FormsMeta;
+use App\Models\Forms\FormsTransactions;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -366,7 +367,7 @@ class FormsController extends Controller
             }
         } catch (ValidationException $e) {
             //  Dump the validation errors (for debugging)
-            // dd('Validation failed:', $e->errors(), $e->getMessage());
+            dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // // or log it instead of dumping:
             // Log::error('Validation failed', ['errors' => $e->errors()]);
@@ -682,7 +683,8 @@ class FormsController extends Controller
     public function getCertificateData($token)
     {
         try {
-            $formType = '1-02';
+            $transactionForm = FormsTransactions::where('form_token', $token)->first();
+            $formType = substr($transactionForm->form_type, 4);
             $formModel = FormManager::getFormModel('form' . $formType);
             $dbForm = $formModel::where('form_token', $token)->first();
 
@@ -738,7 +740,8 @@ class FormsController extends Controller
     public function generateCertificate(Request $request)
     {
         $formToken = $request->query('token');
-        $formType = '1-02'; // Form 2 as specified
+        $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
+        $formType = substr($transactionForm->form_type, 4);
 
         if (!$formToken) {
             return response()->json(['error' => 'Missing form token'], 400);

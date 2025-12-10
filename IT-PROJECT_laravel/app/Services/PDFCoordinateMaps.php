@@ -296,7 +296,7 @@ class PDFCoordinateMaps
             'call_sign' => [39, 159.50], // placeholder
             'validity' => [181, 159.50], // placeholder
             'station_class' => [162, 82], // placeholder
-            'permit_type' => [89, 87], // placeholder
+            'certificate_type' => [89, 87], // placeholder
             //Needs placeholders for other permit types
             'club_name' => [121, 108.50], // placeholder
             'assigned_frequency' => [121, 114], // placeholder

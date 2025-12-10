@@ -59,7 +59,7 @@
                         <!-- formOne-blueprint-three fields -->
                         <x-forms.formOne-blueprint-three :form="$form ?? []" />
 
-                        @if (str_contains($category, 'renew-mod'))
+                        @if (str_contains($category, 'renew-mod') || str_contains($category, 'modification'))
                             <div class="form-grid-3">
 
                                 <div class="form-field">
@@ -104,7 +104,7 @@
                 <section class="step-content" id="step-application">
                     @php
                         $applicationType = old('application_type', $form['application_type'] ?? null);
-                        $permitTypeValue = old('permit_type', $form['permit_type'] ?? null);
+                        $permitTypeValue = old('certificate_type', $form['certificate_type'] ?? null);
                         $stationClassValue = old('station_class', $form['station_class'] ?? null);
                     @endphp
 
@@ -114,11 +114,13 @@
                             <!-- Application type fields -->
                             <div class="form-field">
 
-                                @if (str_contains($category, 'renew-mod'))
-                                    <label>
-                                        <input type="radio" name="application_type" value="renewal"
-                                            {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
-                                        RENEWAL</label>
+                                @if (str_contains($category, 'renew-mod') || str_contains($category, 'modification'))
+                                    @if (str_contains($category, 'renew-mod'))
+                                        <label>
+                                            <input type="radio" name="application_type" value="renewal"
+                                                {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
+                                            RENEWAL</label>
+                                    @endif
                                     <label>
                                         <input type="radio" name="application_type" value="modification"
                                             {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>MODIFICATION
@@ -141,23 +143,38 @@
                                     </label>
                                 @endif
                                 @if ($category !== 'mod')
-                                    <label class="form-label">No. of Years <span class="text-red">*</span></label>
-                                    <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
-                                        value="{{ old('years', $form['years'] ?? '') }}">
-                                        <option value="" disabled selected>Select years</option>
-                                        <option value="1"
-                                            {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1
-                                        </option>
-                                        <option value="2"
-                                            {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2
-                                        </option>
-                                        <option value="3"
-                                            {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3
-                                        </option>
-                                    </select>
-                                    @error('years')
-                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
-                                    @enderror
+                                    @if ($category === 'temporary-foreign' || $category === 'special-event-call')
+                                        <label class="form-label">No. of Years <span class="text-red">*</span></label>
+                                        <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
+                                            value="{{ old('years', $form['years'] ?? '') }}">
+                                            <option value="1"
+                                                {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}
+                                                selected>1
+                                            </option>
+                                        </select>
+                                        @error('years')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    @elseif(str_contains($category, 'at-lifetime'))
+                                    @else
+                                        <label class="form-label">No. of Years <span class="text-red">*</span></label>
+                                        <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
+                                            value="{{ old('years', $form['years'] ?? '') }}">
+                                            <option value="" disabled selected>Select years</option>
+                                            <option value="1"
+                                                {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1
+                                            </option>
+                                            <option value="2"
+                                                {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2
+                                            </option>
+                                            <option value="3"
+                                                {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3
+                                            </option>
+                                        </select>
+                                        @error('years')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    @endif
                                 @endif
                             </div>
                         </fieldset>
@@ -223,7 +240,7 @@
                             </fieldset>
                         @endif
                     </div>
-                    <input type="hidden" name="permit_type" value="{{ $category }}">
+                    <input type="hidden" name="certificate_type" value="{{ $category }}">
 
                     <div class="step-actions"><button type="button" class="btn-secondary"
                             data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button>
@@ -510,7 +527,7 @@
 
                 // --- Toggle enable/disable for club fields and preferred call sign based on permit type ---
                 function togglePermitDependentFields() {
-                    const selectedPermit = form.querySelector('input[name="permit_type"]:checked');
+                    const selectedPermit = form.querySelector('input[name="certificate_type"]:checked');
                     const clubName = form.querySelector('input[name="club_name"]');
                     const assignedFreq = form.querySelector('input[name="assigned_frequency"]');
                     const preferredCallSign = form.querySelector('input[name="preferred_call_sign"]');
@@ -536,8 +553,8 @@
                     }
                 }
 
-                // Bind change listeners for permit_type radios
-                form.querySelectorAll('input[name="permit_type"]').forEach(r => {
+                // Bind change listeners for certificate_type radios
+                form.querySelectorAll('input[name="certificate_type"]').forEach(r => {
                     r.addEventListener('change', togglePermitDependentFields);
                 });
 

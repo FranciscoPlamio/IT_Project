@@ -24,7 +24,9 @@
         @endif
     @endif
 @endif
-@if ($req->form_type === 'form1-02' && $req->payment_status === 'paid')
+@if (
+    ($req->form_type === 'form1-02' && $req->payment_status === 'paid') ||
+        ($req->form_type === 'form1-03' && $req->payment_status === 'paid'))
     @if (!$req->form->or)
         <div class="status-badge progress">
             <img src="{{ asset('images/In-prog.png') }}">
@@ -41,7 +43,7 @@
             try {
                 $files = Storage::disk('local')->files("forms/{$req->form_token}");
                 foreach ($files as $file) {
-                    if (str_contains($file, 'certificate_')) {
+                    if (Str::startsWith(basename($file), 'certificate_')) {
                         $certificateExists = true;
                         break;
                     }

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Forms\FormsTransactions;
 use Illuminate\Support\Str;
+use TypeError;
 
 class FormManager
 {
@@ -99,52 +100,86 @@ class FormManager
                 ])
             );
         } elseif ($formType === "form1-03") {
-            $typeRaw = strtoupper($formData['permit_type']); // e.g., "AT-RSL"
+            $typeRaw = strtoupper($formData['certificate_type']); // e.g., "AT-RSL"
             $years = (int) ($formData['years'] ?? 1);
+            $applicationType = $formData['application_type'] ?? 'new';
 
-
-            $feeTable = [
-                "AT-ROC" => ["ff" => 0, "cpf" => 0, "lf" => 60, "roc" => 30, "dst" => 30],
+            // --- FEE TABLES ---
+            $feeTableNewRenewal = [
+                "ATROC" => ["ff" => 0, "cpf" => 0, "lf" => 0, "roc" => 60, "dst" => 30],
+                "ATROC-RENEW-MOD" => ["ff" => 0, "cpf" => 0, "lf" => 0, "roc" => 60, "dst" => 30],
                 "AT-LIFETIME-NEW" => ["ff" => 60, "cpf" => 0, "lf" => 50, "roc" => 0, "dst" => 30],
                 "AT-CLUB-RSL-NEW" => ["ff" => 180, "cpf" => 600, "lf" => 700, "roc" => 0, "dst" => 30],
+                "AT-CLUB-RSL-RENEW-MOD" => ["ff" => 180, "cpf" => 600, "lf" => 700, "roc" => 0, "dst" => 30],
                 "TEMP-A" => ["ff" => 60, "cpf" => 0, "lf" => 120, "roc" => 60, "dst" => 30],
                 "TEMP-B" => ["ff" => 60, "cpf" => 0, "lf" => 132, "roc" => 60, "dst" => 30],
                 "TEMP-C" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+                "SPECIAL-EVENT-CALL" => ["sp" => 120, "dst" => 30],
+                "VANITY-CALL" => ["sp" => 1000, "dst" => 30],
             ];
 
-            // AT-RSL 
-            if (Str::contains($typeRaw, 'ATRSL')) {
-                $stationClass = strtoupper($formData['station_class'] ?? 'A');
-                $rslTable = [
-                    "RSL-CLASS_A" => ["ff" => 60, "cpf" => 0, "lf" => 120, "roc" => 60, "dst" => 30],
-                    "RSL-CLASS_B" => ["ff" => 60, "cpf" => 0, "lf" => 132, "roc" => 60, "dst" => 30],
-                    "RSL-CLASS_C" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
-                    "RSL-CLASS_D" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
-                ];
-                $matchedKey = "RSL-" . $stationClass;
-                $row = $rslTable[$matchedKey] ?? $rslTable["RSL-A"];
+            $feeTableModification = [
+                "ATROC-RENEW-MOD" => ["mod_ff" => 50, "mod_fee" => 0, "pos_fee" => 0, "dst" => 30],
+                "ATRSL-RENEW-MOD" => ["mod_ff" => 60, "mod_fee" => 50, "pos_fee" => 50, "dst" => 30],
+                "AT-LIFETIME-MODIFICATION" => ["mod_ff" => 60, "mod_fee" => 50, "pos_fee" => 50, "dst" => 30],
+                "AT-CLUB-RSL-RENEW-MOD" => ["mod_ff" => 180, "mod_fee" => 50, "pos_fee" => 50, "dst" => 30],
+            ];
+
+            // --- DETERMINE FEE ROW ---
+            if ($applicationType === 'modification') {
+                // Direct lookup, ignore station class
+                $row = $feeTableModification[$typeRaw] ?? null;
             } else {
-
-                $row = $feeTable[$typeRaw] ?? null;
+                // NEW / RENEWAL processing
+                if (Str::contains($typeRaw, 'ATRSL')) {
+                    $stationClass = strtoupper($formData['station_class'] ?? 'A');
+                    $rslTable = [
+                        "RSL-CLASS_A" => ["ff" => 60, "cpf" => 0, "lf" => 120, "roc" => 60, "dst" => 30],
+                        "RSL-CLASS_B" => ["ff" => 60, "cpf" => 0, "lf" => 132, "roc" => 60, "dst" => 30],
+                        "RSL-CLASS_C" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+                        "RSL-CLASS_D" => ["ff" => 60, "cpf" => 0, "lf" => 144, "roc" => 60, "dst" => 30],
+                    ];
+                    $matchedKey = "RSL-" . $stationClass;
+                    $row = $rslTable[$matchedKey] ?? $rslTable["RSL-CLASS_A"];
+                } elseif (($formData['certificate_type'] ?? null) === "temporary-foreign") {
+                    $rawClass = $formData['station_class'] ?? 'class_a';
+                    $stationClass = strtoupper(substr($rawClass, strpos($rawClass, '_') + 1));
+                    $matchedKey = "TEMP-" . $stationClass;
+                    $row = $feeTableNewRenewal[$matchedKey] ?? $feeTableNewRenewal["TEMP-A"];
+                } else {
+                    $row = $feeTableNewRenewal[$typeRaw] ?? null;
+                }
             }
 
-
+            // --- CALCULATE FEE ---
             if ($row) {
-                $isNew = $formData['application_type'] === 'new';
+                if ($applicationType === 'new') {
+                    $ff = $row['ff'] ?? 0;
+                    $cpf = $row['cpf'] ?? 0;
+                    $lf_total = ($row['lf'] ?? 0) * $years;
+                    $roc_total = ($row['roc'] ?? 0) * $years;
+                    $dst = $row['dst'] ?? 0;
+                    $sp = $row['sp'] ?? 0;
+                    $total = $ff + $cpf + $lf_total + $roc_total + $dst + $sp;
+                } elseif ($applicationType === 'renewal') {
+                    $ff = 0;
+                    $cpf = 0;
+                    $lf_total = ($row['lf'] ?? 0) * $years;
+                    $roc_total = ($row['roc'] ?? 0) * $years;
+                    $dst = $row['dst'] ?? 0;
+                    $sp = $row['sp'] ?? 0;
+                    $total = $lf_total + $roc_total + $dst + $sp;
+                } elseif ($applicationType === 'modification') {
+                    $ff = $row['mod_ff'] ?? 0;
+                    $mod_fee = $row['mod_fee'] ?? 0;
+                    $pos_fee = $row['pos_fee'] ?? 0;
+                    $dst = $row['dst'] ?? 0;
+                    $total = $ff + $mod_fee + $pos_fee + $dst;
+                }
 
-                $ff = $isNew ? ($row['ff'] ?? 0) : 0;
-                $cpf = $isNew ? ($row['cpf'] ?? 0) : 0;
-                $lf_total = ($row['lf'] ?? 0) * $years;
-                $roc_total = ($row['roc'] ?? 0) * $years;
-                $dst = $row['dst'] ?? 0;
-
-                $fee = $ff + $cpf + $lf_total + $roc_total + $dst;
-
-                $transactionData['payment_amount'] = $fee;
+                $transactionData['payment_amount'] = $total;
             }
 
-            dd($transactionData['payment_amount'], $formData);
-            dd(1);
             $form = $formModel::updateOrCreate(
                 ['form_token' => $formToken],
                 array_merge($formData, [
@@ -154,6 +189,7 @@ class FormManager
                 ])
             );
         } else {
+            // dd($formData, $transactionData);
             $form = $formModel::updateOrCreate(
                 ['form_token' => $formToken],
                 $formData

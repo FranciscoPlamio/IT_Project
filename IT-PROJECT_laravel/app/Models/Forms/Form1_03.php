@@ -45,7 +45,7 @@ class Form1_03 extends BaseForm
         'call_sign',
         'validity',
         'station_class',
-        'permit_type',
+        'certificate_type',
         'club_name',
         'assigned_frequency',
         'preferred_call_sign',

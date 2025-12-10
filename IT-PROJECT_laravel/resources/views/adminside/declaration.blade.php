@@ -170,6 +170,13 @@
                 width: 14px;
                 height: 14px;
             }
+
+            .error-message {
+                color: red;
+                font-size: 13px;
+                margin-top: 2px;
+                display: block;
+            }
         </style>
     </x-slot:head>
 
@@ -363,7 +370,7 @@
 
                     <label>
                         <span>OR Amount</span>
-                        <input type="text" name="or_amount" id="or_amount">
+                        <input type="text" name="or_amount" id="or_amount" disabled>
                         <small class="error-message" id="error-or-amount"></small>
                     </label>
                     <label>
@@ -437,12 +444,10 @@
                 if (receiptForm) {
                     receiptForm.reset();
                 }
-                const orNoinpout = document.getElementById("or_no");
-                orNoinpout.value = reference;
 
 
                 const orAmountInput = document.getElementById('or_amount');
-                orAmountInput.value = or_amount;
+                orAmountInput.value = parseFloat(or_amount).toFixed(2);
 
 
                 receiptModal.style.display = "flex";

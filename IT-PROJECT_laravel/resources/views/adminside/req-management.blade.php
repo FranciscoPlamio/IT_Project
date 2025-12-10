@@ -283,14 +283,14 @@
                                             @else
                                                 <span class="muted-text">—</span>
                                             @endif
-                                        @elseif($req->form_type === 'form1-02')
+                                        @elseif($req->form_type === 'form1-02' || $req->form_type === 'form1-03')
                                             @php
                                                 // Check if certificate has been generated (exists in attachments folder)
                                                 $certificateExists = false;
                                                 try {
                                                     $files = Storage::disk('local')->files("forms/{$req->form_token}");
                                                     foreach ($files as $file) {
-                                                        if (str_contains($file, 'certificate_')) {
+                                                        if (Str::startsWith(basename($file), 'certificate_')) {
                                                             $certificateExists = true;
                                                             break;
                                                         }

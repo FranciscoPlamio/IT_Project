@@ -551,7 +551,7 @@ class AdminController extends Controller   // <-- rename this
                 });
             }
             // Handle Form 1-02 (Certificate)
-            elseif ($formTransactions->form_type === 'form1-02') {
+            elseif ($formTransactions->form_type === 'form1-02' || $formTransactions->form_type === 'form1-03') {
                 // Generate certificate PDF
                 $pdfGenerator = new \App\Services\PDFCertificateGenerator();
                 $certificatePdf = $pdfGenerator->generateCertificate($form->toArray(), $formType);
