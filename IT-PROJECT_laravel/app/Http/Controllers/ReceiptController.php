@@ -43,34 +43,66 @@ class ReceiptController extends Controller
         return $pdf->stream('permit-receipt.pdf');
     }
 
-    public function generateExamReceipt($form)
+    public function generateExamReceipt($form, $transaction)
+
     {
+        // Get the exam payment amount from DB
+        $examAmount = $transaction->payment_amount ?? 0; // fallback to 0 if null
+
+        // Construct address string
+        $addressParts = [
+            $form->unit ?? '',
+            $form->street ?? '',
+            $form->barangay ?? '',
+            $form->city ?? '',
+            $form->province ?? ''
+        ];
+        $address = implode(', ', array_filter($addressParts));
+        $middleInitial = isset($form->middle_name) && !empty($form->middle_name)
+            ? strtoupper(substr($form->middle_name, 0, 1)) . '.'
+            : '';
+        // Simplified receipt for exam
         $receipt = [
-            'or_number' => $form->or->or_no ?? 'NTC-' . now()->format('Y') . '-E001',
-            'or_date' => isset($form->or->or_date)
-                ? Carbon::parse($form->or->or_date)->format('F d, Y')
+            'or_number' => $form->or['or_no'] ?? 'NTC-' . now()->format('Y') . '-E001',
+            'or_date' => isset($form->or['or_date'])
+                ? \Carbon\Carbon::parse($form->or['or_date'])->format('F d, Y')
                 : now()->format('F d, Y'),
-            'cash_received_from' => $form->payer_name ?? 'Juan Dela Cruz',
-            'address' => $form->payer_address ?? 'QC, Philippines',
+            'cash_received_from' => trim(
+                ($form->first_name ?? '') . ' ' .
+                    (isset($form->middle_name) && !empty($form->middle_name)
+                        ? strtoupper(substr($form->middle_name, 0, 1)) . '.'
+                        : '') . ' ' .
+                    ($form->last_name ?? '')
+            ),
+            'address' => $address ?: 'QC, Philippines',
             'transaction_type' => 'exam',
-            'form_type' => $form->form_type ?? null,
-            'payment_method' => strtoupper($form->payment_method ?? 'Cash'),
-            'collecting_officer' => $form->or->collecting_officer ?? 'N/A',
-            'ntc_region' => $form->ntc_region ?? 'Central Office',
-            'items' => [],
-            'total_amount' => 0,
+            'form_type' => $form->form_type ?? '1-01',
+            'payment_method' => strtoupper($transaction->payment_method ?? 'Cash'),
+            'collecting_officer' => $form->or['collecting_officer'] ?? 'N/A',
+            'ntc_region' => $form->ntc_region ?? 'NTC – CAR (Baguio)',
+            'exam_amount' => $examAmount, // only this is needed
+            'remarks' => $form->remarks ?? null,
         ];
 
-        $items = [
-            ['description' => 'Exam Fee', 'amount' => 150],
-            ['description' => 'Documentary Stamp Tax (DST)', 'amount' => 30],
-        ];
+        $pdf = Pdf::loadView('templates.exam-receipt', ['data' => $receipt]);
+        // // For testing: stream the PDF in browser
+        // return $pdf->stream('official_receipt.pdf');
 
-        $receipt['items'] = $items;
-        $receipt['total_amount'] = array_sum(array_map(fn($i) => $i['amount'], $items));
+        // Define path
+        $folderPath = "forms/{$form->form_token}";
+        $fileName = 'official_receipt_' . time()  . '.pdf';
+        $fullPath = $folderPath . '/' . $fileName;
 
-        $pdf = Pdf::loadView('templates.ntc-official-receipt', ['data' => $receipt]);
-        return $pdf->stream('exam-receipt.pdf');
+        // Make folder using Storage facade
+        if (!Storage::exists($folderPath)) {
+            Storage::makeDirectory($folderPath);
+        }
+
+        // Save PDF to storage/app/private/forms/{formToken}/...
+        Storage::put($fullPath, $pdf->output());
+
+        // Return path (optional) if you want to redirect
+        return $fullPath;
     }
     public function generateCertificateReceipt($form, $transaction)
     {
@@ -150,7 +182,13 @@ class ReceiptController extends Controller
         $receipt = [
             'or_number' => $form->or['or_no'] ?? 'NTC-' . now()->format('Y') . '-C001',
             'or_date' => isset($form->or['or_date']) ? \Carbon\Carbon::parse($form->or['or_date'])->format('F d, Y') : now()->format('F d, Y'),
-            'cash_received_from' => trim($form->last_name . ', ' . $form->first_name),
+            'cash_received_from' => trim(
+                ($form->first_name ?? '') . ' ' .
+                    (isset($form->middle_name) && !empty($form->middle_name)
+                        ? strtoupper(substr($form->middle_name, 0, 1)) . '.'
+                        : '') . ' ' .
+                    ($form->last_name ?? '')
+            ),
             'address' => $address ?: 'QC, Philippines',
             'certificate_type' => $form->certificate_type ?? $form->application_type ?? 'Certificate',
             'transaction_type' => $form->application_type ?? 'certificate',

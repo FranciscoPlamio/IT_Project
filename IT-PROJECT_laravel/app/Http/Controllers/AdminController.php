@@ -224,6 +224,7 @@ class AdminController extends Controller   // <-- rename this
 
         // Latest requests exclude completed or cancelled
         $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->where('payment_status', 'paid')  // Add this line
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -407,18 +408,16 @@ class AdminController extends Controller   // <-- rename this
         $receiptController = new ReceiptController();
 
         switch ($formType) {
-            case 'Form1-01': // Permit
-                $receiptPath = $receiptController->generatePermitReceipt($form);
+            case 'Form1-01': // Exam
+                $receiptPath = $receiptController->generateExamReceipt($form, $transaction);
                 break;
 
             case 'Form1-02': // Certificate
-                // Generate, save PDF, and get the storage path
-                // $receiptPath = $receiptController->generateCertificateReceipt($form, $transaction);
-                return $receiptController->generateCertificateReceipt($form, $transaction);
+                $receiptPath = $receiptController->generateCertificateReceipt($form, $transaction);
                 break;
 
-            case 'Form1-03': // Exam
-                $receiptPath = $receiptController->generateExamReceipt($form);
+            case 'Form1-03': // Certificate
+                $receiptPath = $receiptController->generatePermitReceipt($form);
                 break;
 
             default: // Default to certificate
@@ -560,7 +559,6 @@ class AdminController extends Controller   // <-- rename this
 
         // Send email using the Blade view
         if (!empty($form->email)) {
-
             // Handle Form 1-01 (Admission Slip)
             if ($formTransactions->form_type === 'form1-01') {
                 //Generate PDF
@@ -572,12 +570,29 @@ class AdminController extends Controller   // <-- rename this
                 $pdfData = $pdf->Output('S'); // <--- IMPORTANT
 
                 $fileName = "NTC_Form_{$formTransactions->form_type}.pdf";
+                // Folder for this form
+                $folderPath = "forms/{$form->form_token}";
+
+                // Try to find the first file starting with 'official_receipt_'
+                $receiptFile = collect(Storage::files($folderPath))
+                    ->first(fn($file) => str_starts_with(basename($file), 'official_receipt_') && strtolower(pathinfo($file, PATHINFO_EXTENSION)) === 'pdf');
+
+                // If a file is found, get its contents
+                $receiptPdfData = null;
+                $receiptFileName = null;
+
+                if ($receiptFile) {
+                    $receiptPdfData = Storage::get($receiptFile);
+                    $receiptFileName = basename($receiptFile);
+                }
+
 
                 // For Form 1-01
-                Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName) {
+                Mail::send('emails.form-approved', ['form' => $form, 'transaction' => $formTransactions], function ($message) use ($form, $pdfData, $fileName, $receiptPdfData, $receiptFileName) {
                     $message->to($form->user->email)
                         ->subject('Your Form Has Been Approved')
-                        ->attachData($pdfData, $fileName, ['mime' => 'application/pdf']);
+                        ->attachData($pdfData, $fileName, ['mime' => 'application/pdf'])
+                        ->attachData($receiptPdfData, $receiptFileName, ['mime' => 'application/pdf']);
                 });
             }
             // Handle Form 1-02 (Certificate)

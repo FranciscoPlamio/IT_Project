@@ -342,14 +342,6 @@
                                                 Create Official Receipt
                                             </button>
                                         @endif
-                                        <button id="orBtn"class="receipt-btn open-receipt-btn"
-                                            data-reference="{{ $req->payment_reference }}"
-                                            data-applicant="{{ $req->form->last_name }} {{ $req->form->first_name }}"
-                                            data-form="{{ ucfirst($req->form_type ?? 'N/A') }}"
-                                            data-formtoken="{{ $req->form_token }}"
-                                            data-amount="{{ $req->payment_amount }}">
-                                            Create Official Receipt
-                                        </button>
                                     </td>
 
                                 </tr>
