@@ -68,7 +68,7 @@ class Form1_09Rules
                 // Inteded Use
                 'intended_use' => ['required', 'string'],
                 'others_use_specify' => ['nullable', 'string'],
-                'storage_location' => ['required_if:intended_use,storage', 'string'],
+                'storage_location' => ['required_if:intended_use,storage',  'nullable', 'string'],
             ],
 
             'messages' => [

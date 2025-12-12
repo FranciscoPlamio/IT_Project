@@ -86,7 +86,7 @@
             try {
                 $files = Storage::disk('local')->files("forms/{$req->form_token}");
                 foreach ($files as $file) {
-                    if (Str::startsWith(basename($file), 'certificate_')) {
+                    if (Str::startsWith(basename($file), 'permit')) {
                         $certificateExists = true;
                         break;
                     }
@@ -98,12 +98,12 @@
         @if ($certificateExists)
             <div class="status-badge done">
                 <img src="{{ asset('images/Done.png') }}">
-                <span>Certificate Completed</span>
+                <span>Permit Completed</span>
             </div>
         @else
             <div class="status-badge progress">
                 <img src="{{ asset('images/In-prog.png') }}">
-                <span>Pending Certificate</span>
+                <span>Pending Permit</span>
             </div>
         @endif
     @endif

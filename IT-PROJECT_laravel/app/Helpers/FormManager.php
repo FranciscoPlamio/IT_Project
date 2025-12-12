@@ -108,7 +108,7 @@ class FormManager
 
             // --- FEE TABLES ---
             $feeTableNewRenewal = [
-                "ATROC" => ["ff" => 0, "cpf" => 0, "lf" => 0, "roc" => 60, "dst" => 30],
+                "ATROC-NEW" => ["ff" => 0, "cpf" => 0, "lf" => 0, "roc" => 60, "dst" => 30],
                 "ATROC-RENEW-MOD" => ["ff" => 0, "cpf" => 0, "lf" => 0, "roc" => 60, "dst" => 30],
                 "AT-LIFETIME-NEW" => ["ff" => 60, "cpf" => 0, "lf" => 50, "roc" => 0, "dst" => 30],
                 "AT-CLUB-RSL-NEW" => ["ff" => 180, "cpf" => 600, "lf" => 700, "roc" => 0, "dst" => 30],
@@ -149,6 +149,7 @@ class FormManager
                     $matchedKey = "TEMP-" . $stationClass;
                     $row = $feeTableNewRenewal[$matchedKey] ?? $feeTableNewRenewal["TEMP-A"];
                 } else {
+
                     $row = $feeTableNewRenewal[$typeRaw] ?? null;
                 }
             }
@@ -181,6 +182,7 @@ class FormManager
 
                 $transactionData['payment_amount'] = $total;
             }
+
 
             $form = $formModel::updateOrCreate(
                 ['form_token' => $formToken],

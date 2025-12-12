@@ -324,6 +324,8 @@ class FormsController extends Controller
 
     public function preview(Request $request, $formType)
     {
+
+
         // Verify Google reCAPTCHA first
         if (!$this->verifyRecaptcha($request)) {
             // dd($request); // for debugging
@@ -717,6 +719,53 @@ class FormsController extends Controller
             return response()->json(['error' => 'Failed to fetch form data: ' . $e->getMessage()], 500);
         }
     }
+    public function getPermitData($token)
+    {
+        try {
+            $transactionForm = FormsTransactions::where('form_token', $token)->first();
+            $formType = substr($transactionForm->form_type, 4);
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $token)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Map permit_type to display name
+            $permitNames = [
+                'at-club-rsl' => 'Amateur Club RSL',
+                'at-lifetime' => 'Amateur Lifetime Permit',
+                'purchase-possess' => 'Purchase/Possess Permit',
+                'sell-transfer' => 'Sell/Transfer Permit',
+                'storage-permit' => 'Storage Permit',
+                'at-rsl' => 'Amateur RSL',
+                // add more mappings as needed
+            ];
+
+            $permitTypeDisplay = $permitNames[$dbForm->permit_type ?? ''] ?? ($dbForm->permit_type ?? '');
+
+            // Combine radio_service + permit_type (radio_service first)
+            $certificateTypeDisplay = trim(($dbForm->radio_service ?? '') . ' ' . $permitTypeDisplay);
+
+            // Calculate dates
+            $issuanceDate = date('F j, Y'); // Current date
+            $years = isset($dbForm->years) ? (int)$dbForm->years : 0;
+            $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+
+            return response()->json([
+                'applicant' => $dbForm->applicant,
+                'certificate_type' => $certificateTypeDisplay,
+                'permit_type' => $permitTypeDisplay,
+                'issuance_date' => $issuanceDate,
+                'expiry_date' => $expiryDate,
+                'application_type' => $dbForm->application_type ?? '—',
+                'intended_use' => $dbForm->intended_use ?? '—',
+                'radio_service' => $dbForm->radio_service
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch form data: ' . $e->getMessage()], 500);
+        }
+    }
 
     /**
      * Format certificate type for display
@@ -775,16 +824,47 @@ class FormsController extends Controller
                 'GROC' => 'General Radiotelegraph Operator Certificate',
                 'RROC-AIRCRAFT' => 'Restricted Radiotelegraph Operator Certificate – Aircraft',
                 'RROC-RLM' => 'Restricted Radiotelegraph Operator Certificate – Land Mobile',
+                // --- FORM 1-03 ---
+                'ATROC' => 'Amateur Radio Operator Certificate',
+                'AT-LIFETIME' => 'Amateur Radio Operator Certificate – Lifetime',
+                'AT-CLUB-RSL' => 'Amateur Club Radio Station License',
+                'ATRSL' => 'Amateur Radio Station License', // will append class
+                'TEMP-A' => 'Temporary Amateur Radio Station Permit – Type A',
+                'TEMP-B' => 'Temporary Amateur Radio Station Permit – Type B',
+                'TEMP-C' => 'Temporary Amateur Radio Station Permit – Type C',
+                'SPECIAL-EVENT-CALL' => 'Special Event Call Sign',
+                'VANITY-CALL' => 'Vanity Call Sign',
+
+
             ];
             // Convert model to array for PDF generation
             $formData = $dbForm->toArray();
+
+            // Determine the raw type and station class
+            $rawType = strtoupper($dbForm->certificate_type ?? $dbForm->category ?? 'UNKNOWN');
+            $stationClass = strtoupper($dbForm->station_class ?? '');
+
+            // Determine the certificate title
+            if (Str::contains($rawType, 'ATRSL')) {
+                // Append station class for ATRSL
+                $title = ($certificateNames['ATRSL'] ?? 'Amateur Radio Station License')
+                    . ($stationClass ? ' –  ' . $stationClass : '');
+            } elseif (Str::contains($rawType, 'TEMP')) {
+                // Append station class for TEMP types if available
+                $title = ($certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType)))
+                    . ($stationClass ? ' – ' . $stationClass : '');
+            } else {
+                // Form 1-02 or other Form 1-03 types
+                $title = $certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType));
+            }
+
             $certificate = [
                 'ntc_region'        => 'NTC – CAR (Baguio)', // fixed
                 'certificate_type'  => strtoupper($dbForm->application_type ?? 'NEW'),
                 'certificate_no'    => $dbForm->certificate_no,
 
                 // Title based on certificate_type (SROP, GROC, etc.)
-                'title' => $certificateNames[$dbForm->certificate_type] ?? 'Certificate',
+                'title' => $title ?? 'Certificate',
 
                 // Radio service (optional — guess based on certificate)
                 'radio_service'     => $dbForm->radio_service,
@@ -835,6 +915,108 @@ class FormsController extends Controller
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function generatePermit(Request $request)
+    {
+        $formToken = $request->query('token');
+
+        if (!$formToken) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
+        if (!$transactionForm) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        $formType = substr($transactionForm->form_type, 4);
+        $formModel = FormManager::getFormModel('form' . $formType);
+        $dbForm = $formModel::where('form_token', $formToken)->first();
+
+        if (!$dbForm) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        $formData = $dbForm->toArray();
+
+        // 1️⃣ Dynamically find all *_units fields
+        $units = [];
+        foreach ($formData as $key => $value) {
+            if (str_ends_with($key, '_units') && $value > 0) {
+                // Convert key to readable name, e.g., 'rt_units' -> 'RT (Radio Telephone)'
+                $nameMap = [
+                    'rt_units' => 'RT (Radio Telephone)',
+                    'fx_units' => 'FX (Fixed)',
+                    'fb_units' => 'FB (Land Base)',
+                    'ml_units' => 'ML (Mobile Land)',
+                    'p_units'  => 'P (Portable/Handheld)',
+                ];
+                $units[$nameMap[$key] ?? strtoupper(str_replace('_units', '', $key))] = $value;
+            }
+        }
+
+        $unitCount = array_sum($units);
+
+        // 2️⃣ Determine intended use & per-unit fee
+        $intendedUse = $formData['intended_use'] ?? 'new_radio_station';
+        $permitType = strtoupper($formData['permit_type'] ?? 'N/A');
+
+        $feeTable = [
+            'purchase' => 50,
+            'possess' => 50,
+            'sell_transfer' => 50,
+            'dst' => 30,
+        ];
+
+        if (in_array($intendedUse, ['new_radio_station', 'change_equipment', 'additional_equipment'])) {
+            $perUnit = $feeTable['purchase'];
+            $label = 'Purchase Permit Fee (PUR)';
+        } elseif ($intendedUse === 'storage') {
+            $perUnit = $feeTable['possess'];
+            $label = 'Possess Permit Fee (POS)';
+        } elseif ($intendedUse === 'sell_transfer') {
+            $perUnit = $feeTable['sell_transfer'];
+            $label = 'Sell/Transfer Permit Fee (STF)';
+        } else {
+            $perUnit = 0;
+            $label = 'Permit Fee';
+        }
+
+        $totalPermitFee = $perUnit * $unitCount;
+        $dst = $feeTable['dst'];
+        $total = $totalPermitFee + $dst;
+
+        // 3️⃣ Prepare data for PDF
+        $permit = [
+            'applicant' => trim("{$formData['applicant']} "),
+            'permit_type_display' => $permitType,
+            'radio_service' => $formData['radio_service'] ?? '-',
+            'application_type' => $formData['application_type'] ?? '-',
+            'intended_use' => $formData['intended_use'] ?? '-',
+            'issuance_date' => now()->format('F j, Y'),
+            'expiry_date' => now()->addYears((int)($formData['years'] ?? 3))->format('F j, Y'),
+            'units' => $units,
+            'unit_count' => $unitCount,
+            'per_unit' => $perUnit,
+            'fee_label' => $label,
+            'total_permit_fee' => $totalPermitFee,
+            'dst' => $dst,
+            'total' => $total,
+        ];
+
+        $pdf = Pdf::loadView('templates.ntc-permit', compact('permit'))
+            ->setPaper('A4', 'portrait');
+
+        $filename = "Permit_{$formData['applicant']}_" . date('Y-m-d_H-i-s') . ".pdf";
+
+        if ($request->boolean('preview')) {
+            return $pdf->stream($filename);
+        } else {
+            $attachmentPath = "forms/{$formToken}/permit_" . time() . ".pdf";
+            Storage::put($attachmentPath, $pdf->output());
+            return $pdf->download($filename);
         }
     }
 }
