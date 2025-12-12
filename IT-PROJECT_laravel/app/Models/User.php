@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function hasFormTransaction()
     {
-        return $this->hasMany(FormsTransactions::class, 'user_id')
+        return FormsTransactions::where('user_id', $this->id)
             ->whereNotIn('status', ['cancelled', 'declined', 'done'])
             ->exists();
     }

@@ -60,9 +60,11 @@
                 align-items: center;
                 z-index: 999;
             }
+
             .confirm-modal h3 {
                 margin-bottom: 15px;
             }
+
             .confirm-modal p {
                 margin-bottom: 15px;
             }
@@ -209,7 +211,12 @@
                                     </td>
 
                                     <td>
-                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @if ($req->form->applicant)
+                                            {{ $req->form->applicant }}
+                                        @else
+                                            {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @endif
+
                                     </td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
@@ -289,14 +296,14 @@
                                             @else
                                                 <span class="muted-text">—</span>
                                             @endif
-                                        @elseif($req->form_type === 'form1-02')
+                                        @elseif($req->form_type === 'form1-02' || $req->form_type === 'form1-03')
                                             @php
                                                 // Check if certificate has been generated (exists in attachments folder)
                                                 $certificateExists = false;
                                                 try {
                                                     $files = Storage::disk('local')->files("forms/{$req->form_token}");
                                                     foreach ($files as $file) {
-                                                        if (str_contains($file, 'certificate_')) {
+                                                        if (Str::startsWith(basename($file), 'certificate_')) {
                                                             $certificateExists = true;
                                                             break;
                                                         }
@@ -326,67 +333,67 @@
         </div>
     </div>
     <div class="confirm-modal" id="confirmApproveModal" style="display:none;">
-    <div class="confirm-modal__content">
-        <h3>Approve Request</h3>
-        <p>Type <strong>"Confirm"</strong> to appove request</p>
+        <div class="confirm-modal__content">
+            <h3>Approve Request</h3>
+            <p>Type <strong>"Confirm"</strong> to appove request</p>
 
-        <input type="text" id="confirmInput" placeholder="Type Confirm" 
-               style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; justify-content: center;">
+            <input type="text" id="confirmInput" placeholder="Type Confirm"
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; justify-content: center;">
 
-        <p id="confirmWarning" style="color: red; font-size: 0.9rem; display:none; margin-top:8px;">
-            Incorrect input. Please type "Confirm".
-        </p>
+            <p id="confirmWarning" style="color: red; font-size: 0.9rem; display:none; margin-top:8px;">
+                Incorrect input. Please type "Confirm".
+            </p>
 
-        <div class="confirm-actions" style="margin-top: 15px;">
-            <button id="confirmApproveCancel" class="btn-secondary">Cancel</button>
+            <div class="confirm-actions" style="margin-top: 15px;">
+                <button id="confirmApproveCancel" class="btn-secondary">Cancel</button>
 
-            <button id="confirmApproveYes" class="btn-primary" disabled>Approve</button>
+                <button id="confirmApproveYes" class="btn-primary" disabled>Approve</button>
+            </div>
         </div>
     </div>
-</div>
     <script>
         let approveId = null;
 
-function openConfirmApproveModal(id) {
-    approveId = id;
-    document.getElementById("confirmApproveModal").style.display = "flex";
+        function openConfirmApproveModal(id) {
+            approveId = id;
+            document.getElementById("confirmApproveModal").style.display = "flex";
 
-    // Reset input and button state
-    document.getElementById("confirmInput").value = "";
-    document.getElementById("confirmWarning").style.display = "none";
-    document.getElementById("confirmApproveYes").disabled = true;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-
-    const confirmInput = document.getElementById("confirmInput");
-    const confirmButton = document.getElementById("confirmApproveYes");
-    const warning = document.getElementById("confirmWarning");
-
-    // Live validation
-    confirmInput.addEventListener("input", () => {
-        if (confirmInput.value.trim() === "Confirm") {
-            confirmButton.disabled = false;
-            warning.style.display = "none";
-        } else {
-            confirmButton.disabled = true;
-
-            // Only show warning when input is NOT empty
-            warning.style.display = confirmInput.value.trim() !== "" ? "block" : "none";
+            // Reset input and button state
+            document.getElementById("confirmInput").value = "";
+            document.getElementById("confirmWarning").style.display = "none";
+            document.getElementById("confirmApproveYes").disabled = true;
         }
-    });
 
-    // Cancel Modal
-    document.getElementById("confirmApproveCancel").addEventListener("click", () => {
-        document.getElementById("confirmApproveModal").style.display = "none";
-        approveId = null;
-    });
+        document.addEventListener('DOMContentLoaded', () => {
 
-    // Confirm Approve
-    confirmButton.addEventListener("click", () => {
-        document.getElementById("confirmApproveModal").style.display = "none";
-        approveRequest(approveId);
-    });
-});
+            const confirmInput = document.getElementById("confirmInput");
+            const confirmButton = document.getElementById("confirmApproveYes");
+            const warning = document.getElementById("confirmWarning");
+
+            // Live validation
+            confirmInput.addEventListener("input", () => {
+                if (confirmInput.value.trim() === "Confirm") {
+                    confirmButton.disabled = false;
+                    warning.style.display = "none";
+                } else {
+                    confirmButton.disabled = true;
+
+                    // Only show warning when input is NOT empty
+                    warning.style.display = confirmInput.value.trim() !== "" ? "block" : "none";
+                }
+            });
+
+            // Cancel Modal
+            document.getElementById("confirmApproveCancel").addEventListener("click", () => {
+                document.getElementById("confirmApproveModal").style.display = "none";
+                approveId = null;
+            });
+
+            // Confirm Approve
+            confirmButton.addEventListener("click", () => {
+                document.getElementById("confirmApproveModal").style.display = "none";
+                approveRequest(approveId);
+            });
+        });
     </script>
 </x-admin-layout>

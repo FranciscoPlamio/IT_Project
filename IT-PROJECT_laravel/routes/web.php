@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailController;
-
+use App\Http\Controllers\ReceiptController;
 
 // Default index route
 Route::get('/', function () {
@@ -18,6 +18,13 @@ Route::get('/requirements', function () {
 Route::get('/services', function () {
     return view('services');
 })->name('services');
+
+
+Route::get('/test-ntc-receipt', [ReceiptController::class, 'generateReceipt']);
+Route::post('/test-ntc-receipt', [ReceiptController::class, 'generateReceiptFromDB']);
+Route::get('/test-ntc-certificate', [ReceiptController::class, 'generateCertificate']);
+Route::post('/test-ntc-certificate', [ReceiptController::class, 'generateCertificateFromDB']);
+
 
 
 // Email Authentication routes

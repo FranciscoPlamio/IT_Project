@@ -11,6 +11,7 @@ use App\Models\Forms\Form1_01\ApplicantDetails;
 use App\Models\Forms\Form1_01\RequestAssistance;
 use App\Models\Forms\Form1_01\Declaration;
 use App\Models\Forms\FormsMeta;
+use App\Models\Forms\FormsTransactions;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf; // or use mPDF if you prefer
+
 
 class FormsController extends Controller
 {
@@ -133,9 +136,9 @@ class FormsController extends Controller
 
     public function show(Request $request, $formType)
     {
-        if (self::userHasFormTransaction()) {
-            return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
-        }
+        // if (self::userHasFormTransaction()) {
+        //     return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
+        // }
         // Get all session keys
         $sessionKeys = array_keys(session()->all());
 
@@ -402,7 +405,6 @@ class FormsController extends Controller
             'paymentMethod' => 'required|string',
             'formData' => 'required|array'
         ]);
-
         // Call FormManager directly using the request's formType and formToken
         $result = FormManager::saveForm(
             $request->input('formType'),
@@ -411,7 +413,6 @@ class FormsController extends Controller
             $request->input('userId'),
             $request->input('paymentMethod')
         );
-
         // Return JSON response for Postman
         return response()->json([
             'message' => 'Form processed successfully',
@@ -651,27 +652,27 @@ class FormsController extends Controller
     }
 
     public function verifyRecaptcha(Request $request)
-{
-    $token = $request->input('g-recaptcha-response');
+    {
+        $token = $request->input('g-recaptcha-response');
 
-    if (!$token) {
-        return false; // No token means CAPTCHA was not completed
+        if (!$token) {
+            return false; // No token means CAPTCHA was not completed
+        }
+
+        // FIX #2 — Disable SSL verification temporarily for local development
+        $response = Http::withoutVerifying()->asForm()->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]
+        );
+
+        $result = $response->json();
+
+        return isset($result['success']) && $result['success'] === true;
     }
-
-    // FIX #2 — Disable SSL verification temporarily for local development
-    $response = Http::withoutVerifying()->asForm()->post(
-        'https://www.google.com/recaptcha/api/siteverify',
-        [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $token,
-            'remoteip' => $request->ip(),
-        ]
-    );
-
-    $result = $response->json();
-
-    return isset($result['success']) && $result['success'] === true;
-}
 
 
     public function userHasFormTransaction()
@@ -686,7 +687,8 @@ class FormsController extends Controller
     public function getCertificateData($token)
     {
         try {
-            $formType = '1-02';
+            $transactionForm = FormsTransactions::where('form_token', $token)->first();
+            $formType = substr($transactionForm->form_type, 4);
             $formModel = FormManager::getFormModel('form' . $formType);
             $dbForm = $formModel::where('form_token', $token)->first();
 
@@ -742,11 +744,17 @@ class FormsController extends Controller
     public function generateCertificate(Request $request)
     {
         $formToken = $request->query('token');
-        $formType = '1-02'; // Form 2 as specified
+        $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
 
         if (!$formToken) {
             return response()->json(['error' => 'Missing form token'], 400);
         }
+        if (!$transactionForm) {
+            return response()->json(['error' => 'Form not found in transactions'], 404);
+        }
+
+        // Extract form type like "1-02"
+        $formType = substr($transactionForm->form_type, 4);
 
         try {
             // Retrieve form data from database
@@ -756,28 +764,74 @@ class FormsController extends Controller
             if (!$dbForm) {
                 return response()->json(['error' => 'Form not found'], 404);
             }
-
+            $certificateNames = [
+                '1RTG' => 'First-class Radiotelegraph Operator Certificate',
+                '2RTG' => 'Second-class Radiotelegraph Operator Certificate',
+                '3RTG' => 'Third-class Radiotelegraph Operator Certificate',
+                '1PHN' => 'First-class Radiotelephone Operator Certificate',
+                '2PHN' => 'Second-class Radiotelephone Operator Certificate',
+                '3PHN' => 'Third-class Radiotelephone Operator Certificate',
+                'SROP' => 'Ship Radiotelegraph Operator Certificate',
+                'GROC' => 'General Radiotelegraph Operator Certificate',
+                'RROC-AIRCRAFT' => 'Restricted Radiotelegraph Operator Certificate – Aircraft',
+                'RROC-RLM' => 'Restricted Radiotelegraph Operator Certificate – Land Mobile',
+            ];
             // Convert model to array for PDF generation
             $formData = $dbForm->toArray();
+            $certificate = [
+                'ntc_region'        => 'NTC – CAR (Baguio)', // fixed
+                'certificate_type'  => strtoupper($dbForm->application_type ?? 'NEW'),
+                'certificate_no'    => $dbForm->certificate_no,
 
-            // Generate certificate PDF using the Sample_Cert.pdf template
-            $pdfGenerator = new \App\Services\PDFCertificateGenerator();
-            $pdf = $pdfGenerator->generateCertificate($formData, $formType);
+                // Title based on certificate_type (SROP, GROC, etc.)
+                'title' => $certificateNames[$dbForm->certificate_type] ?? 'Certificate',
+
+                // Radio service (optional — guess based on certificate)
+                'radio_service'     => $dbForm->radio_service,
+
+                // Name and Address
+                'name' => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                'address'           => implode(', ', array_filter([
+                    $dbForm->unit,
+                    $dbForm->street,
+                    $dbForm->barangay,
+                    $dbForm->city,
+                    $dbForm->province,
+                    $dbForm->zip_code
+                ])),
+
+                // Personal Info
+                'dob'               => \Carbon\Carbon::parse($dbForm->dob)->format('M d, Y'),
+                'citizenship'       => $dbForm->nationality ?? 'Filipino',
+                'sex'               => strtoupper(substr($dbForm->sex, 0, 1)), // male → M
+                'height'            => $dbForm->height,
+                'weight'            => $dbForm->weight,
+
+                // Dates
+                'date_issued'       => now()->format('M d, Y'),
+                'valid_until' => now()->addYears((int) ($dbForm->years ?? 3))->format('M d, Y'),
+
+                // Officer (fixed)
+                'officer_name'      => '________________',
+                'officer_title'     => 'Officer In Charge',
+
+                // Serial No: auto-generate if missing
+                'serial_no'         => $dbForm->serial_no ?? rand(100000, 999999),
+            ];
+            $pdf = Pdf::loadView('templates.certificate', compact('certificate'))
+                ->setPaper('A5', 'portrait');
 
             // Generate filename
             $filename = "Certificate_{$formData['last_name']}_{$formData['first_name']}_" . date('Y-m-d_H-i-s') . ".pdf";
 
-            // Stream inline when preview=1, otherwise save to attachments and download
+            // Preview mode → open in browser
             if ($request->boolean('preview')) {
-                $pdf->Output('I', $filename);
+                return $pdf->stream($filename);
             } else {
-                // Save to attachments folder
-                $attachmentPath = "forms/{$formToken}/certificate_" . date('Y-m-d_H-i-s') . ".pdf";
-                $pdfContent = $pdf->Output('S'); // Get PDF as string
-                \Storage::disk('local')->put($attachmentPath, $pdfContent);
+                $attachmentPath = "forms/{$formToken}/certificate_" . time() . ".pdf";
+                Storage::put($attachmentPath, $pdf->output());
 
-                // Download to user
-                $pdf->Output('D', $filename);
+                return $pdf->download($filename);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);

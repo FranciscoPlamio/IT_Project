@@ -89,7 +89,7 @@
                                     <p class="info-value">
                                         {{ getDisplayValue($key, $value, $licenseDescriptions) ?: '—' }}
                                     </p>
-                                @elseif ($form->form_type === 'form1-03')
+                                @elseif ($form->form_type === 'form1-03' || $form->form_type === 'form1-09')
                                     <p class="info-value">
                                         {{ $value ?: '—' }}
                                     </p>
