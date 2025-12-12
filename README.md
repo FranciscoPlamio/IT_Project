@@ -1,4 +1,67 @@
-# IT Project
+# IT Project - NTC Forms Management System
+
+> **Quick Setup**: Run `setup.ps1` (PowerShell) or `setup.bat` to automatically install all dependencies!
+
+## 🚀 Automated Setup (Recommended)
+
+### Quick Start
+
+1. **Clone the repository**:
+
+   ```bash
+   git clone <repository-url> it-project
+   cd it-project
+   ```
+
+2. **Run the setup script**:
+
+   **Windows (PowerShell)**:
+
+   ```powershell
+   .\setup.ps1
+   ```
+
+   **Windows (Command Prompt)**:
+
+   ```cmd
+   setup.bat
+   ```
+
+3. **Add tools to PATH** (for current terminal):
+
+   ```cmd
+   set-env.bat
+   ```
+
+4. **Install MongoDB Server** (required, not auto-installed):
+
+   - Download from: https://www.mongodb.com/try/download/community
+   - Install with default settings
+
+5. **Start the development server**:
+
+   ```bash
+   cd IT-PROJECT_laravel
+   php artisan serve
+   ```
+
+6. Visit `http://localhost:8000`
+
+### What Gets Auto-Installed
+
+The setup scripts automatically download and install:
+
+- ✅ PHP 8.2.13 (Thread Safe)
+- ✅ cacert.pem (SSL/TLS certificates)
+- ✅ Composer (PHP dependency manager)
+- ✅ MongoDB Shell
+- ✅ All Laravel dependencies
+
+**See [SETUP_GUIDE.md](SETUP_GUIDE.md) for detailed instructions, troubleshooting, and manual installation.**
+
+---
+
+## 📋 Manual Setup (Alternative)
 
 ## Create database in mongodb
 
