@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf; // or use mPDF if you prefer
+
 
 class FormsController extends Controller
 {
@@ -134,9 +136,9 @@ class FormsController extends Controller
 
     public function show(Request $request, $formType)
     {
-        if (self::userHasFormTransaction()) {
-            return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
-        }
+        // if (self::userHasFormTransaction()) {
+        //     return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
+        // }
         // Get all session keys
         $sessionKeys = array_keys(session()->all());
 
@@ -743,11 +745,16 @@ class FormsController extends Controller
     {
         $formToken = $request->query('token');
         $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
-        $formType = substr($transactionForm->form_type, 4);
 
         if (!$formToken) {
             return response()->json(['error' => 'Missing form token'], 400);
         }
+        if (!$transactionForm) {
+            return response()->json(['error' => 'Form not found in transactions'], 404);
+        }
+
+        // Extract form type like "1-02"
+        $formType = substr($transactionForm->form_type, 4);
 
         try {
             // Retrieve form data from database
@@ -757,28 +764,74 @@ class FormsController extends Controller
             if (!$dbForm) {
                 return response()->json(['error' => 'Form not found'], 404);
             }
-
+            $certificateNames = [
+                '1RTG' => 'First-class Radiotelegraph Operator Certificate',
+                '2RTG' => 'Second-class Radiotelegraph Operator Certificate',
+                '3RTG' => 'Third-class Radiotelegraph Operator Certificate',
+                '1PHN' => 'First-class Radiotelephone Operator Certificate',
+                '2PHN' => 'Second-class Radiotelephone Operator Certificate',
+                '3PHN' => 'Third-class Radiotelephone Operator Certificate',
+                'SROP' => 'Ship Radiotelegraph Operator Certificate',
+                'GROC' => 'General Radiotelegraph Operator Certificate',
+                'RROC-AIRCRAFT' => 'Restricted Radiotelegraph Operator Certificate – Aircraft',
+                'RROC-RLM' => 'Restricted Radiotelegraph Operator Certificate – Land Mobile',
+            ];
             // Convert model to array for PDF generation
             $formData = $dbForm->toArray();
+            $certificate = [
+                'ntc_region'        => 'NTC – CAR (Baguio)', // fixed
+                'certificate_type'  => strtoupper($dbForm->application_type ?? 'NEW'),
+                'certificate_no'    => $dbForm->certificate_no,
 
-            // Generate certificate PDF using the Sample_Cert.pdf template
-            $pdfGenerator = new \App\Services\PDFCertificateGenerator();
-            $pdf = $pdfGenerator->generateCertificate($formData, $formType);
+                // Title based on certificate_type (SROP, GROC, etc.)
+                'title' => $certificateNames[$dbForm->certificate_type] ?? 'Certificate',
+
+                // Radio service (optional — guess based on certificate)
+                'radio_service'     => $dbForm->radio_service,
+
+                // Name and Address
+                'name' => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                'address'           => implode(', ', array_filter([
+                    $dbForm->unit,
+                    $dbForm->street,
+                    $dbForm->barangay,
+                    $dbForm->city,
+                    $dbForm->province,
+                    $dbForm->zip_code
+                ])),
+
+                // Personal Info
+                'dob'               => \Carbon\Carbon::parse($dbForm->dob)->format('M d, Y'),
+                'citizenship'       => $dbForm->nationality ?? 'Filipino',
+                'sex'               => strtoupper(substr($dbForm->sex, 0, 1)), // male → M
+                'height'            => $dbForm->height,
+                'weight'            => $dbForm->weight,
+
+                // Dates
+                'date_issued'       => now()->format('M d, Y'),
+                'valid_until' => now()->addYears((int) ($dbForm->years ?? 3))->format('M d, Y'),
+
+                // Officer (fixed)
+                'officer_name'      => '________________',
+                'officer_title'     => 'Officer In Charge',
+
+                // Serial No: auto-generate if missing
+                'serial_no'         => $dbForm->serial_no ?? rand(100000, 999999),
+            ];
+            $pdf = Pdf::loadView('templates.certificate', compact('certificate'))
+                ->setPaper('A5', 'portrait');
 
             // Generate filename
             $filename = "Certificate_{$formData['last_name']}_{$formData['first_name']}_" . date('Y-m-d_H-i-s') . ".pdf";
 
-            // Stream inline when preview=1, otherwise save to attachments and download
+            // Preview mode → open in browser
             if ($request->boolean('preview')) {
-                $pdf->Output('I', $filename);
+                return $pdf->stream($filename);
             } else {
-                // Save to attachments folder
-                $attachmentPath = "forms/{$formToken}/certificate_" . date('Y-m-d_H-i-s') . ".pdf";
-                $pdfContent = $pdf->Output('S'); // Get PDF as string
-                \Storage::disk('local')->put($attachmentPath, $pdfContent);
+                $attachmentPath = "forms/{$formToken}/certificate_" . time() . ".pdf";
+                Storage::put($attachmentPath, $pdf->output());
 
-                // Download to user
-                $pdf->Output('D', $filename);
+                return $pdf->download($filename);
             }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);

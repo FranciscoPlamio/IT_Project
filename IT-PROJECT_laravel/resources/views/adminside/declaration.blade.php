@@ -342,7 +342,14 @@
                                                 Create Official Receipt
                                             </button>
                                         @endif
-
+                                        <button id="orBtn"class="receipt-btn open-receipt-btn"
+                                            data-reference="{{ $req->payment_reference }}"
+                                            data-applicant="{{ $req->form->last_name }} {{ $req->form->first_name }}"
+                                            data-form="{{ ucfirst($req->form_type ?? 'N/A') }}"
+                                            data-formtoken="{{ $req->form_token }}"
+                                            data-amount="{{ $req->payment_amount }}">
+                                            Create Official Receipt
+                                        </button>
                                     </td>
 
                                 </tr>
@@ -514,11 +521,11 @@
 
                 formToken = this.dataset.formtoken;
                 formType = this.dataset.form;
-                console.log(formToken, formType);
+
             });
 
             const form = document.getElementById('receiptForm');
-            console.log(form);
+
             const saveBtn = document.getElementById('saveBtn');
             saveBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -553,6 +560,7 @@
                 if (valid) {
                     document.querySelector('input[name="form_token"]').value = formToken;
                     document.querySelector('input[name="form_type"]').value = formType;
+                    document.getElementById('or_amount').disabled = false;
                     form.submit();
                 }
             })

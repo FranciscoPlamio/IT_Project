@@ -20,7 +20,10 @@ Route::get('/services', function () {
 })->name('services');
 
 
-Route::get('/test-ntc-receipt', [ReceiptController::class, 'generateCertificate']);
+Route::get('/test-ntc-receipt', [ReceiptController::class, 'generateReceipt']);
+Route::post('/test-ntc-receipt', [ReceiptController::class, 'generateReceiptFromDB']);
+Route::get('/test-ntc-certificate', [ReceiptController::class, 'generateCertificate']);
+Route::post('/test-ntc-certificate', [ReceiptController::class, 'generateCertificateFromDB']);
 
 
 

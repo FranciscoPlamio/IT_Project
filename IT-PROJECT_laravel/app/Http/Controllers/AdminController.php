@@ -384,6 +384,7 @@ class AdminController extends Controller   // <-- rename this
 
         $formModel = FormManager::getFormModel($request->input('form_type'));
         $form = $formModel::where('form_token', $request->input('form_token'))->first();
+        $transaction = FormsTransactions::where('form_token', $request->input('form_token'))->first();
 
         if (!$form) {
             return response()->json(['error' => 'Form not found'], 404);
@@ -400,7 +401,36 @@ class AdminController extends Controller   // <-- rename this
         // Save into the form document
         $form->or = $orData; // if the field is in fillable
         $form->save();
-        return redirect()->back();
+
+        // Determine receipt type based on form_type
+        $formType = $request->input('form_type');
+        $receiptController = new ReceiptController();
+
+        switch ($formType) {
+            case 'Form1-01': // Permit
+                $receiptPath = $receiptController->generatePermitReceipt($form);
+                break;
+
+            case 'Form1-02': // Certificate
+                // Generate, save PDF, and get the storage path
+                // $receiptPath = $receiptController->generateCertificateReceipt($form, $transaction);
+                return $receiptController->generateCertificateReceipt($form, $transaction);
+                break;
+
+            case 'Form1-03': // Exam
+                $receiptPath = $receiptController->generateExamReceipt($form);
+                break;
+
+            default: // Default to certificate
+                $receiptPath = $receiptController->generateCertificateReceipt($form, $transaction);
+                break;
+        }
+
+        // Redirect back with success message and optionally include path
+        return redirect()->back()->with([
+            'message' => 'Official Receipt generated successfully!',
+            'receipt_path' => $receiptPath // optional, useful for download link
+        ]);
     }
 
 
@@ -552,45 +582,51 @@ class AdminController extends Controller   // <-- rename this
             }
             // Handle Form 1-02 (Certificate)
             elseif ($formTransactions->form_type === 'form1-02' || $formTransactions->form_type === 'form1-03') {
-                // Generate certificate PDF
-                $pdfGenerator = new \App\Services\PDFCertificateGenerator();
-                $certificatePdf = $pdfGenerator->generateCertificate($form->toArray(), $formType);
+                $folderPath = "forms/{$form->form_token}";
+                $certificateFile = collect(Storage::files($folderPath))
+                    ->first(fn($file) => str_starts_with(basename($file), 'certificate_'));
 
-                // Get PDF as string
-                $certificateData = $certificatePdf->Output('S');
-                $certificateFileName = "Certificate_{$form->last_name}_{$form->first_name}.pdf";
+                if (!$certificateFile) {
+                    return redirect()->back()->withErrors(['Certificate file not found.']);
+                }
 
-                // Format certificate type for email
+                $certificateData = Storage::get($certificateFile);
+                $certificateFileName = basename($certificateFile);
+
+
+                // --- Official Receipt already saved path ---
+                $receiptController = new \App\Http\Controllers\ReceiptController();
+                $receiptPath = $receiptController->generateCertificateReceipt($form, $formTransactions); // returns storage path
+                $receiptFileName = basename($receiptPath);
+                $receiptData = Storage::get($receiptPath);
+
+                // --- Format certificate type display ---
                 $certificateTypes = [
-                    '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
-                    '1rtg_code25' => '1RTG - Code (25/20 wpm)',
-                    '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
-                    '2rtg_code16' => '2RTG - Code (16 wpm)',
-                    '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
-                    '3rtg_code16' => '3RTG - Code (16 wpm)',
-                    '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
-                    '2phn_e123' => '2PHN - Elements 1, 2 & 3',
-                    '3phn_e12' => '3PHN - Elements 1 & 2',
+                    'srop' => 'Second-class Radiotelegraph Operator Certificate',
+                    '1rtg' => 'First-class Radiotelegraph Operator Certificate',
+                    '2rtg' => 'Second-class Radiotelegraph Operator Certificate',
+                    '3rtg' => 'Third-class Radiotelegraph Operator Certificate',
+                    '1phn' => 'First-class Radiotelephone Operator Certificate',
+                    '2phn' => 'Second-class Radiotelephone Operator Certificate',
+                    '3phn' => 'Third-class Radiotelephone Operator Certificate',
                 ];
 
-                $certificateTypeDisplay = $certificateTypes[$form->certificate_type ?? ''] ?? ucwords(str_replace('_', ' ', $form->certificate_type ?? 'N/A'));
+                $certificateTypeDisplay = $certificateTypes[strtolower($form->certificate_type ?? '')]
+                    ?? ucwords(str_replace('_', ' ', $form->certificate_type ?? 'Certificate'));
 
-                // Calculate dates
-                $issuanceDate = date('F j, Y');
-                $years = isset($form->years) ? (int)$form->years : 0;
-                $expiryDate = date('F j, Y', strtotime("+{$years} years"));
-
-                // For Form 1-02
+                // --- Send email with attachments ---
                 Mail::send('emails.certificate-generated', [
                     'form' => $form,
                     'transaction' => $formTransactions,
                     'certificateType' => $certificateTypeDisplay,
-                    'issuanceDate' => $issuanceDate,
-                    'expiryDate' => $expiryDate,
-                ], function ($message) use ($form, $certificateData, $certificateFileName) {
+                    'issuanceDate' => now()->format('F j, Y'),
+                    'expiryDate' => now()->addYears((int)($form->years ?? 3))->format('F j, Y'),
+                    'receiptPath' => $receiptPath,
+                ], function ($message) use ($form, $certificateData, $certificateFileName, $receiptData, $receiptFileName) {
                     $message->to($form->user->email)
-                        ->subject('Your Certificate Has Been Generated')
-                        ->attachData($certificateData, $certificateFileName, ['mime' => 'application/pdf']);
+                        ->subject('Your Certificate and Official Receipt Have Been Generated')
+                        ->attachData($certificateData, $certificateFileName, ['mime' => 'application/pdf'])
+                        ->attachData($receiptData, $receiptFileName, ['mime' => 'application/pdf']);
                 });
             }
         }
