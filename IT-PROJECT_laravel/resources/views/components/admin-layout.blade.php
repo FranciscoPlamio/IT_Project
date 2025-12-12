@@ -68,7 +68,12 @@
             <a href="{{ route('admin.cert-request') }}"
                 class="menu-item {{ Route::is('admin.cert-request') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.cert-request') ? asset('images/whitecert-icon.png') : asset('images/req-icon.png') }} "
-                    alt=""> Certification & Permit Request
+                    alt=""> Certification Request
+            </a>
+            <a href="{{ route('admin.permit-request') }}"
+                class="menu-item {{ Route::is('admin.permit-request') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.permit-request') ? asset('images/whitecert-icon.png') : asset('images/req-icon.png') }} "
+                    alt=""> Permit Request
             </a>
             <a href="{{ route('admin.req-history') }}"
                 class="menu-item {{ Route::is('admin.req-history') ? 'active' : '' }}">

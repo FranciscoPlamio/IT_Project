@@ -12,6 +12,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     Route::get('cert-request', [AdminController::class, 'certRequest'])->name('cert-request');
+    Route::get('permit-request', [AdminController::class, 'permitRequest'])->name('permit-request');
 
     //Request management
     Route::get('req-management', [AdminController::class, 'requestManagement'])->name('req-management');
@@ -43,6 +44,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Certificate generation route
     Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
     Route::get('get-certificate-data/{token}', [FormsController::class, 'getCertificateData'])->name('get-certificate-data');
+
+    // Permit
+    Route::get('generate-permit', [FormsController::class, 'generatePermit'])->name('generate-permit');
+    Route::get('get-permit-data/{token}', [FormsController::class, 'getPermitData'])->name('get-permit-data');
 });
 
 

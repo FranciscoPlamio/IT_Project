@@ -7,6 +7,8 @@
 
     @php
         $units = [
+            'RT (Radio Telephone)' => $form['rt_units'] ?? 0,
+            'FX (Fixed)' => $form['fx_units'] ?? 0,
             'FB (Land Base)' => $form['fb_units'] ?? 0,
             'ML (Mobile Land)' => $form['ml_units'] ?? 0,
             'P (Portable/Handheld)' => $form['p_units'] ?? 0,
@@ -14,6 +16,7 @@
         $unitCount = array_sum($units);
 
         $intendedUse = $form['intended_use'] ?? 'new_radio_station';
+        $permitType = strtoupper($form['permit_type'] ?? 'N/A');
 
         $feeTable = [
             'purchase' => 50,
@@ -42,7 +45,7 @@
         $total = $totalPermitFee + $dst;
     @endphp
 
-    <!-- Selected Intended Use -->
+    <!-- Selected Intended Use & Permit Type -->
     <div class="max-w-md mx-auto bg-blue-50 text-blue-900 p-3 rounded-lg mb-4">
         <p><strong>Intended Use:</strong>
             @if ($intendedUse === 'new_radio_station')
@@ -57,6 +60,7 @@
                 Sell/Transfer
             @endif
         </p>
+        <p><strong>Permit Type:</strong> {{ $permitType }}</p>
     </div>
 
     <!-- Units Breakdown -->

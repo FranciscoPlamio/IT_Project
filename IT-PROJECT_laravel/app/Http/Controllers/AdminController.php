@@ -224,7 +224,7 @@ class AdminController extends Controller   // <-- rename this
 
         // Latest requests exclude completed or cancelled
         $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
-            ->where('payment_status', 'paid')  // Add this line
+            ->where('payment_status', 'paid')
             ->orderBy('created_at', 'desc')
             ->with('user')
             ->get();
@@ -243,6 +243,39 @@ class AdminController extends Controller   // <-- rename this
         $highlight = $request->query('highlight');
 
         return view('adminside.cert-request', compact('user', 'latestRequests', 'highlight'));
+    }
+
+    public function permitRequest(Request $request)
+    {
+        if (!$request->session()->has('admin')) {
+            return redirect()->route('admin.login');
+        }
+
+        $user = User::find($request->session()->get('admin'));
+
+
+        // Latest requests exclude completed or cancelled
+        $latestRequests = \App\Models\Forms\FormsTransactions::whereNotIn('status', ['done', 'cancelled', 'declined'])
+            ->where('payment_status', 'paid')
+            ->where('form_type', 'form1-09')
+            ->orderBy('created_at', 'desc')
+            ->with('user')
+            ->get();
+
+        // Gets the form data using form id
+        $latestRequests->each(function ($transaction) {
+            $formClass = \App\Helpers\FormManager::getFormModel($transaction->form_type);
+            // If form_type is invalid, skip
+            if ($formClass) {
+                $transaction->form = $formClass::find($transaction->form_id);
+            } else {
+                $transaction->form = null;
+            }
+        });
+
+        $highlight = $request->query('highlight');
+
+        return view('adminside.permit-request', compact('user', 'latestRequests', 'highlight'));
     }
 
     public function admissionSlip(Request $request)
@@ -417,7 +450,11 @@ class AdminController extends Controller   // <-- rename this
                 break;
 
             case 'Form1-03': // Certificate
-                $receiptPath = $receiptController->generatePermitReceipt($form);
+                $receiptPath =  $receiptController->generateCertificateReceipt($form, $transaction);
+                break;
+
+            case 'Form1-09': // Permit
+                $receiptPath = $receiptController->generatePermitReceipt($form, $transaction);
                 break;
 
             default: // Default to certificate
@@ -558,6 +595,7 @@ class AdminController extends Controller   // <-- rename this
         $formTransactions->save();
 
         // Send email using the Blade view
+
         if (!empty($form->email)) {
             // Handle Form 1-01 (Admission Slip)
             if ($formTransactions->form_type === 'form1-01') {
@@ -598,22 +636,25 @@ class AdminController extends Controller   // <-- rename this
             // Handle Form 1-02 (Certificate)
             elseif ($formTransactions->form_type === 'form1-02' || $formTransactions->form_type === 'form1-03') {
                 $folderPath = "forms/{$form->form_token}";
-                $certificateFile = collect(Storage::files($folderPath))
-                    ->first(fn($file) => str_starts_with(basename($file), 'certificate_'));
+                $files = collect(Storage::files($folderPath));
+
+                // --- Certificate file ---
+                $certificateFile = $files->first(fn($file) => str_starts_with(basename($file), 'certificate_'));
 
                 if (!$certificateFile) {
                     return redirect()->back()->withErrors(['Certificate file not found.']);
                 }
-
                 $certificateData = Storage::get($certificateFile);
                 $certificateFileName = basename($certificateFile);
 
+                // --- Official Receipt file ---
+                $receiptFile = $files->first(fn($file) => str_starts_with(basename($file), 'official_receipt_'));
+                if (!$receiptFile) {
+                    return redirect()->back()->withErrors(['Official receipt file not found.']);
+                }
+                $receiptData = Storage::get($receiptFile);
+                $receiptFileName = basename($receiptFile);
 
-                // --- Official Receipt already saved path ---
-                $receiptController = new \App\Http\Controllers\ReceiptController();
-                $receiptPath = $receiptController->generateCertificateReceipt($form, $formTransactions); // returns storage path
-                $receiptFileName = basename($receiptPath);
-                $receiptData = Storage::get($receiptPath);
 
                 // --- Format certificate type display ---
                 $certificateTypes = [
@@ -636,19 +677,97 @@ class AdminController extends Controller   // <-- rename this
                     'certificateType' => $certificateTypeDisplay,
                     'issuanceDate' => now()->format('F j, Y'),
                     'expiryDate' => now()->addYears((int)($form->years ?? 3))->format('F j, Y'),
-                    'receiptPath' => $receiptPath,
                 ], function ($message) use ($form, $certificateData, $certificateFileName, $receiptData, $receiptFileName) {
                     $message->to($form->user->email)
-                        ->subject('Your Certificate and Official Receipt Have Been Generated')
+                        ->subject('Your Certificate Generated')
                         ->attachData($certificateData, $certificateFileName, ['mime' => 'application/pdf'])
                         ->attachData($receiptData, $receiptFileName, ['mime' => 'application/pdf']);
                 });
+
+                return redirect()->back()->with([
+                    'message' => 'Form approved and email sent',
+                ]);
+            } elseif ($formTransactions->form_type === 'form1-09') {
+                $this->approveForm1_09($request, $id, $form);
             }
         }
         return redirect()->back()->with([
             'message' => 'Form approved and email sent',
         ]);
     }
+
+    public function approveForm1_09($request, $id, $form)
+    {
+        $formTransactions = FormsTransactions::where('_id', $id)->first();
+
+        if (!$formTransactions) {
+            return redirect()->back()->withErrors(['Transaction not found.']);
+        }
+
+
+        $folderPath = "forms/{$form->form_token}";
+        $files = collect(Storage::files($folderPath));
+        $permitFile = null;
+        foreach (Storage::files($folderPath) as $file) {
+            if (str_starts_with(basename($file), 'permit_')) {
+                $permitFile = $file;
+                break; // stop at first match
+            }
+        }
+
+        if (!$permitFile) {
+            return redirect()->back()->withErrors(['Official permit file not found.']);
+        }
+
+        $permitData = Storage::get($permitFile);
+        $permitFileName = basename($permitFile);
+
+
+
+        // --- Official Receipt file ---
+        $receiptFile = $files->first(fn($file) => str_starts_with(basename($file), 'official_receipt_'));
+        if (!$receiptFile) {
+            return redirect()->back()->withErrors(['Official receipt file not found.']);
+        }
+        $receiptData = Storage::get($receiptFile);
+        $receiptFileName = basename($receiptFile);
+
+        // --- Prepare permit details ---
+        $permitTypeDisplay = strtoupper($form->permit_type ?? '—');
+        $radioService = strtoupper($form->radio_service ?? '—');
+        $applicationType = strtoupper($form->application_type ?? '—');
+        $intendedUse = strtoupper($form->intended_use ?? '—');
+
+        $issuanceDate = now()->format('F j, Y');
+        $expiryDate = $form->expiry_date ?? '—';
+
+        // --- Send Email ---
+        if (!empty($form->email)) {
+            Mail::send('emails.permit-success', [
+                'form' => $form,
+                'transaction' => $formTransactions,
+                'permit' => (object)[
+                    'permit_type_display' => $permitTypeDisplay,
+                    'radio_service' => $radioService,
+                    'application_type' => $applicationType,
+                    'intended_use' => $intendedUse,
+                    'issuance_date' => $issuanceDate,
+                    'expiry_date' => $expiryDate,
+                    'applicant' => $form->applicant
+                ],
+            ], function ($message) use ($form, $permitData, $permitFileName, $receiptData, $receiptFileName) {
+                $message->to($form->user->email)
+                    ->subject('Your Permit Have Been Generated')
+                    ->attachData($permitData, $permitFileName, ['mime' => 'application/pdf'])
+                    ->attachData($receiptData, $receiptFileName, ['mime' => 'application/pdf']);
+            });
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Form 1-09 approved and email sent successfully.',
+        ]);
+    }
+
 
     public function declineForm(Request $request, $id)
     {
