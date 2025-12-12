@@ -544,9 +544,7 @@
                 // Letters only regex
                 const lettersOnly = /^[A-Za-zñÑ\s]+$/;
 
-                // Letters & numbers regex
-                const lettersNumbers = /^[A-Za-z0-9ñÑ\s]+$/;
-
+                const lettersNumbers = /^[A-Za-z0-9ñÑ\s().]+$/;
                 // Validate Admin/Admit Name
                 if (!admitName.value.trim()) {
                     document.getElementById('error-admit-name').textContent = "Admit Name is required.";

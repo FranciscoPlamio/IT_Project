@@ -36,7 +36,7 @@
 
     <!-- Main Content -->
     <div class="main">
-        <h1>Certification Request</h1>
+        <h1>Certification & Permit Request</h1>
 
         <div class="card full-page">
             <section class="half-section">
@@ -125,7 +125,13 @@
                                             more <img src="{{ asset('images/see-icon.png') }}" alt="See"></a>
 
                                     </td>
-                                    <td> {{ $req->form->last_name }} {{ $req->form->first_name }}</td>
+                                    <td>
+                                        @if ($req->form->applicant)
+                                            {{ $req->form->applicant }}
+                                        @else
+                                            {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @endif
+                                    </td>
 
                                     </td>
                                     @php
@@ -155,11 +161,14 @@
                                         @php
                                             // Check if certificate has been generated for Form 1-02
                                             $certificateExists = false;
-                                            if (strtolower($req->form_type) === 'form1-02') {
+                                            if (
+                                                strtolower($req->form_type) === 'form1-02' ||
+                                                strtolower($req->form_type) === 'form1-03'
+                                            ) {
                                                 try {
                                                     $files = Storage::disk('local')->files("forms/{$req->form_token}");
                                                     foreach ($files as $file) {
-                                                        if (str_contains($file, 'certificate_')) {
+                                                        if (Str::startsWith(basename($file), 'certificate_')) {
                                                             $certificateExists = true;
                                                             break;
                                                         }
@@ -188,12 +197,14 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if (strtolower($req->form_type) === 'form1-02')
-                                            <button onclick="openCertificateModal('{{ $req->form_token }}')"
-                                                class="btn btn-primary btn-sm"
-                                                style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;border:none;cursor:pointer;">
-                                                Generate Certificate
-                                            </button>
+                                        @if (strtolower($req->form_type) === 'form1-02' || strtolower($req->form_type) === 'form1-03')
+                                            @if (!$certificateExists)
+                                                <button onclick="openCertificateModal('{{ $req->form_token }}')"
+                                                    class="btn btn-primary btn-sm"
+                                                    style="background:#28a745;color:#fff;text-decoration:none;padding:6px 12px;border-radius:4px;display:inline-block;font-size:12px;border:none;cursor:pointer;">
+                                                    Generate Certificate
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

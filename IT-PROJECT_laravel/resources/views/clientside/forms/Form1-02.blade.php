@@ -313,23 +313,20 @@
 
                             <!-- Exam fields -->
                             <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Place of Exam/Seminar<span class="text-red">
-                                            *</span></label>
-                                    <x-forms.exam-fields :form="$form ?? []" />
-                                    <!-- CAPTCHA fields -->
-                                    <div class="form-field"
-                                        style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
-                                        <div class="g-recaptcha"
-                                            data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
-                                        @if (session('captcha_error'))
-                                            <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="step-actions"><button class="form1-01-btn" type="button"
-                                            id="validateBtn">Proceed to Validation</button>
-                                    </div>
+                                <x-forms.exam-fields :form="$form ?? []" />
+                                <!-- CAPTCHA fields -->
+                                <div class="form-field"
+                                    style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                    <div class="g-recaptcha"
+                                        data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                    @if (session('captcha_error'))
+                                        <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                    @endif
                                 </div>
+                                <div class="step-actions"><button class="form1-01-btn" type="button"
+                                        id="validateBtn">Proceed to Validation</button>
+                                </div>
+
                             </div>
                         </fieldset>
                     </section>

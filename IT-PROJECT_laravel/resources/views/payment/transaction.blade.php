@@ -226,11 +226,15 @@
                         </div>
                     </div> --}}
 
-                            <!-- Breakdown Free -->
-                            @if ($transactions->form_type === 'form1-02')
+                            <!-- Breakdown ree -->
+                            @if ($transactions->form_type === 'form1-01')
+                                <x-forms.payment-breakdown.1-01 :form="$form" />
+                            @elseif ($transactions->form_type === 'form1-02')
                                 <x-forms.payment-breakdown.1-02 :form="$form" />
                             @elseif ($transactions->form_type === 'form1-03')
                                 <x-forms.payment-breakdown.1-03 :form="$form" />
+                            @elseif ($transactions->form_type === 'form1-09')
+                                <x-forms.payment-breakdown.1-09 :form="$form" />
                             @endif
 
                             <!-- GCash Payment Card -->
@@ -412,7 +416,7 @@
 
                                     <!-- Content -->
                                     <div class="p-8 text-gray-800">
-                                        @if ($transactions->form_type === 'form1-02')
+                                        @if ($transactions->form_type === 'form1-02' || $transactions->form_type === 'form1-03')
                                             {{-- Form 1-02: Certificate Generated --}}
                                             <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Certificate Has
                                                 Been Generated</h2>
@@ -490,8 +494,8 @@
                                             <div class="bg-green-100 border border-green-300 p-5 rounded-lg mb-6">
                                                 <p class="text-lg font-bold mb-2">🎉 Congratulations!</p>
                                                 <p class="text-base leading-relaxed">
-                                                    Your certificate has been successfully generated. Please download it
-                                                    using the button below and keep it for your records.
+                                                    Your certificate has been successfully generated. Please check your
+                                                    email to download it
                                                 </p>
                                             </div>
                                         @else

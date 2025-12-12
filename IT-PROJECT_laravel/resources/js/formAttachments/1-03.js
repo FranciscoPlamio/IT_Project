@@ -1,6 +1,6 @@
 export default function attachmentsForm102(containerId, form) {
     console.log(form);
-    const examType = (form?.permit_type || "").toLowerCase();
+    const examType = (form?.certificate_type || "").toLowerCase();
     const applicationType = form.application_type;
     console.log(examType, applicationType);
 

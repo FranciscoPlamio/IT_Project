@@ -170,6 +170,13 @@
                 width: 14px;
                 height: 14px;
             }
+
+            .error-message {
+                color: red;
+                font-size: 13px;
+                margin-top: 2px;
+                display: block;
+            }
         </style>
     </x-slot:head>
 
@@ -278,7 +285,12 @@
                                     </td>
 
                                     <td>
-                                        {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @if ($req->form->applicant)
+                                            {{ $req->form->applicant }}
+                                        @else
+                                            {{ $req->form->last_name }} {{ $req->form->first_name }}
+                                        @endif
+
                                     </td>
                                     @php
                                         $rawStatus = $req->status ?? 'Pending';
@@ -330,7 +342,6 @@
                                                 Create Official Receipt
                                             </button>
                                         @endif
-
                                     </td>
 
                                 </tr>
@@ -363,7 +374,7 @@
 
                     <label>
                         <span>OR Amount</span>
-                        <input type="text" name="or_amount" id="or_amount">
+                        <input type="text" name="or_amount" id="or_amount" disabled>
                         <small class="error-message" id="error-or-amount"></small>
                     </label>
                     <label>
@@ -437,12 +448,10 @@
                 if (receiptForm) {
                     receiptForm.reset();
                 }
-                const orNoinpout = document.getElementById("or_no");
-                orNoinpout.value = reference;
 
 
                 const orAmountInput = document.getElementById('or_amount');
-                orAmountInput.value = or_amount;
+                orAmountInput.value = parseFloat(or_amount).toFixed(2);
 
 
                 receiptModal.style.display = "flex";
@@ -504,11 +513,11 @@
 
                 formToken = this.dataset.formtoken;
                 formType = this.dataset.form;
-                console.log(formToken, formType);
+
             });
 
             const form = document.getElementById('receiptForm');
-            console.log(form);
+
             const saveBtn = document.getElementById('saveBtn');
             saveBtn.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -543,6 +552,7 @@
                 if (valid) {
                     document.querySelector('input[name="form_token"]').value = formToken;
                     document.querySelector('input[name="form_type"]').value = formType;
+                    document.getElementById('or_amount').disabled = false;
                     form.submit();
                 }
             })
