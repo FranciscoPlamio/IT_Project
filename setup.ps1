@@ -107,7 +107,7 @@ if (-not $SkipPHP) {
     else {
         # Download PHP 8.2.13 Thread Safe
         $phpZip = Join-Path $toolsDir "php-8.2.13.zip"
-        $phpUrl = "https://windows.php.net/downloads/releases/php-8.2.13-Win32-vs16-x64.zip"
+        $phpUrl = "https://windows.php.net/downloads/releases/archives/php-8.2.13-nts-Win32-vs16-x64.zip"
         
         if (Download-File -Url $phpUrl -OutputPath $phpZip -Description "PHP 8.2.13") {
             Write-Info "Extracting PHP..."
