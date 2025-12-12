@@ -498,6 +498,75 @@
                                                     email to download it
                                                 </p>
                                             </div>
+                                        @elseif($transactions->form_type === 'form1-09')
+                                            {{-- Form 1-09: Official Permit Generated --}}
+                                            <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Official Permit
+                                                Has Been Generated</h2>
+
+                                            <p class="text-base mb-4">Hello {{ $form->applicant }}
+                                                ,</p>
+
+                                            <p class="text-base mb-4">
+                                                Your payment was successful. Your transaction has been recorded
+                                                successfully.
+                                            </p>
+
+                                            <p class="text-base mb-4">
+                                                Your application
+                                                <strong>{{ $transactions->payment_reference }}</strong> has been
+                                                approved and your official permit has been generated. Below are the
+                                                details:
+                                            </p>
+
+                                            <!-- Payment Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <h3 class="text-lg font-semibold mb-2">Payment Details</h3>
+                                                <p><strong>Reference Number:</strong>
+                                                    {{ $transactions->payment_reference }}</p>
+                                                <p><strong>Method:</strong>
+                                                    {{ ucfirst($transactions->payment_method ?? '—') }}</p>
+                                                <p><strong>Amount:</strong>
+                                                    {{ $transactions->payment_amount ? '₱' . number_format($transactions->payment_amount, 2) : '—' }}
+                                                </p>
+                                            </div>
+
+                                            <!-- Permit Details -->
+                                            <div class="bg-gray-100 p-4 rounded-lg mb-6">
+                                                <h3 class="text-lg font-semibold mb-2">Permit Details</h3>
+                                                @php
+                                                    $permitTypeDisplay = strtoupper($form->permit_type ?? 'N/A');
+                                                    $radioService = strtoupper($form->radio_service ?? '-');
+                                                    $applicationType = strtoupper($form->application_type ?? '-');
+                                                    $intendedUse = ucfirst(
+                                                        str_replace('_', ' ', $form->intended_use ?? '-'),
+                                                    );
+                                                    $issuanceDate = date('F j, Y');
+                                                    $expiryDate = date('F j, Y'); // Permits may not have expiry
+                                                @endphp
+                                                <ul class="list-disc pl-5 space-y-1">
+                                                    <li><strong>Name:</strong> {{ $form->applicant }}
+                                                    </li>
+                                                    <li><strong>Permit Type:</strong> {{ $permitTypeDisplay }}</li>
+                                                    <li><strong>Radio Service:</strong> {{ $radioService }}</li>
+                                                    <li><strong>Application Type:</strong> {{ $applicationType }}</li>
+                                                    <li><strong>Intended Use:</strong> {{ $intendedUse }}</li>
+                                                    <li><strong>Date Issued:</strong> {{ $issuanceDate }}</li>
+
+                                                    <li><strong>OR Number:</strong> {{ $form->or['or_no'] ?? '-' }}
+                                                    </li>
+                                                    <li><strong>OR Date:</strong> {{ $form->or['or_date'] ?? '-' }}
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <!-- Success Banner -->
+                                            <div class="bg-green-100 border border-green-300 p-5 rounded-lg mb-6">
+                                                <p class="text-lg font-bold mb-2">🎉 Congratulations!</p>
+                                                <p class="text-base leading-relaxed">
+                                                    Your official permit has been successfully generated. Please check
+                                                    your email to download it.
+                                                </p>
+                                            </div>
                                         @else
                                             {{-- Form 1-01: Admission Slip --}}
                                             <h2 class="text-2xl font-semibold text-blue-900 mb-4">Your Form Has Been

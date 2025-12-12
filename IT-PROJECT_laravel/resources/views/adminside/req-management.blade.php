@@ -321,6 +321,31 @@
                                             @else
                                                 <span class="muted-text">—</span>
                                             @endif
+                                        @elseif($req->form_type === 'form1-09')
+                                            @php
+                                                // Check if certificate has been generated (exists in attachments folder)
+                                                $certificateExists = false;
+                                                try {
+                                                    $files = Storage::disk('local')->files("forms/{$req->form_token}");
+                                                    foreach ($files as $file) {
+                                                        if (Str::startsWith(basename($file), 'permit')) {
+                                                            $certificateExists = true;
+                                                            break;
+                                                        }
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    $certificateExists = false;
+                                                }
+                                            @endphp
+                                            @if ($req->form->or && $certificateExists)
+                                                <button class="badge-btn progress"
+                                                    onclick="openConfirmApproveModal('{{ $req->_id }}')"
+                                                    title="Approve Request">
+                                                    Approve
+                                                </button>
+                                            @else
+                                                <span class="muted-text">—</span>
+                                            @endif
                                         @endif
                                     </td>
 

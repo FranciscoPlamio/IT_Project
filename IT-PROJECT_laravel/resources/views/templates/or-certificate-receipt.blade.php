@@ -109,6 +109,7 @@
             </tr>
         </table>
         @php
+            // Certificate names
             $certificateNames = [
                 '1RTG' => 'First-class Radiotelegraph Operator Certificate',
                 '2RTG' => 'Second-class Radiotelegraph Operator Certificate',
@@ -120,9 +121,30 @@
                 'SROP' => 'Ship Radio Operator\'s Permit',
                 'GROC' => 'General Radiotelegraph Operator Certificate',
                 'RROC-RLM' => 'Radio Operator\'s Certificate (RLM)',
+
+                // --- FORM 1-03 (AMATEUR RADIO SERVICES) ---
+                'ATROC' => 'Amateur Radio Operator Certificate',
+                'AT-LIFETIME' => 'Amateur Radio Operator Certificate – Lifetime',
+                'AT-CLUB-RSL' => 'Amateur Club Radio Station License',
+                'TEMP-A' => 'Temporary Amateur Radio Station Permit – Type A',
+                'TEMP-B' => 'Temporary Amateur Radio Station Permit – Type B',
+                'TEMP-C' => 'Temporary Amateur Radio Station Permit – Type C',
+                'SPECIAL-EVENT-CALL' => 'Special Event Call Sign',
+                'VANITY-CALL' => 'Vanity Call Sign',
             ];
 
-            $certificateFullName = $certificateNames[$data['certificate_type'] ?? 'UNKNOWN'] ?? 'Unknown Certificate';
+            $rawType = strtoupper($data['certificate_type'] ?? ($data['category'] ?? 'UNKNOWN'));
+            $stationClass = strtoupper($data['station_class'] ?? '');
+
+            // Form 1-03 with station class (ATRSL, TEMP)
+            if (Str::contains($rawType, 'ATRSL') || Str::contains($rawType, 'TEMP')) {
+                $classSuffix = $stationClass ? ' - ' . $stationClass : '';
+                $certificateFullName =
+                    ($certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType))) . $classSuffix;
+            } else {
+                // Form 1-02 or other Form 1-03 types without station class
+                $certificateFullName = $certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType));
+            }
         @endphp
         <div class="section">
             <strong>Received From:</strong> {{ $data['cash_received_from'] }} <br>

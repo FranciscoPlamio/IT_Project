@@ -486,7 +486,7 @@
                                             {{ $intendedUseValue == 'additional_equipment' ? 'checked' : '' }}>
                                         Additional Equipment</label>
                                     <label><input type="radio" name="intended_use" value="storage"
-                                            {{ $intendedUseValue == 'storage' ? 'checked' : '' }} checked> Storage
+                                            {{ $intendedUseValue == 'storage' ? 'checked' : '' }}> Storage
                                         at:</label>
                                     @error('storage_location')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
