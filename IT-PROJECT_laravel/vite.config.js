@@ -22,6 +22,9 @@ export default defineConfig({
                 "resources/css/adminside/admission-slip.css",
                 "resources/css/adminside/form-fees.css",
                 "resources/js/adminside/form-fees.js",
+                "resources/css/adminside/carousel.css",
+                "resources/js/adminside/carousel.js",
+
             ],
             refresh: true,
         }),

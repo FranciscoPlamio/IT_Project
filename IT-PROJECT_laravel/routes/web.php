@@ -6,7 +6,9 @@ use App\Http\Controllers\ReceiptController;
 
 // Default index route
 Route::get('/', function () {
-    return view('homepage');
+    $carouselController = new \App\Http\Controllers\AdminCarouselController();
+    $carouselSlides = $carouselController->getHomepageSlides();
+    return view('homepage', compact('carouselSlides'));
 })->name('homepage');
 
 // Requirements page

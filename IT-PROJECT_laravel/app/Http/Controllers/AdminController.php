@@ -1068,12 +1068,25 @@ class AdminController extends Controller   // <-- rename this
     public function viewFile(Request $request)
     {
         $path = $request->query('path');
-        if (!Storage::exists($path)) {
+
+        // Determine which disk to use based on path
+        // Carousel slides are in public disk
+        if (str_starts_with($path, 'carousel-slides/')) {
+            $disk = Storage::disk('public');
+        } else {
+            // Default to local disk for other files
+            $disk = Storage::disk('local');
+        }
+
+        if (!$disk->exists($path)) {
             abort(404);
         }
 
-        $mime = Storage::mimeType($path);
-        return response(Storage::get($path))
+        // Get full file path for mime type detection
+        $fullPath = $disk->path($path);
+        $mime = mime_content_type($fullPath) ?: 'application/octet-stream';
+
+        return response($disk->get($path))
             ->header('Content-Type', $mime)
             ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
     }

@@ -4,18 +4,25 @@
         <div class="carousel-container">
             <div class="carousel-wrapper">
                 <div class="carousel-slides">
-                    <div class="carousel-slide active">
-                        <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner 1" />
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner 2" />
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="{{ asset('images/banner_final-new.png') }}" alt="Campaign Banner 3" />
-                    </div>
-                    <div class="carousel-slide">
-                        <img src="{{ asset('images/NTC_BANNER-new.png') }}" alt="Campaign Banner 4" />
-                    </div>
+                    @forelse($carouselSlides as $index => $slideUrl)
+                        <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}">
+                            <img src="{{ $slideUrl }}" alt="Campaign Banner {{ $index + 1 }}" />
+                        </div>
+                    @empty
+                        {{-- Default banners if no dynamic ones provided --}}
+                        {{-- <div class="carousel-slide active">
+                            <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner 1" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner 2" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/banner_final-new.png') }}" alt="Campaign Banner 3" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/NTC_BANNER-new.png') }}" alt="Campaign Banner 4" />
+                        </div> --}}
+                    @endforelse
                 </div>
 
                 <!-- Navigation Arrows -->
@@ -28,10 +35,18 @@
 
                 <!-- Dots Indicator -->
                 <div class="carousel-dots">
-                    <span class="dot active" onclick="currentSlide(1)"></span>
-                    <span class="dot" onclick="currentSlide(2)"></span>
-                    <span class="dot" onclick="currentSlide(3)"></span>
-                    <span class="dot" onclick="currentSlide(4)"></span>
+                    @if (count($carouselSlides) > 0)
+                        @foreach ($carouselSlides as $index => $slide)
+                            <span class="dot {{ $index === 0 ? 'active' : '' }}"
+                                onclick="currentSlide({{ $index + 1 }})"></span>
+                        @endforeach
+                    @else
+                        {{-- Default dots --}}
+                        <span class="dot active" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                        <span class="dot" onclick="currentSlide(4)"></span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -60,11 +75,22 @@
 
     <script>
         let currentSlideIndex = 1;
-        const totalSlides = 4;
+        const totalSlides =
+            {{ count($carouselSlides) > 0 ? count($carouselSlides) : 4 }}; // Use dynamic count or fallback to 4
         let autoSlideInterval;
 
         // Initialize carousel
         document.addEventListener('DOMContentLoaded', function() {
+            // Set dynamic width based on number of slides
+            const slidesContainer = document.querySelector('.carousel-slides');
+            if (slidesContainer && totalSlides > 0) {
+                slidesContainer.style.width = (totalSlides * 100) + '%';
+                const slideElements = slidesContainer.querySelectorAll('.carousel-slide');
+                slideElements.forEach(slide => {
+                    slide.style.width = (100 / totalSlides) + '%';
+                });
+            }
+
             showSlide(currentSlideIndex);
             startAutoSlide(); // Start automatic sliding
 
@@ -104,12 +130,17 @@
             if (n > totalSlides) currentSlideIndex = 1;
             if (n < 1) currentSlideIndex = totalSlides;
 
-            // Update slide position
-            slides.className = `carousel-slides slide-${currentSlideIndex}`;
+            // Calculate transform percentage dynamically
+            const translateX = -((currentSlideIndex - 1) * (100 / totalSlides));
+            if (slides) {
+                slides.style.transform = `translateX(${translateX}%)`;
+            }
 
             // Update dots
             dots.forEach(dot => dot.classList.remove('active'));
-            dots[currentSlideIndex - 1].classList.add('active');
+            if (dots[currentSlideIndex - 1]) {
+                dots[currentSlideIndex - 1].classList.add('active');
+            }
         }
 
         function changeSlide(direction) {

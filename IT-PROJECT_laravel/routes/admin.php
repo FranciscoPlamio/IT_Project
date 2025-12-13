@@ -48,6 +48,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Permit
     Route::get('generate-permit', [FormsController::class, 'generatePermit'])->name('generate-permit');
     Route::get('get-permit-data/{token}', [FormsController::class, 'getPermitData'])->name('get-permit-data');
+
+    // Carousel Management
+    Route::get('carousel', [\App\Http\Controllers\AdminCarouselController::class, 'index'])->name('carousel.index');
+    Route::post('carousel/store', [\App\Http\Controllers\AdminCarouselController::class, 'store'])->name('carousel.store');
+    Route::post('carousel/destroy', [\App\Http\Controllers\AdminCarouselController::class, 'destroy'])->name('carousel.destroy');
 });
 
 

@@ -75,6 +75,21 @@
                 <img src="{{ Route::is('admin.permit-request') ? asset('images/whitecert-icon.png') : asset('images/req-icon.png') }} "
                     alt=""> Permit Request
             </a>
+            {{-- <a href="{{ route('admin.bill-pay') }}"
+                class="menu-item {{ Route::is('admin.bill-pay') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.bill-pay') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
+                    alt="">Billings and Payment
+            </a> --}}
+            <a href="{{ route('admin.declaration') }}"
+                class="menu-item {{ Route::is('admin.declaration') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.req-management') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
+                    alt=""> Declaration
+            </a>
+            {{-- <a href="{{ route('admin.form-fees') }}"
+                class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
+                    alt=""> Form Fees & Breakdown
+            </a> --}}
             <a href="{{ route('admin.req-history') }}"
                 class="menu-item {{ Route::is('admin.req-history') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.req-history') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
@@ -85,21 +100,11 @@
                 <img src="{{ Route::is('admin.admission-slip') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt=""> Admission Slip
             </a>
-            {{-- <a href="{{ route('admin.bill-pay') }}"
-                class="menu-item {{ Route::is('admin.bill-pay') ? 'active' : '' }}">
-                <img src="{{ Route::is('admin.bill-pay') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
-                    alt="">Billings and Payment
-            </a> --}}
-            <a href="{{ route('admin.declaration') }}"
-                class="menu-item {{ Route::is('admin.declaration') ? 'active' : '' }}">
-                <img src="{{ Route::is('admin.declaration') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
-                    alt=""> Declaration
+            <a href="{{ route('admin.carousel.index') }}"
+                class="menu-item {{ Route::is('admin.carousel.index') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.carousel.index') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
+                    alt=""> Banner Management
             </a>
-            {{-- <a href="{{ route('admin.form-fees') }}"
-                class="menu-item {{ Route::is('admin.form-fees') ? 'active' : '' }}">
-                <img src="{{ Route::is('admin.form-fees') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
-                    alt=""> Form Fees & Breakdown
-            </a> --}}
             {{-- <a href="{{ route('admin.test') }}">test</a> --}}
 
         </nav>
