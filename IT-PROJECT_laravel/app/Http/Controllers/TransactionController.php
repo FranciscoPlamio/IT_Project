@@ -38,12 +38,17 @@ class TransactionController extends Controller
             $formModel = FormManager::getFormModel(ucfirst($transactions->form_type));
             $form = $formModel::find($transactions->form_id);
         }
-        return view('payment.transaction', compact('transactions', 'form'));
+        
+        // Get payment QR code URL
+        $paymentQRController = new AdminPaymentQRController();
+        $paymentQRUrl = $paymentQRController->getPaymentQRUrl();
+        
+        return view('payment.transaction', compact('transactions', 'form', 'paymentQRUrl'));
     }
 
     public function search(Request $request)
     {
-        // If there’s no query yet, just show the form
+        // If there's no query yet, just show the form
         if (!$request->has('payment_reference')) {
             return view('payment.transactionFinder');
         }
@@ -58,7 +63,11 @@ class TransactionController extends Controller
             return back()->with('error', 'Transaction not found.');
         }
 
-        return view('payment.transaction',  compact('transactions'));
+        // Get payment QR code URL
+        $paymentQRController = new AdminPaymentQRController();
+        $paymentQRUrl = $paymentQRController->getPaymentQRUrl();
+
+        return view('payment.transaction',  compact('transactions', 'paymentQRUrl'));
     }
 
     public function destroy(Request $request)

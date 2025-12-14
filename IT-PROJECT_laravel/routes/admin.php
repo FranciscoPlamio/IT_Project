@@ -53,6 +53,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     Route::get('carousel', [\App\Http\Controllers\AdminCarouselController::class, 'index'])->name('carousel.index');
     Route::post('carousel/store', [\App\Http\Controllers\AdminCarouselController::class, 'store'])->name('carousel.store');
     Route::post('carousel/destroy', [\App\Http\Controllers\AdminCarouselController::class, 'destroy'])->name('carousel.destroy');
+
+    // Payment QR Management
+    Route::get('payment-qr', [\App\Http\Controllers\AdminPaymentQRController::class, 'index'])->name('payment-qr.index');
+    Route::post('payment-qr/store', [\App\Http\Controllers\AdminPaymentQRController::class, 'store'])->name('payment-qr.store');
+    Route::post('payment-qr/destroy', [\App\Http\Controllers\AdminPaymentQRController::class, 'destroy'])->name('payment-qr.destroy');
 });
 
 

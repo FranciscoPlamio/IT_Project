@@ -24,7 +24,8 @@ export default defineConfig({
                 "resources/js/adminside/form-fees.js",
                 "resources/css/adminside/carousel.css",
                 "resources/js/adminside/carousel.js",
-
+                "resources/css/adminside/payment-QR.css",
+                "resources/js/adminside/payment-QR.js"
             ],
             refresh: true,
         }),

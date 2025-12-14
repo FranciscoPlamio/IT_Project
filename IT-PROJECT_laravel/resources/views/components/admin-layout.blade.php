@@ -82,7 +82,7 @@
             </a> --}}
             <a href="{{ route('admin.declaration') }}"
                 class="menu-item {{ Route::is('admin.declaration') ? 'active' : '' }}">
-                <img src="{{ Route::is('admin.req-management') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
+                <img src="{{ Route::is('admin.declaration') ? asset('images/whitereq-icon.png') : asset('images/req-icon.png') }} "
                     alt=""> Declaration
             </a>
             {{-- <a href="{{ route('admin.form-fees') }}"
@@ -99,6 +99,11 @@
                 class="menu-item {{ Route::is('admin.admission-slip') ? 'active' : '' }}">
                 <img src="{{ Route::is('admin.admission-slip') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
                     alt=""> Admission Slip
+            </a>
+            <a href="{{ route('admin.payment-qr.index') }}"
+                class="menu-item {{ Route::is('admin.payment-qr.index') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.payment-qr.index') ? asset('images/white-bill-icon.png') : asset('images/billicon.png') }} "
+                    alt=""> Payment QR Management
             </a>
             <a href="{{ route('admin.carousel.index') }}"
                 class="menu-item {{ Route::is('admin.carousel.index') ? 'active' : '' }}">
