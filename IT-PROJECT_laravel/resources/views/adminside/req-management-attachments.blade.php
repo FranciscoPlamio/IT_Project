@@ -202,34 +202,69 @@
 
                 <div class="section-body" data-collapsible-content>
                     <div class="attachment-grid">
-                        @forelse ($files as $file)
+                        @php
+                            // Collect all form files
+                            $allFiles = $files;
+
+                            // Attempt to find generated certificate for this form
+                            $certificate = \App\Models\Certificate::where('form_token', $form->form_token)->first();
+                            if ($certificate) {
+                                $certificatePath = "private/certificates/{$certificate->certificate_no}.pdf";
+                                if (Storage::exists($certificatePath)) {
+                                    $allFiles->push($certificatePath);
+                                }
+                            }
+                        @endphp
+
+                        @forelse ($allFiles as $file)
                             @php
                                 $url = route('admin.viewFile', ['path' => $file]);
                                 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                                $newFileName = basename($file);
-                                $newFileName = preg_replace('/_\d+\..+$/', '', $newFileName);
-                                $newFileName = ucwords(str_replace('_', ' ', $newFileName));
+                                $fileName = basename($file);
+
+                                // Clean display name
+                                $displayName = preg_replace('/_\d+\..+$/', '', $fileName);
+                                $displayName = ucwords(str_replace(['_', '-'], ' ', $displayName));
+
+                                // Check if filename or display name contains "certificate_photocopy" (case-insensitive)
+                                $isCertificate =
+                                    Str::contains(strtolower($fileName), 'certificate_photocopy') ||
+                                    Str::contains(strtolower($displayName), 'certificate') ||
+                                    Str::contains(strtolower($displayName), 'coa');
                             @endphp
+
                             <article class="attachment-card">
                                 <header class="attachment-card-header">
-                                    <h3>{{ $newFileName === 'Coa' ? 'Certificate of Attendance' : $newFileName }}</h3>
+                                    <h3>{{ $displayName === 'Coa' ? 'Certificate of Attendance' : $displayName }}</h3>
                                     <span class="attachment-badge">{{ strtoupper($ext) }}</span>
                                 </header>
+
                                 <div class="attachment-preview">
                                     @if ($ext === 'pdf')
                                         <iframe src="{{ $url }}"
-                                            title="{{ $newFileName }} preview"></iframe>
+                                            title="{{ $displayName }} preview"></iframe>
                                     @elseif (in_array($ext, ['jpg', 'jpeg', 'png']))
-                                        <img src="{{ $url }}" alt="{{ $newFileName }} preview">
+                                        <img src="{{ $url }}" alt="{{ $displayName }} preview">
                                     @else
                                         <p class="info-value">Preview not available. Use the button below to open the
                                             file.</p>
                                     @endif
                                 </div>
+
                                 <div class="attachment-actions">
                                     <a href="{{ $url }}" target="_blank" class="btn btn-primary">Open in
-                                        new
-                                        tab</a>
+                                        new tab</a>
+
+                                    {{-- Show Verify button only for certificate photocopies or generated certificates --}}
+                                    @if ($isCertificate)
+                                        <a href="{{ route('admin.certificates.verify', ['certificate_no' => '']) }}"
+                                            onclick="event.preventDefault(); 
+                let certNo = prompt('Enter certificate number to verify:'); 
+                if(certNo) { window.location='{{ route('admin.certificates.verify') }}?certificate_no=' + encodeURIComponent(certNo); }"
+                                            class="btn btn-success ">
+                                            Verify
+                                        </a>
+                                    @endif
                                 </div>
                             </article>
                         @empty
@@ -237,7 +272,47 @@
                         @endforelse
                     </div>
                 </div>
+
             </section>
         </div>
     </div>
+
+    <!-- Verify Certificate Modal -->
+    <div id="verifyModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Verify Certificate</h3>
+            <form id="verifyForm" method="POST" action="{{ route('admin.certificates.verify.submit') }}">
+                @csrf
+                <input type="hidden" name="file" id="modalFile">
+                <label for="certificate_no">Certificate Number:</label>
+                <input type="text" name="certificate_no" id="certificateNo" required>
+                <button type="submit" class="btn btn-success">Verify</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('verifyModal');
+            const modalFileInput = document.getElementById('modalFile');
+            const closeModal = modal.querySelector('.close');
+
+            document.querySelectorAll('.verify-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    modalFileInput.value = this.dataset.file; // pass the file path
+                    modal.style.display = 'block';
+                });
+            });
+
+            closeModal.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </x-admin-layout>

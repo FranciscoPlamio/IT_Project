@@ -642,18 +642,18 @@ class AdminController extends Controller   // <-- rename this
                 });
             }
             // Handle Form 1-02 (Certificate)
-            elseif ($formTransactions->form_type === 'form1-02' || $formTransactions->form_type === 'form1-03') {
+            elseif (in_array($formTransactions->form_type, ['form1-02', 'form1-03'])) {
                 $folderPath = "forms/{$form->form_token}";
                 $files = collect(Storage::files($folderPath));
 
-                // Find the certificate record for this form token
+                // --- Get the certificate record from the database ---
                 $certificate = \App\Models\Certificate::where('form_token', $form->form_token)->first();
 
                 if (!$certificate) {
                     return redirect()->back()->withErrors(['Certificate not found.']);
                 }
 
-                // Build the file path in private/certificates folder
+                // Build the certificate file path in private/certificates folder
                 $certificateFileName = $certificate->certificate_no . '.pdf';
                 $certificatePath = "private/certificates/{$certificateFileName}";
 
@@ -661,7 +661,6 @@ class AdminController extends Controller   // <-- rename this
                     return redirect()->back()->withErrors(['Certificate file not found in storage.']);
                 }
 
-                // Get certificate content if needed
                 $certificateData = Storage::get($certificatePath);
 
                 // --- Official Receipt file ---
@@ -671,7 +670,6 @@ class AdminController extends Controller   // <-- rename this
                 }
                 $receiptData = Storage::get($receiptFile);
                 $receiptFileName = basename($receiptFile);
-
 
                 // --- Format certificate type display ---
                 $certificateTypes = [
@@ -684,14 +682,15 @@ class AdminController extends Controller   // <-- rename this
                     '3phn' => 'Third-class Radiotelephone Operator Certificate',
                 ];
 
-                $certificateTypeDisplay = $certificateTypes[strtolower($form->certificate_type ?? '')]
-                    ?? ucwords(str_replace('_', ' ', $form->certificate_type ?? 'Certificate'));
+                $certificateTypeDisplay = $certificateTypes[strtolower($certificate->certificate_type ?? '')]
+                    ?? ucwords(str_replace('_', ' ', $certificate->certificate_type ?? 'Certificate'));
 
                 // --- Send email with attachments ---
                 Mail::send('emails.certificate-generated', [
                     'form' => $form,
                     'transaction' => $formTransactions,
                     'certificateType' => $certificateTypeDisplay,
+                    'certificateNumber' => $certificate->certificate_no, // <- Pass the certificate number
                     'issuanceDate' => now()->format('F j, Y'),
                     'expiryDate' => now()->addYears((int)($form->years ?? 3))->format('F j, Y'),
                 ], function ($message) use ($form, $certificateData, $certificateFileName, $receiptData, $receiptFileName) {
@@ -1064,20 +1063,28 @@ class AdminController extends Controller   // <-- rename this
 
     public function showRequestAttachments(Request $request, $formToken)
     {
-        // Get files
-        $folderPath = "forms/{$formToken}";
-        if (!Storage::exists($folderPath)) {
-            abort(404, "No files found for this form.");
-        }
+        // Get form transaction
+        $form = FormsTransactions::where('form_token', $formToken)->firstOrFail();
 
-        $files = Storage::files($folderPath);
-
-
-        // Get Form from Form token
-        $form = FormsTransactions::where('form_token', $formToken)->first();
+        // Get the form model
         $formClass = FormManager::getFormModel($form->form_type);
         $form->form = $formClass::find($form->form_id);
 
+        // Get all files from the form folder
+        $folderPath = "forms/{$formToken}";
+        $files = collect([]);
+        if (Storage::exists($folderPath)) {
+            $files = collect(Storage::files($folderPath));
+        }
+
+        // Include generated certificate if it exists
+        $certificate = \App\Models\Certificate::where('form_token', $formToken)->first();
+        $certificatePath = "certificates/{$certificate->certificate_no}.pdf";
+        if (Storage::disk('local')->exists($certificatePath)) {
+            $files->push($certificatePath);
+        } else {
+            dd('File not found at:', storage_path("{$certificatePath}"));
+        }
 
         return view('adminside.req-management-attachments', compact('files', 'form'));
     }

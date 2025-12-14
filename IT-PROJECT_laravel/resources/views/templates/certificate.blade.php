@@ -105,7 +105,6 @@
             <div>National Telecommunications Commission</div>
             <div>{{ $certificate['ntc_region'] }}</div>
             <div><strong>{{ strtoupper($certificate['certificate_type']) }}</strong></div>
-            <div>{{ $certificate['certificate_no'] }}</div>
         </div>
 
         <!-- TITLE -->

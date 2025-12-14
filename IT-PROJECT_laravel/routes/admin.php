@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\FormsController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,6 +45,14 @@ Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function
     // Certificate generation route
     Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
     Route::get('get-certificate-data/{token}', [FormsController::class, 'getCertificateData'])->name('get-certificate-data');
+
+    Route::get('certificates/verify', [CertificateController::class, 'showVerifyPage'])->name('certificates.verify');
+    Route::post('certificates/verify', [CertificateController::class, 'verifySubmit'])->name('certificates.verify.submit');
+    Route::get('certificates/download/{certificate_no}', [CertificateController::class, 'downloadCertificate'])->name('certificates.download');
+    Route::post('certificates/ocr', [CertificateController::class, 'runOCR'])->name('certificates.ocr');
+
+
+
 
     // Permit
     Route::get('generate-permit', [FormsController::class, 'generatePermit'])->name('generate-permit');

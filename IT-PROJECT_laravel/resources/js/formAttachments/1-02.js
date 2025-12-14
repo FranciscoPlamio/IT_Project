@@ -77,7 +77,7 @@ export default function attachmentsForm102(containerId, form) {
                 ...defaultLabels,
                 service_record: "Service Record",
                 good_moral_certificate: "Certificate of Good Moral Character",
-                government_service_radio_operator_certificate:
+                government_service_radio_operator_certificate_photocopy:
                     "Government service as a radio operator certificate",
             };
         } else if (examType.includes("srop")) {
