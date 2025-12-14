@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QrCodeLog;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,9 +48,16 @@ class AdminPaymentQRController extends Controller
      */
     public function index()
     {
+
         $file = $this->getPaymentQR();
         $fileCount = $file ? 1 : 0;
-        return view('adminside.Payment-QR', compact('file', 'fileCount'));
+
+        // Get QR code logs, latest first
+        $logs = QrCodeLog::with('admin')
+            ->orderBy('created_at', 'desc')
+            ->get() ?? collect(); // default to empty collection if null
+
+        return view('adminside.Payment-QR', compact('file', 'fileCount', 'logs'));
     }
 
     /**
@@ -61,17 +70,43 @@ class AdminPaymentQRController extends Controller
             'replace_path' => 'nullable|string',
         ]);
 
-        // Check if this is a replace operation
+        // Get admin user info from session
+        $user = User::find($request->session()->get('admin'));
+
+        if (!$user) {
+            return back()->withErrors(['error' => 'Admin not found.']);
+        }
+
         $replacePath = $request->input('replace_path');
 
         if ($replacePath) {
             // Replace existing file
-            return $this->replaceQR($request, $replacePath);
+            $result = $this->replaceQR($request, $replacePath);
+
+            // Log the replacement
+            QrCodeLog::create([
+                'admin_id' => $user->_id ?? $user->id, // depending on DB
+                'action' => 'replaced',
+                'file_name' => basename($replacePath),
+            ]);
+
+            return $result;
         }
 
         // Handle new upload
-        return $this->uploadQR($request);
+        $uploadedFile = $request->file('image');
+        $result = $this->uploadQR($request);
+
+        // Log the new upload
+        QrCodeLog::create([
+            'admin_id' => $user->_id ?? $user->id,
+            'action' => 'uploaded',
+            'file_name' => $uploadedFile->getClientOriginalName(),
+        ]);
+
+        return $result;
     }
+
 
     /**
      * Upload a new payment QR code
@@ -171,8 +206,24 @@ class AdminPaymentQRController extends Controller
     {
         $path = $request->input('path');
 
+        // Get admin user info from session
+        $user = User::find($request->session()->get('admin'));
+
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'Admin not found.']);
+        }
+
         if (Storage::disk('local')->exists($path)) {
+            // Delete the file
             Storage::disk('local')->delete($path);
+
+            // Log the deletion in MongoDB
+            QrCodeLog::create([
+                'admin_id' => $user->_id ?? $user->id, // MongoDB or MySQL
+                'action' => 'deleted',
+                'file_name' => basename($path),
+            ]);
+
             return redirect()->back()->with('success', 'QR code deleted successfully.');
         }
 

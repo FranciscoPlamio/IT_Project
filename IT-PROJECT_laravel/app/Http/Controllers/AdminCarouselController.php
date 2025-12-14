@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\QrCodeLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -61,16 +62,32 @@ class AdminCarouselController extends Controller
             'replace_path' => 'nullable|string',
         ]);
 
-        // Check if this is a replace operation
         $replacePath = $request->input('replace_path');
 
         if ($replacePath) {
-            // Replace existing file
-            return $this->replaceSlide($request, $replacePath);
+            $result = $this->replaceQR($request, $replacePath);
+
+            // Log the replacement
+            QrCodeLog::create([
+                'admin_id' => Auth::id(),
+                'action' => 'replaced',
+                'file_name' => basename($replacePath),
+            ]);
+
+            return $result;
         }
 
         // Handle new upload
-        return $this->uploadSlide($request);
+        $result = $this->uploadSlide($request);
+
+        // Log the new upload
+        QrCodeLog::create([
+            'admin_id' => Auth::id(),
+            'action' => 'uploaded',
+            'file_name' => $request->file('image')->getClientOriginalName(),
+        ]);
+
+        return $result;
     }
 
     /**

@@ -1071,11 +1071,12 @@ class AdminController extends Controller   // <-- rename this
 
         // Include generated certificate if it exists
         $certificate = \App\Models\Certificate::where('form_token', $formToken)->first();
-        $certificatePath = "certificates/{$certificate->certificate_no}.pdf";
-        if (Storage::disk('local')->exists($certificatePath)) {
-            $files->push($certificatePath);
-        } else {
-            dd('File not found at:', storage_path("{$certificatePath}"));
+
+        if ($certificate) {
+            $certificatePath = "certificates/{$certificate->certificate_no}.pdf";
+            if (Storage::disk('local')->exists($certificatePath)) {
+                $files->push($certificatePath);
+            }
         }
 
         return view('adminside.req-management-attachments', compact('files', 'form'));

@@ -119,6 +119,47 @@
                     @endif
                 </div>
             </section>
+            <section class="info-card">
+                <header class="section-heading">
+                    <div>
+                        <p class="section-eyebrow">Admin Activity Logs</p>
+                        <h2>QR Code Changes</h2>
+                        <p class="section-description">
+                            See which admin uploaded, replaced, or deleted QR codes, along with the timestamp.
+                        </p>
+                    </div>
+                </header>
+
+                <div class="section-body">
+                    <div class="table-container1">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Admin Email</th>
+                                    <th>Action</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($logs as $log)
+                                    <tr>
+                                        <td>{{ $log->admin->email ?? 'Unknown Admin' }}</td>
+                                        <td>{{ ucfirst($log->action ?? 'N/A') }}</td>
+                                        <td>{{ $log->created_at ? $log->created_at->format('Y-m-d H:i:s') : 'N/A' }}
+                                        </td>
+
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3" class="empty-state">No activity logs found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
         </div>
     </div>
 </x-admin-layout>
