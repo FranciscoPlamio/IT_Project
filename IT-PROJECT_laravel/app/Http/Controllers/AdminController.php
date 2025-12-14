@@ -148,7 +148,15 @@ class AdminController extends Controller   // <-- rename this
 
         $highlight = $request->query('highlight');
 
-        return view('adminside.req-management', compact('user', 'latestRequests', 'highlight'));
+        // Load common responses from JSON file
+        $responses = [];
+        $responsesPath = base_path('responses.json');
+        if (file_exists($responsesPath)) {
+            $responsesJson = file_get_contents($responsesPath);
+            $responses = json_decode($responsesJson, true) ?? [];
+        }
+
+        return view('adminside.req-management', compact('user', 'latestRequests', 'highlight', 'responses'));
     }
     public function test(Request $request)
     {
