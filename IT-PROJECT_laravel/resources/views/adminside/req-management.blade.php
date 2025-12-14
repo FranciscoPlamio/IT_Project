@@ -273,15 +273,49 @@
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td style="position: relative; vertical-align: top;">
 
                                         <form action="{{ route('admin.remarks.save', ['formId' => $req->_id]) }}"
-                                            method="POST">
+                                            method="POST" class="remarks-form" style="position: relative;">
                                             @csrf
                                             <input type="hidden" name="user_id" value="1">
                                             <!-- ID of the row/user -->
-                                            <input type="text" name="remarks" placeholder="Enter remarks">
-                                            <button type="submit">Send</button>
+                                            <div
+                                                style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                                                <input type="text" name="remarks" id="remarks-{{ $req->_id }}"
+                                                    placeholder="Enter remarks"
+                                                    value="{{ old('remarks', $req->remarks) }}"
+                                                    style="flex: 1; min-width: 200px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px;">
+                                                <button type="submit"
+                                                    style="padding: 6px 12px; background: #2563eb; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">Send</button>
+                                            </div>
+                                            @if (!empty($responses))
+                                                <div style="margin-top: 4px; position: relative;"
+                                                    data-dropdown-parent="{{ $req->_id }}">
+                                                    <button type="button" class="dropdown-toggle"
+                                                        onclick="event.preventDefault(); toggleResponses('{{ $req->_id }}');"
+                                                        id="toggle-{{ $req->_id }}"
+                                                        style="color: #6b7280; background: none; border: none; font-size: 11px; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 4px;"
+                                                        onmouseover="this.style.color='#2563eb';"
+                                                        onmouseout="this.style.color='#6b7280';">
+                                                        <span id="toggle-text-{{ $req->_id }}">Common
+                                                            responses</span>
+                                                        <span id="toggle-icon-{{ $req->_id }}">▼</span>
+                                                    </button>
+                                                    <div id="responses-{{ $req->_id }}" class="dropdown-menu"
+                                                        style="display: none; position: absolute; top: 100%; left: 0; background: white; border: 1px solid #e5e7eb; border-radius: 4px; padding: 4px; margin-top: 4px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10000; min-width: 300px; max-width: 500px; max-height: 250px; overflow-y: auto;">
+                                                        @foreach ($responses as $response)
+                                                            <a href="#" class="dropdown-item"
+                                                                onclick="event.preventDefault(); fillRemarksInput('{{ $response }}', '{{ $req->_id }}'); closeDropdown('{{ $req->_id }}');"
+                                                                style="color: #2563eb; text-decoration: none; font-size: 12px; padding: 6px 8px; border-radius: 3px; transition: background-color 0.2s; display: block;"
+                                                                onmouseover="this.style.backgroundColor='#e0e7ff';"
+                                                                onmouseout="this.style.backgroundColor='transparent';">
+                                                                {{ $response }}
+                                                            </a>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </form>
                                         <span class="action-placeholder">{{ $req->remarks }}</span>
                                     </td>
@@ -417,6 +451,182 @@
             confirmButton.addEventListener("click", () => {
                 document.getElementById("confirmApproveModal").style.display = "none";
                 approveRequest(approveId);
+            });
+        });
+
+        // Function to fill remarks input from link selection
+        function fillRemarksInput(responseText, formId) {
+            const remarksInput = document.getElementById('remarks-' + formId);
+            if (remarksInput && responseText) {
+                remarksInput.value = responseText;
+                remarksInput.focus();
+            }
+        }
+
+        // Function to close dropdown
+        function closeDropdown(formId) {
+            const responsesDiv = document.getElementById('responses-' + formId);
+            const toggleIcon = document.getElementById('toggle-icon-' + formId);
+            const toggleButton = document.getElementById('toggle-' + formId);
+
+            if (responsesDiv) {
+                // Return dropdown to original position if it was moved to body
+                const originalParent = responsesDiv.getAttribute('data-original-parent');
+                if (originalParent && responsesDiv.parentElement === document.body) {
+                    const parentElement = document.querySelector('[data-dropdown-parent="' + formId + '"]');
+                    if (parentElement) {
+                        parentElement.appendChild(responsesDiv);
+                    }
+                }
+                responsesDiv.style.display = 'none';
+                responsesDiv.style.position = 'absolute';
+                responsesDiv.style.top = '';
+                responsesDiv.style.left = '';
+                responsesDiv.style.right = '';
+            }
+            if (toggleIcon) {
+                toggleIcon.textContent = '▼';
+            }
+        }
+
+        // Function to toggle dropdown visibility
+        function toggleResponses(formId) {
+            const responsesDiv = document.getElementById('responses-' + formId);
+            const toggleIcon = document.getElementById('toggle-icon-' + formId);
+            const toggleButton = document.getElementById('toggle-' + formId);
+
+            // Close all other dropdowns first
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== 'responses-' + formId) {
+                    const otherFormId = menu.id.replace('responses-', '');
+                    closeDropdown(otherFormId);
+                }
+            });
+
+            if (responsesDiv && toggleIcon && toggleButton) {
+                if (responsesDiv.style.display === 'none' || !responsesDiv.style.display) {
+                    // Get button position (getBoundingClientRect gives viewport coordinates)
+                    const buttonRect = toggleButton.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight;
+                    const viewportWidth = window.innerWidth;
+
+                    // Store original parent if not already stored
+                    if (!responsesDiv.getAttribute('data-original-parent')) {
+                        responsesDiv.setAttribute('data-original-parent', formId);
+                    }
+
+                    // Move dropdown to body to escape table constraints
+                    if (responsesDiv.parentElement !== document.body) {
+                        document.body.appendChild(responsesDiv);
+                    }
+
+                    // Temporarily show dropdown to measure its height
+                    responsesDiv.style.position = 'fixed';
+                    responsesDiv.style.visibility = 'hidden';
+                    responsesDiv.style.display = 'block';
+                    const dropdownHeight = responsesDiv.offsetHeight;
+                    const dropdownWidth = responsesDiv.offsetWidth;
+                    responsesDiv.style.visibility = 'visible';
+
+                    // Calculate available space
+                    const spaceBelow = viewportHeight - buttonRect.bottom;
+                    const spaceAbove = buttonRect.top;
+                    const spaceRight = viewportWidth - buttonRect.left;
+                    const spaceLeft = buttonRect.right;
+
+                    // Determine vertical position (above or below)
+                    let topPosition, verticalClass;
+                    if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
+                        // Position below button
+                        topPosition = buttonRect.bottom + 4;
+                        verticalClass = 'below';
+                    } else {
+                        // Position above button
+                        topPosition = buttonRect.top - dropdownHeight - 4;
+                        verticalClass = 'above';
+                    }
+
+                    // Determine horizontal position (adjust if near edges)
+                    let leftPosition = buttonRect.left;
+                    if (leftPosition + dropdownWidth > viewportWidth) {
+                        // Adjust to fit within viewport
+                        leftPosition = viewportWidth - dropdownWidth - 10;
+                        if (leftPosition < 10) {
+                            leftPosition = 10;
+                        }
+                    }
+
+                    // Apply positioning
+                    responsesDiv.style.position = 'fixed';
+                    responsesDiv.style.top = topPosition + 'px';
+                    responsesDiv.style.left = leftPosition + 'px';
+                    responsesDiv.style.right = 'auto';
+                    responsesDiv.setAttribute('data-position', verticalClass);
+                    responsesDiv.style.display = 'block';
+                    toggleIcon.textContent = '▲';
+                } else {
+                    closeDropdown(formId);
+                }
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const clickedDropdown = event.target.closest('.dropdown-menu');
+            const clickedToggle = event.target.closest('.dropdown-toggle');
+
+            if (!clickedDropdown && !clickedToggle) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    const formId = menu.id.replace('responses-', '');
+                    closeDropdown(formId);
+                });
+            }
+        });
+
+        // Update dropdown position on scroll
+        window.addEventListener('scroll', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.style.display === 'block' && menu.style.position === 'fixed') {
+                    const formId = menu.id.replace('responses-', '');
+                    const toggleButton = document.getElementById('toggle-' + formId);
+                    if (toggleButton) {
+                        const buttonRect = toggleButton.getBoundingClientRect();
+                        const viewportHeight = window.innerHeight;
+                        const viewportWidth = window.innerWidth;
+                        const dropdownHeight = menu.offsetHeight;
+                        const dropdownWidth = menu.offsetWidth;
+
+                        // Recalculate position based on available space
+                        const spaceBelow = viewportHeight - buttonRect.bottom;
+                        const spaceAbove = buttonRect.top;
+
+                        let topPosition;
+                        if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
+                            topPosition = buttonRect.bottom + 4;
+                        } else {
+                            topPosition = buttonRect.top - dropdownHeight - 4;
+                        }
+
+                        let leftPosition = buttonRect.left;
+                        if (leftPosition + dropdownWidth > viewportWidth) {
+                            leftPosition = viewportWidth - dropdownWidth - 10;
+                            if (leftPosition < 10) {
+                                leftPosition = 10;
+                            }
+                        }
+
+                        menu.style.top = topPosition + 'px';
+                        menu.style.left = leftPosition + 'px';
+                    }
+                }
+            });
+        }, true);
+
+        // Close dropdowns on window resize
+        window.addEventListener('resize', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                const formId = menu.id.replace('responses-', '');
+                closeDropdown(formId);
             });
         });
     </script>
