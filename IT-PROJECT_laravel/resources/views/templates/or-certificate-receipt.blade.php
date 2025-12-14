@@ -6,16 +6,27 @@
     <title>NTC Certificate Official Receipt</title>
 
     <style>
+        @page {
+            size: 250mm 180mm;
+            margin: 5mm;
+        }
+
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 13px;
             color: #000;
+            width: 100%;
+            overflow: hidden;
         }
 
         .container {
+            max-width: 200mm;
             width: 100%;
             padding: 20px;
             border: 1px solid #000;
+            margin: 0 auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
         .header {
@@ -36,12 +47,14 @@
 
         .section {
             margin-top: 15px;
+            page-break-inside: avoid;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
+            page-break-inside: avoid;
         }
 
         table td,
@@ -57,6 +70,14 @@
 
         .right {
             text-align: right;
+        }
+
+        .left {
+            text-align: left;
+        }
+
+        .center {
+            text-align: center;
         }
 
         .bold {
@@ -104,8 +125,8 @@
         <!-- OR INFO -->
         <table class="no-border">
             <tr>
-                <td><strong>OR No:</strong> {{ $data['or_number'] }}</td>
-                <td class="right"><strong>Date:</strong> {{ $data['or_date'] }}</td>
+                <td class="left"><strong>OR No:</strong> {{ $data['or_number'] }}</td>
+                <td class="center"><strong>Date:</strong> {{ $data['or_date'] }}</td>
             </tr>
         </table>
         @php

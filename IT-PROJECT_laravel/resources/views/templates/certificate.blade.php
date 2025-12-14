@@ -6,10 +6,17 @@
     <title>NTC Radio Operator Certificate</title>
 
     <style>
+        @page {
+            size: 150mm 190mm;
+            margin: 10mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 14px;
             color: #000;
+            height: 190mm;
+            overflow: hidden;
         }
 
         .container {
@@ -17,6 +24,8 @@
             padding: 18px;
             border: 1px solid #000;
             margin: auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
         .header {
@@ -46,6 +55,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
+            page-break-inside: avoid;
         }
 
         td {
@@ -67,6 +77,7 @@
         .signature-section {
             margin-top: 20px;
             text-align: center;
+            page-break-inside: avoid;
         }
 
         .officer {
