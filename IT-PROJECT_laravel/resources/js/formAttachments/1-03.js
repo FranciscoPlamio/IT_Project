@@ -41,7 +41,7 @@ export default function attachmentsForm102(containerId, form) {
     } else if (examType === "temporary-foreign") {
         labels = {
             id_picture: "Letter of Intent",
-            photcopy_of_valid_amateur_radio_operator_certificate:
+            f_valid_amateur_radio_operator_certificate_photocopy:
                 "Photocopy of valid Amateur Radio Operator Certificate issued by country of citizenship",
             reciprocal_privileges_proof:
                 "Any proof that the applicant’s country gives reciprocal privileges to Filipino amateurs",
@@ -56,7 +56,7 @@ export default function attachmentsForm102(containerId, form) {
         if (examType.includes("atroc")) {
             labels = {
                 ...defaultLabels,
-                photocopy_of_amateur_radio_operator_certificate:
+                amateur_radio_operator_certificate_photocopy:
                     "Photocopy of Amateur Radio Operator Certificate",
                 proof_of_amateur_activities: "Proof of Amateur Activity(ies)",
             };
@@ -122,7 +122,7 @@ export default function attachmentsForm102(containerId, form) {
         if (examType.includes("atroc")) {
             labels = {
                 ...defaultLabels,
-                photocopy_of_amateur_radio_operator_certificate:
+                amateur_radio_operator_certificate_photocopy:
                     "Photocopy of Amateur Radio Operator Certificate",
             };
         } else if (examType.includes("at-club-rsl")) {

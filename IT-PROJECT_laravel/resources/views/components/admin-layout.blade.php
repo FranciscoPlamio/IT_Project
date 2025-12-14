@@ -110,6 +110,11 @@
                 <img src="{{ Route::is('admin.carousel.index') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
                     alt=""> Banner Management
             </a>
+            <a href="{{ route('admin.certificates.verify') }}"
+                class="menu-item {{ Route::is('admin.certificates.verify') ? 'active' : '' }}">
+                <img src="{{ Route::is('admin.certificates.verify') ? asset('images/whitecert-icon.png') : asset('images/cert-icon.png') }} "
+                    alt=""> Verify Certificate
+            </a>
             {{-- <a href="{{ route('admin.test') }}">test</a> --}}
 
         </nav>

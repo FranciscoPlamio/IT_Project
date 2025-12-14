@@ -95,7 +95,7 @@ export default function attachmentsForm102(containerId, form) {
         if (examType.includes("atroc")) {
             labels = {
                 ...defaultLabels,
-                photocopy_of_amateur_radio_operator_certificate:
+                amateur_radio_operator_certificate_photocopy:
                     "Photocopy of Amateur Radio Operator Certificate",
                 proof_of_amateur_activities: "Proof of Amateur Activity(ies)",
             };
@@ -161,7 +161,7 @@ export default function attachmentsForm102(containerId, form) {
         if (examType.includes("atroc")) {
             labels = {
                 ...defaultLabels,
-                photocopy_of_amateur_radio_operator_certificate:
+                amateur_radio_operator_certificate_photocopy:
                     "Photocopy of Amateur Radio Operator Certificate",
             };
         } else if (examType.includes("at-club-rsl")) {
@@ -218,7 +218,7 @@ export default function attachmentsForm102(containerId, form) {
         wrapper.classList.remove(
             "border-emerald-200",
             "border-sky-200",
-            "border-amber-200",
+            "border-amber-200"
         );
         const accent = accentMap[accentIndex % accentMap.length];
         accentIndex += 1;
@@ -253,11 +253,11 @@ export default function attachmentsForm102(containerId, form) {
                 : `Uploaded ${uploaded}/${total}`;
             statusPill.classList.toggle(
                 "bg-emerald-100",
-                allFilled && gcashReady,
+                allFilled && gcashReady
             );
             statusPill.classList.toggle(
                 "text-emerald-700",
-                allFilled && gcashReady,
+                allFilled && gcashReady
             );
             statusPill.classList.toggle("bg-gray-100", !allFilled);
             statusPill.classList.toggle("text-gray-600", !allFilled);
@@ -337,7 +337,7 @@ export default function attachmentsForm102(containerId, form) {
                 "block",
                 "text-base",
                 "font-semibold",
-                "text-gray-900",
+                "text-gray-900"
             );
 
             const input = document.createElement("input");
@@ -360,7 +360,7 @@ export default function attachmentsForm102(containerId, form) {
                 "transition",
                 "focus:border-emerald-500",
                 "focus:ring-2",
-                "focus:ring-emerald-200",
+                "focus:ring-emerald-200"
             );
 
             wrapper.appendChild(label);
@@ -407,7 +407,7 @@ export default function attachmentsForm102(containerId, form) {
             proceedPaymentBtn.classList.toggle("opacity-50", !canProceed);
             proceedPaymentBtn.classList.toggle(
                 "cursor-not-allowed",
-                !canProceed,
+                !canProceed
             );
         }
 
@@ -415,7 +415,7 @@ export default function attachmentsForm102(containerId, form) {
             allFilled,
             filledCount,
             inputs.length || 0,
-            gcashReady,
+            gcashReady
         );
         return canProceed;
     }

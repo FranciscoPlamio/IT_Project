@@ -2,41 +2,111 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Certificate;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf; // or use mPDF if you prefer
+use Illuminate\Support\Facades\Storage;
 
 class CertificateController extends Controller
 {
-    public function generateCertificate()
+    // Display verification form
+    public function showVerifyPage(Request $request)
     {
-        $certificate = [
-            'ntc_region' => 'Quezon City',
-            'certificate_type' => 'NEW',
-            'certificate_no' => 'CAR20 00000',
-            'title' => 'Restricted Radiotelephone Operator\'s Certificate',
-            'radio_service' => 'LAND MOBILE',
+        $certificate = null;
+        $pdfUrl = null;
 
-            'name' => 'Juan Dela Cruz',
-            'address' => 'Baguio City',
+        if ($request->has('certificate_no')) {
+            $certificateNo = $request->query('certificate_no');
+            $certificate = Certificate::where('certificate_no', $certificateNo)->first();
 
-            'dob' => 'Jan 01, 1990',
-            'citizenship' => 'Filipino',
-            'sex' => 'M',
-            'height' => '170',
-            'weight' => '65',
+            if ($certificate) {
+                $pdfUrl = $certificate->pdf_path ? Storage::url($certificate->pdf_path) : null;
+            } else {
+                return redirect()->route('admin.certificates.verify')
+                    ->withErrors(['certificate_no' => 'Certificate not found']);
+            }
+        }
 
-            'date_issued' => 'Jan 01, 2025',
-            'valid_until' => 'Jan 01, 2030',
+        return view('adminside.verify', compact('certificate', 'pdfUrl'));
+    }
 
-            'officer_name' => 'DANTE M. VENGUA pcee, cese',
-            'officer_title' => 'Officer In Charge',
 
-            'serial_no' => '715751',
-        ];
-        return view('templates.certificate', compact('certificate'));
-        $pdf = Pdf::loadView('templates.certificate', compact('certificate'))
-            ->setPaper('A5', 'portrait');
+    // Handle verification
+    public function verifySubmit(Request $request)
+    {
+        $request->validate([
+            'certificate_no' => 'required|string',
+        ]);
 
-        return $pdf->stream('ntc-certificate.pdf');
+        $certificate = Certificate::where('certificate_no', $request->certificate_no)->first();
+
+        if (!$certificate) {
+            return back()->withErrors(['Certificate not found.']);
+        }
+
+        if ($certificate->status !== 'active') {
+            return back()->withErrors(['Certificate is ' . $certificate->status . '.']);
+        }
+
+        // Optional: generate a link to the PDF
+        $pdfPath = "private/certificates/{$certificate->certificate_no}.pdf";
+        $pdfUrl = Storage::exists($pdfPath) ? route('admin.certificates.download', ['certificate_no' => $certificate->certificate_no]) : null;
+
+        return view('adminside.verify', [
+            'certificate' => $certificate,
+            'pdfUrl' => $pdfUrl,
+        ]);
+    }
+
+    // Optional: allow admin to download/view certificate
+    public function downloadCertificate($certificate_no)
+    {
+        $certificate = Certificate::where('certificate_no', $certificate_no)->firstOrFail();
+        $pdfPath = "private/certificates/{$certificate->certificate_no}.pdf";
+
+        if (!Storage::exists($pdfPath)) {
+            abort(404, 'Certificate file not found.');
+        }
+
+        return response()->download(storage_path("app/{$pdfPath}"), "{$certificate_no}.pdf");
+    }
+
+    public function extractCertificateNumber($certificateId)
+    {
+        $certificate = Certificate::find($certificateId);
+        if (!$certificate) {
+            return back()->withErrors(['Certificate not found']);
+        }
+
+        // Get file path
+        $filePath = storage_path('app/private/' . $certificate->pdf_path);
+
+        $text = '';
+
+        if (str_ends_with($filePath, '.pdf')) {
+            // Option 1: PDF Parser for PDF files
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf = $parser->parseFile($filePath);
+            $text = $pdf->getText();
+        } else {
+            // Option 2: OCR for image files (jpg, png, etc.)
+            $text = (new TesseractOCR($filePath))
+                ->lang('eng')
+                ->run();
+        }
+
+        // Extract certificate number using regex
+        // Example: certificate format "ATROC-123456" or "1RTG-7890"
+        preg_match('/[A-Z0-9]+-\d+/', $text, $matches);
+        $certificateNo = $matches[0] ?? null;
+
+        if (!$certificateNo) {
+            return back()->withErrors(['Unable to detect certificate number.']);
+        }
+
+        // Save extracted certificate number to DB
+        $certificate->certificate_no = $certificateNo;
+        $certificate->save();
+
+        return back()->with('success', "Certificate number extracted: {$certificateNo}");
     }
 }

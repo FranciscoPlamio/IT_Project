@@ -126,34 +126,37 @@
             </div>
 
             <!-- Certificate Details -->
-            <div class="details-box">
-                <h3>Certificate Details</h3>
-                <ul>
-                    <li><strong>Name:</strong> {{ $form->last_name }} {{ $form->first_name }}
-                        {{ $form->middle_name ?? '' }}</li>
-                    <li><strong>Certificate Type:</strong> {{ $certificateType }}</li>
-                    <li><strong>Date Issued:</strong> {{ $issuanceDate }}</li>
-                    <li><strong>Expiry Date:</strong> {{ $expiryDate }}</li>
-                    <li><strong>OR Number:</strong> {{ $form->or['or_no'] ?? '-' }}</li>
-                    <li><strong>OR Date:</strong> {{ $form->or['or_date'] ?? '-' }}</li>
-                </ul>
-            </div>
+            <<!-- Certificate Details -->
+                <div class="details-box">
+                    <h3>Certificate Details</h3>
+                    <ul>
+                        <li><strong>Name:</strong> {{ $form->last_name }} {{ $form->first_name }}
+                            {{ $form->middle_name ?? '' }}</li>
+                        <li><strong>Certificate Number:</strong> {{ $certificateNumber ?? '-' }}</li>
+                        <li><strong>Certificate Type:</strong> {{ $certificateType }}</li>
+                        <li><strong>Date Issued:</strong> {{ $issuanceDate }}</li>
+                        <li><strong>Expiry Date:</strong> {{ $expiryDate }}</li>
+                        <li><strong>OR Number:</strong> {{ $form->or['or_no'] ?? '-' }}</li>
+                        <li><strong>OR Date:</strong> {{ $form->or['or_date'] ?? '-' }}</li>
+                    </ul>
+                </div>
 
-            <div class="success-banner">
-                <p style="font-size:18px; margin-bottom:10px;">🎉 <strong>Congratulations!</strong></p>
-                <p>
-                    Your certificate has been successfully generated and is attached to this email.
-                    Please download and keep it for your records.
+
+                <div class="success-banner">
+                    <p style="font-size:18px; margin-bottom:10px;">🎉 <strong>Congratulations!</strong></p>
+                    <p>
+                        Your certificate has been successfully generated and is attached to this email.
+                        Please download and keep it for your records.
+                    </p>
+                </div>
+
+                <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 25px 0;">
+
+                <p style="font-size:14px; line-height:1.6;">
+                    If you have any questions or concerns, feel free to contact us at
+                    <strong>car.admin@ntc.gov.ph</strong>.
                 </p>
-            </div>
-
-            <hr style="border: none; border-top: 1px solid #e1e1e1; margin: 25px 0;">
-
-            <p style="font-size:14px; line-height:1.6;">
-                If you have any questions or concerns, feel free to contact us at
-                <strong>car.admin@ntc.gov.ph</strong>.
-            </p>
-            <p>Thank you for using the NTC Forms System.</p>
+                <p>Thank you for using the NTC Forms System.</p>
         </div>
 
         <div class="footer">
