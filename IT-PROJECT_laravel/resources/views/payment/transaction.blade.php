@@ -243,7 +243,8 @@
                                 <p class="gcash-subnote">Log in to GCash and scan this QR with the QR Scanner.</p>
 
                                 <div class="gcash-qr">
-                                    <img src="{{ asset('images/Gcash-Form1-01.png') }}" alt="GCash QR Code">
+                                    <img src="{{ $paymentQRUrl ?? asset('images/Gcash-BMA-QRcode.jpg') }}"
+                                        alt="GCash QR Code">
                                 </div>
                             </div>
 

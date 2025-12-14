@@ -1073,6 +1073,9 @@ class AdminController extends Controller   // <-- rename this
         // Carousel slides are in public disk
         if (str_starts_with($path, 'carousel-slides/')) {
             $disk = Storage::disk('public');
+        } elseif (str_starts_with($path, 'payment-QR/')) {
+            // Payment QR codes are in local disk
+            $disk = Storage::disk('local');
         } else {
             // Default to local disk for other files
             $disk = Storage::disk('local');
