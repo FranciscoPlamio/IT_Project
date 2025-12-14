@@ -159,20 +159,18 @@
                                     @endphp
                                     <td>
                                         @php
-                                            // Check if certificate has been generated for Form 1-02
                                             $certificateExists = false;
+
                                             if (
                                                 strtolower($req->form_type) === 'form1-02' ||
                                                 strtolower($req->form_type) === 'form1-03'
                                             ) {
                                                 try {
-                                                    $files = Storage::disk('local')->files("forms/{$req->form_token}");
-                                                    foreach ($files as $file) {
-                                                        if (Str::startsWith(basename($file), 'certificate_')) {
-                                                            $certificateExists = true;
-                                                            break;
-                                                        }
-                                                    }
+                                                    // Check if a certificate record exists for this form token
+                                                    $certificateExists = \App\Models\Certificate::where(
+                                                        'form_token',
+                                                        $req->form_token,
+                                                    )->exists();
                                                 } catch (\Exception $e) {
                                                     $certificateExists = false;
                                                 }

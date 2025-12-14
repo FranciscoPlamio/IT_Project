@@ -70,7 +70,7 @@
             <div>{{ $data['ntc_region'] }}</div>
         </div>
 
-        <div class="title">OFFICIAL RECEIPT (EXAMINATION)</div>
+        <div class="title">OFFICIAL RECEIPT</div>
 
         <!-- OR Info -->
         <div class="section">

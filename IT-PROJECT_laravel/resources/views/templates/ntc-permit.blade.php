@@ -79,7 +79,7 @@
         <div>NTC – CAR (Baguio)</div>
     </div>
 
-    <div class="title">NTC PERMIT</div>
+    <div class="title">OFFICIAL PERMIT</div>
 
     <div class="section">
         <div class="section-title">Applicant Information</div>

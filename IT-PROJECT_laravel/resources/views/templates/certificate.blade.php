@@ -152,7 +152,7 @@
         </div>
 
         <!-- SERIAL NO -->
-        <div class="serial">No: {{ $certificate['serial_no'] }}</div>
+        <div class="serial">{{ $certificate['certificate_no'] }}</div>
 
         <div class="section" style="text-align:center; margin-top:25px;">
             *** THIS IS A SYSTEM GENERATED CERTIFICATE ***

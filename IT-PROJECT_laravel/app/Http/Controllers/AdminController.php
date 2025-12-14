@@ -638,14 +638,23 @@ class AdminController extends Controller   // <-- rename this
                 $folderPath = "forms/{$form->form_token}";
                 $files = collect(Storage::files($folderPath));
 
-                // --- Certificate file ---
-                $certificateFile = $files->first(fn($file) => str_starts_with(basename($file), 'certificate_'));
+                // Find the certificate record for this form token
+                $certificate = \App\Models\Certificate::where('form_token', $form->form_token)->first();
 
-                if (!$certificateFile) {
-                    return redirect()->back()->withErrors(['Certificate file not found.']);
+                if (!$certificate) {
+                    return redirect()->back()->withErrors(['Certificate not found.']);
                 }
-                $certificateData = Storage::get($certificateFile);
-                $certificateFileName = basename($certificateFile);
+
+                // Build the file path in private/certificates folder
+                $certificateFileName = $certificate->certificate_no . '.pdf';
+                $certificatePath = "private/certificates/{$certificateFileName}";
+
+                if (!Storage::exists($certificatePath)) {
+                    return redirect()->back()->withErrors(['Certificate file not found in storage.']);
+                }
+
+                // Get certificate content if needed
+                $certificateData = Storage::get($certificatePath);
 
                 // --- Official Receipt file ---
                 $receiptFile = $files->first(fn($file) => str_starts_with(basename($file), 'official_receipt_'));

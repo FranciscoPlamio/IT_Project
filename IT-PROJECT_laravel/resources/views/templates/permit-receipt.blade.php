@@ -85,7 +85,7 @@
             <div>{{ $data['ntc_region'] ?? 'Central Office' }}</div>
         </div>
 
-        <div class="title">OFFICIAL RECEIPT (Permit)</div>
+        <div class="title">OFFICIAL RECEIPT</div>
 
         <!-- OR INFO -->
         <table class="no-border">

@@ -99,7 +99,7 @@
             <div>{{ $data['ntc_region'] ?? 'NTC – CAR (Baguio)' }}</div>
         </div>
 
-        <div class="title">OFFICIAL RECEIPT (CERTIFICATE)</div>
+        <div class="title">OFFICIAL RECEIPT</div>
 
         <!-- OR INFO -->
         <table class="no-border">

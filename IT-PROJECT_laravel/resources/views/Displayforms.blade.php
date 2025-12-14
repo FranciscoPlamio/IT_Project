@@ -37,15 +37,6 @@
                                     View PDF
                                 </a>
 
-                                <a href="{{ route('showFormInformation', ['formType' => $form['formType']]) }}"
-                                    class="px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
-                                    Sign Up
-                                </a>
-
-                                <a href="{{ route('requirements') }}"
-                                    class="px-3 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm">
-                                    Requirements
-                                </a>
                             </div>
                         </div>
                     @endforeach
@@ -70,15 +61,6 @@
                                 style="background:#0d6efd;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
                                 View PDF
                             </a>
-
-                            <a href="{{ route('showFormInformation', ['formType' => '1-01']) }}"
-                                style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                                Sign up
-                            </a>
-                            <a href="{{ route('requirements') }}"
-                                style="background:#6c757d;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                                Requirements
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -98,14 +80,6 @@
                                 View PDF
                             </a>
 
-                            <a href="{{ route('showFormInformation', ['formType' => '1-02']) }}"
-                                style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                                Sign up
-                            </a>
-                            <a href="{{ route('requirements') }}"
-                                style="background:#6c757d;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                                Requirements
-                            </a>
                         </div>
                     </div>
                 </div>

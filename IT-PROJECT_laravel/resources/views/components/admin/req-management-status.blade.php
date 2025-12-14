@@ -40,19 +40,15 @@
             <span>Official Receipt Completed</span>
         </div>
         @php
-            // Check if certificate has been generated (exists in attachments folder)
             $certificateExists = false;
+
             try {
-                $files = Storage::disk('local')->files("forms/{$req->form_token}");
-                foreach ($files as $file) {
-                    if (Str::startsWith(basename($file), 'certificate_')) {
-                        $certificateExists = true;
-                        break;
-                    }
-                }
+                // Check if a certificate record exists for this form token
+                $certificateExists = \App\Models\Certificate::where('form_token', $req->form_token)->exists();
             } catch (\Exception $e) {
                 $certificateExists = false;
             }
+
         @endphp
         @if ($certificateExists)
             <div class="status-badge done">

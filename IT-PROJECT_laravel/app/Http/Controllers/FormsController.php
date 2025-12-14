@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\FormManager;
+use App\Models\Certificate;
 use App\Models\Forms\Form1_01;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -798,6 +799,7 @@ class FormsController extends Controller
         if (!$formToken) {
             return response()->json(['error' => 'Missing form token'], 400);
         }
+
         if (!$transactionForm) {
             return response()->json(['error' => 'Form not found in transactions'], 404);
         }
@@ -806,13 +808,15 @@ class FormsController extends Controller
         $formType = substr($transactionForm->form_type, 4);
 
         try {
-            // Retrieve form data from database
+            // Retrieve form data
             $formModel = FormManager::getFormModel('form' . $formType);
             $dbForm = $formModel::where('form_token', $formToken)->first();
 
             if (!$dbForm) {
                 return response()->json(['error' => 'Form not found'], 404);
             }
+
+            // Certificate names mapping
             $certificateNames = [
                 '1RTG' => 'First-class Radiotelegraph Operator Certificate',
                 '2RTG' => 'Second-class Radiotelegraph Operator Certificate',
@@ -824,54 +828,65 @@ class FormsController extends Controller
                 'GROC' => 'General Radiotelegraph Operator Certificate',
                 'RROC-AIRCRAFT' => 'Restricted Radiotelegraph Operator Certificate – Aircraft',
                 'RROC-RLM' => 'Restricted Radiotelegraph Operator Certificate – Land Mobile',
-                // --- FORM 1-03 ---
                 'ATROC' => 'Amateur Radio Operator Certificate',
                 'AT-LIFETIME' => 'Amateur Radio Operator Certificate – Lifetime',
                 'AT-CLUB-RSL' => 'Amateur Club Radio Station License',
-                'ATRSL' => 'Amateur Radio Station License', // will append class
+                'ATRSL' => 'Amateur Radio Station License',
                 'TEMP-A' => 'Temporary Amateur Radio Station Permit – Type A',
                 'TEMP-B' => 'Temporary Amateur Radio Station Permit – Type B',
                 'TEMP-C' => 'Temporary Amateur Radio Station Permit – Type C',
                 'SPECIAL-EVENT-CALL' => 'Special Event Call Sign',
                 'VANITY-CALL' => 'Vanity Call Sign',
-
-
             ];
-            // Convert model to array for PDF generation
-            $formData = $dbForm->toArray();
 
-            // Determine the raw type and station class
             $rawType = strtoupper($dbForm->certificate_type ?? $dbForm->category ?? 'UNKNOWN');
             $stationClass = strtoupper($dbForm->station_class ?? '');
 
             // Determine the certificate title
             if (Str::contains($rawType, 'ATRSL')) {
-                // Append station class for ATRSL
                 $title = ($certificateNames['ATRSL'] ?? 'Amateur Radio Station License')
-                    . ($stationClass ? ' –  ' . $stationClass : '');
+                    . ($stationClass ? ' – ' . $stationClass : '');
             } elseif (Str::contains($rawType, 'TEMP')) {
-                // Append station class for TEMP types if available
                 $title = ($certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType)))
                     . ($stationClass ? ' – ' . $stationClass : '');
             } else {
-                // Form 1-02 or other Form 1-03 types
                 $title = $certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType));
             }
 
+            // --- Generate or retrieve certificate number ---
+            $existingCert = Certificate::where('form_token', $formToken)->first();
+            if ($existingCert) {
+                $certificateNo = $existingCert->certificate_no;
+            } else {
+                // Generate unique certificate number
+                $year = now()->year;
+                $typeCode = preg_replace('/[^A-Z]/', '', $rawType) ?: 'GEN';
+                $count = Certificate::whereYear('date_issued', $year)->count() + 1;
+                $sequence = str_pad($count, 6, '0', STR_PAD_LEFT);
+                $certificateNo = "NTC-CAR-{$typeCode}-{$year}-{$sequence}";
+
+                // Save certificate record
+                Certificate::create([
+                    'certificate_no'   => $certificateNo,
+                    'form_token'       => $formToken,
+                    'form_type'        => $transactionForm->form_type,
+                    'certificate_type' => $rawType,
+                    'holder_name'      => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                    'date_issued'      => now(),
+                    'valid_until'      => now()->addYears((int)($dbForm->years ?? 3)),
+                    'status'           => 'active',
+                ]);
+            }
+
+            // Build certificate array
             $certificate = [
-                'ntc_region'        => 'NTC – CAR (Baguio)', // fixed
-                'certificate_type'  => strtoupper($dbForm->application_type ?? 'NEW'),
-                'certificate_no'    => $dbForm->certificate_no,
-
-                // Title based on certificate_type (SROP, GROC, etc.)
-                'title' => $title ?? 'Certificate',
-
-                // Radio service (optional — guess based on certificate)
-                'radio_service'     => $dbForm->radio_service,
-
-                // Name and Address
-                'name' => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
-                'address'           => implode(', ', array_filter([
+                'ntc_region'       => 'NTC – CAR (Baguio)',
+                'certificate_type' => strtoupper($dbForm->application_type ?? 'NEW'),
+                'certificate_no'   => $certificateNo,
+                'title'            => $title,
+                'radio_service'    => $dbForm->radio_service,
+                'name'             => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                'address'          => implode(', ', array_filter([
                     $dbForm->unit,
                     $dbForm->street,
                     $dbForm->barangay,
@@ -879,40 +894,31 @@ class FormsController extends Controller
                     $dbForm->province,
                     $dbForm->zip_code
                 ])),
-
-                // Personal Info
-                'dob'               => \Carbon\Carbon::parse($dbForm->dob)->format('M d, Y'),
-                'citizenship'       => $dbForm->nationality ?? 'Filipino',
-                'sex'               => strtoupper(substr($dbForm->sex, 0, 1)), // male → M
-                'height'            => $dbForm->height,
-                'weight'            => $dbForm->weight,
-
-                // Dates
-                'date_issued'       => now()->format('M d, Y'),
-                'valid_until' => now()->addYears((int) ($dbForm->years ?? 3))->format('M d, Y'),
-
-                // Officer (fixed)
-                'officer_name'      => '________________',
-                'officer_title'     => 'Officer In Charge',
-
-                // Serial No: auto-generate if missing
-                'serial_no'         => $dbForm->serial_no ?? rand(100000, 999999),
+                'dob'          => \Carbon\Carbon::parse($dbForm->dob)->format('M d, Y'),
+                'citizenship'  => $dbForm->nationality ?? 'Filipino',
+                'sex'          => strtoupper(substr($dbForm->sex, 0, 1)),
+                'height'       => $dbForm->height,
+                'weight'       => $dbForm->weight,
+                'date_issued'  => now()->format('M d, Y'),
+                'valid_until'  => now()->addYears((int)($dbForm->years ?? 3))->format('M d, Y'),
+                'officer_name' => '________________',
+                'officer_title' => 'Officer In Charge',
             ];
+
+            // Generate PDF
             $pdf = Pdf::loadView('templates.certificate', compact('certificate'))
                 ->setPaper('A5', 'portrait');
 
-            // Generate filename
-            $filename = "Certificate_{$formData['last_name']}_{$formData['first_name']}_" . date('Y-m-d_H-i-s') . ".pdf";
+            // Private folder for certificates
+            $certificatePath = "certificates/{$certificateNo}.pdf";
+            Storage::put($certificatePath, $pdf->output());
 
-            // Preview mode → open in browser
+            // Preview or download
             if ($request->boolean('preview')) {
-                return $pdf->stream($filename);
-            } else {
-                $attachmentPath = "forms/{$formToken}/certificate_" . time() . ".pdf";
-                Storage::put($attachmentPath, $pdf->output());
-
-                return $pdf->download($filename);
+                return $pdf->stream("{$certificateNo}.pdf");
             }
+
+            return response()->download(storage_path("app/{$certificatePath}"), "{$certificateNo}.pdf");
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
         }

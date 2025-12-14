@@ -87,86 +87,13 @@
         </header>
 
         <section class="space-y-6">
-            <!-- A. Request for Blocking/Unblocking -->
-            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
-                <button @click="open = !open"
-                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
-                    A. Request for Blocking/Unblocking of IMEI and SIM of lost/stolen mobile phone
-                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
-                </button>
-                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished and notarized AFFIDAVIT OF OWNERSHIP AND LOSS WITH UNDERTAKING
-                            <span class="italic">(Form No. NTC 1-24)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Consumer Welfare and Protection Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                            <p class="mt-1 text-xs text-gray-600">
-                                Note: The Affidavit of Loss must indicate the mobile number of the phone and/or the SIM
-                                to
-                                be blocked.
-                            </p>
-                        </li>
-                        <li>
-                            For Blocking, Proof of ownership, <span class="font-semibold">ANY</span> of the following:
-                            <ol class="list-decimal pl-6 mt-1 text-sm space-y-1">
-                                <li>Photocopy of Official Receipt of the mobile phone</li>
-                                <li>Box of the mobile phone with International Mobile Equipment Identity (IMEI)</li>
-                                <li>
-                                    Certificate of Purchase issued by the Authorized Seller with the Name of the
-                                    Purchaser,
-                                    Date of Purchase and IMEI
-                                </li>
-                                <li>
-                                    In the absence of 2.1, 2.2 &amp; 2.3: Affidavit (of loss, declaring ownership and
-                                    providing a reference for blocking such as IMEI and, if available, the Police
-                                    Blotter)
-                                </li>
-                            </ol>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Mobile Phone Dealer / Applicant
-                            </span>
-                        </li>
-                        <li>
-                            For Unblocking, Photocopy of duly received request for blocking +
-                            AFFIDAVIT OF OWNERSHIP AND LOSS WITH UNDERTAKING
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Applicant
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Identification:
-                            <ol class="list-decimal pl-6 mt-1 text-sm space-y-1">
-                                <li>Any government‑issued ID or Passport</li>
-                                <li>For students, School ID</li>
-                                <li>
-                                    For cases when ID is not available, Birth Certificate
-                                    <span class="font-semibold">OR</span> NBI Clearance
-                                </li>
-                            </ol>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: BIR / Post Office / DFA / SSS / GSIS / PAG‑IBIG / PSA / School / NBI /
-                                LTO
-                            </span>
-                        </li>
-                    </ol>
-                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
-                        <a href="{{ route('forms.show', ['formType' => '1-24', 'category' => 'blocking-unblocking-imei-sim']) }}"
-                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                            Apply using Form 1-24 (Affidavit of Ownership and Loss with Undertaking)
-                        </a>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- B. Complaints on Text Spam/Scam etc. -->
             <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
                 <button @click="open = !open"
                     class="w-full text-left flex justify-between items-center font-semibold text-lg">
-                    B. Handling of Complaints on Text Spam, Text Scam, or Illegal/Obscene/Threat/Other Similar Text
+                    A. Handling of Complaints on Text Spam, Text Scam, or Illegal/Obscene/Threat/Other Similar Text
                     Messages
                     <span class="ml-2" x-text="open ? '-' : '+'"></span>
                 </button>
@@ -206,74 +133,9 @@
                 </div>
             </div>
 
-            <!-- C. Complaints on Services -->
-            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
-                <button @click="open = !open"
-                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
-                    C. Handling of Complaints on Services offered by Telecommunications or Broadcast Service Providers
-                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
-                </button>
-                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Duly accomplished COMPLAINT FORM
-                            <span class="italic">(Form No. NTC 1-25)</span>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Consumer Welfare and Protection Unit / Website:
-                                <a href="https://ntc.gov.ph" target="_blank"
-                                    class="text-blue-600 underline hover:text-blue-800">ntc.gov.ph</a>
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of valid Identification:
-                            <ol class="list-decimal pl-6 mt-1 text-sm space-y-1">
-                                <li>Any government‑issued ID or Passport</li>
-                                <li>For students, School ID</li>
-                                <li>
-                                    For cases when ID is not available, Birth Certificate
-                                    <span class="font-semibold">OR</span> NBI Clearance
-                                </li>
-                            </ol>
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: BIR / Post Office / DFA / SSS / GSIS / PAG‑IBIG / PSA / School / NBI /
-                                LTO
-                            </span>
-                        </li>
-                        <li>
-                            Photocopy of latest Statement of Account (SOA), Service Contract and/or Document indicating
-                            the
-                            services being availed by the complainant
-                            <span class="block text-sm text-gray-600">
-                                Where to secure: Service Provider
-                            </span>
-                        </li>
-                    </ol>
-                    <div class="mt-3 flex flex-wrap gap-3 justify-center">
-                        <a href="{{ route('forms.show', ['formType' => '1-25', 'category' => 'service-complaints']) }}"
-                            class="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
-                            Apply using Form 1-25 (Complaint Form)
-                        </a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Supporting Documents for Representative(s) -->
-            <div x-data="{ open: false }" class="bg-gray-50 rounded-lg p-4 text-gray-700">
-                <button @click="open = !open"
-                    class="w-full text-left flex justify-between items-center font-semibold text-lg">
-                    Supporting Documents for Representative(s)
-                    <span class="ml-2" x-text="open ? '-' : '+'"></span>
-                </button>
-                <div x-show="open" x-transition class="mt-2 text-gray-700 space-y-2">
-                    <ol class="list-decimal pl-6 space-y-1">
-                        <li>
-                            Authorization letter duly signed by the applicant and valid ID of the authorized
-                            representative.
-                            <span class="block text-sm text-gray-600">Where to secure: Applicant</span>
-                        </li>
-                    </ol>
-                </div>
-            </div>
+
+
         </section>
 
         <!-- Footer actions -->
