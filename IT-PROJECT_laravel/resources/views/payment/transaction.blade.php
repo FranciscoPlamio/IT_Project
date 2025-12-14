@@ -207,9 +207,12 @@
                                             <h2 class="text-2xl font-semibold text-amber-700">Please wait for
                                                 validation</h2>
                                             <p class="mt-2 text-sm text-amber-600 max-w-xl">
-                                                Our team is reviewing your application details. You’ll receive a
-                                                notification as
-                                                soon as we’re ready for the next step. Feel free to keep this tab open.
+                                                Your payment and application are currently under review by our
+                                                processing team.
+                                                We will complete the verification process within 2-3 business days and
+                                                it will proceed to the next step once validated, there will be remarks
+                                                for futher notice. Thank you for
+                                                your patience.
                                             </p>
                                         </div>
                                     </div>

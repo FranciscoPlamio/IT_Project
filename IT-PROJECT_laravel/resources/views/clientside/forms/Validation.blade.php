@@ -112,25 +112,38 @@
             "rroc_aircraft_e1": "RROC - Aircraft - Element 1"
         };
 
+        // Function to capitalize first letter of each word
+        function capitalizeFirstLetter(str) {
+            if (!str || typeof str !== 'string') return str;
+            // Split by spaces, capitalize first letter of each word, then join
+            return str.split(' ').map(word => {
+                if (word.length === 0) return word;
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }).join(' ');
+        }
+
         function formatValue(key, rawValue) {
             // If the field is a file input, show just the file name
             if (key === 'id_picture' || key === 'admit_id_picture') {
                 if (!rawValue) return 'No file selected';
                 if (Array.isArray(rawValue)) {
-                    return rawValue.map(v => (v && typeof v === 'string' ? v.split('\\').pop().split('/').pop() : ''))
+                    const fileNames = rawValue.map(v => (v && typeof v === 'string' ? v.split('\\').pop().split('/').pop() :
+                            ''))
                         .filter(Boolean)
                         .join(', ');
+                    return capitalizeFirstLetter(fileNames);
                 }
-                return typeof rawValue === 'string' && rawValue.length > 0 ?
+                const fileName = typeof rawValue === 'string' && rawValue.length > 0 ?
                     rawValue.split('\\').pop().split('/').pop() :
                     'No file selected';
+                return capitalizeFirstLetter(fileName);
             }
 
             // Map checkbox values to their labels when applicable
             const map = checkboxLabelMaps[rawValue];
             if (key === 'exam_type') {
                 if (map) {
-                    return map;
+                    return map; // Already properly formatted
                 }
             }
 
@@ -143,8 +156,12 @@
             }
 
             // Default formatting
-            if (Array.isArray(rawValue)) return rawValue.join(', ');
-            return rawValue ?? '';
+            if (Array.isArray(rawValue)) {
+                const joined = rawValue.join(', ');
+                return capitalizeFirstLetter(joined);
+            }
+            const value = rawValue ?? '';
+            return capitalizeFirstLetter(String(value));
         }
 
         const server101 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
