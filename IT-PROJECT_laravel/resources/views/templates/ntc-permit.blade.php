@@ -5,11 +5,20 @@
     <meta charset="UTF-8">
     <title>NTC Official Permit</title>
     <style>
+        @page {
+            size: 190mm 200.63mm;
+            margin: 0mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 13px;
             color: #000;
             margin: 40px;
+            height: {{ $pdf_height ?? '220.63' }}mm;
+            overflow: hidden;
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
         .header {
@@ -37,6 +46,7 @@
 
         .section {
             margin-bottom: 20px;
+            page-break-inside: avoid;
         }
 
         .section-title {
@@ -48,6 +58,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
+            page-break-inside: avoid;
         }
 
         table td,

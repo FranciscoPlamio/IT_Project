@@ -6,16 +6,27 @@
     <title>NTC Official Receipt (Permit)</title>
 
     <style>
+        @page {
+            size: 250mm 185mm;
+            margin: 5mm;
+        }
+
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 13px;
             color: #000;
+            width: 100%;
+            overflow: hidden;
         }
 
         .container {
+            max-width: 200mm;
             width: 100%;
             padding: 20px;
             border: 1px solid #000;
+            margin: 0 auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
         .header {
@@ -37,12 +48,14 @@
 
         .section {
             margin-top: 15px;
+            page-break-inside: avoid;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
+            page-break-inside: avoid;
         }
 
         table td,
@@ -90,17 +103,17 @@
         <!-- OR INFO -->
         <table class="no-border">
             <tr>
-                <td><strong>OR No:</strong> {{ $data['or_number'] ?? 'N/A' }}</td>
-                <td class="right"><strong>Date:</strong> {{ $data['or_date'] ?? 'N/A' }}</td>
+                <td class="left"><strong>OR No:</strong> {{ $data['or_number'] ?? 'N/A' }}</td>
+                <td class="center"><strong>Date:</strong> {{ $data['or_date'] ?? 'N/A' }}</td>
             </tr>
         </table>
 
         <!-- Payee Info -->
         <div class="section">
-            <strong>Received From:</strong> {{ $data['cash_received_from'] ?? 'N/A' }} <br>
-            <strong>Address:</strong> {{ $data['address'] ?? 'N/A' }} <br>
+            <div><strong>Received From:</strong> {{ $data['cash_received_from'] ?? 'N/A' }}</div>
+            <div><strong>Address:</strong> {{ $data['address'] ?? 'N/A' }}</div>
             @if (isset($data['transaction_type']))
-                <strong>Transaction Type:</strong> {{ ucfirst($data['transaction_type']) }} <br>
+                <div><strong>Transaction Type:</strong> {{ ucfirst($data['transaction_type']) }}</div>
             @endif
             <!-- Permit Type row -->
             @php
@@ -118,7 +131,7 @@
             @endphp
 
             @if (isset($data['permit_type']))
-                <strong>Permit Type:</strong> {{ $permitName }} <br>
+                <div><strong>Permit Type:</strong> {{ $permitName }}</div>
             @endif
         </div>
 
@@ -127,25 +140,25 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="left">Description</th>
-                        <th class="right">Qty</th>
-                        <th class="right">Unit Price</th>
-                        <th class="right">Amount</th>
+                        <th>Description</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data['items'] as $item)
                         <tr>
-                            <td class="left">{{ $item['description'] }}</td>
-                            <td class="right">{{ $item['qty'] ?? 1 }}</td>
-                            <td class="right">₱{{ number_format($item['unit_price'] ?? $item['amount'], 2) }}</td>
-                            <td class="right">₱{{ number_format($item['amount'], 2) }}</td>
+                            <td>{{ $item['description'] }}</td>
+                            <td>{{ $item['qty'] ?? 1 }}</td>
+                            <td>₱{{ number_format($item['unit_price'] ?? $item['amount'], 2) }}</td>
+                            <td>₱{{ number_format($item['amount'], 2) }}</td>
                         </tr>
                     @endforeach
 
                     <tr>
-                        <td colspan="3" class="right bold">TOTAL AMOUNT</td>
-                        <td class="right bold">₱{{ number_format($data['total_amount'], 2) }}</td>
+                        <td colspan="3" class="bold">TOTAL AMOUNT</td>
+                        <td class="bold">₱{{ number_format($data['total_amount'], 2) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -153,14 +166,14 @@
 
         <!-- Payment Method -->
         <div class="section">
-            <strong>Payment Method:</strong> {{ strtoupper($data['payment_method'] ?? 'N/A') }} <br>
-            <strong>Collected by:</strong> {{ $data['collecting_officer'] ?? 'N/A' }}
+            <div><strong>Payment Method:</strong> {{ strtoupper($data['payment_method'] ?? 'N/A') }}</div>
+            <div><strong>Collected by:</strong> {{ $data['collecting_officer'] ?? 'N/A' }}</div>
         </div>
 
         <!-- Remarks -->
         @if (isset($data['remarks']))
             <div class="section">
-                <strong>Remarks:</strong> {{ $data['remarks'] }}
+                <div><strong>Remarks:</strong> {{ $data['remarks'] }}</div>
             </div>
         @endif
 

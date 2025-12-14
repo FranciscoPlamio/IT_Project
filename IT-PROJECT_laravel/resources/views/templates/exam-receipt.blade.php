@@ -5,16 +5,27 @@
     <meta charset="UTF-8">
     <title>NTC Examination Official Receipt</title>
     <style>
+        @page {
+            size: 250mm 165mm;
+            margin: 5mm;
+        }
+
         body {
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 13px;
             color: #000;
+            width: 100%;
+            overflow: hidden;
         }
 
         .container {
+            max-width: 200mm;
             width: 100%;
             padding: 20px;
             border: 1px solid #000;
+            margin: 0 auto;
+            page-break-inside: avoid;
+            page-break-after: avoid;
         }
 
         .header {
@@ -35,12 +46,14 @@
 
         .section {
             margin-top: 15px;
+            page-break-inside: avoid;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 8px;
+            page-break-inside: avoid;
         }
 
         table td,
@@ -49,8 +62,17 @@
             padding: 6px;
         }
 
+        .no-border td {
+            border: 0;
+            padding: 3px 0;
+        }
+
         .right {
             text-align: right;
+        }
+
+        .center {
+            text-align: center;
         }
 
         .bold {
@@ -72,11 +94,13 @@
 
         <div class="title">OFFICIAL RECEIPT</div>
 
-        <!-- OR Info -->
-        <div class="section">
-            <strong>OR No:</strong> {{ $data['or_number'] }} <br>
-            <strong>Date:</strong> {{ $data['or_date'] }}
-        </div>
+        <!-- OR INFO -->
+        <table class="no-border">
+            <tr>
+                <td class="left"><strong>OR No:</strong> {{ $data['or_number'] }}</td>
+                <td class="center"><strong>Date:</strong> {{ $data['or_date'] }}</td>
+            </tr>
+        </table>
 
         <!-- Payer Info -->
         <div class="section">
