@@ -858,11 +858,11 @@ class FormsController extends Controller
 
             if ($existingCert) {
                 $certificateNo = $existingCert->certificate_no;
+                $nextSequence = $existingCert->sequence; // ensure sequence exists
             } else {
                 $year = now()->year;
                 $typeCode = preg_replace('/[^A-Z]/', '', $rawType) ?: 'GEN';
 
-                // Get last sequence for the year
                 $lastCert = Certificate::whereYear('date_issued', $year)
                     ->orderBy('sequence', 'desc')
                     ->first();
@@ -870,28 +870,10 @@ class FormsController extends Controller
                 $nextSequence = $lastCert ? $lastCert->sequence + 1 : 1;
                 $sequencePadded = str_pad($nextSequence, 6, '0', STR_PAD_LEFT);
 
-                // Generate random suffix
                 do {
                     $randomSuffix = strtoupper(Str::random(4));
                     $certificateNo = "NTC-CAR-{$typeCode}-{$year}-{$sequencePadded}-{$randomSuffix}";
                 } while (Certificate::where('certificate_no', $certificateNo)->exists());
-
-                // Save certificate record
-                Certificate::create([
-                    'certificate_no'   => $certificateNo,
-                    'sequence'         => $nextSequence,
-                    'form_token'       => $formToken,
-                    'form_type'        => $transactionForm->form_type,
-                    'certificate_type' => $rawType,
-                    'holder_name'      => trim(
-                        "{$dbForm->first_name} " .
-                            ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') .
-                            "{$dbForm->last_name}"
-                    ),
-                    'date_issued'      => now(),
-                    'valid_until'      => now()->addYears((int)($dbForm->years ?? 3)),
-                    'status'           => 'active',
-                ]);
             }
 
             // Build certificate array
@@ -932,6 +914,23 @@ class FormsController extends Controller
             // Preview or download
             if ($request->boolean('preview')) {
                 return $pdf->stream("{$certificateNo}.pdf");
+            } else {
+                // Save certificate record
+                Certificate::create([
+                    'certificate_no'   => $certificateNo,
+                    'sequence'         => $nextSequence,
+                    'form_token'       => $formToken,
+                    'form_type'        => $transactionForm->form_type,
+                    'certificate_type' => $rawType,
+                    'holder_name'      => trim(
+                        "{$dbForm->first_name} " .
+                            ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') .
+                            "{$dbForm->last_name}"
+                    ),
+                    'date_issued'      => now(),
+                    'valid_until'      => now()->addYears((int)($dbForm->years ?? 3)),
+                    'status'           => 'active',
+                ]);
             }
 
             return response()->download(storage_path("app/{$certificatePath}"), "{$certificateNo}.pdf");
