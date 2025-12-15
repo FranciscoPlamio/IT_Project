@@ -4,46 +4,51 @@ namespace App\Helpers\FormRules;
 
 class Form1_14Rules
 {
+    use BaseValidationRules;
+
     public static function rules(): array
     {
         return [
             'rules' => [
-                //Application Details
+                // Application Details
                 'nature_service' => ['required', 'string'],
                 'radio_service' => ['required', 'string'],
-                'rt_units' => ['nullable', 'string'],
-                'fx_units' => ['nullable', 'string'],
-                'fb_units' => ['nullable', 'string'],
-                'ml_units' => ['nullable', 'string'],
-                'p_units' => ['nullable', 'string'],
-                'bc_units' => ['nullable', 'string'],
-                'fc_units' => ['nullable', 'string'],
-                'fa_units' => ['nullable', 'string'],
-                'ma_units' => ['nullable', 'string'],
-                'tc_units' => ['nullable', 'string'],
+                
+                // Station units - integers only
+                'rt_units' => self::integerRules(required: false, min: 0),
+                'fx_units' => self::integerRules(required: false, min: 0),
+                'fb_units' => self::integerRules(required: false, min: 0),
+                'ml_units' => self::integerRules(required: false, min: 0),
+                'p_units' => self::integerRules(required: false, min: 0),
+                'bc_units' => self::integerRules(required: false, min: 0),
+                'fc_units' => self::integerRules(required: false, min: 0),
+                'fa_units' => self::integerRules(required: false, min: 0),
+                'ma_units' => self::integerRules(required: false, min: 0),
+                'tc_units' => self::integerRules(required: false, min: 0),
                 'others_station_specify' => ['nullable', 'string'],
-                'others_station_units' => ['nullable', 'string'],
+                'others_station_units' => self::integerRules(required: false, min: 0),
 
-                // Applicant Details
-                'applicant' => ['required', 'string'],
+                // Applicant Details - name validation (letters only)
+                'applicant' => self::nameRules(required: true, minLength: 2, maxLength: 100),
+                
+                // Address fields
                 'unit' => ['nullable', 'string'],
                 'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
-                'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => [
-                    'required',
-                    'email',
-                    'min:6',
-                    'max:30',
-                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
-                ],
+                
+                // Contact number - must be 11-digit PH mobile starting with 09
+                'contact_number' => self::phMobileRules(required: true),
+                
+                // Email - Gmail, Yahoo, or Outlook only
+                'email' => self::emailRules(required: true, minLength: 6, maxLength: 30),
+                
                 // Station / Equipment
                 'exact_location' => ['required', 'string'],
-                'longitude' => ['required', 'string'],
-                'latitude' => ['required', 'string'],
+                'longitude' => ['required', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
+                'latitude' => ['required', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
                 'points_of_comm' => ['required', 'string'],
                 'proposed_freq' => ['required', 'string'],
                 'bw_emission' => ['required', 'string'],
@@ -53,10 +58,16 @@ class Form1_14Rules
                 'serial_number' => ['required', 'string'],
                 'power_output' => ['required', 'string'],
                 'frequency_range' => ['required', 'string'],
-
             ],
 
-            'messages' => [],
+            'messages' => array_merge(
+                self::allCommonMessages(),
+                [
+                    'applicant.regex' => 'Applicant name must contain only letters, spaces, hyphens, or apostrophes. Numbers are not allowed.',
+                    'longitude.regex' => 'Longitude must be a valid coordinate (e.g., 121.0742).',
+                    'latitude.regex' => 'Latitude must be a valid coordinate (e.g., 14.5995).',
+                ]
+            ),
 
             'attributes' => []
         ];

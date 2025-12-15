@@ -2,7 +2,7 @@
     <main>
 
 
-        <form class="form1-01-container" id="form101" method="POST"
+        <form class="form1-01-container" id="form101" method="POST" data-form-type="1-01"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
             <a href="{{ route('display.forms') }}" class="inline-flex items-center hover:underline">
                 &#8592; Back
@@ -833,7 +833,12 @@
 
                 // Initialize on page load if an exam type is already selected
                 filterCourseOptions();
+
+                // Real-time form validation auto-initializes via formValidation.js
+                // using the data-form-type attribute on the form
             });
         </script>
+
+        {{-- Form validation auto-initialized by resources/js/formValidation.js loaded in layout --}}
     </main>
 </x-layout>

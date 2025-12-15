@@ -8,6 +8,7 @@ export default defineConfig({
             input: [
                 "resources/css/app.css",
                 "resources/js/app.js",
+                "resources/js/formValidation.js",
                 "resources/js/adminside/index.js",
                 "resources/css/adminside/index.css",
                 "resources/js/adminside/req-management.js",

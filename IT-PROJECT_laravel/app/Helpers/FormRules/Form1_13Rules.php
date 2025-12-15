@@ -4,20 +4,22 @@ namespace App\Helpers\FormRules;
 
 class Form1_13Rules
 {
+    use BaseValidationRules;
+
     public static function rules(): array
     {
         return [
             'rules' => [
-                //Applicant
-                'applicant' => ['required', 'string'],
+                // Applicant - name validation (letters only)
+                'applicant' => self::nameRules(required: true, minLength: 2, maxLength: 100),
 
-                //Particulars
+                // Particulars - Authorized
                 'authorized_exact_location' => ['nullable', 'string'],
                 'proposed_exact_location' => ['nullable', 'string'],
-                'authorized_longitude' => ['nullable', 'string'],
-                'proposed_longitude' => ['nullable', 'string'],
-                'authorized_latitude' => ['nullable', 'string'],
-                'proposed_latitude' => ['nullable', 'string'],
+                'authorized_longitude' => ['nullable', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
+                'proposed_longitude' => ['nullable', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
+                'authorized_latitude' => ['nullable', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
+                'proposed_latitude' => ['nullable', 'string', 'regex:/^-?\d+(\.\d+)?$/'],
                 'authorized_points_of_comm' => ['nullable', 'string'],
                 'proposed_points_of_comm' => ['nullable', 'string'],
                 'authorized_assigned_freq' => ['nullable', 'string'],
@@ -42,10 +44,18 @@ class Form1_13Rules
                 'proposed_others_2' => ['nullable', 'string'],
                 'authorized_others_3' => ['nullable', 'string'],
                 'proposed_others_3' => ['nullable', 'string'],
-
             ],
 
-            'messages' => [],
+            'messages' => array_merge(
+                self::allCommonMessages(),
+                [
+                    'applicant.regex' => 'Applicant name must contain only letters, spaces, hyphens, or apostrophes. Numbers are not allowed.',
+                    'authorized_longitude.regex' => 'Longitude must be a valid coordinate.',
+                    'proposed_longitude.regex' => 'Longitude must be a valid coordinate.',
+                    'authorized_latitude.regex' => 'Latitude must be a valid coordinate.',
+                    'proposed_latitude.regex' => 'Latitude must be a valid coordinate.',
+                ]
+            ),
 
             'attributes' => []
         ];

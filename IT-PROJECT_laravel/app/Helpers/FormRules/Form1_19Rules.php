@@ -4,44 +4,52 @@ namespace App\Helpers\FormRules;
 
 class Form1_19Rules
 {
+    use BaseValidationRules;
+
     public static function rules(): array
     {
         return [
             'rules' => [
-                //Type Equipment
+                // Type Equipment
                 'equipment_type' => ['required', 'string'],
 
-                // Applicant Details
-                'applicant' => ['required', 'string'],
+                // Applicant Details - name validation (letters only)
+                'applicant' => self::nameRules(required: true, minLength: 2, maxLength: 100),
+                
+                // Address fields
                 'unit' => ['nullable', 'string'],
                 'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
-                'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => [
-                    'required',
-                    'email',
-                    'min:6',
-                    'max:30',
-                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
-                ],
+                
+                // Contact number - must be 11-digit PH mobile starting with 09
+                'contact_number' => self::phMobileRules(required: true),
+                
+                // Email - Gmail, Yahoo, or Outlook only
+                'email' => self::emailRules(required: true, minLength: 6, maxLength: 30),
+                
                 'validity' => ['required', 'date', 'after_or_equal:today'],
                 'permit_import_no' => ['required', 'string'],
                 'invoice_no' => ['required', 'string'],
                 'cpcn_pa_rsl_no' => ['required', 'string'],
 
-                //Equipment and Devices
+                // Equipment and Devices
                 'equipment1_make' => ['required', 'string'],
-                'equipment1_quantity' => ['required', 'numeric'],
+                'equipment1_quantity' => self::integerRules(required: true, min: 1),
                 'equipment1_serial' => ['required', 'string'],
             ],
 
-            'messages' => [
-                'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
-                'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
-            ], // custom messages 
+            'messages' => array_merge(
+                self::allCommonMessages(),
+                [
+                    'applicant.regex' => 'Applicant name must contain only letters, spaces, hyphens, or apostrophes. Numbers are not allowed.',
+                    'equipment1_quantity.integer' => 'Quantity must be a whole number.',
+                    'equipment1_quantity.min' => 'Quantity must be at least 1.',
+                ]
+            ),
+            
             'attributes' => []
         ];
     }

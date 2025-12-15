@@ -4,65 +4,69 @@ namespace App\Helpers\FormRules;
 
 class Form1_02Rules
 {
+    use BaseValidationRules;
+
     public static function rules(): array
     {
         return [
             'rules' => [
-                // Applicant Details
-                'last_name' => ['required', 'string', 'min:2'],
-                'first_name' => ['required', 'string', 'min:2'],
-                'middle_name' => ['required', 'string', 'min:2'],
+                // Applicant Details - Using strict name validation (letters only, no numbers)
+                'last_name' => self::nameRules(required: true, minLength: 2, maxLength: 50),
+                'first_name' => self::nameRules(required: true, minLength: 2, maxLength: 50),
+                'middle_name' => self::nameRules(required: true, minLength: 2, maxLength: 50),
 
-                // 3 
-                'dob' => [
-                    'required',
-                    'date',
-                    'before_or_equal:' . now()->subYears(18)->toDateString(),
-                    'after_or_equal:' . now()->subYears(70)->toDateString(),
-                ],
+                // Date of birth with age validation
+                'dob' => self::dobRules(required: true, minAge: 18, maxAge: 70),
+
                 'sex' => ['required', 'string'],
                 'nationality' => ['required', 'string'],
 
-                //8 Address fields
+                // Address fields
                 'unit' => ['nullable', 'string'],
                 'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
-                'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => [
-                    'required',
-                    'email',
-                    'min:6',
-                    'max:30',
-                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
-                ],
+
+                // Contact number - must be 11-digit PH mobile starting with 09
+                'contact_number' => self::phMobileRules(required: true),
+
+                // Email - Gmail, Yahoo, or Outlook only
+                'email' => self::emailRules(required: true, minLength: 6, maxLength: 30),
+
                 // Exam fields
                 'exam_place' => ['required', 'string'],
                 'exam_date' => ['required', 'date', 'before_or_equal:today'],
-                'rating' => ['required', 'numeric'],
+                'rating' => self::numericRules(required: true, min: 0, max: 100),
 
-                'height' => ['required', 'string'],
-                'weight' => ['required', 'string'],
+                // Physical measurements - numeric only
+                'height' => self::numericRules(required: true, min: 50, max: 300),
+                'weight' => self::numericRules(required: true, min: 20, max: 500),
+
                 'employment_status' => ['required', 'string'],
                 'employment_type' => ['required', 'string'],
                 'application_type' => ['required', 'string'],
-                'modification_reason' => ['required_if:application_type,modification', 'string'],
-                'years' => ['required', 'integer'],
+                'modification_reason' => ['required_if:application_type,modification', 'string', 'nullable'],
+                'years' => self::integerRules(required: true, min: 1, max: 10),
                 'certificate_type' => ['required', 'string'],
-
-
-
             ],
 
-            'messages' => [
-                'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
-                'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
-            ], // custom messages 
+            'messages' => array_merge(
+                self::allCommonMessages(),
+                [
+                    'rating.numeric' => 'Rating must be a number.',
+                    'rating.min' => 'Rating must be at least 0.',
+                    'rating.max' => 'Rating cannot exceed 100.',
+                    'height.numeric' => 'Height must be a number (in cm).',
+                    'weight.numeric' => 'Weight must be a number (in kg).',
+                    'years.integer' => 'Years must be a whole number.',
+                    'years.min' => 'Years must be at least 1.',
+                ]
+            ),
 
             'attributes' => [
-                'dob' => 'date of birth', // custom attribute name
+                'dob' => 'date of birth',
             ]
         ];
     }

@@ -372,6 +372,68 @@ textarea.form1-01-input {
     }
 }
 
+/* ================================================
+   Real-time Form Validation Styles
+   ================================================ */
+
+/* Field error state */
+.field-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+    box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2) !important;
+}
+
+.field-error:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.3) !important;
+}
+
+/* Field success state */
+.field-success {
+    border-color: #16a34a !important;
+    background-color: #f0fdf4 !important;
+    box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2) !important;
+}
+
+.field-success:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.3) !important;
+}
+
+/* Real-time error message */
+.realtime-error {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    animation: error-shake 0.3s ease-in-out;
+}
+
+/* Shake animation for errors */
+@keyframes error-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Field validation indicator icons */
+.form-field.has-error .form-label::after {
+    content: " ✗";
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.form-field.has-success .form-label::after {
+    content: " ✓";
+    color: #16a34a;
+    font-weight: bold;
+}
+
+/* Input helper text */
+.form-field small.text-gray-500 {
+    font-size: 0.75rem;
+    font-weight: normal;
+}
+
 /* Sidebar steps layout */
 .form-layout {
     display: grid;
