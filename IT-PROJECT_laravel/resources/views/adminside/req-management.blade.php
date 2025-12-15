@@ -243,22 +243,26 @@
                                     @endphp
                                     <td class="status-cell {{ $statusClass }}">
                                         @if ($isManagedStatus)
-                                            <select class="status-select" data-request-id="{{ $req->_id }}"
-                                                data-current-status="{{ $status }}">
-                                                <option value="pending" @selected($status === 'pending')>Pending
-                                                </option>
-                                                <option value="processing" @selected($status === 'processing')>Processing
-                                                </option>
-                                                <option value="declined" @selected($status === 'declined')>Decline
-                                                </option>
+                                            <select class="status-select"
+                                                    data-request-id="{{ $req->_id }}"
+                                                    data-current-status="{{ $status }}"
+                                                    onchange="handleStatusChange(this)">
+                                                <option value="pending" @selected($status === 'pending')>Pending</option>
+                                                <option value="processing" @selected($status === 'processing')>Processing</option>
+                                                <option value="declined" @selected($status === 'declined')>Decline</option>
                                             </select>
+
+                                            <!-- Flash message for status updates -->
+                                            <p class="status-flash" id="flash-{{ $req->_id }}" style="color:green; font-size:0.85rem; display:none;"></p>
 
                                             @if ($req->payment_status == 'paid')
                                                 <div class="status-badge done">
                                                     <img src="{{ asset('images/Done.png') }}">
-                                                    <span><a
-                                                            href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">Proof
-                                                            of Payment Received!</a></span>
+                                                    <span>
+                                                        <a href="{{ route('admin.req.attachments', ['formToken' => $req->form_token]) }}">
+                                                            Proof of Payment Received!
+                                                        </a>
+                                                    </span>
                                                 </div>
                                             @else
                                                 @if ($req->status != 'pending')
@@ -268,11 +272,13 @@
                                                     </div>
                                                 @endif
                                             @endif
+
                                             <x-admin.req-management-status :req="$req" />
                                         @else
                                             <span class="status-label">{{ $statusLabel }}</span>
                                         @endif
                                     </td>
+                                    
                                     <td style="position: relative; vertical-align: top;">
 
                                         <form action="{{ route('admin.remarks.save', ['formId' => $req->_id]) }}"
@@ -409,225 +415,346 @@
             </div>
         </div>
     </div>
-    <script>
-        let approveId = null;
 
-        function openConfirmApproveModal(id) {
-            approveId = id;
-            document.getElementById("confirmApproveModal").style.display = "flex";
+    <!-- PROCESSING MODAL -->
+    <div class="confirm-modal" id="confirmProcessingModal" style="display:none;">
+        <div class="confirm-modal__content">
+            <h3>Change Status to Processing</h3>
+            <p>Type <strong>"Processing"</strong> to confirm</p>
+            <input type="text" id="processingInput" placeholder="Type Processing"
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <p id="processingWarning" style="color: red; font-size: 0.9rem; display:none; margin-top:8px;">
+                Incorrect input. Please type "Processing".
+            </p>
+            <div class="confirm-actions" style="margin-top: 15px;">
+                <button id="processingCancel" class="btn-secondary">Cancel</button>
+                <button id="processingConfirm" class="btn-primary" disabled>Confirm</button>
+            </div>
+        </div>
+    </div>
 
-            // Reset input and button state
-            document.getElementById("confirmInput").value = "";
-            document.getElementById("confirmWarning").style.display = "none";
-            document.getElementById("confirmApproveYes").disabled = true;
+
+    <!-- DECLINE MODAL -->
+    <div class="confirm-modal" id="confirmDeclineModal" style="display:none;">
+        <div class="confirm-modal__content">
+            <h3>Change Status to Declined</h3>
+            <p>Type <strong>"Decline"</strong> to confirm</p>
+            <input type="text" id="declineInput" placeholder="Type Decline"
+                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            <p id="declineWarning" style="color: red; font-size: 0.9rem; display:none; margin-top:8px;">
+                Incorrect input. Please type "Decline".
+            </p>
+            <p id="declineFlash" style="color: green; font-size: 0.9rem; display:none; margin-top:8px;">
+                Form declined and email sent
+            </p>
+            <div class="confirm-actions" style="margin-top: 15px;">
+                <button id="declineCancel" class="btn-secondary">Cancel</button>
+                <button id="declineConfirm" class="btn-primary" disabled>Confirm</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+let approveId = null;
+let statusActionId = null;
+let statusActionType = null;
+
+/* =======================
+   APPROVE MODAL LOGIC
+======================= */
+document.addEventListener('DOMContentLoaded', () => {
+
+    const confirmInput = document.getElementById("confirmInput");
+    const confirmButton = document.getElementById("confirmApproveYes");
+    const warning = document.getElementById("confirmWarning");
+
+    // Live validation for Approve
+    confirmInput.addEventListener("input", () => {
+        if (confirmInput.value.trim() === "Confirm") {
+            confirmButton.disabled = false;
+            warning.style.display = "none";
+        } else {
+            confirmButton.disabled = true;
+            warning.style.display = confirmInput.value.trim() !== "" ? "block" : "none";
+        }
+    });
+
+    // Cancel Approve Modal
+    document.getElementById("confirmApproveCancel").addEventListener("click", () => {
+        document.getElementById("confirmApproveModal").style.display = "none";
+        approveId = null;
+    });
+
+    // Confirm Approve
+    confirmButton.addEventListener("click", () => {
+        document.getElementById("confirmApproveModal").style.display = "none";
+        updateStatus(approveId, 'approved');
+    });
+
+/* =======================
+       PROCESSING MODAL LOGIC
+    ======================= */
+    const processingModal = document.getElementById('confirmProcessingModal');
+const processingInput = document.getElementById('processingInput');
+const processingConfirm = document.getElementById('processingConfirm');
+const processingWarning = document.getElementById('processingWarning');
+const processingCancel = document.getElementById('processingCancel');
+
+processingInput.addEventListener('input', () => {
+    processingConfirm.disabled = (processingInput.value.trim() !== 'Processing');
+    processingWarning.style.display = (processingInput.value.trim() && processingInput.value.trim() !== 'Processing') ? 'block' : 'none';
+});
+
+processingCancel.onclick = () => {
+    processingModal.style.display = 'none';
+    statusActionId = null;
+};
+
+processingConfirm.onclick = () => {
+    updateStatus(statusActionId, 'processing'); // Update DB and table flash
+    processingModal.style.display = 'none';
+    statusActionId = null;
+};
+
+    /* =======================
+       DECLINE MODAL LOGIC
+    ======================= */
+    const declineModal = document.getElementById('confirmDeclineModal');
+    const declineInput = document.getElementById('declineInput');
+    const declineConfirm = document.getElementById('declineConfirm');
+    const declineWarning = document.getElementById('declineWarning');
+    const declineCancel = document.getElementById('declineCancel');
+    const declineFlash = document.getElementById('declineFlash');
+
+    // Live validation for Decline
+    declineInput.addEventListener('input', () => {
+        declineConfirm.disabled = (declineInput.value.trim() !== 'Decline');
+        declineWarning.style.display = (declineInput.value.trim() && declineInput.value.trim() !== 'Decline') ? 'block' : 'none';
+    });
+
+    declineCancel.onclick = () => {
+        declineModal.style.display = 'none';
+        statusActionId = null;
+    };
+
+    declineConfirm.onclick = () => {
+        declineModal.style.display = 'none';
+        updateStatus(statusActionId, 'declined');
+    };
+});
+
+/* =======================
+   HANDLE SELECT CHANGE
+======================= */
+function handleStatusChange(select) {
+    const newStatus = select.value;
+    const requestId = select.dataset.requestId;
+
+    // Reset select to previous value until confirmed
+    select.value = select.dataset.currentStatus;
+
+    statusActionId = requestId;
+
+    if (newStatus === 'processing') {
+        document.getElementById('confirmProcessingModal').style.display = 'flex';
+        resetProcessingModal();
+    } else if (newStatus === 'declined') {
+        document.getElementById('confirmDeclineModal').style.display = 'flex';
+        resetDeclineModal();
+    }
+}
+
+/* =======================
+   RESET MODALS
+======================= */
+function resetProcessingModal() {
+    processingInput.value = '';
+    processingWarning.style.display = 'none';
+    processingConfirm.disabled = true;
+}
+
+function resetDeclineModal() {
+    document.getElementById('declineInput').value = '';
+    document.getElementById('declineWarning').style.display = 'none';
+    document.getElementById('declineConfirm').disabled = true;
+}
+
+/* =======================
+   UPDATE DATABASE & FLASH
+======================= */
+function updateStatus(id, status) {
+    fetch(`/admin/requests/${id}/status`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Update select
+        const select = document.querySelector(`.status-select[data-request-id='${id}']`);
+        if(select) {
+            select.value = status;
+            select.dataset.currentStatus = status;
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        // Update table cell class
+        const statusCell = select.closest('.status-cell');
+        if(statusCell) {
+            statusCell.className = 'status-cell ' + status;
+        }
 
-            const confirmInput = document.getElementById("confirmInput");
-            const confirmButton = document.getElementById("confirmApproveYes");
-            const warning = document.getElementById("confirmWarning");
+        // Show flash message in table row
+        const flash = document.getElementById('flash-' + id);
+        if(flash) {
+            if(status === 'processing') flash.textContent = 'Form status updated to Processing';
+            if(status === 'declined') flash.textContent = 'Form declined and email sent';
+            flash.style.display = 'block';
+            setTimeout(() => flash.style.display = 'none', 3000);
+        }
+    })
+    .catch(err => console.error(err));
+}
 
-            // Live validation
-            confirmInput.addEventListener("input", () => {
-                if (confirmInput.value.trim() === "Confirm") {
-                    confirmButton.disabled = false;
-                    warning.style.display = "none";
-                } else {
-                    confirmButton.disabled = true;
+/* =======================
+   REMARKS DROPDOWN LOGIC
+======================= */
+function fillRemarksInput(responseText, formId) {
+    const remarksInput = document.getElementById('remarks-' + formId);
+    if (remarksInput && responseText) {
+        remarksInput.value = responseText;
+        remarksInput.focus();
+    }
+}
 
-                    // Only show warning when input is NOT empty
-                    warning.style.display = confirmInput.value.trim() !== "" ? "block" : "none";
-                }
-            });
+function closeDropdown(formId) {
+    const responsesDiv = document.getElementById('responses-' + formId);
+    const toggleIcon = document.getElementById('toggle-icon-' + formId);
+    const toggleButton = document.getElementById('toggle-' + formId);
 
-            // Cancel Modal
-            document.getElementById("confirmApproveCancel").addEventListener("click", () => {
-                document.getElementById("confirmApproveModal").style.display = "none";
-                approveId = null;
-            });
-
-            // Confirm Approve
-            confirmButton.addEventListener("click", () => {
-                document.getElementById("confirmApproveModal").style.display = "none";
-                approveRequest(approveId);
-            });
-        });
-
-        // Function to fill remarks input from link selection
-        function fillRemarksInput(responseText, formId) {
-            const remarksInput = document.getElementById('remarks-' + formId);
-            if (remarksInput && responseText) {
-                remarksInput.value = responseText;
-                remarksInput.focus();
+    if (responsesDiv) {
+        const originalParent = responsesDiv.getAttribute('data-original-parent');
+        if (originalParent && responsesDiv.parentElement === document.body) {
+            const parentElement = document.querySelector('[data-dropdown-parent="' + formId + '"]');
+            if (parentElement) {
+                parentElement.appendChild(responsesDiv);
             }
         }
+        responsesDiv.style.display = 'none';
+        responsesDiv.style.position = 'absolute';
+        responsesDiv.style.top = '';
+        responsesDiv.style.left = '';
+        responsesDiv.style.right = '';
+    }
+    if (toggleIcon) {
+        toggleIcon.textContent = '▼';
+    }
+}
 
-        // Function to close dropdown
-        function closeDropdown(formId) {
-            const responsesDiv = document.getElementById('responses-' + formId);
-            const toggleIcon = document.getElementById('toggle-icon-' + formId);
+function toggleResponses(formId) {
+    const responsesDiv = document.getElementById('responses-' + formId);
+    const toggleIcon = document.getElementById('toggle-icon-' + formId);
+    const toggleButton = document.getElementById('toggle-' + formId);
+
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        if (menu.id !== 'responses-' + formId) {
+            const otherFormId = menu.id.replace('responses-', '');
+            closeDropdown(otherFormId);
+        }
+    });
+
+    if (responsesDiv && toggleIcon && toggleButton) {
+        if (responsesDiv.style.display === 'none' || !responsesDiv.style.display) {
+            const buttonRect = toggleButton.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const viewportWidth = window.innerWidth;
+
+            if (!responsesDiv.getAttribute('data-original-parent')) {
+                responsesDiv.setAttribute('data-original-parent', formId);
+            }
+
+            if (responsesDiv.parentElement !== document.body) {
+                document.body.appendChild(responsesDiv);
+            }
+
+            responsesDiv.style.position = 'fixed';
+            responsesDiv.style.visibility = 'hidden';
+            responsesDiv.style.display = 'block';
+            const dropdownHeight = responsesDiv.offsetHeight;
+            const dropdownWidth = responsesDiv.offsetWidth;
+            responsesDiv.style.visibility = 'visible';
+
+            const spaceBelow = viewportHeight - buttonRect.bottom;
+            const spaceAbove = buttonRect.top;
+
+            let topPosition = (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) ? buttonRect.bottom + 4 : buttonRect.top - dropdownHeight - 4;
+            let leftPosition = buttonRect.left;
+            if (leftPosition + dropdownWidth > viewportWidth) {
+                leftPosition = Math.max(10, viewportWidth - dropdownWidth - 10);
+            }
+
+            responsesDiv.style.top = topPosition + 'px';
+            responsesDiv.style.left = leftPosition + 'px';
+            responsesDiv.style.right = 'auto';
+            responsesDiv.setAttribute('data-position', spaceBelow >= dropdownHeight + 4 ? 'below' : 'above');
+            responsesDiv.style.display = 'block';
+            toggleIcon.textContent = '▲';
+        } else {
+            closeDropdown(formId);
+        }
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const clickedDropdown = event.target.closest('.dropdown-menu');
+    const clickedToggle = event.target.closest('.dropdown-toggle');
+
+    if (!clickedDropdown && !clickedToggle) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            const formId = menu.id.replace('responses-', '');
+            closeDropdown(formId);
+        });
+    }
+});
+
+// Update dropdown position on scroll
+window.addEventListener('scroll', function() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        if (menu.style.display === 'block' && menu.style.position === 'fixed') {
+            const formId = menu.id.replace('responses-', '');
             const toggleButton = document.getElementById('toggle-' + formId);
+            if (toggleButton) {
+                const buttonRect = toggleButton.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const viewportWidth = window.innerWidth;
+                const dropdownHeight = menu.offsetHeight;
+                const dropdownWidth = menu.offsetWidth;
 
-            if (responsesDiv) {
-                // Return dropdown to original position if it was moved to body
-                const originalParent = responsesDiv.getAttribute('data-original-parent');
-                if (originalParent && responsesDiv.parentElement === document.body) {
-                    const parentElement = document.querySelector('[data-dropdown-parent="' + formId + '"]');
-                    if (parentElement) {
-                        parentElement.appendChild(responsesDiv);
-                    }
+                const spaceBelow = viewportHeight - buttonRect.bottom;
+                const spaceAbove = buttonRect.top;
+
+                let topPosition = (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) ? buttonRect.bottom + 4 : buttonRect.top - dropdownHeight - 4;
+                let leftPosition = buttonRect.left;
+                if (leftPosition + dropdownWidth > viewportWidth) {
+                    leftPosition = Math.max(10, viewportWidth - dropdownWidth - 10);
                 }
-                responsesDiv.style.display = 'none';
-                responsesDiv.style.position = 'absolute';
-                responsesDiv.style.top = '';
-                responsesDiv.style.left = '';
-                responsesDiv.style.right = '';
-            }
-            if (toggleIcon) {
-                toggleIcon.textContent = '▼';
-            }
-        }
 
-        // Function to toggle dropdown visibility
-        function toggleResponses(formId) {
-            const responsesDiv = document.getElementById('responses-' + formId);
-            const toggleIcon = document.getElementById('toggle-icon-' + formId);
-            const toggleButton = document.getElementById('toggle-' + formId);
-
-            // Close all other dropdowns first
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                if (menu.id !== 'responses-' + formId) {
-                    const otherFormId = menu.id.replace('responses-', '');
-                    closeDropdown(otherFormId);
-                }
-            });
-
-            if (responsesDiv && toggleIcon && toggleButton) {
-                if (responsesDiv.style.display === 'none' || !responsesDiv.style.display) {
-                    // Get button position (getBoundingClientRect gives viewport coordinates)
-                    const buttonRect = toggleButton.getBoundingClientRect();
-                    const viewportHeight = window.innerHeight;
-                    const viewportWidth = window.innerWidth;
-
-                    // Store original parent if not already stored
-                    if (!responsesDiv.getAttribute('data-original-parent')) {
-                        responsesDiv.setAttribute('data-original-parent', formId);
-                    }
-
-                    // Move dropdown to body to escape table constraints
-                    if (responsesDiv.parentElement !== document.body) {
-                        document.body.appendChild(responsesDiv);
-                    }
-
-                    // Temporarily show dropdown to measure its height
-                    responsesDiv.style.position = 'fixed';
-                    responsesDiv.style.visibility = 'hidden';
-                    responsesDiv.style.display = 'block';
-                    const dropdownHeight = responsesDiv.offsetHeight;
-                    const dropdownWidth = responsesDiv.offsetWidth;
-                    responsesDiv.style.visibility = 'visible';
-
-                    // Calculate available space
-                    const spaceBelow = viewportHeight - buttonRect.bottom;
-                    const spaceAbove = buttonRect.top;
-                    const spaceRight = viewportWidth - buttonRect.left;
-                    const spaceLeft = buttonRect.right;
-
-                    // Determine vertical position (above or below)
-                    let topPosition, verticalClass;
-                    if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
-                        // Position below button
-                        topPosition = buttonRect.bottom + 4;
-                        verticalClass = 'below';
-                    } else {
-                        // Position above button
-                        topPosition = buttonRect.top - dropdownHeight - 4;
-                        verticalClass = 'above';
-                    }
-
-                    // Determine horizontal position (adjust if near edges)
-                    let leftPosition = buttonRect.left;
-                    if (leftPosition + dropdownWidth > viewportWidth) {
-                        // Adjust to fit within viewport
-                        leftPosition = viewportWidth - dropdownWidth - 10;
-                        if (leftPosition < 10) {
-                            leftPosition = 10;
-                        }
-                    }
-
-                    // Apply positioning
-                    responsesDiv.style.position = 'fixed';
-                    responsesDiv.style.top = topPosition + 'px';
-                    responsesDiv.style.left = leftPosition + 'px';
-                    responsesDiv.style.right = 'auto';
-                    responsesDiv.setAttribute('data-position', verticalClass);
-                    responsesDiv.style.display = 'block';
-                    toggleIcon.textContent = '▲';
-                } else {
-                    closeDropdown(formId);
-                }
+                menu.style.top = topPosition + 'px';
+                menu.style.left = leftPosition + 'px';
             }
         }
+    });
+}, true);
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const clickedDropdown = event.target.closest('.dropdown-menu');
-            const clickedToggle = event.target.closest('.dropdown-toggle');
-
-            if (!clickedDropdown && !clickedToggle) {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    const formId = menu.id.replace('responses-', '');
-                    closeDropdown(formId);
-                });
-            }
-        });
-
-        // Update dropdown position on scroll
-        window.addEventListener('scroll', function() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                if (menu.style.display === 'block' && menu.style.position === 'fixed') {
-                    const formId = menu.id.replace('responses-', '');
-                    const toggleButton = document.getElementById('toggle-' + formId);
-                    if (toggleButton) {
-                        const buttonRect = toggleButton.getBoundingClientRect();
-                        const viewportHeight = window.innerHeight;
-                        const viewportWidth = window.innerWidth;
-                        const dropdownHeight = menu.offsetHeight;
-                        const dropdownWidth = menu.offsetWidth;
-
-                        // Recalculate position based on available space
-                        const spaceBelow = viewportHeight - buttonRect.bottom;
-                        const spaceAbove = buttonRect.top;
-
-                        let topPosition;
-                        if (spaceBelow >= dropdownHeight + 4 || spaceBelow >= spaceAbove) {
-                            topPosition = buttonRect.bottom + 4;
-                        } else {
-                            topPosition = buttonRect.top - dropdownHeight - 4;
-                        }
-
-                        let leftPosition = buttonRect.left;
-                        if (leftPosition + dropdownWidth > viewportWidth) {
-                            leftPosition = viewportWidth - dropdownWidth - 10;
-                            if (leftPosition < 10) {
-                                leftPosition = 10;
-                            }
-                        }
-
-                        menu.style.top = topPosition + 'px';
-                        menu.style.left = leftPosition + 'px';
-                    }
-                }
-            });
-        }, true);
-
-        // Close dropdowns on window resize
-        window.addEventListener('resize', function() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                const formId = menu.id.replace('responses-', '');
-                closeDropdown(formId);
-            });
-        });
-    </script>
+// Close dropdowns on window resize
+window.addEventListener('resize', function() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        const formId = menu.id.replace('responses-', '');
+        closeDropdown(formId);
+    });
+});
+</script>
 </x-admin-layout>
