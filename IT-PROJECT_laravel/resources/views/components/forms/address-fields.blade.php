@@ -16,8 +16,7 @@
     <div class="form-field">
         <label class="form-label">Province <span class="required-asterisk">*</span></label>
         <select class="form1-01-input address-select" name="province" id="provinceSelect" required
-            data-old-value="{{ old('province', $form['province'] ?? '') }}"
-            data-validation="select">
+            data-old-value="{{ old('province', $form['province'] ?? '') }}" data-validation="select">
             <option value="">Select Province</option>
         </select>
         @error('province')
@@ -27,8 +26,7 @@
     <div class="form-field">
         <label class="form-label">City/Municipality <span class="required-asterisk">*</span></label>
         <select class="form1-01-input address-select" name="city" id="citySelect" disabled required
-            data-old-value="{{ old('city', $form['city'] ?? '') }}"
-            data-validation="select">
+            data-old-value="{{ old('city', $form['city'] ?? '') }}" data-validation="select">
             <option value="">Select City/Municipality</option>
         </select>
         @error('city')
@@ -40,8 +38,7 @@
     <div class="form-field">
         <label class="form-label">Barangay <span class="required-asterisk">*</span></label>
         <select class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled required
-            data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}"
-            data-validation="select">
+            data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}" data-validation="select">
             <option value="">Select Barangay</option>
         </select>
         @error('barangay')
@@ -51,8 +48,7 @@
     <div class="form-field">
         <label class="form-label">ZIP Code <span class="required-asterisk">*</span></label>
         <select class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled required
-            data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}"
-            data-validation="select">
+            data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}" data-validation="select">
             <option value="">Select ZIP Code</option>
         </select>
         @error('zip_code')
@@ -63,20 +59,16 @@
 <div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Unit/Rm/House/Bldg No.</label>
-        <input class="form1-01-input" type="text" name="unit" 
-            value="{{ old('unit', $form['unit'] ?? '') }}"
-            placeholder="Unit number (optional)"
-            data-validation="text">
+        <input class="form1-01-input" type="text" name="unit" value="{{ old('unit', $form['unit'] ?? '') }}"
+            placeholder="Unit number (optional)" data-validation="text">
         @error('unit')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     </div>
     <div class="form-field">
         <label class="form-label">Street</label>
-        <input class="form1-01-input" type="text" name="street" 
-            value="{{ old('street', $form['street'] ?? '') }}"
-            placeholder="Street name (optional)"
-            data-validation="text">
+        <input class="form1-01-input" type="text" name="street" value="{{ old('street', $form['street'] ?? '') }}"
+            placeholder="Street name (optional)" data-validation="text">
         @error('street')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -87,8 +79,7 @@
         <label class="form-label">Contact Number <span class="required-asterisk">*</span></label>
         <input class="form1-01-input" type="tel" name="contact_number" required
             value="{{ old('contact_number', $form['contact_number'] ?? '') }}"
-            placeholder="e.g., 09123456789 or +639123456789"
-            data-validation="phone">
+            placeholder="e.g., 09123456789 or +639123456789" data-validation="phone">
         @error('contact_number')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -96,11 +87,10 @@
     <div class="form-field">
         <label class="form-label">Email Address <span class="required-asterisk">*</span></label>
         <input class="form1-01-input" type="email" name="email" required
-            value="{{ old('email', $form['email'] ?? '') }}"
-            placeholder="Enter your email address"
+            value="{{ old('email', $form['email'] ?? '') }}" placeholder="Enter your email address"
             data-validation="email">
         @error('email')
-            <p class="text-red text-sm mt-1">{{ $message }}</p>
+            <div class="text-red text-sm mt-1">{!! $message !!}</div>
         @enderror
     </div>
 </div>
@@ -121,8 +111,8 @@
                 this.zipCodeSelect = document.getElementById('zipCodeSelect');
 
                 this.remoteUrls = {
-                    provinceData: 'https://raw.githubusercontent.com/flores-jacob/philippine-regions-provinces-cities-municipalities-barangays/refs/heads/master/philippine_provinces_cities_municipalities_and_barangays_2019v2.json',
-                    zipCodeData: 'https://raw.githubusercontent.com/arnellebalane/zipcodes-ph/refs/heads/master/source/zipcodes.json'
+                    provinceData: '/philippine_provinces_cities_municipalities_and_barangays_2019v2.json',
+                    zipCodeData: '/ph-zipcodes.json'
                 };
 
                 this.localUrls = {

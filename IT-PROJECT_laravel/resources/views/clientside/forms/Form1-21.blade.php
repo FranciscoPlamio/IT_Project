@@ -11,7 +11,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those
                 fields on site and you will need to set a new appointment.
-                <div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa akin</label></div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
             <div class="form-layout">
                 <aside class="steps-sidebar">
@@ -30,6 +31,10 @@
 
                 <div>
                     <section class="step-content active" id="step-applicant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset>
                             <legend>Applicant's Details</legend>
                             <div class="form-grid-1">
@@ -115,10 +120,18 @@
                 const stepsList = document.getElementById('stepsList21');
                 const form = document.getElementById('form121');
                 if (form) {
-                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
+                    });
                 }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'applicant') {
+                        return;
+                    }
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -168,14 +181,24 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
                 });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     if (validateActiveStep()) go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {

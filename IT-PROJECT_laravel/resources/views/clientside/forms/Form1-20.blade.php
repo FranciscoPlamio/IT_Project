@@ -11,7 +11,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those
                 fields on site and you will need to set a new appointment.
-                <div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa akin</label></div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
 
             <div class="form-layout">
@@ -31,6 +32,10 @@
 
                 <div>
                     <section class="step-content active" id="step-categories">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Application Type</legend>
                             <div class="form-grid-1">
@@ -143,26 +148,27 @@
                                 </div>
                                 <div class="form-field"><label class="form-label">Is applicant known by another
                                         name?</label>
-                                    <div class="inline-radio">
+                                    <div class="inline-radio"
+                                        style="width:100%; display:flex; align-items:center; gap:14px;">
                                         <label>
                                             <input type="radio" name="known_by_another_name" value="yes"
                                                 {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'checked' : '' }}
                                                 onclick="toggleFormerName('yes')">
                                             Yes</label>
-                                        <br>
                                         <label>
                                             <input type="radio" name="known_by_another_name" value="no"
                                                 {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'no' ? 'checked' : '' }}
                                                 onclick="toggleFormerName('no')">
                                             No</label>
+                                        <input class="form1-01-input" type="text" name="former_name"
+                                            id="former_name" placeholder="If yes, indicate former name"
+                                            value="{{ old('former_name', $form['former_name'] ?? '') }}"
+                                            style="flex:1; min-width:0;"
+                                            {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? '' : 'disabled' }}>
                                     </div>
                                     @error('known_by_another_name')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
-                                    <input class="form1-01-input" type="text" name="former_name" id="former_name"
-                                        placeholder="Former name if Yes"
-                                        value="{{ old('former_name', $form['former_name'] ?? '') }}"
-                                        style="display: {{ old('known_by_another_name', $form['known_by_another_name'] ?? '') === 'yes' ? 'block' : 'none' }}">
                                     @error('former_name')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -259,10 +265,18 @@
                 const stepsList = document.getElementById('stepsList20');
                 const form = document.getElementById('form120');
                 if (form) {
-                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
+                    });
                 }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'categories') {
+                        return;
+                    }
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -312,14 +326,86 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
                 });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+                document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     if (validateActiveStep()) go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
+
+                // --- Conditional fields ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !modRadio) return;
+                    const enabled = modRadio.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleFormerNameInline() {
+                    const yesRadio = form.querySelector('input[name="known_by_another_name"][value="yes"]');
+                    const formerInput = document.getElementById('former_name');
+                    if (!formerInput || !yesRadio) return;
+                    const enabled = yesRadio.checked;
+                    formerInput.disabled = !enabled;
+                    if (!enabled) formerInput.value = '';
+                }
+
+                // Bind listeners
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+                form.querySelectorAll('input[name="known_by_another_name"]').forEach(r => {
+                    r.addEventListener('change', toggleFormerNameInline);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+                toggleFormerNameInline();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleFormerNameInline();
+                    });
+                }
+
+                // --- Value Added Services: enable 'others_vas' only when 'vas_services=others' ---
+                function toggleVasOthersSpecify() {
+                    const othersRadio = form.querySelector('input[name="vas_services"][value="others"]');
+                    const othersInput = form.querySelector('input[name="others_vas"]');
+                    if (!othersRadio || !othersInput) return;
+                    const enabled = othersRadio.checked;
+                    othersInput.disabled = !enabled;
+                    if (!enabled) othersInput.value = '';
+                }
+
+                form.querySelectorAll('input[name="vas_services"]').forEach(r => {
+                    r.addEventListener('change', toggleVasOthersSpecify);
+                });
+
+                // Initialize on load
+                toggleVasOthersSpecify();
+
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleVasOthersSpecify();
+                    });
+                }
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {

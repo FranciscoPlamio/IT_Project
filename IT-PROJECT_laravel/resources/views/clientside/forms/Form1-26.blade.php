@@ -23,6 +23,10 @@
 
                 <div>
                     <section class="step-content active" id="step-affiant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Affiant Information</legend>
                             <div class="inline-text-container">
@@ -257,9 +261,9 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
                     if (validateActiveStep()) go(1);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\FormManager;
+use App\Models\Certificate;
 use App\Models\Forms\Form1_01;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -11,43 +12,23 @@ use App\Models\Forms\Form1_01\ApplicantDetails;
 use App\Models\Forms\Form1_01\RequestAssistance;
 use App\Models\Forms\Form1_01\Declaration;
 use App\Models\Forms\FormsMeta;
+use App\Models\Forms\FormsTransactions;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Http;
+use Barryvdh\DomPDF\Facade\Pdf; // or use mPDF if you prefer
+
 
 class FormsController extends Controller
 {
     // In FormController or a dedicated page controller
+
+
     public function index()
-    {
-        $forms = [
-            ['number' => '1-01', 'title' => 'Application for Radio Operator Examination'],
-            ['number' => '1-02', 'title' => 'Application for Radio Operator Certificate'],
-            ['number' => '1-03', 'title' => 'Application for Amateur Radio Operator Certificate/AmateurRadio Station License'],
-            ['number' => '1-09', 'title' => 'Aplication for Permit to Purchase/Possess/Sell/Transfer'],
-            ['number' => '1-11', 'title' => 'Application for Construction Permit/Radio Station License'],
-            ['number' => '1-13', 'title' => 'Form D (For Modification)'],
-            ['number' => '1-14', 'title' => 'Application for Temporary Permit to Propagate/Demonstrate'],
-            ['number' => '1-16', 'title' => 'Application for Permit to Transport Radio Transmitter/Transceiver'],
-            ['number' => '1-18', 'title' => 'Application for Dealer/Manufacturer/Service/Center/Retailer/Reseller/Permit/CPE
-                                Supplier Accreditation'],
-            ['number' => '1-19', 'title' => 'Application for Certificate of Registration (WDN/SRD/RFID/SRRS/Public Trunk Radio)'],
-            ['number' => '1-20', 'title' => 'Application for Certificate of Registration - Value Added Services'],
-            ['number' => '1-21', 'title' => 'Application for Duplicate of Permit/License/Certificate'],
-            ['number' => '1-22', 'title' => 'Application for TVRO Registration Certificate/TVRO/Station License/CATV Station
-                                License'],
-            ['number' => '1-24', 'title' => 'Affidavit of Ownership and Loss with Undertaking'],
-            ['number' => '1-25', 'title' => 'Complaint Form'],
-            ['number' => '1-26', 'title' => 'Complaint on Text Message'],
-        ];
-
-        return view('formsList', compact('forms'));
-    }
-
-    public function index2()
     {
         $forms = [
             [ //0
@@ -154,9 +135,41 @@ class FormsController extends Controller
     }
 
 
-    public function show($formType)
+    public function show(Request $request, $formType)
     {
-        return view("clientside.forms.Form{$formType}", compact('formType'));
+        if (self::userHasFormTransaction()) {
+            return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
+        }
+        // Get all session keys
+        $sessionKeys = array_keys(session()->all());
+
+        // Check if any key starts with 'form_'
+        $hasFormSession = collect($sessionKeys)->contains(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        if ($hasFormSession) {
+            $oldFormType = "";
+            $formToken = "";
+
+            foreach ($sessionKeys as $key) {
+                if (str_starts_with($key, 'form')) {
+
+                    $oldFormType = substr($key, 5, 4);
+                    $formToken = substr($key, 10);
+                }
+            }
+            $form = session('form_' . $oldFormType . '_' . $formToken);
+            return redirect()->route('forms.validation', ['formType' => $oldFormType, 'token' => $formToken, 'targetFormType' => $formType])->with('message', 'Please finish your current form before signing up a new form');
+        } else {
+
+            $category = $request->query('category', null);
+            return view("clientside.forms.Form{$formType}", compact('formType', 'category'));
+        }
+    }
+
+    public function showFormInformation($formType)
+    {
+        return view("clientside.forms.information.FormInformation{$formType}");
     }
 
     /**
@@ -177,8 +190,7 @@ class FormsController extends Controller
         }
 
         // Check if user is editing his/her own form.
-        $sessionEmail = session('email_verified');
-        $user = User::where('email', $sessionEmail)->first();
+        $user = $this->getUser();
 
         if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
             return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Unauthorized access to this form.');
@@ -193,58 +205,34 @@ class FormsController extends Controller
     }
 
     /**
-     * Store Application Details section (Form 1-01) into the database.
-     */
-    public function storeApplication(Request $request)
-    {
-        $validated = $request->validate([
-            'date_of_exam' => ['nullable', 'date'],
-            'rtg' => ['nullable', 'array'],
-            'amateur' => ['nullable', 'array'],
-            'rphn' => ['nullable', 'array'],
-            'rroc' => ['nullable', 'array'],
-        ]);
-
-        $formToken = $request->input('form_token');
-        if (!$formToken) {
-            $formToken = (string) Str::uuid();
-        }
-
-        // Otherwise redirect back with token in session for linking next steps
-        return redirect()->back()->with([
-            'status' => 'Application Details saved',
-            // 'form_token' => $record->form_token,
-        ]);
-    }
-
-    /**
-     * Store the entire Form 1-01 (all sections) in one request.
+     * Store the entire Form in one request.
      */
     public function storeAll(Request $request, $formType)
     {
-        $formToken = $request->input('form_token');
+        $formToken = $request->input('token');
+        $paymentMethod = $request->input('payment_method');
 
         // Form
-        $validated = session('form_' . $formType . '_' . $request->input('form_token'));
+        $validated = session('form_' . $formType . '_' . $request->input('token'));
         if (!$validated) {
             return back()->withErrors(['message' => 'No form data found in session.']);
         }
-
         // User email
         $user = $this->getUser();
 
-        // $status = $request->input('status', 'draft');
-        // $transactionData = ['status' => $status];
 
+        $message = $this->validateAndStoreUploadedFile($request, $formToken);
+
+        if ($message) {
+            // Validation failed
+            return redirect()->back()->with('message', $message);
+        }
         // Save using FormManager
-        $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id);
+        $result = FormManager::saveForm('form' . $formType, $formToken, $validated, $user->_id, $paymentMethod);
 
-        // if ($status === 'submitted') {
-        //     session()->forget("form101_" . $formToken);
-        // }
+        $this->forgetFormKeySession($request);
 
         if ($request->wantsJson()) {
-            dd($result);
             return response()->json([
                 'message' => 'Form ' . $formType . ' saved',
                 'form_token' => $formToken,
@@ -253,13 +241,91 @@ class FormsController extends Controller
             ]);
         }
 
-        return redirect()->route('payment.method')->with([
-            'status' => 'Form 1-01 saved',
-        ]);
+        return redirect()->route('transactions.index')->with('message', 'Form created successfully');
+    }
+
+    private function forgetFormKeySession($request)
+    {
+        //Forget Form Key session
+        $sessionKeys = array_keys($request->session()->all());
+        $formKey = collect($sessionKeys)->first(function ($key) {
+            return str_starts_with($key, 'form_');
+        });
+        session()->forget($formKey);
+    }
+
+    public function cancel(Request $request)
+    {
+        $this->forgetFormKeySession($request);
+        return redirect()->route('homepage')->with('message', 'Draft Form cancelled successfully.');
+    }
+
+    private function validateAndStoreUploadedFile($request, $formToken)
+    {
+
+        $rules = [];
+
+        foreach ($request->file() as $key => $file) {
+            $rules[$key] = 'file|mimes:pdf,jpg,png|max:10240';
+        }
+        try {
+            // Validate dynamically
+            $validated = $request->validate($rules);
+
+            // Store files if validation passes
+            foreach ($request->file() as $key => $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = $key . '_' . time() . '.' . $extension;
+                $path = $file->storeAs('forms/' . $formToken, $fileName, 'local');
+            }
+
+            return null;
+        } catch (ValidationException $e) {
+            dd($e->errors());
+            dd(ini_get('post_max_size'), ini_get('upload_max_filesize'));
+            $message = "Validation failed: files must be no larger than 10 MB and must be in .png, .jpg, or .pdf";
+            return $message;
+        }
+    }
+
+
+
+    private function cleanInput(array $data)
+    {
+        $clean_recursive = function ($value, $key = null) use (&$clean_recursive) {
+            if (is_array($value)) {
+                $cleaned = [];
+                foreach ($value as $k => $v) {
+                    $cleaned[$k] = $clean_recursive($v, $k);
+                }
+                return $cleaned;
+            }
+
+            if (is_string($value)) {
+                // Trim and collapse spaces
+                $value = preg_replace('/\s+/', ' ', trim($value));
+
+                // Capitalize name fields
+                $nameFields = ['first_name', 'middle_name', 'last_name'];
+                if ($key && in_array($key, $nameFields)) {
+                    $value = ucwords(strtolower($value));
+                }
+            }
+
+            return $value;
+        };
+
+        $cleanedData = [];
+        foreach ($data as $key => $value) {
+            $cleanedData[$key] = $clean_recursive($value, $key);
+        }
+
+        return $cleanedData;
     }
 
     public function preview(Request $request, $formType)
     {
+
 
         // Verify Google reCAPTCHA first
         if (!$this->verifyRecaptcha($request)) {
@@ -273,14 +339,39 @@ class FormsController extends Controller
         $rules = FormManager::getValidationRules($formType);
         // dd($rules);
         // Validate fields of a form, if there are invalid it will print error messages
+
+        // Clean input before validation
+
         try {
+
+
+            $cleaned = $this->cleanInput($request->all());
+
+            $request->replace($cleaned);
+
             $validated = $request->validate(
                 $rules['rules'],
                 $rules['messages'],
                 $rules['attributes']
             );
+
+            // Custom check: require at least one unit across all station classes
+            if ($formType === "1-09") {
+                if (
+                    empty($request->rt_units) &&
+                    empty($request->fx_units) &&
+                    empty($request->fb_units) &&
+                    empty($request->ml_units) &&
+                    empty($request->p_units)
+                ) {
+                    // Throw a ValidationException manually
+                    throw ValidationException::withMessages([
+                        'units' => 'You must select at least 1 unit in any station class.'
+                    ]);
+                }
+            }
         } catch (ValidationException $e) {
-            // //  Dump the validation errors (for debugging)
+            //  Dump the validation errors (for debugging)
             // dd('Validation failed:', $e->errors(), $e->getMessage());
 
             // // or log it instead of dumping:
@@ -305,11 +396,33 @@ class FormsController extends Controller
 
         // Store validated data temporarily in session
         session(["form_{$formType}_$formToken" => $validated]);
-
-        return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken])
-            ->with([
-                'status' => 'Form ' . $formType . ' saved for review.',
-            ]);
+        return redirect()->route('forms.validation', ['formType' => $formType, 'token' => $formToken]);
+    }
+    public function testSaveForm(Request $request)
+    {
+        // Validate minimal required inputs
+        $request->validate([
+            'formType' => 'required|string',
+            'formToken' => 'required|string',
+            'userId' => 'required|string',
+            'paymentMethod' => 'required|string',
+            'formData' => 'required|array'
+        ]);
+        // Call FormManager directly using the request's formType and formToken
+        $result = FormManager::saveForm(
+            $request->input('formType'),
+            $request->input('formToken'),
+            $request->input('formData'),
+            $request->input('userId'),
+            $request->input('paymentMethod')
+        );
+        // Return JSON response for Postman
+        return response()->json([
+            'message' => 'Form processed successfully',
+            'form_token' => $request->input('formToken'),
+            'form' => $result['form'],
+            'meta' => $result['meta'],
+        ], 200);
     }
 
     /**
@@ -317,29 +430,215 @@ class FormsController extends Controller
      */
     public function showValidation(Request $request, $formType)
     {
+
         $form = session('form_' . $formType . '_' . $request->input('token'));
+        // If no form is found, redirect safely
+        if (!$form) {
+            return redirect()->route('homepage');
+        }
 
-        // $token = $request->query('token') ?: $request->input('token');
-        // if (!$token) {
-        //     return redirect()->route('forms.1-01')->withErrors('Missing form token.');
-        // }
+        //testing
+        // $form["application_type"] = "new";
+        // $form["application_type"] = "new";
+        // $form["permit_type"] = "temporary-foreign";
 
-        // $form = Form1_01::where('form_token', $token)->first();
-        // if (!$form) {
-        //     return redirect()->route('forms.1-01')->withErrors('Form not found for the provided token.');
-        // }
+        // Return view with no-cache headers
+        return response()
+            ->view('clientside.forms.Validation', [
+                'form' => $form,
+                'formType' => $formType,
+                'targetFormType' => $request->input('targetFormType')
+            ])
+            ->header('Cache-Control', 'no-cache, no-store, must-revalidate')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
+    }
 
-        // // Check if user is viewing his/her own form
-        // $sessionEmail = session('email_verified');
-        // $user = User::where('email', $sessionEmail)->first();
-        // if (!$user || (string) $form->user_id !== (string) $user->_id) {
-        //     return redirect()->route('forms.1-01')->withErrors('Unauthorized access to this form.');
-        // }
+    /**
+     * Show Form Preview page with filled data
+     */
+    public function showPreview(Request $request, $formType)
+    {
+        $token = $request->query('token') ?: $request->input('token');
+        if (!$token) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Missing form token.');
+        }
 
-        return view('clientside.forms.Validation', [
+        $form = session('form_' . $formType . '_' . $token);
+        if (!$form) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Form not found.');
+        }
+
+        // Check if user is viewing his/her own form
+        $user = $this->getUser();
+        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+            return redirect()->route('forms.show', ['formType' => $formType])->withErrors('Unauthorized access to this form.');
+        }
+
+        return view('clientside.forms.FormPreview', [
             'form' => $form,
             'formType' => $formType,
+            'formToken' => $token,
         ]);
+    }
+
+    /**
+     * Generate PDF for the form preview (Paki validate if oks)
+     */
+    public function generatePDF(Request $request, $formType)
+    {
+        $token = $request->query('token');
+        if (!$token) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $form = session('form_' . $formType . '_' . $token);
+        if (!$form) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        // Check if user is authorized
+        $user = $this->getUser();
+        if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+            return response()->json(['error' => 'Unauthorized access'], 403);
+        }
+
+        try {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('clientside.forms.FormPDF', [
+                'form' => $form,
+                'formType' => $formType,
+                'formToken' => $token,
+            ]);
+
+            $pdf->setPaper('A4', 'portrait');
+            $pdf->setOptions([
+                'defaultFont' => 'Arial',
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => false,
+                'debugKeepTemp' => false,
+                'debugCss' => false,
+                'debugLayout' => false,
+                'debugLayoutLines' => false,
+                'debugLayoutBlocks' => false,
+                'debugLayoutInline' => false,
+                'debugLayoutPaddingBox' => false,
+            ]);
+
+            return $pdf->download("NTC_Form_{$formType}_" . date('Y-m-d') . ".pdf");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Generate PDF using template-based approach with FPDF/FPDI
+     */
+    public function generateTemplatePDF(Request $request, $formType)
+    {
+        $token = $request->query('token');
+        if (!$token) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $user = $this->getUser();
+
+        // Try to get form data from session first (for in-progress forms)
+        $form = session('form_' . $formType . '_' . $token);
+        // dd(session()->all());
+        // If not in session, retrieve from database
+        if (!$form) {
+            try {
+                $formModel = FormManager::getFormModel('form' . $formType);
+                $dbForm = $formModel::where('form_token', $token)->first();
+
+                if (!$dbForm) {
+                    return response()->json(['error' => 'Form not found'], 404);
+                }
+
+                // Check authorization
+                if (!$user || (string) $dbForm->user_id !== (string) $user->_id) {
+                    return response()->json(['error' => 'Unauthorized access'], 403);
+                }
+
+                // Convert model to array for PDF generation
+                $form = $dbForm->toArray();
+                // dd($form);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Form not found: ' . $e->getMessage()], 404);
+            }
+        } else {
+            // If in session, check authorization
+            if (!$user || (string) $form['user_id'] !== (string) $user->_id) {
+                return response()->json(['error' => 'Unauthorized access'], 403);
+            }
+        }
+
+        try {
+            // Ensure form data has required structure for each form type
+            $form = $this->normalizeFormData($form, $formType);
+            // dd($form);
+
+            $pdfGenerator = new \App\Services\PDFGenerator();
+
+            // Check if template exists
+            if (!$pdfGenerator->templateExists($formType)) {
+                return response()->json(['error' => "Template not found for form type: {$formType}"], 404);
+            }
+
+            // Generate PDF with form data
+            $pdf = $pdfGenerator->generatePDF($form, $formType);
+
+            // Generate filename
+            $filename = "NTC_Form_{$formType}_" . date('Y-m-d_H-i-s') . ".pdf";
+
+            // Always stream inline (user changed from conditional)
+            $pdf->Output('I', $filename);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate PDF: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Normalize form data to ensure all required fields exist for each form type
+     * 
+     * if theres no values in the form, it will be set to empty string, just add a default value.
+     */
+    private function normalizeFormData($form, $formType)
+    {
+        // Common fields that should always exist
+        $defaults = [
+            'first_name' => '',
+            'last_name' => '',
+            'middle_name' => '',
+            'email' => '',
+            'contact_number' => '',
+        ];
+
+        // Form-specific defaults
+        if ($formType === '1-01') {
+            // Form 1-01 specific fields
+            $defaults = array_merge($defaults, [
+                'exam_type' => '',
+                'admission_slip' => [
+                    'admit_name' => '',
+                    'place_of_exam' => '',
+                    'date_of_exam' => '',
+                    'time_of_exam' => '',
+                    'authorized_officer' => '',
+                    'mailing_address' => '',
+                ],
+            ]);
+        } elseif ($formType === '1-02') {
+            // Form 1-02 specific fields
+            $defaults = array_merge($defaults, [
+                'certificate_type' => '',
+                'years' => 0,
+                'mailing_address' => '',
+            ]);
+        }
+
+        // Merge defaults with actual form data (actual data takes precedence)
+        return array_merge($defaults, $form);
     }
 
     public function getUser()
@@ -363,15 +662,383 @@ class FormsController extends Controller
             return false; // No token means CAPTCHA was not completed
         }
 
-        $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $token,
-            'remoteip' => $request->ip(),
-        ]);
-        // dd($response); // for debugging (security checking eg. Local IP address on handlerstats)
+        // FIX #2 — Disable SSL verification temporarily for local development
+        $response = Http::withoutVerifying()->asForm()->post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            [
+                'secret' => env('RECAPTCHA_SECRET_KEY'),
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]
+        );
 
         $result = $response->json();
-        // dd($result); // for debugging (whether the CAPTCHA was successful or not)
+
         return isset($result['success']) && $result['success'] === true;
+    }
+
+
+    public function userHasFormTransaction()
+    {
+        $user = $this->getUser();
+        return $user->hasFormTransaction();
+    }
+
+    /**
+     * Get certificate data for validation modal
+     */
+    public function getCertificateData($token)
+    {
+        try {
+            $transactionForm = FormsTransactions::where('form_token', $token)->first();
+            $formType = substr($transactionForm->form_type, 4);
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $token)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Get certificate type display name
+            $certificateTypeDisplay = $this->formatCertificateType($dbForm->certificate_type ?? '');
+
+            // Calculate dates
+            $issuanceDate = date('F j, Y'); // Current date
+            $years = isset($dbForm->years) ? (int)$dbForm->years : 0;
+            $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+
+            return response()->json([
+                'first_name' => $dbForm->first_name,
+                'last_name' => $dbForm->last_name,
+                'middle_name' => $dbForm->middle_name ?? '',
+                'certificate_type' => $certificateTypeDisplay,
+                'certificate_type_raw' => $dbForm->certificate_type ?? '',
+                'issuance_date' => $issuanceDate,
+                'expiry_date' => $expiryDate,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch form data: ' . $e->getMessage()], 500);
+        }
+    }
+    public function getPermitData($token)
+    {
+        try {
+            $transactionForm = FormsTransactions::where('form_token', $token)->first();
+            $formType = substr($transactionForm->form_type, 4);
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $token)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Map permit_type to display name
+            $permitNames = [
+                'at-club-rsl' => 'Amateur Club RSL',
+                'at-lifetime' => 'Amateur Lifetime Permit',
+                'purchase-possess' => 'Purchase/Possess Permit',
+                'sell-transfer' => 'Sell/Transfer Permit',
+                'storage-permit' => 'Storage Permit',
+                'at-rsl' => 'Amateur RSL',
+                // add more mappings as needed
+            ];
+
+            $permitTypeDisplay = $permitNames[$dbForm->permit_type ?? ''] ?? ($dbForm->permit_type ?? '');
+
+            // Combine radio_service + permit_type (radio_service first)
+            $certificateTypeDisplay = trim(($dbForm->radio_service ?? '') . ' ' . $permitTypeDisplay);
+
+            // Calculate dates
+            $issuanceDate = date('F j, Y'); // Current date
+            $years = isset($dbForm->years) ? (int)$dbForm->years : 0;
+            $expiryDate = date('F j, Y', strtotime("+{$years} years"));
+
+            return response()->json([
+                'applicant' => $dbForm->applicant,
+                'certificate_type' => $certificateTypeDisplay,
+                'permit_type' => $permitTypeDisplay,
+                'issuance_date' => $issuanceDate,
+                'expiry_date' => $expiryDate,
+                'application_type' => $dbForm->application_type ?? '—',
+                'intended_use' => $dbForm->intended_use ?? '—',
+                'radio_service' => $dbForm->radio_service
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch form data: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Format certificate type for display
+     */
+    private function formatCertificateType($type)
+    {
+        $types = [
+            '1rtg_e1256_code25' => '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
+            '1rtg_code25' => '1RTG - Code (25/20 wpm)',
+            '2rtg_e1256_code16' => '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
+            '2rtg_code16' => '2RTG - Code (16 wpm)',
+            '3rtg_e125_code16' => '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
+            '3rtg_code16' => '3RTG - Code (16 wpm)',
+            '1phn_e1234' => '1PHN - Elements 1, 2, 3 & 4',
+            '2phn_e123' => '2PHN - Elements 1, 2 & 3',
+            '3phn_e12' => '3PHN - Elements 1 & 2',
+        ];
+
+        return $types[$type] ?? ucwords(str_replace('_', ' ', $type));
+    }
+
+    /**
+     * Generate certificate PDF for Form 1-02
+     */
+    public function generateCertificate(Request $request)
+    {
+        $formToken = $request->query('token');
+        $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
+
+        if (!$formToken) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        if (!$transactionForm) {
+            return response()->json(['error' => 'Form not found in transactions'], 404);
+        }
+
+        // Extract form type like "1-02"
+        $formType = substr($transactionForm->form_type, 4);
+
+        try {
+            // Retrieve form data
+            $formModel = FormManager::getFormModel('form' . $formType);
+            $dbForm = $formModel::where('form_token', $formToken)->first();
+
+            if (!$dbForm) {
+                return response()->json(['error' => 'Form not found'], 404);
+            }
+
+            // Certificate names mapping
+            $certificateNames = [
+                '1RTG' => 'First-class Radiotelegraph Operator Certificate',
+                '2RTG' => 'Second-class Radiotelegraph Operator Certificate',
+                '3RTG' => 'Third-class Radiotelegraph Operator Certificate',
+                '1PHN' => 'First-class Radiotelephone Operator Certificate',
+                '2PHN' => 'Second-class Radiotelephone Operator Certificate',
+                '3PHN' => 'Third-class Radiotelephone Operator Certificate',
+                'SROP' => 'Ship Radiotelegraph Operator Certificate',
+                'GROC' => 'General Radiotelegraph Operator Certificate',
+                'RROC-AIRCRAFT' => 'Restricted Radiotelegraph Operator Certificate – Aircraft',
+                'RROC-RLM' => 'Restricted Radiotelegraph Operator Certificate – Land Mobile',
+                'ATROC' => 'Amateur Radio Operator Certificate',
+                'AT-LIFETIME' => 'Amateur Radio Operator Certificate – Lifetime',
+                'AT-CLUB-RSL' => 'Amateur Club Radio Station License',
+                'ATRSL' => 'Amateur Radio Station License',
+                'TEMP-A' => 'Temporary Amateur Radio Station Permit – Type A',
+                'TEMP-B' => 'Temporary Amateur Radio Station Permit – Type B',
+                'TEMP-C' => 'Temporary Amateur Radio Station Permit – Type C',
+                'SPECIAL-EVENT-CALL' => 'Special Event Call Sign',
+                'VANITY-CALL' => 'Vanity Call Sign',
+            ];
+
+            $rawType = strtoupper($dbForm->certificate_type ?? $dbForm->category ?? 'UNKNOWN');
+            $stationClass = strtoupper($dbForm->station_class ?? '');
+
+            // Determine the certificate title
+            if (Str::contains($rawType, 'ATRSL')) {
+                $title = ($certificateNames['ATRSL'] ?? 'Amateur Radio Station License')
+                    . ($stationClass ? ' – ' . $stationClass : '');
+            } elseif (Str::contains($rawType, 'TEMP')) {
+                $title = ($certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType)))
+                    . ($stationClass ? ' – ' . $stationClass : '');
+            } else {
+                $title = $certificateNames[$rawType] ?? ucwords(str_replace(['-', '_'], ' ', $rawType));
+            }
+
+            // --- Generate or retrieve certificate number ---
+            $existingCert = Certificate::where('form_token', $formToken)->first();
+
+            if ($existingCert) {
+                $certificateNo = $existingCert->certificate_no;
+            } else {
+                $year = now()->year;
+                $typeCode = preg_replace('/[^A-Z]/', '', $rawType) ?: 'GEN';
+
+                // Get last sequence for the year
+                $lastCert = Certificate::whereYear('date_issued', $year)
+                    ->orderBy('sequence', 'desc')
+                    ->first();
+
+                $nextSequence = $lastCert ? $lastCert->sequence + 1 : 1;
+                $sequencePadded = str_pad($nextSequence, 6, '0', STR_PAD_LEFT);
+
+                // Generate random suffix
+                do {
+                    $randomSuffix = strtoupper(Str::random(4));
+                    $certificateNo = "NTC-CAR-{$typeCode}-{$year}-{$sequencePadded}-{$randomSuffix}";
+                } while (Certificate::where('certificate_no', $certificateNo)->exists());
+
+                // Save certificate record
+                Certificate::create([
+                    'certificate_no'   => $certificateNo,
+                    'sequence'         => $nextSequence,
+                    'form_token'       => $formToken,
+                    'form_type'        => $transactionForm->form_type,
+                    'certificate_type' => $rawType,
+                    'holder_name'      => trim(
+                        "{$dbForm->first_name} " .
+                            ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') .
+                            "{$dbForm->last_name}"
+                    ),
+                    'date_issued'      => now(),
+                    'valid_until'      => now()->addYears((int)($dbForm->years ?? 3)),
+                    'status'           => 'active',
+                ]);
+            }
+
+            // Build certificate array
+            $certificate = [
+                'ntc_region'       => 'NTC – CAR (Baguio)',
+                'certificate_type' => strtoupper($dbForm->application_type ?? 'NEW'),
+                'certificate_no'   => $certificateNo,
+                'title'            => $title,
+                'radio_service'    => $dbForm->radio_service,
+                'name'             => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                'address'          => implode(', ', array_filter([
+                    $dbForm->unit,
+                    $dbForm->street,
+                    $dbForm->barangay,
+                    $dbForm->city,
+                    $dbForm->province,
+                    $dbForm->zip_code
+                ])),
+                'dob'          => \Carbon\Carbon::parse($dbForm->dob)->format('M d, Y'),
+                'citizenship'  => $dbForm->nationality ?? 'Filipino',
+                'sex'          => strtoupper(substr($dbForm->sex, 0, 1)),
+                'height'       => $dbForm->height,
+                'weight'       => $dbForm->weight,
+                'date_issued'  => now()->format('M d, Y'),
+                'valid_until'  => now()->addYears((int)($dbForm->years ?? 3))->format('M d, Y'),
+                'officer_name' => '________________',
+                'officer_title' => 'Officer In Charge',
+            ];
+
+            // Generate PDF
+            $pdf = Pdf::loadView('templates.certificate', compact('certificate'))
+                ->setPaper('A5', 'portrait');
+
+            // Private folder for certificates
+            $certificatePath = "certificates/{$certificateNo}.pdf";
+            Storage::put($certificatePath, $pdf->output());
+
+            // Preview or download
+            if ($request->boolean('preview')) {
+                return $pdf->stream("{$certificateNo}.pdf");
+            }
+
+            return response()->download(storage_path("app/{$certificatePath}"), "{$certificateNo}.pdf");
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function generatePermit(Request $request)
+    {
+        $formToken = $request->query('token');
+
+        if (!$formToken) {
+            return response()->json(['error' => 'Missing form token'], 400);
+        }
+
+        $transactionForm = FormsTransactions::where('form_token', $formToken)->first();
+        if (!$transactionForm) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        $formType = substr($transactionForm->form_type, 4);
+        $formModel = FormManager::getFormModel('form' . $formType);
+        $dbForm = $formModel::where('form_token', $formToken)->first();
+
+        if (!$dbForm) {
+            return response()->json(['error' => 'Form not found'], 404);
+        }
+
+        $formData = $dbForm->toArray();
+
+        // 1️⃣ Dynamically find all *_units fields
+        $units = [];
+        foreach ($formData as $key => $value) {
+            if (str_ends_with($key, '_units') && $value > 0) {
+                // Convert key to readable name, e.g., 'rt_units' -> 'RT (Radio Telephone)'
+                $nameMap = [
+                    'rt_units' => 'RT (Radio Telephone)',
+                    'fx_units' => 'FX (Fixed)',
+                    'fb_units' => 'FB (Land Base)',
+                    'ml_units' => 'ML (Mobile Land)',
+                    'p_units'  => 'P (Portable/Handheld)',
+                ];
+                $units[$nameMap[$key] ?? strtoupper(str_replace('_units', '', $key))] = $value;
+            }
+        }
+
+        $unitCount = array_sum($units);
+
+        // 2️⃣ Determine intended use & per-unit fee
+        $intendedUse = $formData['intended_use'] ?? 'new_radio_station';
+        $permitType = strtoupper($formData['permit_type'] ?? 'N/A');
+
+        $feeTable = [
+            'purchase' => 50,
+            'possess' => 50,
+            'sell_transfer' => 50,
+            'dst' => 30,
+        ];
+
+        if (in_array($intendedUse, ['new_radio_station', 'change_equipment', 'additional_equipment'])) {
+            $perUnit = $feeTable['purchase'];
+            $label = 'Purchase Permit Fee (PUR)';
+        } elseif ($intendedUse === 'storage') {
+            $perUnit = $feeTable['possess'];
+            $label = 'Possess Permit Fee (POS)';
+        } elseif ($intendedUse === 'sell_transfer') {
+            $perUnit = $feeTable['sell_transfer'];
+            $label = 'Sell/Transfer Permit Fee (STF)';
+        } else {
+            $perUnit = 0;
+            $label = 'Permit Fee';
+        }
+
+        $totalPermitFee = $perUnit * $unitCount;
+        $dst = $feeTable['dst'];
+        $total = $totalPermitFee + $dst;
+
+        // 3️⃣ Prepare data for PDF
+        $permit = [
+            'applicant' => trim("{$formData['applicant']} "),
+            'permit_type_display' => $permitType,
+            'radio_service' => $formData['radio_service'] ?? '-',
+            'application_type' => $formData['application_type'] ?? '-',
+            'intended_use' => $formData['intended_use'] ?? '-',
+            'issuance_date' => now()->format('F j, Y'),
+            'expiry_date' => now()->addYears((int)($formData['years'] ?? 3))->format('F j, Y'),
+            'units' => $units,
+            'unit_count' => $unitCount,
+            'per_unit' => $perUnit,
+            'fee_label' => $label,
+            'total_permit_fee' => $totalPermitFee,
+            'dst' => $dst,
+            'total' => $total,
+        ];
+
+        $pdf = Pdf::loadView('templates.ntc-permit', compact('permit'))
+            ->setPaper('A4', 'portrait');
+
+        $filename = "Permit_{$formData['applicant']}_" . date('Y-m-d_H-i-s') . ".pdf";
+
+        if ($request->boolean('preview')) {
+            return $pdf->stream($filename);
+        } else {
+            $attachmentPath = "forms/{$formToken}/permit_" . time() . ".pdf";
+            Storage::put($attachmentPath, $pdf->output());
+            return $pdf->download($filename);
+        }
     }
 }

@@ -8,20 +8,36 @@
     'showPermit' => false,
     'showYears' => true,
     'showModification' => false,
+    'category' => '',
 ])
 
 <div class="form-field">
-    <label>
-        <input type="radio" name="application_type" value="new"
-            {{ old('application_type', $form['application_type'] ?? '') === 'new' ? 'checked' : '' }}>
-        NEW
-    </label>
-    <label>
-        <input type="radio" name="application_type" value="renewal"
-            {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
-        RENEWAL</label>
 
-    @if ($showModification)
+    @if ($category === 'mod')
+        <label>
+            <input type="radio" name="application_type" value="modification"
+                {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}checked>MODIFICATION
+        </label>
+        @error('application_type')
+            <p class="text-red text-sm mt-1">{{ $message }}</p>
+        @enderror
+        <input class="form1-01-input mt-4" type="text" name="modification_reason" placeholder="Reason"
+            value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
+        @error('modification_reason')
+            <p class="text-red text-sm mt-1">{{ $message }}</p>
+        @enderror
+    @else
+        <label>
+            <input type="radio" name="application_type" value="new"
+                {{ old('application_type', $form['application_type'] ?? '') === 'new' ? 'checked' : '' }}>
+            NEW
+        </label>
+        <label>
+            <input type="radio" name="application_type" value="renewal"
+                {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
+            RENEWAL</label>
+    @endif
+    {{-- @if ($showModification)
         <label>
             <input type="radio" name="application_type" value="modification"
                 {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>
@@ -50,7 +66,7 @@
         @error('modification_reason')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
-    @endif
+    @endif --}}
 
 
 
@@ -66,10 +82,15 @@
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
     @endif
-    @if ($showYears)
+    @if ($category !== 'mod')
         <label class="form-label">No. of Years</label>
-        <input class="form1-01-input" type="text" name="years" placeholder="e.g., 2"
+        <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
             value="{{ old('years', $form['years'] ?? '') }}">
+            <option value="" disabled selected>Select years</option>
+            <option value="1" {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1</option>
+            <option value="2" {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2</option>
+            <option value="3" {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3</option>
+        </select>
         @error('years')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror

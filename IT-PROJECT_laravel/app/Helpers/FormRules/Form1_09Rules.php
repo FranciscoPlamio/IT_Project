@@ -9,21 +9,28 @@ class Form1_09Rules
         return [
             'rules' => [
                 // Applicant details
-                'unit' => ['required', 'string'],
-                'street' => ['required', 'string'],
+                'applicant' => ['required', 'string'],
+                'validity' => ['required', 'date', 'after_or_equal:today'],
+                'cpc_cpcn_pa_rsl_no' => ['required', 'string'],
+                'unit' => ['nullable', 'string'],
+                'street' => ['nullable', 'string'],
                 'barangay' => ['required', 'string'],
                 'city' => ['required', 'string'],
                 'province' => ['required', 'string'],
                 'zip_code' => ['required', 'string'],
                 'contact_number' => ['required', 'regex:/^[0-9]{10,11}$/'],
-                'email' => ['nullable', 'email'],
+                'email' => [
+                    'required',
+                    'email',
+                    'min:6',
+                    'max:30',
+                    'regex:/^[A-Za-z0-9](?:[A-Za-z0-9\.]{4,28}[A-Za-z0-9])@(gmail|yahoo|outlook)\.com$/i'
+                ],
 
-                'applicant' => ['required', 'string'],
-                'validity' => ['required', 'date', 'after_or_equal:today'],
-                'cpc_cpcn_pa_rsl_no' => ['required', 'integer'],
 
                 //Application Details
                 'application_type' => ['required', 'string'],
+                'permit_type'  => ['required', 'string'], //no need
                 'radio_service' => ['required', 'string'],
                 'others_specify' => ['nullable', 'string'],
                 'nature_service' => ['required', 'string'],
@@ -45,12 +52,12 @@ class Form1_09Rules
                 'longitude' => ['required', 'string'],
                 'latitude' => ['required', 'string'],
                 'points_of_comm' => ['required', 'string'],
-                'frequency' => ['required', 'numeric'],
+                'frequency' => ['required', 'string'],
                 'make_type_model' => ['required', 'string'],
                 'serial_number' => ['required', 'string'],
                 'bandwidth_emission' => ['required', 'string'],
                 'power_output' => ['required', 'string'],
-                'frequency_range' => ['required', 'numeric'],
+                'frequency_range' => ['required', 'string'],
 
                 // Source of Equipment
                 'dealer_name' => ['required', 'string'],
@@ -61,17 +68,14 @@ class Form1_09Rules
                 // Inteded Use
                 'intended_use' => ['required', 'string'],
                 'others_use_specify' => ['nullable', 'string'],
-                'storage_location' => ['nullable', 'string'],
+                'storage_location' => ['required_if:intended_use,storage',  'nullable', 'string'],
             ],
 
             'messages' => [
                 'dob.before_or_equal' => 'Invalid date. Please enter correct date of birth.',
-                'contact_number.regex' => 'Please enter a valid contact number with 10–11 digits.'
+                'contact_number.regex' => 'Please enter a valid contact number (09xxxxxxxxxxx) with 11 digits.'
             ], // custom messages 
-
-            'attributes' => [
-                'dob' => 'date of birth', // custom attribute name
-            ]
+            'attributes' => []
         ];
     }
 }

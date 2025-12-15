@@ -1,7 +1,55 @@
 <x-layout>
     <!-- Body -->
     <section class="banner">
-        <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner" />
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="carousel-slides">
+                    @forelse($carouselSlides as $index => $slideUrl)
+                        <div class="carousel-slide {{ $index === 0 ? 'active' : '' }}">
+                            <img src="{{ $slideUrl }}" alt="Campaign Banner {{ $index + 1 }}" />
+                        </div>
+                    @empty
+                        {{-- Default banners if no dynamic ones provided --}}
+                        {{-- <div class="carousel-slide active">
+                            <img src="{{ asset('images/ntc-home.png') }}" alt="Campaign Banner 1" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/banner-image.png') }}" alt="Campaign Banner 2" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/banner_final-new.png') }}" alt="Campaign Banner 3" />
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{{ asset('images/NTC_BANNER-new.png') }}" alt="Campaign Banner 4" />
+                        </div> --}}
+                    @endforelse
+                </div>
+
+                <!-- Navigation Arrows -->
+                <button class="carousel-arrow carousel-prev" onclick="changeSlide(-1)">
+                    <span>&#8249;</span>
+                </button>
+                <button class="carousel-arrow carousel-next" onclick="changeSlide(1)">
+                    <span>&#8250;</span>
+                </button>
+
+                <!-- Dots Indicator -->
+                <div class="carousel-dots">
+                    @if (count($carouselSlides) > 0)
+                        @foreach ($carouselSlides as $index => $slide)
+                            <span class="dot {{ $index === 0 ? 'active' : '' }}"
+                                onclick="currentSlide({{ $index + 1 }})"></span>
+                        @endforeach
+                    @else
+                        {{-- Default dots --}}
+                        <span class="dot active" onclick="currentSlide(1)"></span>
+                        <span class="dot" onclick="currentSlide(2)"></span>
+                        <span class="dot" onclick="currentSlide(3)"></span>
+                        <span class="dot" onclick="currentSlide(4)"></span>
+                    @endif
+                </div>
+            </div>
+        </div>
     </section>
 
     <section class="quick-links">
@@ -12,7 +60,8 @@
                 <p>Schedules</p>
             </div>
         </a>
-        <a id="applyLink" href="{{ route('email-auth') }}" class="card" style="text-decoration:none;color:inherit;">
+        <a id="applyLink" href="{{ route('display.forms') }}" class="card"
+            style="text-decoration:none;color:inherit;">
             <img src="{{ asset('images/icon-forms.png') }}" alt="Forms Icon" />
             <p>Apply</p>
         </a>
@@ -23,5 +72,92 @@
             </div>
         </a>
     </section>
+
+    <script>
+        let currentSlideIndex = 1;
+        const totalSlides =
+            {{ count($carouselSlides) > 0 ? count($carouselSlides) : 4 }}; // Use dynamic count or fallback to 4
+        let autoSlideInterval;
+
+        // Initialize carousel
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set dynamic width based on number of slides
+            const slidesContainer = document.querySelector('.carousel-slides');
+            if (slidesContainer && totalSlides > 0) {
+                slidesContainer.style.width = (totalSlides * 100) + '%';
+                const slideElements = slidesContainer.querySelectorAll('.carousel-slide');
+                slideElements.forEach(slide => {
+                    slide.style.width = (100 / totalSlides) + '%';
+                });
+            }
+
+            showSlide(currentSlideIndex);
+            startAutoSlide(); // Start automatic sliding
+
+            // Pause auto-slide on hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', stopAutoSlide);
+                carouselContainer.addEventListener('mouseleave', startAutoSlide);
+            }
+        });
+
+        function startAutoSlide() {
+            // Clear any existing interval
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+            // Auto-advance slides every 4 seconds
+            autoSlideInterval = setInterval(function() {
+                currentSlideIndex++;
+                if (currentSlideIndex > totalSlides) {
+                    currentSlideIndex = 1;
+                }
+                showSlide(currentSlideIndex);
+            }, 4000); // 4000 milliseconds = 4 seconds
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideInterval) {
+                clearInterval(autoSlideInterval);
+            }
+        }
+
+        function showSlide(n) {
+            const slides = document.querySelector('.carousel-slides');
+            const dots = document.querySelectorAll('.dot');
+
+            if (n > totalSlides) currentSlideIndex = 1;
+            if (n < 1) currentSlideIndex = totalSlides;
+
+            // Calculate transform percentage dynamically
+            const translateX = -((currentSlideIndex - 1) * (100 / totalSlides));
+            if (slides) {
+                slides.style.transform = `translateX(${translateX}%)`;
+            }
+
+            // Update dots
+            dots.forEach(dot => dot.classList.remove('active'));
+            if (dots[currentSlideIndex - 1]) {
+                dots[currentSlideIndex - 1].classList.add('active');
+            }
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            showSlide(currentSlideIndex);
+            // Restart auto-slide timer when user manually changes slide
+            stopAutoSlide();
+            startAutoSlide();
+        }
+
+        function currentSlide(n) {
+            currentSlideIndex = n;
+            showSlide(currentSlideIndex);
+            // Restart auto-slide timer when user clicks on dots
+            stopAutoSlide();
+            startAutoSlide();
+        }
+    </script>
 
 </x-layout>

@@ -1,9 +1,14 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
+@source "../views/**/*.blade.php";
+@source "../js/**/*.js";
 
 @theme {
     --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
@@ -225,8 +230,12 @@ textarea.form1-01-input {
 }
 
 @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 /* Address error styling */
@@ -247,7 +256,7 @@ textarea.form1-01-input {
 }
 
 .address-field-loading::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     right: 12px;
@@ -267,7 +276,7 @@ textarea.form1-01-input {
         background-size: 14px;
         padding-right: 36px;
     }
-    
+
     .address-error {
         padding: 10px 12px;
         margin: 12px 0;
@@ -288,17 +297,17 @@ textarea.form1-01-input {
 .child-note {
     background: #e8f3ff;
     border: 1px solid #cfe3ff;
-    color:#1f3b66;
+    color: #1f3b66;
     padding: 10px 10px;
     border-radius: 4px;
     margin: 8px 0 12px 0;
-    font-size: 0.80rem;
+    font-size: 0.8rem;
 }
 
 .form1-01-warning {
-    background: #fff5f5;
-    border: 1px solid #f3c2c2;
-    color: #7a1f1f;
+    background: #ffe5e5;
+    border: 1px solid #ffb3b3;
+    color: #8b0000;
     padding: 16px;
     border-radius: 6px;
     margin: 12px 0 20px 0;
@@ -728,33 +737,33 @@ textarea.form1-01-input {
         margin: 20px auto;
         padding: 30px 20px;
     }
-    
+
     .email-auth-container h2 {
         font-size: 1.6rem;
     }
-    
+
     .email-auth-container p {
         font-size: 0.95rem;
     }
-    
+
     .email-auth-instructions {
         padding: 16px;
         margin: 16px 0;
     }
-    
+
     .email-auth-instructions h3 {
         font-size: 1rem;
     }
-    
+
     .instruction-steps {
         font-size: 0.9rem;
     }
-    
+
     .email-auth-input {
         padding: 12px 14px;
         font-size: 16px; /* Prevent zoom on iOS */
     }
-    
+
     .email-auth-btn {
         padding: 14px 0;
         font-size: 1rem;
@@ -768,38 +777,38 @@ textarea.form1-01-input {
         margin: 15px auto;
         padding: 20px 15px;
     }
-    
+
     .email-auth-container h2 {
         font-size: 1.4rem;
     }
-    
+
     .email-auth-container p {
         font-size: 0.9rem;
     }
-    
+
     .email-auth-instructions {
         padding: 12px;
         margin: 12px 0;
     }
-    
+
     .email-auth-instructions h3 {
         font-size: 0.95rem;
     }
-    
+
     .instruction-steps {
         font-size: 0.85rem;
     }
-    
+
     .email-auth-input {
         padding: 10px 12px;
     }
-    
+
     .email-auth-btn {
         padding: 12px 0;
         font-size: 0.95rem;
         min-height: 44px;
     }
-    
+
     .email-auth-resend {
         font-size: 0.9rem;
     }
@@ -812,23 +821,23 @@ textarea.form1-01-input {
         padding: 12px 8px;
         margin: 8px auto;
     }
-    
+
     .forms-list-header {
         font-size: 1.2rem;
     }
-    
+
     .forms-list-table th,
     .forms-list-table td {
         padding: 8px 6px;
         font-size: 0.9rem;
     }
-    
+
     .forms-signup-btn {
         padding: 10px 16px;
         font-size: 0.9rem;
         min-height: 44px;
     }
-    
+
     .forms-search-input {
         width: 150px;
         font-size: 16px; /* Prevent zoom on iOS */
@@ -841,28 +850,28 @@ textarea.form1-01-input {
         padding: 8px 4px;
         margin: 4px auto;
     }
-    
+
     .forms-list-header {
         font-size: 1.1rem;
     }
-    
+
     .forms-list-table th,
     .forms-list-table td {
         padding: 6px 4px;
         font-size: 0.85rem;
     }
-    
+
     .forms-signup-btn {
         padding: 8px 12px;
         font-size: 0.85rem;
         min-height: 40px;
     }
-    
+
     .forms-search-input {
         width: 120px;
         font-size: 16px;
     }
-    
+
     .forms-search-bar {
         flex-wrap: wrap;
         gap: 6px;
@@ -871,13 +880,12 @@ textarea.form1-01-input {
 
 /* Mobile-First Responsive Base Styles */
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 /* Prevent horizontal scroll on mobile */
-html, body {
+html,
+body {
     overflow-x: hidden;
     width: 100%;
 }
@@ -915,7 +923,7 @@ header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
-    z-index: 1000;
+    z-index: 5;
 }
 
 .top-bar {
@@ -1021,6 +1029,174 @@ nav {
     margin: 0 auto;
 }
 
+/* Carousel Styles */
+.carousel-container {
+    position: relative;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+    /* Width will be set dynamically by JavaScript based on number of slides */
+}
+
+.carousel-slide {
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Width will be set dynamically by JavaScript based on number of slides */
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 12px;
+    display: block;
+}
+
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-arrow:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev {
+    left: 20px;
+}
+
+.carousel-next {
+    right: 20px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active,
+.dot:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+}
+
+/* Carousel Animation */
+.carousel-slides.slide-1 {
+    transform: translateX(0);
+}
+
+.carousel-slides.slide-2 {
+    transform: translateX(-25%);
+}
+
+.carousel-slides.slide-3 {
+    transform: translateX(-50%);
+}
+
+.carousel-slides.slide-4 {
+    transform: translateX(-75%);
+}
+
+/* Responsive Carousel */
+@media (max-width: 768px) {
+    .carousel-wrapper {
+        height: 50vh;
+    }
+
+    .carousel-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    .carousel-prev {
+        left: 10px;
+    }
+
+    .carousel-next {
+        right: 10px;
+    }
+
+    .carousel-dots {
+        bottom: 15px;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-wrapper {
+        height: 250px;
+    }
+
+    .carousel-arrow {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+
+    .carousel-prev {
+        left: 5px;
+    }
+
+    .carousel-next {
+        right: 5px;
+    }
+}
+
 /* Quick Links Styles */
 .quick-links {
     display: grid;
@@ -1047,6 +1223,202 @@ nav {
     flex-direction: row;
 }
 
+/* Footer Styles */
+.footer {
+    background: #1e3a8a;
+    color: #ffffff;
+    margin-top: 4rem;
+    position: relative;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.footer-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    flex-shrink: 0;
+    order: 1;
+}
+
+.footer-text-content {
+    flex: 1;
+    order: 2;
+}
+
+.footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-subtitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.footer-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 0;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-separator {
+    border: none;
+    height: 1px;
+    background: #475569;
+    margin: 0;
+}
+
+.footer-copyright {
+    text-align: center;
+    padding: 1.5rem 2rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+.footer-copyright p {
+    margin: 0;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1rem;
+    }
+
+    .footer-section {
+        text-align: center;
+    }
+
+    .footer-logo-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .footer-logo {
+        width: 100px;
+        height: 100px;
+        order: 1;
+    }
+
+    .footer-text-content {
+        order: 2;
+    }
+
+    .footer-title {
+        font-size: 1.3rem;
+    }
+
+    .footer-description {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-content {
+        padding: 1.5rem 1rem;
+        gap: 1.5rem;
+    }
+
+    .footer-logo {
+        width: 80px;
+        height: 80px;
+    }
+
+    .footer-copyright {
+        padding: 1rem;
+    }
+}
+
+.footer-main {
+    margin-left: -180px;
+}
+
+/* Copyright Section Layout */
+.footer-copyright {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 1.5rem 2rem;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.footer-logo-small {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1200px) {
+    .footer-main {
+        margin-left: -30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-main {
+        margin-left: 0;
+    }
+}
+
 .card:hover {
     transform: translateY(-6px) scale(1.03);
     box-shadow: 0 8px 32px rgba(59, 130, 246, 0.18);
@@ -1064,7 +1436,7 @@ nav {
     font-size: 1.5rem;
     font-weight: 600;
     color: #333;
-    margin: 0; 
+    margin: 0;
 }
 
 /* Footer Styles */
@@ -1150,7 +1522,6 @@ footer {
     background: #f8f8f8;
     border-radius: 8px;
     padding: 24px 20px;
-    margin-bottom: 32px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.04);
 }
 .validation-list dt {
@@ -1289,6 +1660,34 @@ footer {
     }
 }
 
+/* Section Headers for Station/Equipment/Antenna */
+.section-header {
+    background: #4a5568;
+    color: white;
+    text-align: center;
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.station-section,
+.equipment-section,
+.antenna-section {
+    background: #f8f9fa;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.antenna-section {
+    margin-top: 16px;
+}
+
 /* Enhanced Responsive Design */
 
 /* Large Desktop (1200px and up) */
@@ -1296,25 +1695,25 @@ footer {
     .top-bar {
         padding: 1.5rem 3rem;
     }
-    
+
     .title h1 {
         font-size: 1.8rem;
     }
-    
+
     .quick-links {
         grid-template-columns: repeat(3, 1fr);
         gap: 3rem;
         padding: 4rem 3rem;
     }
-    
+
     .card {
         padding: 3rem;
     }
-    
+
     .news {
         padding: 4rem 3rem;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 32px 24px;
@@ -1326,13 +1725,13 @@ footer {
     .top-bar {
         padding: 1.25rem 2.5rem;
     }
-    
+
     .quick-links {
         grid-template-columns: repeat(3, 1fr);
         gap: 2.5rem;
         padding: 3.5rem 2.5rem;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 28px 20px;
@@ -1345,47 +1744,47 @@ footer {
         flex-direction: row;
         padding: 1rem 2rem;
     }
-    
+
     .logo {
         width: 70px;
         height: 70px;
         margin-right: 1.25rem;
     }
-    
+
     .title h1 {
         font-size: 1.4rem;
     }
-    
+
     .title span {
         font-size: 1rem;
     }
-    
+
     .quick-links {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
         padding: 2.5rem 2rem;
     }
-    
+
     .card {
         padding: 2rem;
     }
-    
+
     .news-item {
         flex-direction: row;
         align-items: flex-start;
     }
-    
+
     .news-icon {
         width: 50px;
         height: 50px;
         flex-shrink: 0;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 24px 18px;
     }
-    
+
     .form-card img {
         max-width: 350px;
     }
@@ -1398,29 +1797,29 @@ footer {
         text-align: center;
         padding: 1rem 1.5rem;
     }
-    
+
     .logo {
         width: 60px;
         height: 60px;
         margin-right: 0;
         margin-bottom: 0.75rem;
     }
-    
+
     .title h1 {
         font-size: 1.3rem;
     }
-    
+
     .title span {
         font-size: 0.95rem;
     }
-    
+
     .menu-toggle {
         display: block;
         position: absolute;
         top: 1rem;
         right: 1.5rem;
     }
-    
+
     #navList {
         display: none;
         flex-direction: column;
@@ -1432,46 +1831,46 @@ footer {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
     }
-    
+
     #navList.open {
         display: flex;
     }
-    
+
     #navList li {
         border-bottom: 1px solid #e5e7eb;
         padding: 0.75rem 1.5rem;
     }
-    
+
     .quick-links {
         grid-template-columns: 1fr;
         gap: 1.5rem;
         padding: 2rem 1.5rem;
     }
-    
+
     .card {
         padding: 1.75rem;
     }
-    
+
     .news {
         padding: 2rem 1.5rem;
     }
-    
+
     .news-item {
         flex-direction: column;
         text-align: center;
     }
-    
+
     .news-icon {
         align-self: center;
         width: 50px;
         height: 50px;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 20px 16px;
     }
-    
+
     .form-card img {
         max-width: 300px;
     }
@@ -1484,22 +1883,22 @@ footer {
         text-align: center;
         padding: 0.75rem 1rem;
     }
-    
+
     .logo {
         width: 50px;
         height: 50px;
         margin-right: 0;
         margin-bottom: 0.5rem;
     }
-    
+
     .title h1 {
         font-size: 1.1rem;
     }
-    
+
     .title span {
         font-size: 0.9rem;
     }
-    
+
     .menu-toggle {
         display: block;
         position: absolute;
@@ -1507,7 +1906,7 @@ footer {
         right: 1rem;
         font-size: 1.25rem;
     }
-    
+
     #navList {
         display: none;
         flex-direction: column;
@@ -1519,56 +1918,56 @@ footer {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
     }
-    
+
     #navList.open {
         display: flex;
     }
-    
+
     #navList li {
         border-bottom: 1px solid #e5e7eb;
         padding: 0.75rem 1rem;
     }
-    
+
     .quick-links {
         grid-template-columns: 1fr;
         gap: 1.25rem;
         padding: 1.5rem 1rem;
     }
-    
+
     .card {
         padding: 1.5rem;
     }
-    
+
     .card img {
         width: 60px;
         height: 60px;
     }
-    
+
     .news {
         padding: 1.5rem 1rem;
     }
-    
+
     .news h2 {
         font-size: 1.4rem;
     }
-    
+
     .news-item {
         flex-direction: column;
         text-align: center;
         padding: 1rem;
     }
-    
+
     .news-icon {
         align-self: center;
         width: 45px;
         height: 45px;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
+
     .form-card img {
         max-width: 280px;
     }
@@ -1581,23 +1980,23 @@ footer {
         text-align: center;
         padding: 0.75rem 0.75rem;
     }
-    
+
     .logo {
         width: 45px;
         height: 45px;
         margin-right: 0;
         margin-bottom: 0.5rem;
     }
-    
+
     .title h1 {
         font-size: 1rem;
         line-height: 1.3;
     }
-    
+
     .title span {
         font-size: 0.85rem;
     }
-    
+
     .menu-toggle {
         display: block;
         position: absolute;
@@ -1606,7 +2005,7 @@ footer {
         font-size: 1.25rem;
         padding: 0.25rem;
     }
-    
+
     #navList {
         display: none;
         flex-direction: column;
@@ -1618,84 +2017,84 @@ footer {
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         z-index: 1000;
     }
-    
+
     #navList.open {
         display: flex;
     }
-    
+
     #navList li {
         border-bottom: 1px solid #e5e7eb;
         padding: 0.75rem 0.75rem;
     }
-    
+
     .banner {
         padding: 1rem 0.75rem;
     }
-    
+
     .banner img {
         border-radius: 8px;
     }
-    
+
     .quick-links {
         grid-template-columns: 1fr;
         gap: 1rem;
         padding: 1.5rem 0.75rem;
     }
-    
+
     .card {
         padding: 1.25rem;
     }
-    
+
     .card img {
         width: 50px;
         height: 50px;
     }
-    
+
     .card p {
         font-size: 1rem;
     }
-    
+
     .news {
         padding: 1.5rem 0.75rem;
     }
-    
+
     .news h2 {
         font-size: 1.3rem;
     }
-    
+
     .news-item {
         flex-direction: column;
         text-align: center;
         padding: 1rem;
     }
-    
+
     .news-icon {
         align-self: center;
         width: 40px;
         height: 40px;
     }
-    
+
     .news-content h3 {
         font-size: 1.1rem;
     }
-    
+
     .news-content h5 {
         font-size: 0.85rem;
     }
-    
+
     .news-content p {
         font-size: 0.9rem;
     }
-    
+
     .forms-gallery-grid {
         grid-template-columns: 1fr;
         gap: 12px;
     }
-    
+
     .form-card img {
         max-width: 250px;
     }
-    
+
     .form-card-title {
         font-size: 0.8rem;
         padding: 8px 10px;
@@ -1712,20 +2111,20 @@ footer {
         align-items: center;
         justify-content: center;
     }
-    
+
     #navList li {
         min-height: 44px;
         display: flex;
         align-items: center;
     }
-    
+
     .card {
         min-height: 120px;
         display: flex;
         flex-direction: column;
         justify-content: center;
     }
-    
+
     /* Prevent zoom on input focus */
     input[type="email"],
     input[type="text"],
@@ -1735,7 +2134,7 @@ footer {
     textarea {
         font-size: 16px;
     }
-    
+
     /* Improve button touch targets */
     .email-auth-btn,
     .forms-signup-btn,
@@ -1743,12 +2142,12 @@ footer {
         min-height: 44px;
         padding: 12px 24px;
     }
-    
+
     /* Better spacing for touch */
     .quick-links {
         gap: 1.5rem;
     }
-    
+
     .news-item {
         margin-bottom: 1.25rem;
     }
@@ -1769,24 +2168,24 @@ footer {
     .top-bar {
         padding: 0.5rem 1rem;
     }
-    
+
     .logo {
         width: 40px;
         height: 40px;
     }
-    
+
     .title h1 {
         font-size: 1rem;
     }
-    
+
     .title span {
         font-size: 0.8rem;
     }
-    
+
     .quick-links {
         padding: 1rem;
     }
-    
+
     .card {
         padding: 1rem;
     }
@@ -1901,7 +2300,7 @@ footer {
     text-align: center;
     width: 100%;
     max-width: 420px; /* Match default image max-width */
-    margin: 0 auto;   /* Center to align with image */
+    margin: 0 auto; /* Center to align with image */
 }
 
 .form-card-title {
@@ -2170,13 +2569,13 @@ body {
         flex-direction: column;
         gap: 20px;
     }
-    
+
     .gcash-actions {
         flex-direction: column;
         gap: 15px;
         align-items: center;
     }
-    
+
     .gcash-btn {
         width: 100%;
         max-width: 300px;
@@ -2237,7 +2636,7 @@ body {
 }
 
 .ref-number-cell {
-    font-family: 'Courier New', monospace;
+    font-family: "Courier New", monospace;
     font-weight: 600;
     color: #333;
 }
@@ -2345,7 +2744,8 @@ body {
     gap: 20px;
 }
 
-.transaction-actions .btn-primary, .transaction-actions .btn-secondary {
+.transaction-actions .btn-primary,
+.transaction-actions .btn-secondary {
     padding: 8px 18px;
     border-radius: 18px;
     font-weight: 600;
@@ -2381,43 +2781,43 @@ body {
 
 /* Transaction Page Responsive Design */
 @media (max-width: 768px) {
-    
     .transaction-table-header th,
     .transaction-row td {
         padding: 15px 12px;
         font-size: 0.9rem;
     }
-    
+
     .ref-number-header {
         width: 30%;
     }
-    
+
     .details-header {
         width: 50%;
     }
-    
+
     .actions-header {
         width: 20%;
     }
-    
+
     .detail-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
     }
-    
+
     .detail-label {
         min-width: auto;
         font-size: 0.85rem;
     }
-    
+
     .transaction-actions {
         flex-direction: column;
         gap: 15px;
         padding: 20px;
     }
-    
-    .btn-primary, .btn-secondary {
+
+    .btn-primary,
+    .btn-secondary {
         width: 100%;
         min-width: auto;
     }
@@ -2427,16 +2827,16 @@ body {
     .transaction-table-container {
         font-size: 0.8rem;
     }
-    
+
     .transaction-table-header th,
     .transaction-row td {
         padding: 12px 8px;
     }
-    
+
     .purpose-text {
         font-size: 0.8rem;
     }
-    
+
     .cancel-btn {
         padding: 8px 12px;
         font-size: 0.8rem;
@@ -2577,11 +2977,15 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: transform 0.3s ease, cursor 0.2s ease;
     cursor: pointer;
+    filter: brightness(1.05) contrast(1.05);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .charter-image:hover {
     transform: scale(1.02);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.1) contrast(1.1);
 }
 
 /* Fullscreen Modal Styles */
@@ -2669,52 +3073,52 @@ body {
         margin: 20px auto;
         padding: 20px 16px;
     }
-    
+
     .requirements-header h1 {
         font-size: 1.5rem;
     }
-    
+
     .requirements-nav {
         flex-direction: column;
         gap: 8px;
     }
-    
+
     .nav-btn {
         text-align: center;
         padding: 10px 16px;
     }
-    
+
     .image-container {
         padding: 16px;
     }
-    
+
     .zoom-controls {
         padding: 6px 12px;
         gap: 6px;
     }
-    
+
     .zoom-btn {
         width: 35px;
         height: 35px;
         font-size: 16px;
     }
-    
+
     .zoom-btn.zoom-reset {
         width: 50px;
         font-size: 10px;
     }
-    
+
     .fullscreen-zoom-controls {
         padding: 8px 16px;
         gap: 8px;
     }
-    
+
     .fullscreen-zoom-controls .zoom-btn {
         width: 40px;
         height: 40px;
         font-size: 18px;
     }
-    
+
     .fullscreen-zoom-controls .zoom-btn.zoom-reset {
         width: 60px;
         font-size: 12px;
@@ -2725,51 +3129,51 @@ body {
     .requirements-header h1 {
         font-size: 1.3rem;
     }
-    
+
     .image-container {
         padding: 12px;
     }
-    
+
     .charter-image {
         border-radius: 6px;
     }
-    
+
     .zoom-controls {
         padding: 4px 8px;
         gap: 4px;
         margin-bottom: 10px;
     }
-    
+
     .zoom-btn {
         width: 30px;
         height: 30px;
         font-size: 14px;
     }
-    
+
     .zoom-btn.zoom-reset {
         width: 45px;
         font-size: 9px;
     }
-    
+
     .close-btn {
         top: -40px;
         width: 35px;
         height: 35px;
         font-size: 20px;
     }
-    
+
     .fullscreen-zoom-controls {
         padding: 6px 12px;
         gap: 6px;
         margin-bottom: 15px;
     }
-    
+
     .fullscreen-zoom-controls .zoom-btn {
         width: 35px;
         height: 35px;
         font-size: 16px;
     }
-    
+
     .fullscreen-zoom-controls .zoom-btn.zoom-reset {
         width: 50px;
         font-size: 10px;
@@ -2802,7 +3206,6 @@ body {
 }
 
 .payment-options {
-    display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-bottom: 32px;
@@ -2938,8 +3341,12 @@ body {
 }
 
 @keyframes payment-spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .payment-continue-btn.loading .payment-loading-spinner {
@@ -2957,34 +3364,34 @@ body {
         margin: 20px auto;
         padding: 30px 20px;
     }
-    
+
     .payment-method-container h2 {
         font-size: 1.6rem;
     }
-    
+
     .payment-options {
         grid-template-columns: 1fr;
         gap: 16px;
     }
-    
+
     .payment-option {
         padding: 20px 16px;
     }
-    
+
     .payment-option-icon {
         width: 56px;
         height: 56px;
         font-size: 24px;
     }
-    
+
     .payment-option-title {
         font-size: 1.1rem;
     }
-    
+
     .payment-option-description {
         font-size: 0.85rem;
     }
-    
+
     .payment-continue-btn {
         padding: 12px 24px;
         font-size: 1rem;
@@ -2997,34 +3404,34 @@ body {
         margin: 15px auto;
         padding: 20px 15px;
     }
-    
+
     .payment-method-container h2 {
         font-size: 1.4rem;
     }
-    
+
     .payment-method-container p {
         font-size: 0.9rem;
         margin-bottom: 24px;
     }
-    
+
     .payment-option {
         padding: 16px 12px;
     }
-    
+
     .payment-option-icon {
         width: 48px;
         height: 48px;
         font-size: 20px;
     }
-    
+
     .payment-option-title {
         font-size: 1rem;
     }
-    
+
     .payment-option-description {
         font-size: 0.8rem;
     }
-    
+
     .payment-continue-btn {
         padding: 10px 20px;
         font-size: 0.95rem;
@@ -3444,64 +3851,64 @@ body {
         flex-direction: column;
         gap: 20px;
     }
-    
+
     .gcash-payment-interface .gcash-card {
         padding: 20px;
     }
-    
+
     .gcash-payment-interface .gcash-qr img {
         width: 250px;
     }
-    
+
     .cash-payment-interface .cash-payment-container {
         padding: 30px 20px;
     }
-    
+
     .cash-payment-interface .cash-header-section {
         flex-direction: column;
         text-align: center;
         gap: 16px;
     }
-    
+
     .cash-payment-interface .cash-content-grid {
         flex-direction: column;
         gap: 16px;
     }
-    
+
     .cash-payment-interface .cash-bottom-section {
         flex-direction: column;
         gap: 12px;
     }
-    
+
     .cash-payment-interface .payment-info {
         padding: 16px;
     }
-    
+
     .cash-payment-interface .office-hours {
         padding: 14px;
     }
-    
+
     .cash-payment-interface .office-location {
         padding: 14px;
     }
-    
+
     .cash-payment-interface .payment-instructions {
         padding: 12px;
     }
-    
+
     .cash-payment-interface .important-notes {
         padding: 12px;
     }
-    
+
     .cash-payment-interface .location-content {
         flex-direction: column;
         gap: 16px;
     }
-    
+
     .cash-payment-interface .location-details {
         min-width: auto;
     }
-    
+
     .cash-payment-interface .maps-container {
         min-width: auto;
     }
@@ -3511,58 +3918,366 @@ body {
     .gcash-payment-interface .gcash-card {
         padding: 16px;
     }
-    
+
     .gcash-payment-interface .gcash-qr img {
         width: 220px;
     }
-    
+
     .gcash-payment-interface .gcash-instructions {
         padding: 16px;
     }
-    
+
     .cash-payment-interface .cash-payment-container {
         padding: 20px 15px;
     }
-    
+
     .cash-payment-interface .cash-header-section {
         gap: 12px;
     }
-    
+
     .cash-payment-interface .header-content h2 {
         font-size: 1.5rem;
     }
-    
+
     .cash-payment-interface .header-content p {
         font-size: 0.9rem;
     }
-    
+
     .cash-payment-interface .cash-content-grid {
         gap: 12px;
     }
-    
+
     .cash-payment-interface .cash-bottom-section {
         gap: 10px;
     }
-    
+
     .cash-payment-interface .info-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 4px;
     }
-    
+
     .cash-payment-interface .office-location {
         padding: 12px;
     }
-    
+
     .cash-payment-interface .payment-instructions {
         padding: 10px;
     }
-    
+
     .cash-payment-interface .important-notes {
         padding: 10px;
     }
-    
+
     .cash-payment-interface .maps-container iframe {
         height: 250px;
+    }
+}
+
+/* Center Equipment Particulars table */
+#step-equipment .table-container {
+    display: flex;
+    justify-content: center;
+}
+#step-equipment .form-table {
+    width: auto;
+    min-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#step-equipment .form-table th,
+#step-equipment .form-table td {
+    text-align: center;
+}
+
+/* ============================================
+   Step Progress Indicator Styles
+   ============================================ */
+
+.steps,
+.steps-gcash,
+.steps-cash {
+    margin: 32px 0;
+    padding: 0;
+}
+
+.steps ol,
+.steps-gcash ol,
+.steps-cash ol {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    position: relative;
+    flex-wrap: wrap;
+}
+
+/* Progress line connecting steps (background) */
+.steps ol::before,
+.steps-gcash ol::before,
+.steps-cash ol::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 2px;
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+/* Progress line for completed/active steps (foreground) */
+.steps ol::after,
+.steps-gcash ol::after,
+.steps-cash ol::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #10b981 0%, #3b82f6 50%, #3b82f6 100%);
+    border-radius: 2px;
+    z-index: 1;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    width: var(--progress-width, 0%);
+    box-shadow: 0 1px 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Individual Step Item */
+.steps .step-item,
+.steps-gcash .step-item,
+.steps-cash .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 180px;
+    max-width: 280px;
+    padding: 0 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    text-align: center;
+    color: #6b7280;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding-top: 56px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    list-style: none;
+}
+
+/* Step Circle/Badge */
+.steps .step-item::before,
+.steps-gcash .step-item::before,
+.steps-cash .step-item::before {
+    content: attr(data-step);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #e5e7eb;
+    color: #6b7280;
+    font-weight: 700;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Pending State (default) */
+.steps .step-item[data-step],
+.steps-gcash .step-item[data-step],
+.steps-cash .step-item[data-step] {
+    color: #9ca3af;
+}
+
+/* Active State */
+.steps .step-item.active::before,
+.steps-gcash .step-item.active::before,
+.steps-cash .step-item.active::before {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-color: #3b82f6;
+    color: #ffffff;
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.steps .step-item.active,
+.steps-gcash .step-item.active,
+.steps-cash .step-item.active {
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* Completed State */
+.steps .step-item.completed::before,
+.steps-gcash .step-item.completed::before,
+.steps-cash .step-item.completed::before {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    color: #ffffff;
+    content: "✓";
+    font-size: 20px;
+    font-weight: 700;
+    transform: translateX(-50%);
+}
+
+.steps .step-item.completed,
+.steps-gcash .step-item.completed,
+.steps-cash .step-item.completed {
+    color: #059669;
+}
+
+/* Hover Effect */
+.steps .step-item:hover::before,
+.steps-gcash .step-item:hover::before,
+.steps-cash .step-item:hover::before {
+    transform: translateX(-50%) scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Step Action Buttons Container */
+.steps > div[style*="margin-top"],
+.steps-gcash > div[style*="margin-top"],
+.steps-cash > div[style*="margin-top"] {
+    margin-top: 32px !important;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Button Styles for Step Actions */
+.steps .btn-primary,
+.steps-gcash .btn-primary,
+.steps-cash .btn-primary {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.steps .btn-primary:hover,
+.steps-gcash .btn-primary:hover,
+.steps-cash .btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.steps .btn-primary:active,
+.steps-gcash .btn-primary:active,
+.steps-cash .btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design for Steps */
+@media (max-width: 768px) {
+    .steps ol,
+    .steps-gcash ol,
+    .steps-cash ol {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+    }
+
+    .steps ol::before,
+    .steps-gcash ol::before,
+    .steps-cash ol::before {
+        display: none;
+    }
+
+    .steps ol::after,
+    .steps-gcash ol::after,
+    .steps-cash ol::after {
+        display: none;
+    }
+
+    .steps .step-item,
+    .steps-gcash .step-item,
+    .steps-cash .step-item {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        min-width: auto;
+        max-width: none;
+        padding: 0;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    .steps .step-item::before,
+    .steps-gcash .step-item::before,
+    .steps-cash .step-item::before {
+        flex-shrink: 0;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+    }
+
+    .steps .step-item.active::before,
+    .steps-gcash .step-item.active::before,
+    .steps-cash .step-item.active::before {
+        transform: scale(1.1);
+    }
+
+    .steps .step-item.completed::before,
+    .steps-gcash .step-item.completed::before,
+    .steps-cash .step-item.completed::before {
+        transform: none;
+    }
+
+    .steps .step-item:hover::before,
+    .steps-gcash .step-item:hover::before,
+    .steps-cash .step-item:hover::before {
+        transform: scale(1.15);
+    }
+}
+
+@media (max-width: 480px) {
+    .steps .step-item::before,
+    .steps-gcash .step-item::before,
+    .steps-cash .step-item::before {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+
+    .steps .step-item,
+    .steps-gcash .step-item,
+    .steps-cash .step-item {
+        font-size: 12px;
+        gap: 12px;
+    }
+
+    .steps .btn-primary,
+    .steps-gcash .btn-primary,
+    .steps-cash .btn-primary {
+        padding: 10px 20px;
+        font-size: 13px;
+        width: 100%;
     }
 }

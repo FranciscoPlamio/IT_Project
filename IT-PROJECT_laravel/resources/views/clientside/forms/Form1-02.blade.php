@@ -12,9 +12,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those
                 fields on site and you will need to set a new appointment.
-                <div class="form1-01-agree">
-                    <label><input type="checkbox" /> I agree / Malinaw sa akin</label>
-                </div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
             {{-- style="pointer-events: none; --}}
             <div class="form-layout">
@@ -34,6 +33,10 @@
 
                 <div>
                     <section class="step-content active" id="step-personal">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset>
                             <legend>Applicant's Details</legend>
 
@@ -47,7 +50,7 @@
                             <div class="form-grid-3">
 
                                 <div class="form-field">
-                                    <label class="form-label">Weight (kg)</label>
+                                    <label class="form-label">Weight (kg)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="weight"
                                         value="{{ old('weight', $form['weight'] ?? '') }}">
                                     @error('weight')
@@ -55,7 +58,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Height (cm)</label>
+                                    <label class="form-label">Height (cm)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="height"
                                         value="{{ old('height', $form['height'] ?? '') }}">
                                     @error('height')
@@ -115,7 +118,7 @@
 
                     <section class="step-content" id="step-application">
                         <fieldset class="fieldset-compact">
-                            <legend>Type of Application & Certificate</legend>
+                            <legend>Type of Application & Certificate<span class="text-red"> *</span></legend>
 
                             @php
                                 $applicationType = old('application_type', $form['application_type'] ?? null);
@@ -125,58 +128,176 @@
 
                                 <fieldset class="fieldset-compact">
                                     <!-- Application type fields -->
-                                    <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType" />
+                                    <div class="form-field">
+
+                                        @if ($category === 'mod')
+                                            <label>
+                                                <input type="radio" name="application_type" value="modification"
+                                                    {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}checked>MODIFICATION
+                                            </label>
+                                            @error('application_type')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                            <input class="form1-01-input mt-4" type="text" name="modification_reason"
+                                                placeholder="Reason"
+                                                value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
+                                            @error('modification_reason')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        @else
+                                            <label>
+                                                <input type="radio" name="application_type" value="new"
+                                                    {{ old('application_type', $form['application_type'] ?? '') === 'new' ? 'checked' : '' }}>
+                                                NEW
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="application_type" value="renewal"
+                                                    {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
+                                                RENEWAL</label>
+                                        @endif
+                                        @if ($category !== 'mod')
+                                            <label class="form-label">No. of Years</label>
+                                            <select name="years"
+                                                class="form1-01-input w-full border rounded px-3 py-2"
+                                                value="{{ old('years', $form['years'] ?? '') }}">
+                                                <option value="" disabled selected>Select years</option>
+                                                <option value="1"
+                                                    {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1
+                                                </option>
+                                                <option value="2"
+                                                    {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2
+                                                </option>
+                                                <option value="3"
+                                                    {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3
+                                                </option>
+                                            </select>
+                                            @error('years')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        @endif
+                                    </div>
                                 </fieldset>
 
-                                <div class="form-field" data-require-one="input[type=checkbox]">
+                                <div class="form-field" data-require-one="input[type=radio]">
                                     @error('certificate_type')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
-                                    <label class="form-label">Type of Certificate</label>
+                                    <label class="form-label">Type of Certificate<span class="text-red">
+                                            *</span></label>
                                     @php
                                         $certificateType = old('certificate_type', $form['certificate_type'] ?? null);
                                     @endphp
+                                    @if ($category === 'roc')
+                                        <label>
+                                            <input type="radio" name="certificate_type" value="1RTG"
+                                                {{ $certificateType == 'new' ? 'checked' : '' }}>
+                                            1RTG (First-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
+                                            2RTG (Second-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
+                                            3RTG (Third-class Radiotelegraph Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
+                                            1PHN (First-class Radiotelephone Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
+                                            2PHN (Second-class Radiotelephone Operator Certificate)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
+                                            3PHN (Third-class Radiotelephone Operator Certificate)
+                                        </label>
+                                    @elseif ($category === 'rroc')
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}
+                                                checked>
+                                            RROC-Aircraft (Restricted Radiotelephone Operator’s Certificate – Aircraft)
+                                        </label>
+                                    @elseif ($category === 'tprroc')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}
+                                                checked>
+                                            TP RROC-Aircraft (Foreign Pilot)
+                                        </label>
+                                    @elseif ($category === 'srop')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}
+                                                checked>
+                                            SROP (Special Radio Operator's Permit)</label>
+                                    @elseif ($category === 'groc')
+                                        <label><input type="radio" name="certificate_type"
+                                                value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}
+                                                checked>
+                                            GROC
+                                            (Government Radio Operator Certificate)
+                                        </label>
+                                    @elseif ($category === 'rrocrlm')
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}
+                                                checked>
+                                            RROC-Land Mobile (Restricted Radiotelephone Operator’s Certificate for
+                                            Land Mobile Station )</label>
+                                    @elseif ($category === 'mod')
+                                        <label>
+                                            <input type="radio" name="certificate_type" value="1RTG"
+                                                {{ $certificateType == 'new' ? 'checked' : '' }}>
+                                            1RTG (First-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
+                                            2RTG (Second-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
+                                            3RTG (Third-class Radiotelegraph Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
+                                            1PHN (First-class Radiotelephone Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
+                                            2PHN (Second-class Radiotelephone Operator Certificate)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
+                                            3PHN (Third-class Radiotelephone Operator Certificate)</label>
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}>
+                                            RROC-Aircraft (Restricted Radiotelephone Operator’s Certificate – Aircraft)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}>
+                                            TP RROC-Aircraft (Foreign Pilot)
+                                        </label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}>
+                                            SROP (Special Radio Operator's Permit)</label>
+                                        <label><input type="radio" name="certificate_type"
+                                                value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}>
+                                            GROC
+                                            (Government Radio Operator Certificate)
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="certificate_type"
+                                                value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}>
+                                            RROC-Land Mobile (Restricted Radiotelephone Operator’s Certificate for
+                                            Land Mobile Station )</label>
+                                    @endif
 
-                                    <label>
-                                        <input type="radio" name="certificate_type" value="1RTG"
-                                            {{ $certificateType == 'new' ? 'checked' : '' }}>
-                                        1RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="2RTG"{{ $certificateType == '2RTG' ? 'checked' : '' }}>
-                                        2RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="3RTG"{{ $certificateType == '3RTG' ? 'checked' : '' }}>
-                                        3RTG</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="1PHN"{{ $certificateType == '1PHN' ? 'checked' : '' }}>
-                                        1PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="2PHN"{{ $certificateType == '2PHN' ? 'checked' : '' }}>
-                                        2PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="3PHN"{{ $certificateType == '3PHN' ? 'checked' : '' }}>
-                                        3PHN</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="SROP"{{ $certificateType == 'SROP' ? 'checked' : '' }}>
-                                        SROP</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="RROC-Land Mobile"{{ $certificateType == 'RROC-Land Mobile' ? 'checked' : '' }}>
-                                        RROC-Land Mobile (RLM)</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="RROC-Aircraft"{{ $certificateType == 'RROC-Aircraft' ? 'checked' : '' }}>
-                                        RROC-Aircraft</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="GROC"{{ $certificateType == 'GROC' ? 'checked' : '' }}> GROC
-                                        (Government)</label>
-                                    <label><input type="radio" name="certificate_type"
-                                            value="TP RROC-Aircraft"{{ $certificateType == 'TP RROC-Aircraft' ? 'checked' : '' }}>
-                                        TP RROC-Aircraft (Foreign Pilot)</label>
-                                    <label><input type="radio" name="certificate_type"
+
+
+
+                                    {{-- <label><input type="radio" name="certificate_type"
                                             value="others"{{ $certificateType == 'others' ? 'checked' : '' }}>
                                         OTHERS,
                                         specify</label>
                                     <input class="form1-01-input" type="text" name="others_specify"
-                                        placeholder="Specify if others">
+                                        placeholder="Specify if others"> --}}
                                 </div>
                             </div>
                             <div class="step-actions">
@@ -192,22 +313,20 @@
 
                             <!-- Exam fields -->
                             <div class="form-grid-3">
-                                <div class="form-field">
-                                    <label class="form-label">Place of Exam/Seminar</label>
-                                    <x-forms.exam-fields :form="$form ?? []" />
-                                    <!-- CAPTCHA fields -->
-                                    <div class="form-field"
-                                        style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
-                                        <div class="g-recaptcha"
-                                            data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
-                                        @if (session('captcha_error'))
-                                            <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
-                                        @endif
-                                    </div>
-                                    <div class="step-actions"><button class="form1-01-btn" type="button"
-                                            id="validateBtn">Proceed to Validation</button>
-                                    </div>
+                                <x-forms.exam-fields :form="$form ?? []" />
+                                <!-- CAPTCHA fields -->
+                                <div class="form-field"
+                                    style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                                    <div class="g-recaptcha"
+                                        data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
+                                    @if (session('captcha_error'))
+                                        <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                                    @endif
                                 </div>
+                                <div class="step-actions"><button class="form1-01-btn" type="button"
+                                        id="validateBtn">Proceed to Validation</button>
+                                </div>
+
                             </div>
                         </fieldset>
                     </section>
@@ -229,8 +348,36 @@
                     form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
                 }
                 const validationLink02 = document.getElementById('validationLink02');
+                const warningCheckbox = document.getElementById('warning-agreement');
+
+                // Function to disable/enable all form fields
+                function toggleFormFields(enabled) {
+                    const formFields = form.querySelectorAll('input, select, textarea, button');
+                    formFields.forEach(field => {
+                        // Skip the warning checkbox itself and hidden inputs
+                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                            return;
+                        }
+                        field.disabled = !enabled;
+                    });
+                }
+
+                // Initially disable all form fields
+                toggleFormFields(false);
+
+                // Add event listener to warning checkbox
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleFormFields(this.checked);
+                    });
+                }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'application') {
+                        return;
+                    }
+
                     stepsList.querySelectorAll('.step-item').forEach(li => {
                         li.classList.toggle('active', li.dataset.step === step);
                     });
@@ -286,19 +433,73 @@
                         li.classList.remove('completed');
                         li.querySelector('.step-status').textContent = '';
                     }
+                    console.log(valid);
                     return valid;
                 }
 
+                // Disable sidebar click navigation; use Next/Back only
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
+                    // Intentionally do nothing to enforce Next/Back navigation only
                 });
 
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     if (validateActiveStep()) go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
+
+
+                // --- Toggle enable/disable for conditional textboxes ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !isModification) return;
+                    const enabled = isModification.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleOthersSpecify() {
+                    const othersSpecify = form.querySelector('input[name="others_specify"]');
+                    const othersRadio = form.querySelector('input[name="certificate_type"][value="others"]');
+                    if (!othersSpecify || !othersRadio) return;
+                    const enabled = othersRadio.checked;
+                    othersSpecify.disabled = !enabled;
+                    if (!enabled) othersSpecify.value = '';
+                }
+
+                // Bind change listeners for radios controlling the conditional fields
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+                form.querySelectorAll('input[name="certificate_type"]').forEach(r => {
+                    r.addEventListener('change', toggleOthersSpecify);
+                });
+
+                // Initialize states on load
+                toggleModificationReason();
+                toggleOthersSpecify();
+
+                // Keep conditional fields in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleOthersSpecify();
+                    });
+                }
+
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
@@ -317,6 +518,10 @@
                             }
                         } catch (e) {}
                         const formData = new FormData(form);
+                        formData.forEach((value, key) => {
+                            console.log(`${key}: ${value}`);
+                        });
+                        if (!validateActiveStep()) return;
                         form.submit();
 
                         // const entries = {};

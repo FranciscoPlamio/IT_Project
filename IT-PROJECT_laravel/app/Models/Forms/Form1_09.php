@@ -25,6 +25,7 @@ class Form1_09 extends BaseForm
         'applicant',
         'validity',
         'cpc_cpcn_pa_rsl_no',
+        'permit_type',
 
         // Application details
         'application_type',

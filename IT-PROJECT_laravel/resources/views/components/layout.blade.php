@@ -15,6 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{ $head }}
+
 </head>
 
 <body>
@@ -29,14 +30,22 @@
         {{ $slot }}
     </main>
 
+    <!-- Footer -->
+    <x-footer />
+
+    <x-flash-message />
+
     <script>
         const toggle = document.getElementById("menuToggle");
         const navList = document.getElementById("navList");
-
-        toggle.addEventListener("click", () => {
-            navList.classList.toggle("open");
-        });
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                navList.classList.toggle("open");
+            });
+        }
     </script>
+    <!-- Include Alpine.js -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </body>
 
 </html>

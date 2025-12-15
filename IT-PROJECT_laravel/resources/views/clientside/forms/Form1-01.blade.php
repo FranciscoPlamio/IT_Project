@@ -1,8 +1,10 @@
 <x-layout :title="'Application for Radio Operator Examination (Form 1-01)'" :form-header="['formNo' => 'NTC 1-01', 'revisionNo' => '03', 'revisionDate' => '03/31/2023']">
-
     <main>
         <form class="form1-01-container" id="form101" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
+            <a href="{{ route('display.forms') }}" class="inline-flex items-center hover:underline">
+                &#8592; Back
+            </a>
             @csrf
             <input type="hidden" name="form_token"
                 value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
@@ -12,7 +14,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those fields on
                 site and you will need to set a new appointment.
-                <div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa akin</label></div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
 
             <div class="form-layout">
@@ -32,6 +35,10 @@
 
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Instructions</legend>
                             <ol style="margin:8px 0 0 20px;font-size:0.97rem;">
@@ -49,6 +56,10 @@
                         @endphp
 
 
+                        <legend>Examination Type <span class="text-red">*</span></legend>
+                        @error('exam_type')
+                            <p class="text-red text-lg text-center w-full">{{ $message }}</p>
+                        @enderror
                         <fieldset class="fieldset-compact">
                             <legend>Radiotelegraphy</legend>
                             <div class="form-field">
@@ -164,9 +175,6 @@
                             </div> --}}
                         </div>
                         <div class="step-actions">
-                            @error('exam_type')
-                                <p class="text-red text-lg text-center w-full">{{ $message }}</p>
-                            @enderror
                             <button type="button" class="btn-primary" data-next>Next</button>
                         </div>
                     </section>
@@ -186,33 +194,32 @@
 
 
                             <div class="form-field">
-                                <label class="form-label">School Attended <span class="required-asterisk">*</span></label>
+                                <label class="form-label">School Attended <span
+                                        class="required-asterisk">*</span></label>
                                 <input class="form1-01-input" type="text" name="school_attended" required
                                     value="{{ old('school_attended', $form['school_attended'] ?? '') }}"
-                                    placeholder="Enter the name of your school"
-                                    data-validation="text">
+                                    placeholder="Enter the name of your school" data-validation="text">
                                 @error('school_attended')
                                     <p class="text-red text-sm mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                             <div class="form-grid-3">
                                 <div class="form-field">
-                                    <label class="form-label">Course Taken <span class="required-asterisk">*</span></label>
+                                    <label class="form-label">Course Taken <span
+                                            class="required-asterisk">*</span></label>
                                     <input class="form1-01-input" type="text" name="course_taken" required
                                         value="{{ old('course_taken', $form['course_taken'] ?? '') }}"
-                                        placeholder="Enter your course/degree"
-                                        data-validation="text">
+                                        placeholder="Enter your course/degree" data-validation="text">
                                     @error('course_taken')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Year Graduated <span class="required-asterisk">*</span></label>
+                                    <label class="form-label">Year Graduated <span
+                                            class="required-asterisk">*</span></label>
                                     <input class="form1-01-input" type="text" name="year_graduated" required
                                         value="{{ old('year_graduated', $form['year_graduated'] ?? '') }}"
-                                        placeholder="e.g., 2020"
-                                        data-validation="year"
-                                        maxlength="4">
+                                        placeholder="e.g., 2020" data-validation="year" maxlength="4">
                                     @error('year_graduated')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -233,13 +240,15 @@
                                         examination? <span class="required-asterisk">*</span></label>
                                     <div class="inline-radio">
                                         <label>
-                                            <input id="needs_yes" type="radio" name="needs" value="1" required
+                                            <input id="needs_yes" type="radio" name="needs" value="1"
+                                                required
                                                 {{ old('needs', $form['needs'] ?? '') === '1' ? 'checked' : '' }}
                                                 data-validation="radio">
                                             Yes
                                         </label>
                                         <label>
-                                            <input type="radio" name="needs" value="0" id="needs_no" required
+                                            <input type="radio" name="needs" value="0" id="needs_no"
+                                                required
                                                 {{ old('needs', $form['needs'] ?? '') === '0' ? 'checked' : '' }}
                                                 data-validation="radio">
                                             No
@@ -254,8 +263,7 @@
                                         request.</label>
                                     <input id="needs_details" class="form1-01-input" type="text"
                                         name="needs_details" value="{{ $form['needs_details'] ?? '' }}" disabled
-                                        placeholder="Describe your special needs or requests"
-                                        data-validation="text">
+                                        placeholder="Describe your special needs or requests" data-validation="text">
                                     @error('needs_details')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -270,8 +278,10 @@
                                     <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
                                 @endif
                             </div>
-                            <div class="step-actions"><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button>
+                            <div class="step-actions">
+                                <button type="button" class="btn-secondary" data-prev>Back</button>
+                                <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
+                                    Validation</button>
                             </div>
                         </fieldset>
                     </section>
@@ -385,22 +395,65 @@
                 class FormValidator {
                     constructor() {
                         this.validationRules = {
-                            'first_name': { required: true, minLength: 2, pattern: /^[A-Za-z\s]+$/ },
-                            'last_name': { required: true, minLength: 2, pattern: /^[A-Za-z\s]+$/ },
-                            'middle_name': { required: false, pattern: /^[A-Za-z\s]*$/ },
-                            'dob': { required: true, type: 'date' },
-                            'sex': { required: true },
-                            'nationality': { required: true },
-                            'province': { required: true },
-                            'city': { required: true },
-                            'barangay': { required: true },
-                            'zip_code': { required: true },
-                            'contact_number': { required: true, pattern: /^(\+63|0)?[0-9]{10}$/ },
-                            'email': { required: true, type: 'email' },
-                            'school_attended': { required: true, minLength: 2 },
-                            'course_taken': { required: true, minLength: 2 },
-                            'year_graduated': { required: true, pattern: /^\d{4}$/ },
-                            'needs': { required: true }
+                            'first_name': {
+                                required: true,
+                                minLength: 2,
+                                pattern: /^[A-Za-z\s]+$/
+                            },
+                            'last_name': {
+                                required: true,
+                                minLength: 2,
+                                pattern: /^[A-Za-z\s]+$/
+                            },
+                            'middle_name': {
+                                required: false,
+                                pattern: /^[A-Za-z\s]*$/
+                            },
+                            'dob': {
+                                required: true,
+                                type: 'date'
+                            },
+                            'sex': {
+                                required: true
+                            },
+                            'nationality': {
+                                required: true
+                            },
+                            'province': {
+                                required: true
+                            },
+                            'city': {
+                                required: true
+                            },
+                            'barangay': {
+                                required: true
+                            },
+                            'zip_code': {
+                                required: true
+                            },
+                            'contact_number': {
+                                required: true,
+                                pattern: /^(\+63|0)?[0-9]{10}$/
+                            },
+                            'email': {
+                                required: true,
+                                type: 'email'
+                            },
+                            'school_attended': {
+                                required: true,
+                                minLength: 2
+                            },
+                            'course_taken': {
+                                required: true,
+                                minLength: 2
+                            },
+                            'year_graduated': {
+                                required: true,
+                                pattern: /^\d{4}$/
+                            },
+                            'needs': {
+                                required: true
+                            }
                         };
                         this.init();
                     }
@@ -443,7 +496,8 @@
                                 errorMessage = 'Please enter a valid Philippine phone number (e.g., 09123456789).';
                             } else if (fieldName === 'year_graduated') {
                                 errorMessage = 'Please enter a valid 4-digit year (e.g., 2020).';
-                            } else if (fieldName === 'first_name' || fieldName === 'last_name' || fieldName === 'middle_name') {
+                            } else if (fieldName === 'first_name' || fieldName === 'last_name' || fieldName ===
+                                'middle_name') {
                                 errorMessage = 'Please enter a valid name using only letters and spaces.';
                             } else {
                                 errorMessage = `Please enter a valid ${this.getFieldLabel(field)}.`;
@@ -453,7 +507,8 @@
                         // Length validation
                         if (isValid && value && rules.minLength && value.length < rules.minLength) {
                             isValid = false;
-                            errorMessage = `${this.getFieldLabel(field)} must be at least ${rules.minLength} characters.`;
+                            errorMessage =
+                                `${this.getFieldLabel(field)} must be at least ${rules.minLength} characters.`;
                         }
 
                         // Email validation
@@ -484,7 +539,7 @@
                         // Remove existing error styling
                         field.classList.remove('field-error');
                         field.classList.remove('field-success');
-                        
+
                         // Remove existing error message
                         const existingError = field.parentNode.querySelector('.field-error-message');
                         if (existingError) {
@@ -494,17 +549,17 @@
                         if (!isValid) {
                             // Add the error class to the field
                             field.classList.add('field-error');
-                            
+
                             // Force a style update
                             field.style.border = '2px solid #dc3545';
                             field.style.backgroundColor = '#fff5f5';
-                            
+
                             // Add error message with enhanced styling
                             const errorDiv = document.createElement('div');
                             errorDiv.className = 'field-error-message';
                             errorDiv.textContent = errorMessage;
                             field.parentNode.appendChild(errorDiv);
-                            
+
                             console.log('Applied error styling to field:', field.name, 'with class:', field.className);
                         }
                     }
@@ -521,7 +576,7 @@
                             field.classList.remove('field-error');
                             field.style.border = '';
                             field.style.backgroundColor = '';
-                            
+
                             // Remove error message
                             const existingError = field.parentNode.querySelector('.field-error-message');
                             if (existingError) {
@@ -543,7 +598,8 @@
                                 field.classList.remove('field-error');
                                 field.style.border = '';
                                 field.style.backgroundColor = '';
-                                const existingError = field.parentNode.querySelector('.field-error-message');
+                                const existingError = field.parentNode.querySelector(
+                                '.field-error-message');
                                 if (existingError) {
                                     existingError.remove();
                                 }
@@ -591,7 +647,11 @@
                                 this.showValidationSummary(step, invalidFields);
                             }
 
-                            return { valid, errors, invalidFields };
+                            return {
+                                valid,
+                                errors,
+                                invalidFields
+                            };
                         };
                     }
 
@@ -614,10 +674,11 @@
                             color: #dc3545;
                             font-weight: 600;
                         `;
-                        
+
                         const fieldLabels = invalidFields.map(fieldName => {
                             const field = document.querySelector(`[name="${fieldName}"]`);
-                            const label = field ? field.closest('.form-field')?.querySelector('label')?.textContent?.replace('*', '').trim() : fieldName;
+                            const label = field ? field.closest('.form-field')?.querySelector('label')
+                                ?.textContent?.replace('*', '').trim() : fieldName;
                             return label || fieldName;
                         });
 
@@ -643,7 +704,7 @@
                             </div>
                             <div class="form-progress-text" id="progressText">Step 1 of 3</div>
                         `;
-                        
+
                         form.insertBefore(progressContainer, form.firstChild);
                         this.updateProgress();
                     }
@@ -651,10 +712,10 @@
                     updateProgress() {
                         const currentStepIndex = stepsOrder.indexOf(currentStep());
                         const progress = ((currentStepIndex + 1) / stepsOrder.length) * 100;
-                        
+
                         const progressFill = document.getElementById('progressFill');
                         const progressText = document.getElementById('progressText');
-                        
+
                         if (progressFill) {
                             progressFill.style.width = `${progress}%`;
                         }
@@ -671,7 +732,7 @@
                     document.querySelectorAll('.step-content').forEach(s => {
                         s.classList.toggle('active', s.id === `step-${step}`);
                     });
-                    
+
                     // Update progress when step changes
                     if (window.formValidator) {
                         window.formValidator.updateProgress();
@@ -694,7 +755,8 @@
                     section.querySelectorAll('[data-require-one]').forEach(group => {
                         const selector = group.getAttribute('data-require-one');
                         const items = group.querySelectorAll(selector);
-                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type ===
+                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el
+                            .type ===
                             'radio') ? el.checked : Boolean(el.value));
                         if (!anyChecked) ok = false;
                     });
@@ -715,6 +777,13 @@
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
+
+                    // Only allow navigation to application step if checkbox not checked
+                    if (!warningCheckbox.checked && li.dataset.step !== 'application') {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+
                     showStep(li.dataset.step);
                 });
 
@@ -735,19 +804,35 @@
                         }
 
                         const errorDiv = document.createElement('p');
-                        errorDiv.className = 'text-red text-sm mt-1';
+                        errorDiv.className = 'text-red text-sm mt-1 text-right';
                         errorDiv.textContent = errorMessage;
-                        const existingError = document.querySelector(
-                            `#step-${currentStepName} .step-actions .text-red`);
+
+                        let x = document.querySelector(`#step-${currentStepName} .step-actions`)
+                            .parentElement
+                        const existingError = x.querySelector('p.text-red');
+
                         if (existingError) existingError.remove();
-                        document.querySelector(`#step-${currentStepName} .step-actions`).appendChild(errorDiv);
+                        document.querySelector(`#step-${currentStepName} .step-actions`)
+                            .parentElement
+                            .appendChild(errorDiv);;
                     }
                 }));
-                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);
@@ -756,7 +841,8 @@
                             // Show validation error message
                             const errorDiv = document.createElement('p');
                             errorDiv.className = 'text-red text-sm mt-1';
-                            errorDiv.textContent = 'Please complete all required fields before proceeding.';
+                            errorDiv.textContent =
+                                'Please complete all required fields before proceeding.';
                             const existingError = document.querySelector('.step-actions .text-red');
                             if (existingError) existingError.remove();
                             document.querySelector('.step-actions').appendChild(errorDiv);
@@ -768,8 +854,10 @@
                                 if (!captchaResponse) {
                                     const errorDiv = document.createElement('p');
                                     errorDiv.className = 'text-red text-sm mt-1';
-                                    errorDiv.textContent = 'Please complete the CAPTCHA before proceeding.';
-                                    document.querySelector('.g-recaptcha').parentNode.appendChild(errorDiv);
+                                    errorDiv.textContent =
+                                        'Please complete the CAPTCHA before proceeding.';
+                                    document.querySelector('.g-recaptcha').parentNode.appendChild(
+                                        errorDiv);
                                     return;
                                 }
                             }
@@ -838,6 +926,181 @@
 
                 showStep(stepsOrder[0]);
             })();
+
+            //Course taken - Other option
+            const courseSelect = document.getElementById('course_taken');
+            const otherInput = document.getElementById('other_course');
+            console.log(courseSelect, otherInput);
+
+            function toggleOtherInput() {
+                console.log(1);
+                if (courseSelect.value === 'Other') {
+                    otherInput.style.display = 'block';
+                    otherInput.required = true;
+                } else {
+                    otherInput.style.display = 'none';
+                    otherInput.required = false;
+                    otherInput.value = '';
+                }
+            }
+
+            // Run when loaded + when changed
+            toggleOtherInput();
+            courseSelect.addEventListener('change', toggleOtherInput);
+
+            // Filter course options based on examination type
+            // Store all original course options
+            let allCourseOptions = [];
+            let initiallySelectedValue = '';
+
+            function storeOriginalOptions() {
+                allCourseOptions = Array.from(courseSelect.options).map(option => ({
+                    value: option.value,
+                    text: option.text.trim(), // Trim whitespace
+                    html: option.innerHTML, // Store HTML to preserve formatting
+                    selected: option.selected // Store initial selected state
+                }));
+
+                // Store the initially selected value
+                const selectedOption = allCourseOptions.find(opt => opt.selected);
+                if (selectedOption) {
+                    initiallySelectedValue = selectedOption.value;
+                }
+            }
+
+            // Store options on page load
+            storeOriginalOptions();
+
+            // Courses allowed for radiotelegraphy
+            const radiotelegraphyCourses = [
+                'General Radio Communication Operator (GRCO)',
+                'Industrial Electronics Technician Course (IETC)',
+                'Communications Technician Course (CTC)',
+                'Bachelor of Science in Avionics Technology (BS AVTECH)',
+                'Bachelor of Science in Electronics and Communications Engineering / Bachelor of Science in Electronics Engineering (BS ECE)'
+            ];
+
+            // Courses allowed for amateur
+            const amateurCourses = [
+                'Radio Enthusiast',
+                'Registered ECE or Commercial Operator',
+                'Licensed Amateur (for upgrading)'
+            ];
+
+            // Courses allowed for restricted radiotelephone
+            const restrictedRadiotelephoneCourses = [
+                'Commercial Pilot',
+                'Student Pilot'
+            ];
+
+            function filterCourseOptions() {
+                const examTypeRadios = document.querySelectorAll('input[name="exam_type"]');
+                const selectedExamType = Array.from(examTypeRadios).find(radio => radio.checked);
+
+                // Store currently selected value before filtering
+                // Use current value if set, otherwise use the initially selected value
+                let currentSelectedValue = courseSelect.value || initiallySelectedValue;
+
+                // Clear current options
+                courseSelect.innerHTML = '';
+
+                // Determine which courses to show based on exam type
+                let allowedCourses = [];
+                let isFilteredCategory = false;
+
+                if (selectedExamType) {
+                    if (selectedExamType.value.includes('rtg')) {
+                        // Radiotelegraphy selected
+                        isFilteredCategory = true;
+                        allowedCourses = radiotelegraphyCourses;
+                    } else if (selectedExamType.value.includes('phn')) {
+                        // Radiotelephony selected - same courses as Radiotelegraphy
+                        isFilteredCategory = true;
+                        allowedCourses = radiotelegraphyCourses;
+                    } else if (selectedExamType.value.startsWith('class_')) {
+                        // Amateur selected (all amateur exam types start with "class_")
+                        isFilteredCategory = true;
+                        allowedCourses = amateurCourses;
+                    } else if (selectedExamType.value.includes('rroc')) {
+                        // Restricted Radiotelephone selected
+                        isFilteredCategory = true;
+                        allowedCourses = restrictedRadiotelephoneCourses;
+                    }
+                }
+
+                if (isFilteredCategory) {
+                    // Filtered exam type selected - show only allowed courses
+                    // Add "Select Course" option
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = 'Select Course';
+                    courseSelect.appendChild(defaultOption);
+
+                    // Add allowed courses
+                    allCourseOptions.forEach(option => {
+                        if (allowedCourses.includes(option.value)) {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            // Use innerHTML to preserve any formatting (like line breaks)
+                            newOption.innerHTML = option.html || option.text;
+                            // Preserve selection if it was the selected value
+                            if (currentSelectedValue === option.value) {
+                                newOption.selected = true;
+                            }
+                            courseSelect.appendChild(newOption);
+                        }
+                    });
+
+                    // Add "Other" option if it was in the original list
+                    const otherOption = allCourseOptions.find(opt => opt.value === 'Other');
+                    if (otherOption) {
+                        const newOption = document.createElement('option');
+                        newOption.value = 'Other';
+                        newOption.textContent = 'Other';
+                        if (currentSelectedValue === 'Other') {
+                            newOption.selected = true;
+                        }
+                        courseSelect.appendChild(newOption);
+                    }
+
+                    // Clear selection if the previously selected value is not in the filtered list
+                    if (currentSelectedValue && !allowedCourses.includes(currentSelectedValue) &&
+                        currentSelectedValue !== 'Other') {
+                        courseSelect.value = '';
+                        // Also clear the other_course input if it was visible
+                        if (otherInput) {
+                            otherInput.value = '';
+                            otherInput.style.display = 'none';
+                            otherInput.required = false;
+                        }
+                    }
+                } else {
+                    // Other exam type selected - show all courses
+                    allCourseOptions.forEach(option => {
+                        const newOption = document.createElement('option');
+                        newOption.value = option.value;
+                        // Use innerHTML to preserve formatting
+                        newOption.innerHTML = option.html || option.text;
+                        // Preserve selection if it was the selected value
+                        if (currentSelectedValue === option.value) {
+                            newOption.selected = true;
+                        }
+                        courseSelect.appendChild(newOption);
+                    });
+                }
+
+                // Re-trigger the toggleOtherInput to handle "Other" option visibility
+                toggleOtherInput();
+            }
+
+            // Listen for changes on exam type radio buttons
+            document.querySelectorAll('input[name="exam_type"]').forEach(radio => {
+                radio.addEventListener('change', filterCourseOptions);
+            });
+
+            // Initialize on page load if an exam type is already selected
+            filterCourseOptions();
+            });
         </script>
     </main>
 </x-layout>

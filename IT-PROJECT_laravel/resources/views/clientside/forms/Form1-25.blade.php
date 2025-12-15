@@ -28,6 +28,10 @@
 
                 <div>
                     <section class="step-content active" id="step-complainant">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Complainant's Details</legend>
                             <div class="form-field">
@@ -283,14 +287,31 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
                     if (validateActiveStep()) go(1);
                 }));
                 document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+
+                // --- Nature of Complaint: enable 'complaint_type_others' only when 'complaint_type=others' ---
+                function toggleComplaintOthers() {
+                    const othersRadio = form.querySelector('input[name="complaint_type"][value="others"]');
+                    const othersInput = form.querySelector('input[name="complaint_type_others"]');
+                    if (!othersRadio || !othersInput) return;
+                    const enabled = othersRadio.checked;
+                    othersInput.disabled = !enabled;
+                    if (!enabled) othersInput.value = '';
+                }
+
+                form.querySelectorAll('input[name="complaint_type"]').forEach(r => {
+                    r.addEventListener('change', toggleComplaintOthers);
+                });
+
+                // Initialize on load
+                toggleComplaintOthers();
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {

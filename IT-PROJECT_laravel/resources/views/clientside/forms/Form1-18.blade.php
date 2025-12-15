@@ -13,7 +13,8 @@
                 <div class="form1-01-warning-title">WARNING:</div>
                 Ensure that all details in the name and date of birth fields are correct. We cannot edit those
                 fields on site and you will need to set a new appointment.
-                <div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa akin</label></div>
+                <div class="form1-01-agree"><label><input type="checkbox" id="warning-agreement" /> I agree / Malinaw sa
+                        akin</label></div>
             </div>
 
             <div class="form-layout">
@@ -38,6 +39,10 @@
                 @endphp
                 <div>
                     <section class="step-content active" id="step-application">
+
+                        <!-- Error header -->
+                        <x-forms.error-header />
+
                         <fieldset class="fieldset-compact">
                             <legend>Type of Application</legend>
                             <x-forms.application-type-fields :form="$form101 ?? []" :applicationType="$applicationType" :permitTypeValue="$permitTypeValue"
@@ -338,10 +343,19 @@
                 const stepsList = document.getElementById('stepsList18');
                 const form = document.getElementById('form118');
                 if (form) {
-                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
+                    });
                 }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'application') {
+                        return;
+                    }
+
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -436,14 +450,65 @@
                 }
 
                 stepsList.addEventListener('click', (e) => {
+                    e.preventDefault();
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
                 });
                 document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
                     if (validateActiveStep()) go(1);
                 }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => go(-1)));
+                document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
+                    if (!warningCheckbox.checked) {
+                        alert('Please check the agreement checkbox first before proceeding.');
+                        return;
+                    }
+                    go(-1);
+                }));
+
+                // --- Conditional enable/disable fields ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !modRadio) return;
+                    const enabled = modRadio.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                function toggleEntityOthers() {
+                    const othersRadio = form.querySelector('input[name="entity_type"][value="others"]');
+                    const othersInput = document.getElementById('others_input');
+                    if (!othersInput || !othersRadio) return;
+                    const enabled = othersRadio.checked && !othersRadio.disabled;
+                    othersInput.disabled = !enabled;
+                    if (!enabled) othersInput.value = '';
+                }
+
+                // Bind listeners for application_type
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+
+                // Bind listeners for entity_type
+                form.querySelectorAll('input[name="entity_type"]').forEach(r => {
+                    r.addEventListener('change', toggleEntityOthers);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+                toggleEntityOthers();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                        toggleEntityOthers();
+                    });
+                }
 
                 // Handle category sub-options state (disable/enable only)
                 function handleCategoryOptions() {
@@ -513,10 +578,9 @@
                 // Initialize category options state
                 handleCategoryOptions();
 
-                // Add event listeners for others radio button
+                // Legacy specific listeners for others entity retained but superseded by toggleEntityOthers
                 const othersRadio = document.getElementById('others_radio');
                 const othersInput = document.getElementById('others_input');
-
                 if (othersRadio) {
                     othersRadio.addEventListener('change', function() {
                         if (this.checked && this.disabled === false) {
@@ -526,13 +590,19 @@
                         }
                     });
                 }
-
-                // Initialize on page load
-                othersInput.disabled = !othersRadio.checked;
+                // Initialize legacy state
+                if (othersInput && othersRadio) {
+                    othersInput.disabled = !othersRadio.checked;
+                }
 
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);

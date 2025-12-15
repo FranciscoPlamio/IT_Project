@@ -7,14 +7,25 @@
             <input type="hidden" name="form_token"
                 value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR AMATEUR RADIO OPERATOR CERTIFICATE/AMATEUR RADIO STATION
-                LICENSE</div>
+                LICENSE
+            </div>
             <div class="form1-01-note"><strong>NOTE:</strong> The system asks for additional info when applicant is
-                a minor.</div>
+                a minor.
+            </div>
             <div class="form1-01-warning">
-                <div class="form1-01-warning-title">WARNING:</div> Ensure that all details in the name and date of
+                <div class="form1-01-warning-title">
+                    WARNING:
+                </div> Ensure that all details in the name and date of
                 birth fields are correct. We cannot edit those fields on site and you will need to set a new
-                appointment.<div class="form1-01-agree"><label><input type="checkbox" /> I agree / Malinaw sa
-                        akin</label></div>
+                appointment.
+                <div class="form1-01-agree">
+                    <label>
+                        <input type="checkbox" id="warning-agreement" />
+                        I agree
+                        / Malinaw sa
+                        akin
+                    </label>
+                </div>
             </div>
 
             <div class="form-layout">
@@ -34,20 +45,25 @@
                     </ul>
                 </aside>
 
-                <div>
-                    <section class="step-content active" id="step-personal">
-                        <fieldset>
-                            <legend>Applicant's Details</legend>
-                            <!-- Name fields-->
-                            <x-forms.name-fields :form="$form ?? []" />
 
-                            <!-- formOne-blueprint-three fields -->
-                            <x-forms.formOne-blueprint-three :form="$form ?? []" />
+                <section class="step-content active" id="step-personal">
 
+                    <!-- Error header -->
+                    <x-forms.error-header />
+
+                    <fieldset>
+                        <legend>Applicant's Details</legend>
+                        <!-- Name fields-->
+                        <x-forms.name-fields :form="$form ?? []" />
+
+                        <!-- formOne-blueprint-three fields -->
+                        <x-forms.formOne-blueprint-three :form="$form ?? []" />
+
+                        @if (str_contains($category, 'renew-mod') || str_contains($category, 'modification'))
                             <div class="form-grid-3">
 
                                 <div class="form-field">
-                                    <label class="form-label">Call Sign</label>
+                                    <label class="form-label">Call Sign <span class="text-red">*</span></label>
                                     <input class="form1-01-input" type="text" name="call_sign"
                                         value="{{ old('call_sign', $form['call_sign'] ?? '') }}">
                                     @error('call_sign')
@@ -55,7 +71,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">ATROC/ARSL No.</label>
+                                    <label class="form-label">ATROC/ARSL No. <span class="text-red">*</span></label>
                                     <input class="form1-01-input" type="text" name="atroc_arsl_no"
                                         value="{{ old('atroc_arsl_no', $form['atroc_arsl_no'] ?? '') }}">
                                     @error('atroc_arsl_no')
@@ -63,7 +79,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-field">
-                                    <label class="form-label">Validity</label>
+                                    <label class="form-label">Validity <span class="text-red">*</span></label>
                                     <input class="form1-01-input" type="date" name="validity"
                                         value="{{ old('validity', $form['validity'] ?? '') }}">
                                     @error('validity')
@@ -73,32 +89,99 @@
 
                             </div>
 
-                            <!-- address fields format -->
-                            <x-forms.address-fields :form="$form ?? []" />
+                            <div></div>
+                        @endif
 
-                            <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+
+                        <!-- address fields format -->
+                        <x-forms.address-fields :form="$form ?? []" />
+
+                        <div class="step-actions"><button type="button" class="btn-primary" data-next>Next</button>
+                        </div>
+                    </fieldset>
+                </section>
+
+                <section class="step-content" id="step-application">
+                    @php
+                        $applicationType = old('application_type', $form['application_type'] ?? null);
+                        $permitTypeValue = old('certificate_type', $form['certificate_type'] ?? null);
+                        $stationClassValue = old('station_class', $form['station_class'] ?? null);
+                    @endphp
+
+                    <div class="form-grid-2">
+                        <fieldset class="fieldset-compact">
+                            <legend>Type of Application <span class="text-red">*</span></legend>
+                            <!-- Application type fields -->
+                            <div class="form-field">
+
+                                @if (str_contains($category, 'renew-mod') || str_contains($category, 'modification'))
+                                    @if (str_contains($category, 'renew-mod'))
+                                        <label>
+                                            <input type="radio" name="application_type" value="renewal"
+                                                {{ old('application_type', $form['application_type'] ?? '') === 'renewal' ? 'checked' : '' }}>
+                                            RENEWAL</label>
+                                    @endif
+                                    <label>
+                                        <input type="radio" name="application_type" value="modification"
+                                            {{ old('application_type', $form['application_type'] ?? '') === 'modification' ? 'checked' : '' }}>MODIFICATION
+                                    </label>
+                                    @error('application_type')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                    <input class="form1-01-input mt-4" type="text" name="modification_reason"
+                                        placeholder="Reason"
+                                        value="{{ old('modification_reason', $form['modification_reason'] ?? '') }}">
+                                    @error('modification_reason')
+                                        <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                @else
+                                    <label>
+                                        <input type="radio" name="application_type" value="new"
+                                            {{ old('application_type', $form['application_type'] ?? '') === 'new' ? 'checked' : '' }}
+                                            checked>
+                                        NEW
+                                    </label>
+                                @endif
+                                @if ($category !== 'mod')
+                                    @if ($category === 'temporary-foreign' || $category === 'special-event-call')
+                                        <label class="form-label">No. of Years <span class="text-red">*</span></label>
+                                        <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
+                                            value="{{ old('years', $form['years'] ?? '') }}">
+                                            <option value="1"
+                                                {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}
+                                                selected>1
+                                            </option>
+                                        </select>
+                                        @error('years')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    @elseif(str_contains($category, 'at-lifetime'))
+                                    @else
+                                        <label class="form-label">No. of Years <span class="text-red">*</span></label>
+                                        <select name="years" class="form1-01-input w-full border rounded px-3 py-2"
+                                            value="{{ old('years', $form['years'] ?? '') }}">
+                                            <option value="" disabled selected>Select years</option>
+                                            <option value="1"
+                                                {{ old('years', $form['years'] ?? '') == 1 ? 'selected' : '' }}>1
+                                            </option>
+                                            <option value="2"
+                                                {{ old('years', $form['years'] ?? '') == 2 ? 'selected' : '' }}>2
+                                            </option>
+                                            <option value="3"
+                                                {{ old('years', $form['years'] ?? '') == 3 ? 'selected' : '' }}>3
+                                            </option>
+                                        </select>
+                                        @error('years')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    @endif
+                                @endif
                             </div>
                         </fieldset>
-                    </section>
 
-                    <section class="step-content" id="step-application">
-                        @php
-                            $applicationType = old('application_type', $form['application_type'] ?? null);
-                            $permitTypeValue = old('permit_type', $form['permit_type'] ?? null);
-                            $stationClassValue = old('station_class', $form['station_class'] ?? null);
-                        @endphp
-
-                        <div class="form-grid-2">
+                        @if (str_contains($category, 'atrsl'))
                             <fieldset class="fieldset-compact">
-                                <legend>Type of Application</legend>
-                                <!-- Application type fields -->
-                                <x-forms.application-type-fields :form="$form101 ?? []" :application-type="$applicationType"
-                                    :show-years="true" />
-                            </fieldset>
-
-
-                            <fieldset class="fieldset-compact">
-                                <legend>Type of Class of Station</legend>
+                                <legend>Type of Class of Station <span class="text-red">*</span></legend>
                                 <div class="form-field">
                                     <div class="form-field" data-require-one="input[type=radio]">
                                         <label>
@@ -126,163 +209,173 @@
                                         @enderror
                                     </div>
                                 </div>
-                        </div>
-                        </fieldset>
 
-                        <fieldset class="fieldset-compact">
-                            <legend>Type of Permit/License/Certificate </legend>
-                            @error('permit_type')
-                                <p class="text-red text-sm mt-1">{{ $message }}</p>
-                            @enderror
-                            <div class="form-field" data-require-one="input[type=radio]">
-                                <label>
-                                    <input type="radio" name="permit_type" value="amateur_operator"
-                                        {{ $permitTypeValue == 'amateur_operator' ? 'checked' : '' }}>
-                                    Amateur Radio Operator Certificate
-                                </label>
-                                <label>
-                                    <input type="radio" name="permit_type" value="amateur_station"
-                                        {{ $permitTypeValue == 'amateur_station' ? 'checked' : '' }}>
-                                    Amateur Radio Station License
-                                </label>
-                                <label>
-                                    <input type="radio" name="permit_type" value="club_station"
-                                        {{ $permitTypeValue == 'club_station' ? 'checked' : '' }}>
-                                    Club Radio Station License
-                                </label>
-                                <div style="margin-left:12px;margin-top:8px;">
-                                    <label class="form-label">Name of Club</label>
-                                    <input class="form1-01-input" type="text" name="club_name"
-                                        value="{{ old('club_name', $form['club_name'] ?? '') }}">
-                                    <label class="form-label">Assigned Freq.</label>
-                                    <input class="form1-01-input" type="text" name="assigned_frequency"
-                                        value="{{ old('assigned_frequency', $form['assigned_frequency'] ?? '') }}">
-                                </div>
-                                <label>
-                                    <input type="radio" name="permit_type" value="temporary_foreign"
-                                        {{ $permitTypeValue == 'temporary_foreign' ? 'checked' : '' }}>
-                                    Temporary Permit for Foreign Visitor
-                                </label>
-                                <label>
-                                    <input type="radio" name="permit_type" value="special_vanity"
-                                        {{ $permitTypeValue == 'special_vanity' ? 'checked' : '' }}>
-                                    Special Permit for Vanity/Special Call Sign
-                                </label>
-                                <label class="form-label">Preferred Call Sign/s</label>
-                                <input class="form1-01-input" type="text" name="preferred_call_sign"
-                                    value="{{ old('preferred_call_sign', $form['preferred_call_sign'] ?? '') }}">
-
-                            </div>
-                        </fieldset>
-                        <div class="step-actions"><button type="button" class="btn-secondary"
-                                data-prev>Back</button><button type="button" class="btn-primary"
-                                data-next>Next</button></div>
-                    </section>
-
-                    <section class="step-content" id="step-exam">
-                        <fieldset class="fieldset-compact">
-                            <legend>Examination Details</legend>
-
-                            <!-- Exam fields -->
-                            <div class="form-grid-3">
+                            </fieldset>
+                        @elseif($category === 'temporary-foreign')
+                            <fieldset class="fieldset-compact">
+                                <legend>Type of Class of Station</legend>
                                 <div class="form-field">
-                                    <label class="form-label">Place of Exam</label>
-                                    <x-forms.exam-fields :form="$form ?? []" />
+                                    <div class="form-field" data-require-one="input[type=radio]">
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_a"
+                                                {{ $stationClassValue == 'class_a' ? 'checked' : '' }}>
+                                            Class A
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_b"
+                                                {{ $stationClassValue == 'class_b' ? 'checked' : '' }}>
+                                            Class B
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="station_class" value="class_c"
+                                                {{ $stationClassValue == 'class_c' ? 'checked' : '' }}>
+                                            Class C
+                                        </label>
+                                        @error('station_class')
+                                            <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                        </fieldset>
-                    </section>
+                            </fieldset>
+                        @endif
+                    </div>
+                    <input type="hidden" name="certificate_type" value="{{ $category }}">
 
-                    <section class="step-content" id="step-equipment">
-                        <fieldset>
-                            <legend>Particulars of Equipment</legend>
-                            <div class="table-container">
-                                <table class="form-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Make</th>
-                                            <th>Type/Model</th>
-                                            <th>Serial Number</th>
-                                            <th>Frequency Range</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment_make_1"
-                                                    value="{{ old('equipment_make_1', $form['equipment_make_1'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_type_1"
-                                                    value="{{ old('equipment_type_1', $form['equipment_type_1'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_serial_1"
-                                                    value="{{ old('equipment_serial_1', $form['equipment_serial_1'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_freq_1"
-                                                    value="{{ old('equipment_freq_1', $form['equipment_freq_1'] ?? '') }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment_make_2"
-                                                    value="{{ old('equipment_make_2', $form['equipment_make_2'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_type_2"
-                                                    value="{{ old('equipment_type_2', $form['equipment_type_2'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_serial_2"
-                                                    value="{{ old('equipment_serial_2', $form['equipment_serial_2'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_freq_2"
-                                                    value="{{ old('equipment_freq_2', $form['equipment_freq_2'] ?? '') }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment_make_3"
-                                                    value="{{ old('equipment_make_3', $form['equipment_make_3'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_type_3"
-                                                    value="{{ old('equipment_type_3', $form['equipment_type_3'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_serial_3"
-                                                    value="{{ old('equipment_serial_3', $form['equipment_serial_3'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_freq_3"
-                                                    value="{{ old('equipment_freq_3', $form['equipment_freq_3'] ?? '') }}">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><input class="table-input" type="text" name="equipment_make_4"
-                                                    value="{{ old('equipment_make_4', $form['equipment_make_4'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_type_4"
-                                                    value="{{ old('equipment_type_4', $form['equipment_type_4'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_serial_4"
-                                                    value="{{ old('equipment_serial_4', $form['equipment_serial_4'] ?? '') }}">
-                                            </td>
-                                            <td><input class="table-input" type="text" name="equipment_freq_4"
-                                                    value="{{ old('equipment_freq_4', $form['equipment_freq_4'] ?? '') }}">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="step-actions"><button type="button" class="btn-secondary"
+                            data-prev>Back</button><button type="button" class="btn-primary" data-next>Next</button>
+                    </div>
+                </section>
+
+
+
+                <section class="step-content" id="step-equipment">
+                    <fieldset>
+                        <legend>Particulars of Equipment</legend>
+                        <div class="table-container">
+                            <table class="form-table">
+                                <thead>
+                                    <tr>
+                                        <th>Make</th>
+                                        <th>Type/Model</th>
+                                        <th>Serial Number</th>
+                                        <th>Frequency Range</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_make_1"
+                                                value="{{ old('equipment_make_1', $form['equipment_make_1'] ?? '') }}">
+                                            @error('equipment_make_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </td>
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_type_1"
+                                                value="{{ old('equipment_type_1', $form['equipment_type_1'] ?? '') }}">
+                                            @error('equipment_type_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </td>
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_serial_1"
+                                                value="{{ old('equipment_serial_1', $form['equipment_serial_1'] ?? '') }}">
+                                            @error('equipment_serial_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </td>
+
+                                        <td>
+                                            <input class="table-input" type="text" name="equipment_freq_1"
+                                                value="{{ old('equipment_freq_1', $form['equipment_freq_1'] ?? '') }}">
+                                            @error('equipment_freq_1')
+                                                <p class="text-red text-sm mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td><input class="table-input" type="text" name="equipment_make_2"
+                                                value="{{ old('equipment_make_2', $form['equipment_make_2'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_type_2"
+                                                value="{{ old('equipment_type_2', $form['equipment_type_2'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_serial_2"
+                                                value="{{ old('equipment_serial_2', $form['equipment_serial_2'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_freq_2"
+                                                value="{{ old('equipment_freq_2', $form['equipment_freq_2'] ?? '') }}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="table-input" type="text" name="equipment_make_3"
+                                                value="{{ old('equipment_make_3', $form['equipment_make_3'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_type_3"
+                                                value="{{ old('equipment_type_3', $form['equipment_type_3'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_serial_3"
+                                                value="{{ old('equipment_serial_3', $form['equipment_serial_3'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_freq_3"
+                                                value="{{ old('equipment_freq_3', $form['equipment_freq_3'] ?? '') }}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><input class="table-input" type="text" name="equipment_make_4"
+                                                value="{{ old('equipment_make_4', $form['equipment_make_4'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_type_4"
+                                                value="{{ old('equipment_type_4', $form['equipment_type_4'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_serial_4"
+                                                value="{{ old('equipment_serial_4', $form['equipment_serial_4'] ?? '') }}">
+                                        </td>
+                                        <td><input class="table-input" type="text" name="equipment_freq_4"
+                                                value="{{ old('equipment_freq_4', $form['equipment_freq_4'] ?? '') }}">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- CAPTCHA fields -->
+                        <div class="form-field"
+                            style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
+                            <div class="g-recaptcha" data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}">
                             </div>
-                            <!-- CAPTCHA fields -->
-                            <div class="form-field"
-                                style="margin:12px 0; display:flex; flex-direction:column; align-items:center;">
-                                <div class="g-recaptcha"
-                                    data-sitekey="{{ env('RECAPTCHA_SITE_KEY', 'your_site_key') }}"></div>
-                                @if (session('captcha_error'))
-                                    <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
-                                @endif
-                            </div>
+                            @if (session('captcha_error'))
+                                <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
+                            @endif
+                        </div>
+                        <div class="step-actions"><button type="button" class="btn-secondary"
+                                data-prev>Back</button><button class="form1-01-btn" type="button"
+                                id="validateBtn">Proceed to Validation</button></div>
+                    </fieldset>
+                </section>
+                <section class="step-content" id="step-exam">
+                    <fieldset class="fieldset-compact">
+                        <legend>Examination Details</legend>
+
+                        <!-- Exam fields -->
+                        <div class="form-grid-3">
+
+                            <x-forms.exam-fields :form="$form ?? []" />
+
                             <div class="step-actions"><button type="button" class="btn-secondary"
-                                    data-prev>Back</button><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button></div>
-                        </fieldset>
-                    </section>
+                                    data-prev>Back</button><button type="button" class="btn-primary"
+                                    data-next>Next</button></div>
 
-                    {{-- <!-- Declaration fields component -->
+                        </div>
+            </div>
+            </fieldset>
+            </section>
+
+            {{-- <!-- Declaration fields component -->
                     <x-forms.declaration-field :form="$form ?? []" /> --}}
-                </div>
             </div>
         </form>
 
@@ -296,8 +389,36 @@
                     form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
                 }
                 const validationLink03 = document.getElementById('validationLink03');
+                const warningCheckbox = document.getElementById('warning-agreement');
+
+                // Function to disable/enable all form fields
+                function toggleFormFields(enabled) {
+                    const formFields = form.querySelectorAll('input, select, textarea, button');
+                    formFields.forEach(field => {
+                        // Skip the warning checkbox itself and hidden inputs
+                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
+                            return;
+                        }
+                        field.disabled = !enabled;
+                    });
+                }
+
+                // Initially disable all form fields
+                toggleFormFields(false);
+
+                // Add event listener to warning checkbox
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleFormFields(this.checked);
+                    });
+                }
 
                 function showStep(step) {
+                    // Only allow navigation if warning checkbox is checked
+                    if (!warningCheckbox.checked && step !== 'personal') {
+                        return;
+                    }
+
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
                     document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
@@ -358,26 +479,106 @@
                     return valid;
                 }
 
-                // Handle step navigation via sidebar
+                // Disable step navigation via sidebar; enforce using Next/Back buttons
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
-                    showStep(li.dataset.step);
+                    e.preventDefault();
                 });
 
                 // Handle next/prev buttons anywhere in the form
                 document.addEventListener('click', (e) => {
                     if (e.target.matches('[data-next]')) {
-                        go(1)
-                        if (validateActiveStep());
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+                        if (validateActiveStep()) go(1);
                     } else if (e.target.matches('[data-prev]')) {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
                         go(-1);
                     }
                 });
 
+                // --- Toggle enable/disable for modification reason textbox ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !isModification) return;
+                    const enabled = isModification.checked;
+                    modReason.disabled = !enabled;
+                    if (!enabled) modReason.value = '';
+                }
+
+                // Bind change listeners for application_type radios
+                form.querySelectorAll('input[name="application_type"]').forEach(r => {
+                    r.addEventListener('change', toggleModificationReason);
+                });
+
+                // Initialize on load
+                toggleModificationReason();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        toggleModificationReason();
+                    });
+                }
+
+                // --- Toggle enable/disable for club fields and preferred call sign based on permit type ---
+                function togglePermitDependentFields() {
+                    const selectedPermit = form.querySelector('input[name="certificate_type"]:checked');
+                    const clubName = form.querySelector('input[name="club_name"]');
+                    const assignedFreq = form.querySelector('input[name="assigned_frequency"]');
+                    const preferredCallSign = form.querySelector('input[name="preferred_call_sign"]');
+
+                    if (!clubName || !assignedFreq || !preferredCallSign) return;
+
+                    const isClub = selectedPermit && selectedPermit.value === 'club_station';
+                    const enablePreferred = selectedPermit && (selectedPermit.value === 'temporary_foreign' ||
+                        selectedPermit.value === 'special_vanity');
+
+                    // Club fields
+                    clubName.disabled = !isClub;
+                    assignedFreq.disabled = !isClub;
+                    if (!isClub) {
+                        clubName.value = '';
+                        assignedFreq.value = '';
+                    }
+
+                    // Preferred call sign
+                    preferredCallSign.disabled = !enablePreferred;
+                    if (!enablePreferred) {
+                        preferredCallSign.value = '';
+                    }
+                }
+
+                // Bind change listeners for certificate_type radios
+                form.querySelectorAll('input[name="certificate_type"]').forEach(r => {
+                    r.addEventListener('change', togglePermitDependentFields);
+                });
+
+                // Initialize dependent fields on load
+                togglePermitDependentFields();
+
+                // Keep in sync when agreement toggles overall enabled state
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', function() {
+                        togglePermitDependentFields();
+                    });
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+
                         const formData = new FormData(form);
                         formData.forEach((value, key) => {
                             console.log(`${key}: ${value}`);

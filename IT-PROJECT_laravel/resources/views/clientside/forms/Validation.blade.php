@@ -1,828 +1,330 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Validation - Application for Radio Operator Examination (Form 1-01)</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-
-<body>
-
-    <header>
-        <div class="top-bar">
-            <a href="{{ route('homepage') }}" aria-label="Go to homepage">
-                <img src="{{ asset('images/logo.png') }}" alt="NTC Logo" class="logo">
-            </a>
-            <div class="title">
-                <p>Republic of the Philippines</p>
-                <h1>National Telecommunication Commission<br><span>BIR Road, East Triangle, Diliman, Quezon City</span>
-                </h1>
-            </div>
-        </div>
-    </header>
-    <main>
-        <div class="form1-01-container">
-            <div class="form1-01-header">Validation Phase: Review Your Application</div>
-            <div class="validation-section-title">Please review your details before final submission:</div>
-            <dl class="validation-list" id="validationList"></dl>
-
-            {{-- Payment Method Selection --}}
-            <div class="payment-method-container">
-                <h2>Choose Payment Method</h2>
-                <p>Select your preferred payment method to proceed with your application.</p>
-
-                <div class="payment-options">
-                    <div class="payment-option" data-method="cash" id="cashOption">
-                        <div class="payment-option-check">✓</div>
-                        <div class="payment-option-icon cash-icon">₱</div>
-                        <div>
-                            <h3 class="payment-option-title">Cash Payment</h3>
-                            <p class="payment-option-description">Pay in cash at our office during business hours</p>
-                        </div>
+<x-layout :title="'Validation'" :showNavbar=false>
+    <div class="form1-01-container">
+        <div class="form1-01-header">Validation Phase: Review Your Application</div>
+        <div class="validation-section-title">Please review your details before final submission:</div>
+        <dl class="validation-list" id="validationList"></dl>
+        <hr>
+        <div id="attachments-container" data-form-type="{{ $formType }}" class="mt-8">
+            <div class="rounded-2xl border border-gray-200 bg-white/80 p-6 shadow-sm">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-lg font-semibold text-gray-900">Upload Requirements</p>
+                        <p class="text-sm text-gray-600">
+                            Attach the documents requested below. Accepted formats: PDF, JPG, PNG (max 10&nbsp;MB per
+                            file).
+                        </p>
                     </div>
-
-                    <div class="payment-option" data-method="gcash" id="gcashOption">
-                        <div class="payment-option-check">✓</div>
-                        <div class="payment-option-icon gcash-icon">G</div>
-                        <div>
-                            <h3 class="payment-option-title">GCash Payment</h3>
-                            <p class="payment-option-description">Pay securely online using your GCash account</p>
-                        </div>
-                    </div>
+                    <span id="attachmentStatusPill"
+                        class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600">
+                        Waiting for files
+                    </span>
                 </div>
 
-            </div>
+                <ul class="mt-4 grid gap-2 text-sm text-gray-600 sm:grid-cols-2">
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-emerald-400"></span>
+                        Gather clear scans or photos before uploading.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-sky-400"></span>
+                        Click each file field to attach the required document.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-amber-400"></span>
+                        You may replace an upload anytime before payment.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="mt-1 h-2 w-2 rounded-full bg-rose-400"></span>
+                        Proceed to payment unlocks once all uploads are complete.
+                    </li>
+                </ul>
 
-            <div class="validation-btns">
-                <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
-                <a class="form1-01-btn" id="proceedPayment" href="" disabled>Proceed to Payment</a>
-                <form id="paymentForm" action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST"
-                    style="display:none;">
-                    @csrf
-                </form>
+                <div data-role="attachment-fields" class="mt-6 space-y-5" aria-live="polite"></div>
+                <p id="attachmentStatusMessage" class="mt-4 text-sm text-gray-600">No files uploaded yet.</p>
             </div>
         </div>
+        {{-- Payment Method Selection --}}
+        <div class="payment-method-container">
+            <h2>Choose Payment Method</h2>
+            <p>Select your preferred payment method to proceed with your application.</p>
 
-        <script>
-            function formatKey(key) {
-                return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            <div class="payment-options">
+
+
+                <div class="payment-option" data-method="gcash" id="gcashOption">
+                    <div class="payment-option-check">✓</div>
+                    <div class="payment-option-icon gcash-icon">G</div>
+                    <div>
+                        <h3 class="payment-option-title">GCash Payment</h3>
+                        <p class="payment-option-description">Pay securely online using your GCash account</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="validation-btns">
+            <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
+            <x-forms.cancel-validation :formType="$targetFormType" />
+            <button class="form1-01-btn" id="proceedPayment" href="">Proceed to
+                Payment</button>
+            <form id="paymentForm" enctype="multipart/form-data"
+                action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST" style="display:none;">
+                @csrf
+                <input type="hidden" name="payment_method" id="paymentMethodInput">
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <script type="module">
+        // No in-page canvas preview; use inline preview via new tab
+
+        function formatKey(key) {
+            let newKey = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            if (newKey == "Dob") {
+                newKey = "Date of Birth";
+                return newKey;
+            }
+            if (newKey == "Needs") {
+                newKey = "Special Needs/ Requests during examination"
+            }
+            return newKey;
+        }
+
+        // Map of checkbox values -> human-readable labels from Form1-01
+        const checkboxLabelMaps = {
+            "class_a_e8910_code5": "Class A - Elements 8, 9, 10 & Code (5 wpm)",
+            "class_a_code5_only": "Class A - Code (5 wpm) Only",
+            "class_b_e567": "Class B - Elements 5, 6 & 7",
+            "class_b_e2": "Class B - Element 2",
+            "class_c_e234": "Class C - Elements 2, 3 & 4",
+            "class_d_e2": "Class D - Element 2",
+            "1rtg_e1256_code25": "1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)",
+            "1rtg_code25": "1RTG - Code (25/20 wpm)",
+            "2rtg_e1256_code16": "2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)",
+            "2rtg_code16": "2RTG - Code (16 wpm)",
+            "3rtg_e125_code16": "3RTG - Elements 1, 2, 5 & Code (16 wpm)",
+            "3rtg_code16": "3RTG - Code (16 wpm)",
+            "1phn_e1234": "1PHN - Elements 1, 2, 3 & 4",
+            "2phn_e123": "2PHN - Elements 1, 2 & 3",
+            "3phn_e12": "3PHN - Elements 1 & 2",
+            "rroc_aircraft_e1": "RROC - Aircraft - Element 1"
+        };
+
+        // Function to capitalize first letter of each word
+        function capitalizeFirstLetter(str) {
+            if (!str || typeof str !== 'string') return str;
+            // Split by spaces, capitalize first letter of each word, then join
+            return str.split(' ').map(word => {
+                if (word.length === 0) return word;
+                return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+            }).join(' ');
+        }
+
+        function formatValue(key, rawValue) {
+            // If the field is a file input, show just the file name
+            if (key === 'id_picture' || key === 'admit_id_picture') {
+                if (!rawValue) return 'No file selected';
+                if (Array.isArray(rawValue)) {
+                    const fileNames = rawValue.map(v => (v && typeof v === 'string' ? v.split('\\').pop().split('/').pop() :
+                            ''))
+                        .filter(Boolean)
+                        .join(', ');
+                    return capitalizeFirstLetter(fileNames);
+                }
+                const fileName = typeof rawValue === 'string' && rawValue.length > 0 ?
+                    rawValue.split('\\').pop().split('/').pop() :
+                    'No file selected';
+                return capitalizeFirstLetter(fileName);
             }
 
-            // Map of checkbox values -> human-readable labels from Form1-01
-            const checkboxLabelMaps = {
-                rtg: {
-                    '1rtg_e1256_code25': '1RTG - Elements 1, 2, 5, 6 & Code (25/20 wpm)',
-                    '1rtg_code25': '1RTG - Code (25/20 wpm)',
-                    '2rtg_e1256_code16': '2RTG - Elements 1, 2, 5, 6 & Code (16 wpm)',
-                    '2rtg_code16': '2RTG - Code (16 wpm)',
-                    '3rtg_e125_code16': '3RTG - Elements 1, 2, 5 & Code (16 wpm)',
-                    '3rtg_code16': '3RTG - Code (16 wpm)'
-                },
-                amateur: {
-                    'class_a_e8910_code5': 'Class A - Elements 8, 9, 10 & Code (5 wpm)',
-                    'class_a_code5_only': 'Class A - Code (5 wpm) Only',
-                    'class_b_e567': 'Class B - Elements 5, 6 & 7',
-                    'class_b_e2': 'Class B - Element 2',
-                    'class_c_e234': 'Class C - Elements 2, 3 & 4',
-                    'class_d_e2': 'Class D - Element 2'
-                },
-                rphn: {
-                    '1phn_e1234': '1PHN - Elements 1, 2, 3 & 4',
-                    '2phn_e123': '2PHN - Elements 1, 2 & 3',
-                    '3phn_e12': '3PHN - Elements 1 & 2'
-                },
-                rroc: {
-                    'rroc_aircraft_e1': 'RROC - Aircraft - Element 1'
-                }
-            };
-
-            function formatValue(key, rawValue) {
-                // If the field is a file input, show just the file name
-                if (key === 'id_picture' || key === 'admit_id_picture') {
-                    if (!rawValue) return 'No file selected';
-                    if (Array.isArray(rawValue)) {
-                        return rawValue.map(v => (v && typeof v === 'string' ? v.split('\\').pop().split('/').pop() : ''))
-                            .filter(Boolean)
-                            .join(', ');
-                    }
-                    return typeof rawValue === 'string' && rawValue.length > 0 ?
-                        rawValue.split('\\').pop().split('/').pop() :
-                        'No file selected';
-                }
-
-                // Map checkbox values to their labels when applicable
-                const map = checkboxLabelMaps[key];
+            // Map checkbox values to their labels when applicable
+            const map = checkboxLabelMaps[rawValue];
+            if (key === 'exam_type') {
                 if (map) {
-                    if (Array.isArray(rawValue)) {
-                        return rawValue.map(v => map[v] || v).join(', ');
-                    }
-                    return map[rawValue] || rawValue || '';
-                }
-
-                // Default formatting
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            const server101 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
-            const data = {}; // always prefer server; keep empty to avoid localStorage conflicts
-            const list = document.getElementById('validationList');
-            const data102 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
-            const data103 = JSON.parse(localStorage.getItem('form1-03-data') || '{}');
-            const data111 = JSON.parse(localStorage.getItem('form1-11-data') || '{}');
-            const data113 = JSON.parse(localStorage.getItem('form1-13-data') || '{}');
-            const data114 = JSON.parse(localStorage.getItem('form1-14-data') || '{}');
-            const data116 = JSON.parse(localStorage.getItem('form1-16-data') || '{}');
-            const data118 = JSON.parse(localStorage.getItem('form1-18-data') || '{}');
-            const data119 = JSON.parse(localStorage.getItem('form1-19-data') || '{}');
-            const data120 = JSON.parse(localStorage.getItem('form1-20-data') || '{}');
-            const data121 = JSON.parse(localStorage.getItem('form1-21-data') || '{}');
-            const data122 = JSON.parse(localStorage.getItem('form1-22-data') || '{}');
-            const data124 = JSON.parse(localStorage.getItem('form1-24-data') || '{}');
-            const data125 = JSON.parse(localStorage.getItem('form1-25-data') || '{}');
-            const data126 = JSON.parse(localStorage.getItem('form1-26-data') || '{}');
-            const has101 = Object.keys(data).length > 0;
-            const has102 = Object.keys(data102).length > 0;
-            const has103 = Object.keys(data103).length > 0;
-            const has111 = Object.keys(data111).length > 0;
-            const has113 = Object.keys(data113).length > 0;
-            const has114 = Object.keys(data114).length > 0;
-            const has116 = Object.keys(data116).length > 0;
-            const has118 = Object.keys(data118).length > 0;
-            const has119 = Object.keys(data119).length > 0;
-            const has120 = Object.keys(data120).length > 0;
-            const has121 = Object.keys(data121).length > 0;
-            const has122 = Object.keys(data122).length > 0;
-            const has124 = Object.keys(data124).length > 0;
-            const has125 = Object.keys(data125).length > 0;
-            const has126 = Object.keys(data126).length > 0;
-            const activeForm = localStorage.getItem('active-form');
-
-            const labelMaps102 = {
-                application_type: {
-                    'new': 'NEW',
-                    'renewal': 'RENEWAL',
-                    'modification': 'MODIFICATION'
-                },
-                certificate_type: {
-                    '1RTG': '1RTG',
-                    '2RTG': '2RTG',
-                    '3RTG': '3RTG',
-                    '1PHN': '1PHN',
-                    '2PHN': '2PHN',
-                    '3PHN': '3PHN',
-                    'SROP': 'SROP',
-                    'RROC-Land Mobile': 'RROC-Land Mobile (RLM)',
-                    'RROC-Aircraft': 'RROC-Aircraft',
-                    'GROC': 'GROC (Government)',
-                    'TP RROC-Aircraft': 'TP RROC-Aircraft (Foreign Pilot)',
-                    'others': 'OTHERS, specify'
-                },
-                sex: {
-                    male: 'Male',
-                    female: 'Female'
-                },
-                employment_status: {
-                    employed: 'Employed',
-                    unemployed: 'Unemployed'
-                },
-                employment_type: {
-                    local: 'Local',
-                    foreign: 'Foreign'
-                }
-            };
-
-            function formatValue102(key, rawValue) {
-                const map = labelMaps102[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-
-
-            // Unified function to render form data from server FORM 1-01 (pj)
-            function renderFormData(formData, formType = '1-01') {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) {
-                    titleEl.textContent = `Form ${formType} Details:`;
-                }
-
-                // Clear existing content
-                list.innerHTML = '';
-
-                if (!formData || typeof formData !== 'object') {
-                    const dt = document.createElement('dt');
-                    dt.textContent = 'No Data';
-                    const dd = document.createElement('dd');
-                    dd.textContent = 'No form data available';
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                    return;
-                }
-
-                for (const key in formData) {
-                    if (key === 'form_token' || key === '_id' || key === 'user_id' || key === 'created_at' || key ===
-                        'updated_at') continue;
-
-                    const value = formatValue(key, formData[key]);
-                    if (value === '' || value === null || value === undefined) continue;
-
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
+                    return map; // Already properly formatted
                 }
             }
 
-
-
-            function render101() {
-                console.log(2);
-                const payload = server101 && typeof server101 === 'object' ? server101 : data;
-                renderFormData(payload, '1-01');
-            }
-
-            function render102() {
-                console.log(data102);
-                console.log(1);
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-02 Details:';
-                // Reuse the existing list so the bar/title alignment stays consistent
-                list.innerHTML = '';
-                for (const key in data102) {
-                    const value = formatValue102(key, data102[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
+            if (key === 'needs') {
+                if (rawValue === '0') {
+                    return 'None';
+                } else if (rawValue === '1') {
+                    return 'Yes';
                 }
             }
 
-            // ===== Form 1-03 mapping and renderer =====
-            const labelMaps103 = {
-                application_type: {
-                    new: 'NEW',
-                    renewal: 'RENEWAL',
-                    modification: 'MODIFICATION'
-                },
-                permit_type: {
-                    amateur_operator: 'Amateur Radio Operator Certificate',
-                    amateur_station: 'Amateur Radio Station License',
-                    club_station: 'Club Radio Station License',
-                    temporary_foreign: 'Temporary Permit for Foreign Visitor',
-                    special_vanity: 'Special Permit for Vanity/Special Call Sign'
-                },
-                station_class: {
-                    class_a: 'Class A',
-                    class_b: 'Class B',
-                    class_c: 'Class C',
-                    class_d: 'Class D'
-                },
-                sex: {
-                    male: 'Male',
-                    female: 'Female'
-                }
-            };
+            // Default formatting
+            if (Array.isArray(rawValue)) {
+                const joined = rawValue.join(', ');
+                return capitalizeFirstLetter(joined);
+            }
+            const value = rawValue ?? '';
+            return capitalizeFirstLetter(String(value));
+        }
 
-            function formatValue103(key, rawValue) {
-                const map = labelMaps103[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
+        const server101 = JSON.parse('{!! json_encode(isset($form) ? $form : null) !!}');
+        window.formData = server101; // now available globally
+        const data = {}; // always prefer server; keep empty to avoid localStorage conflicts
+        const list = document.getElementById('validationList');
+
+
+        // Render textual summary list for quick review
+        function renderFormData(formData, formType) {
+            const titleEl = document.querySelector('.validation-section-title');
+            if (titleEl) {
+                titleEl.textContent = `Form ${formType} Details:`;
             }
 
-            function render103() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-03 Details:';
-                list.innerHTML = '';
-                for (const key in data103) {
-                    const value = formatValue103(key, data103[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
+            list.innerHTML = '';
+            if (!formData || typeof formData !== 'object') {
+                const dt = document.createElement('dt');
+                dt.textContent = 'No Data';
+                const dd = document.createElement('dd');
+                dd.textContent = 'No form data available';
+                list.appendChild(dt);
+                list.appendChild(dd);
+                return;
             }
 
-            // ===== Form 1-11 mapping and renderer =====
-            const labelMaps111 = {
-                application_type: {
-                    new: 'NEW',
-                    renewal: 'RENEWAL',
-                    modification: 'MODIFICATION'
-                },
-                permit_type: {
-                    construction_permit: 'CONSTRUCTION PERMIT',
-                    radio_station_license: 'RADIO STATION LICENSE'
-                },
-                radio_service: {
-                    fixed_land_mobile: 'FIXED AND LAND MOBILE',
-                    aeronautical: 'AERONAUTICAL',
-                    maritime: 'MARITIME (Public/Private Coastal)',
-                    broadcast: 'BROADCAST',
-                    others: 'OTHERS'
-                },
-                station_class: {
-                    rt: 'RT',
-                    fx: 'FX',
-                    fb: 'FB',
-                    ml: 'ML',
-                    p: 'P',
-                    bc: 'BC',
-                    fc: 'FC',
-                    fa: 'FA',
-                    ma: 'MA',
-                    tc: 'TC',
-                    others_station: 'OTHERS'
-                }
-            };
+            for (const key in formData) {
+                if (key === 'form_token' || key === '_id' || key === 'user_id' || key === 'created_at' || key ===
+                    'updated_at') continue;
+                const value = formatValue(key, formData[key]);
+                if (value === '' || value === null || value === undefined) continue;
+                const dt = document.createElement('dt');
+                dt.classList.add('inline', 'font-semibold', 'mr-1'); // inline + bold + small space after
+                dt.textContent = formatKey(key) + ":"; // add the colon
 
-            function formatValue111(key, rawValue) {
-                const map = labelMaps111[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
+                const dd = document.createElement('dd');
+                dd.classList.add('inline'); // inline so it stays on the same line
+                dd.textContent = value;
+
+                const wrapper = document.createElement('div'); // wrapper for each pair
+                wrapper.classList.add('mb-2'); // vertical spacing between pairs
+
+                list.appendChild(dt);
+                list.appendChild(dd);
+                list.appendChild(wrapper); // append wrapper instead of br
+            }
+        }
+
+
+        // Wire Back to Edit with token
+        (function wireBackToEdit() {
+            try {
+
+                const btn = document.getElementById('backToEditBtn');
+                if (!btn) return;
+                const tokenFromServer = server101 && server101.form_token ? server101.form_token : '';
+                const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
+                const storedToken = localStorage.getItem('form_token') || '';
+                const token = tokenFromServer || tokenFromQuery || storedToken;
+
+                const formType = @json($formType);
+                const urlString = @json(route('forms.edit', ['formType' => $formType]));
+                const url = new URL(urlString, window.location.origin);
+
+                if (token) url.searchParams.set('token', token);
+                btn.href = url.toString();
+            } catch (e) {
+                /* noop */
+            }
+        })();
+
+        const link = document.getElementById('proceedPayment');
+        const form = document.getElementById('paymentForm');
+
+        // Get token from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+            // Create hidden input dynamically
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'token';
+            input.value = token;
+            form.appendChild(input);
+        }
+
+        link.addEventListener('click', function(event) {
+            event.preventDefault(); // prevent normal link behavior
+            const inputs = document.querySelectorAll("input[type='file']");
+            console.log(inputs);
+
+            // Check if payment method is selected
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method before proceeding.');
+                return;
             }
 
-            function render111() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-11 Details:';
-                list.innerHTML = '';
-                for (const key in data111) {
-                    const value = formatValue111(key, data111[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-13 mapping and renderer =====
-            const labelMaps113 = {
-                // Currently Form 1-13 uses text inputs only; keep for future mappings
-            };
-
-            function formatValue113(key, rawValue) {
-                const map = labelMaps113[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render113() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-13 Details:';
-                list.innerHTML = '';
-                for (const key in data113) {
-                    const value = formatValue113(key, data113[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-            // ===== Form 1-14 mapping and renderer =====
-            const labelMaps114 = {
-                // Currently Form 1-14 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue114(key, rawValue) {
-                const map = labelMaps114[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render114() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-14 Details:';
-                list.innerHTML = '';
-                for (const key in data114) {
-                    const value = formatValue114(key, data114[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-16 mapping and renderer =====
-            const labelMaps116 = {
-                // Currently Form 1-16 uses text inputs only; keep for future mappings
-            };
-
-            function formatValue116(key, rawValue) {
-                const map = labelMaps116[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render116() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-16 Details:';
-                list.innerHTML = '';
-                for (const key in data116) {
-                    const value = formatValue116(key, data116[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-18 mapping and renderer =====
-            const labelMaps118 = {
-                // Currently Form 1-18 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue118(key, rawValue) {
-                const map = labelMaps118[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render118() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-18 Details:';
-                list.innerHTML = '';
-                for (const key in data118) {
-                    const value = formatValue118(key, data118[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-19 mapping and renderer =====
-            const labelMaps119 = {
-                // Currently Form 1-19 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue119(key, rawValue) {
-                const map = labelMaps119[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render119() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-19 Details:';
-                list.innerHTML = '';
-                for (const key in data119) {
-                    const value = formatValue119(key, data119[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-20 mapping and renderer =====
-            const labelMaps120 = {
-                // Currently Form 1-20 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue120(key, rawValue) {
-                const map = labelMaps120[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render120() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-20 Details:';
-                list.innerHTML = '';
-                for (const key in data120) {
-                    const value = formatValue120(key, data120[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-21 mapping and renderer =====
-            const labelMaps121 = {
-                // Currently Form 1-21 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue121(key, rawValue) {
-                const map = labelMaps121[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render121() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-21 Details:';
-                list.innerHTML = '';
-                for (const key in data121) {
-                    const value = formatValue121(key, data121[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-22 mapping and renderer =====
-            const labelMaps122 = {
-                // Currently Form 1-22 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue122(key, rawValue) {
-                const map = labelMaps122[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render122() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-22 Details:';
-                list.innerHTML = '';
-                for (const key in data122) {
-                    const value = formatValue122(key, data122[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-24 mapping and renderer =====
-            const labelMaps124 = {
-                // Currently Form 1-24 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue124(key, rawValue) {
-                const map = labelMaps124[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render124() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-24 Details:';
-                list.innerHTML = '';
-                for (const key in data124) {
-                    const value = formatValue124(key, data124[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-25 mapping and renderer =====
-            const labelMaps125 = {
-                // Currently Form 1-25 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue125(key, rawValue) {
-                const map = labelMaps125[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render125() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-25 Details:';
-                list.innerHTML = '';
-                for (const key in data125) {
-                    const value = formatValue125(key, data125[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-
-            // ===== Form 1-26 mapping and renderer =====
-            const labelMaps126 = {
-                // Currently Form 1-26 uses text inputs only; keep for future mappings
-            };
-
-
-            function formatValue126(key, rawValue) {
-                const map = labelMaps126[key];
-                if (map) {
-                    if (Array.isArray(rawValue)) return rawValue.map(v => map[v] || v).join(', ');
-                    return map[rawValue] || rawValue || '';
-                }
-                if (Array.isArray(rawValue)) return rawValue.join(', ');
-                return rawValue ?? '';
-            }
-
-            function render126() {
-                const titleEl = document.querySelector('.validation-section-title');
-                if (titleEl) titleEl.textContent = 'Form 1-26 Details:';
-                list.innerHTML = '';
-                for (const key in data126) {
-                    const value = formatValue126(key, data126[key]);
-                    const dt = document.createElement('dt');
-                    dt.textContent = formatKey(key);
-                    const dd = document.createElement('dd');
-                    dd.textContent = value;
-                    list.appendChild(dt);
-                    list.appendChild(dd);
-                }
-            }
-            // Wire Back to Edit with token
-            (function wireBackToEdit() {
-                try {
-
-                    const btn = document.getElementById('backToEditBtn');
-                    if (!btn) return;
-                    const tokenFromServer = server101 && server101.form_token ? server101.form_token : '';
-                    const tokenFromQuery = new URLSearchParams(window.location.search).get('token');
-                    const storedToken = localStorage.getItem('form_token') || '';
-                    const token = tokenFromServer || tokenFromQuery || storedToken;
-
-                    const formType = @json($formType);
-                    const urlString = @json(route('forms.edit', ['formType' => $formType]));
-                    const url = new URL(urlString, window.location.origin);
-
-                    if (token) url.searchParams.set('token', token);
-                    btn.href = url.toString();
-                } catch (e) {
-                    /* noop */
-                }
-            })();
-
-            const link = document.getElementById('proceedPayment');
-            const form = document.getElementById('paymentForm');
-
-            // Get token from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('token');
-            console.log(token);
-            if (token) {
-                // Create hidden input dynamically
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'form_token';
-                input.value = token;
+            inputs.forEach((input) => {
                 form.appendChild(input);
-            }
+            })
+            // Redirect to transaction page with payment method
+            form.submit();
+        });
 
-            link.addEventListener('click', function(event) {
-                event.preventDefault(); // prevent normal link behavior
+        // Payment Method Selection JavaScript
+        const cashOption = document.getElementById('cashOption');
+        const gcashOption = document.getElementById('gcashOption');
+        const proceedPaymentBtn = document.getElementById('proceedPayment');
 
-                // Check if payment method is selected
-                if (!selectedPaymentMethod) {
-                    alert('Please select a payment method before proceeding.');
-                    return;
-                }
+        let selectedPaymentMethod = null;
 
-                // Redirect to transaction page with payment method
-                window.location.href = '{{ route('payment.transaction') }}?payment_method=' + selectedPaymentMethod;
+        // Payment option click handlers
+        if (cashOption) {
+            cashOption.addEventListener('click', function() {
+                selectPaymentMethod('cash');
             });
+        }
 
-            // Payment Method Selection JavaScript
-            const cashOption = document.getElementById('cashOption');
-            const gcashOption = document.getElementById('gcashOption');
-            const proceedPaymentBtn = document.getElementById('proceedPayment');
-
-            let selectedPaymentMethod = null;
-
-            // Payment option click handlers
-            if (cashOption) {
-                cashOption.addEventListener('click', function() {
-                    selectPaymentMethod('cash');
-                });
-            }
-
-            if (gcashOption) {
-                gcashOption.addEventListener('click', function() {
-                    selectPaymentMethod('gcash');
-                });
-            }
-
-            function selectPaymentMethod(method) {
-                // Remove previous selection
-                document.querySelectorAll('.payment-option').forEach(option => {
-                    option.classList.remove('selected');
-                });
-
-                // Add selection to clicked option
-                if (method === 'cash' && cashOption) {
-                    cashOption.classList.add('selected');
-                } else if (method === 'gcash' && gcashOption) {
-                    gcashOption.classList.add('selected');
-                }
-
-                selectedPaymentMethod = method;
-                if (proceedPaymentBtn) {
-                    proceedPaymentBtn.removeAttribute('disabled');
-                    proceedPaymentBtn.style.opacity = '1';
-                    proceedPaymentBtn.style.cursor = 'pointer';
-                }
-            }
-
-            // Add keyboard navigation support for payment options
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    if (document.activeElement === cashOption || document.activeElement === gcashOption) {
-                        document.activeElement.click();
-                    }
-                }
+        if (gcashOption) {
+            gcashOption.addEventListener('click', function() {
+                selectPaymentMethod('gcash');
             });
+        }
+        const paymentInput = document.getElementById('paymentMethodInput');
 
-            // Make payment options focusable for keyboard navigation
-            if (cashOption) cashOption.setAttribute('tabindex', '0');
-            if (gcashOption) gcashOption.setAttribute('tabindex', '0');
+        function selectPaymentMethod(method) {
+            // Remove previous selection
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            // Add selection to clicked option
+            if (method === 'cash' && cashOption) {
+                cashOption.classList.add('selected');
+                paymentInput.value = method;
+            } else if (method === 'gcash' && gcashOption) {
+                gcashOption.classList.add('selected');
+                paymentInput.value = method;
+            }
 
-            // Add focus styles for payment options
-            const paymentStyle = document.createElement('style');
-            paymentStyle.textContent = `
+            selectedPaymentMethod = method;
+
+            if (typeof window.__revalidateAttachments === 'function') {
+                window.__revalidateAttachments();
+            }
+        }
+
+        // Add keyboard navigation support for payment options
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (document.activeElement === cashOption || document.activeElement === gcashOption) {
+                    document.activeElement.click();
+                }
+            }
+        });
+
+        // Make payment options focusable for keyboard navigation
+        if (cashOption) cashOption.setAttribute('tabindex', '0');
+        if (gcashOption) gcashOption.setAttribute('tabindex', '0');
+
+        // Add focus styles for payment options
+        const paymentStyle = document.createElement('style');
+        paymentStyle.textContent = `
                 .payment-option:focus {
                     outline: 2px solid #3b82f6;
                     outline-offset: 2px;
@@ -832,72 +334,9 @@
                     cursor: not-allowed;
                 }
             `;
-            document.head.appendChild(paymentStyle);
+        document.head.appendChild(paymentStyle);
 
-            // Show only the active form (fallback to whichever has data)
-            if (activeForm === '1-01' && server101) {
-                renderFormData(server101, '1-01');
-            } else if (activeForm === '1-02' && has102) {
-                render102();
-            } else if (activeForm === '1-03' && has103) {
-                render103();
-            } else if (activeForm === '1-11' && has111) {
-                render111();
-            } else if (activeForm === '1-13' && has113) {
-                render113();
-            } else if (activeForm === '1-14' && has114) {
-                render114();
-            } else if (activeForm === '1-16' && has116) {
-                render116();
-            } else if (activeForm === '1-18' && has118) {
-                render118();
-            } else if (activeForm === '1-19' && has119) {
-                render119();
-            } else if (activeForm === '1-20' && has120) {
-                render120();
-            } else if (activeForm === '1-21' && has121) {
-                render121();
-            } else if (activeForm === '1-22' && has122) {
-                render122();
-            } else if (activeForm === '1-24' && has124) {
-                render124();
-            } else if (activeForm === '1-25' && has125) {
-                render125();
-            } else if (activeForm === '1-26' && has126) {
-                render126();
-            } else if (server101) {
-                renderFormData(server101, @json($formType));
-            } else if (has102) {
-                render102();
-            } else if (has103) {
-                render103();
-            } else if (has111) {
-                render111();
-            } else if (has113) {
-                render113();
-            } else if (has114) {
-                render114();
-            } else if (has116) {
-                render116();
-            } else if (has118) {
-                render118();
-            } else if (has119) {
-                render119();
-            } else if (has120) {
-                render120();
-            } else if (has121) {
-                render121();
-            } else if (has122) {
-                render122();
-            } else if (has124) {
-                render124();
-            } else if (has125) {
-                render125();
-            } else if (has126) {
-                render126();
-            }
-        </script>
-    </main>
-</body>
-
-</html>
+        // Show only the active form (fallback to whichever has data)
+        renderFormData(server101, @json($formType));
+    </script>
+</x-layout>

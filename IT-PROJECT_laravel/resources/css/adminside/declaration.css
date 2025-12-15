@@ -1,0 +1,242 @@
+.declaration-main {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background: #f7f7f7;
+}
+
+.declaration-main h1 {
+    font-size: 22px;
+    color: #1f2933;
+}
+
+.declaration-table-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -18px rgba(15, 23, 42, 0.35);
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.declaration-table-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.declaration-table-card .card-header p {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.declaration-table-card .table-meta {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.declaration-table-card .table-container {
+    max-height: 450px;
+    overflow-y: auto;
+    border-radius: 12px;
+    border: 1px solid #eef2f7;
+}
+
+.declaration-table-card .table-container table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 760px;
+}
+
+.styled-table thead th {
+    text-align: left;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: #2a3545;
+    font-weight: 700;
+    background: #f3f5f9;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.styled-table tbody tr {
+    border-bottom: 2px solid #eef2f7;
+    transition: background 0.2s ease;
+}
+
+.styled-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.styled-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    background: #fff;
+}
+
+.status-chip {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.action-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.action-placeholder {
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+.receipt-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: #213c78;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    align-self: flex-start;
+}
+
+.receipt-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -15px rgba(33, 60, 120, 0.9);
+}
+
+.receipt-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1000;
+}
+
+.receipt-modal__content {
+    background: #fff;
+    border-radius: 18px;
+    max-width: 520px;
+    width: 100%;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 25px 60px -30px rgba(15, 23, 42, 0.6);
+}
+
+.receipt-modal__close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.receipt-modal__header h3 {
+    margin-bottom: 4px;
+}
+
+.receipt-modal__header p {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.receipt-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.receipt-form .form-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.receipt-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.receipt-form input {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.receipt-form input:focus {
+    outline: none;
+    border-color: #213c78;
+    box-shadow: 0 0 0 3px rgba(33, 60, 120, 0.15);
+}
+
+.receipt-form__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.btn-secondary,
+.btn-primary {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.btn-primary {
+    background: #213c78;
+    color: #fff;
+}
+
+.btn-secondary:hover,
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -15px rgba(15, 23, 42, 0.8);
+}
+
+@media (max-width: 1024px) {
+    .declaration-main {
+        margin-left: 0;
+    }
+
+    .declaration-table-card .card-header {
+        flex-direction: column;
+    }
+
+    .receipt-form .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

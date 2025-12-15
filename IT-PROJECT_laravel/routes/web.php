@@ -1,50 +1,43 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\ValidationController;
-use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\EmailController;
-use App\Http\Controllers\FormsController;
-use App\Http\Middleware\BlockMobileDevices;
+use App\Http\Controllers\ReceiptController;
+use App\Http\Controllers\TemplatePreviewController;
 
 // Default index route
 Route::get('/', function () {
-    return view('homepage');
+    $carouselController = new \App\Http\Controllers\AdminCarouselController();
+    $carouselSlides = $carouselController->getHomepageSlides();
+
+    return view('homepage', compact('carouselSlides'));
 })->name('homepage');
-
-// Forms list page
-Route::get('/forms-list', [FormsController::class, 'index'])->name('forms.list')->middleware('email.verified');
-
-// Forms showcase gallery
-Route::get('/display-forms', [FormsController::class, 'index2'])->name('display.forms');
-
-// Payment method selection page
-Route::get('/payment/method', function () {
-    return view('payment.payment-method');
-})->name('payment.method');
-
-// Simple GCash payment demo page
-Route::get('/payment/gcash', function () {
-    return view('payment.gcash');
-})->name('payment.gcash');
-
-// Cash payment confirmation page
-Route::get('/payment/cash', function () {
-    return view('payment.cash');
-})->name('payment.cash');
-
-// Transaction details page
-Route::get('/payment/transaction', function (Request $request) {
-    $paymentMethod = $request->get('payment_method', 'cash');
-    return view('payment.transaction', compact('paymentMethod'));
-})->name('payment.transaction');
 
 // Requirements page
 Route::get('/requirements', function () {
     return view('requirements');
 })->name('requirements');
+
+//Services page
+Route::get('/services', function () {
+    return view('services');
+})->name('services');
+
+
+Route::get('/test-ntc-receipt', [ReceiptController::class, 'generateReceipt']);
+Route::post('/test-ntc-receipt', [ReceiptController::class, 'generateReceiptFromDB']);
+Route::get('/test-ntc-certificate', [ReceiptController::class, 'generateCertificate']);
+Route::post('/test-ntc-certificate', [ReceiptController::class, 'generateCertificateFromDB']);
+
+// Template Preview Routes (for Chrome PDF preview)
+Route::get('/preview-templates', [TemplatePreviewController::class, 'index'])->name('preview.templates.index');
+Route::get('/preview-templates/certificate', [TemplatePreviewController::class, 'previewCertificate'])->name('preview.certificate');
+Route::get('/preview-templates/ntc-permit', [TemplatePreviewController::class, 'previewNtcPermit'])->name('preview.ntc-permit');
+Route::get('/preview-templates/exam-receipt', [TemplatePreviewController::class, 'previewExamReceipt'])->name('preview.exam-receipt');
+Route::get('/preview-templates/or-certificate-receipt', [TemplatePreviewController::class, 'previewOrCertificateReceipt'])->name('preview.or-certificate-receipt');
+Route::get('/preview-templates/permit-receipt', [TemplatePreviewController::class, 'previewPermitReceipt'])->name('preview.permit-receipt');
+
+
 
 // Email Authentication routes
 Route::get('/email-auth', [EmailController::class, 'showEmailAuth'])->name('email-auth');
@@ -53,38 +46,6 @@ Route::get('/email-auth/verify/{token}', [EmailController::class, 'verifyEmail']
 Route::get('/email-auth/verify-script/{token}', [EmailController::class, 'verifyEmailScript'])->name('email-auth.verify-script');
 Route::get('/email-auth/status', [EmailController::class, 'checkEmailStatus'])->name('email-auth.status');
 Route::post('/email-auth/clear', [EmailController::class, 'clearEmailVerification'])->name('email-auth.clear');
-
-Route::prefix('forms')->name('forms.')->middleware('email.verified')->group(function () {
-
-    // GET routes to render form views
-    Route::get('{formType}', [FormsController::class, 'show'])->name('show');
-    Route::get('{formType}/validation', [FormsController::class, 'showValidation'])->name('validation');
-    Route::get('{formType}/edit', [FormsController::class, 'edit'])->name('edit');
-
-    Route::post('{formType}/preview', [FormsController::class, 'preview'])->name('preview');
-    Route::post('{formType}/submit', [FormsController::class, 'storeAll'])->name('submit');
-});
-
-// Adminside Pages
-// Show login page (GET)
-Route::get('/adminside', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-
-// Handle login (POST) → same page (index.blade.php)
-Route::post('/adminside', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-
-// Dashboard (after login)
-Route::get('/adminside/dashboard', [AdminAuthController::class, 'dashboard'])->name('adminside.dashboard');
-
-// Logout
-Route::post('/adminside/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-
-// Sign Up (temporary redirect)
-
-
-// Default route (optional) (Uncomment to make the default url to adminside only 1 can be used) 
-// Route::get('/', function () {
-//     return redirect()->route('adminside.index');
-// });
 
 
 // Serve Philippine address data JSON files
@@ -126,22 +87,3 @@ Route::get('/nationalities.json', function () {
         'Cache-Control' => 'public, max-age=3600', // Cache for 1 hour
     ]);
 })->name('nationalities.data');
-
-Route::get('/adminside/cert-request', [AdminAuthController::class, 'certRequest'])->name('adminside.cert-request');
-
-Route::get('/adminside/req-management', [AdminAuthController::class, 'requestManagement'])->name('adminside.req-management');
-
-Route::post('/admin/update-status', [AdminAuthController::class, 'updateStatus'])->name('admin.updateStatus');
-
-Route::get('/adminside/bill-pay', [App\Http\Controllers\AdminAuthController::class, 'billPay'])->name('adminside.bill-pay');
-
-Route::post('/adminside/set-paid', [AdminAuthController::class, 'setPaid'])->name('adminside.setPaid');
-
-Route::prefix('adminside')
-    ->middleware(\App\Http\Middleware\BlockMobileDevices::class)
-    ->group(function () {
-        Route::get('/', [AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-        Route::post('/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
-        Route::get('/dashboard', [AdminAuthController::class, 'dashboard'])->name('adminside.dashboard');
-        Route::post('/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
-    });

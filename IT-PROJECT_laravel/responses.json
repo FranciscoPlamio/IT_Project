@@ -1,0 +1,9 @@
+[
+    "Payment received and verified",
+    "Payment pending verification",
+    "Payment amount needs adjustment",
+    "Payment proof submitted",
+    "Awaiting payment",
+    "Payment incomplete - Please resubmit"
+]
+

@@ -18,15 +18,6 @@
                 style="background:#0d6efd;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
                 View PDF
             </a>
-
-            <a href="{{ route('forms.show', ['formType' => $formType]) }}"
-                style="background:#09e84c;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                Sign up
-            </a>
-            <a href="{{ route('requirements') }}"
-                style="background:#6c757d;color:#fff;text-decoration:none;padding:8px 12px;border-radius:4px;display:inline-block;">
-                Requirements
-            </a>
         </div>
     </div>
 </div>

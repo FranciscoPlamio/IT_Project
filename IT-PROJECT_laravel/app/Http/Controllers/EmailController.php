@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\AuthMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +19,7 @@ class EmailController extends Controller
     public function showEmailAuth()
     {
         if (session()->has('email_verified')) {
-            return redirect()->route('forms.list');
+            return redirect()->route('display.forms');
         }
         return view('emailAuthentication');
     }
@@ -75,12 +76,27 @@ class EmailController extends Controller
      */
     public function sendAuthEmail(Request $request)
     {
-        // Validate the email input
+        // Validate the email input with strict RFC validation
+        // Using 'rfc,strict' for stricter email validation that rejects invalid formats
+        // Also adding regex to ensure domain has a TLD (e.g., .com, .org)
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|max:255'
+            'email' => [
+                'required',
+                'email:rfc,strict',
+                'max:255',
+                'regex:/^[^\s@]+@[^\s@]+\.[^\s@]+$/' // Ensures domain has a TLD
+            ]
         ]);
 
         if ($validator->fails()) {
+            // Log validation failures for monitoring and security
+            Log::warning('Email authentication validation failed', [
+                'email' => $request->input('email'),
+                'errors' => $validator->errors()->toArray(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Please provide a valid email address.',
@@ -97,15 +113,21 @@ class EmailController extends Controller
         Cache::put('email_auth_' . $token, $email, 900); // 15 minutes
 
         try {
-            // Send the authentication email
-            Mail::send('emails.auth-email', [
+            // Send the authentication email using the AuthMail mailable class
+            $verificationUrl = route('email-auth.verify', ['token' => $token]);
+
+            Mail::to($email)->send(new AuthMail(
+                $email,
+                $token,
+                $verificationUrl
+            ));
+
+            // Log successful email send for audit trail
+            Log::info('Authentication email sent successfully', [
                 'email' => $email,
-                'token' => $token,
-                'verification_url' => route('email-auth.verify', ['token' => $token])
-            ], function ($message) use ($email) {
-                $message->to($email)
-                    ->subject('Email Authentication - NTC Forms System');
-            });
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -113,8 +135,16 @@ class EmailController extends Controller
                 'email' => $email
             ]);
         } catch (\Exception $e) {
-            // Log the error
-            Log::error('Email sending failed: ' . $e->getMessage());
+            // Log detailed error information
+            Log::error('Email sending failed', [
+                'email' => $email,
+                'error_message' => $e->getMessage(),
+                'error_file' => $e->getFile(),
+                'error_line' => $e->getLine(),
+                'error_trace' => $e->getTraceAsString(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
 
             return response()->json([
                 'success' => false,
@@ -162,7 +192,7 @@ class EmailController extends Controller
         }
 
         // Retrieve intended URL from session
-        $redirectUrl = session('intended_url', route('forms.list'));
+        $redirectUrl = session('intended_url', route('display.forms'));
         session()->forget('intended_url'); // Clean up after use
 
 
@@ -203,9 +233,9 @@ class EmailController extends Controller
      */
     public function clearEmailVerification(Request $request)
     {
-        session()->forget('email_verified');
+        session()->flush(); // 🧹 clears ALL session data
 
         // Redirect to home page after signing out
-        return redirect()->route('homepage')->with('success', 'You have been signed out successfully.');
+        return redirect()->route('homepage')->with('message', 'You have been signed out successfully.');
     }
 }
