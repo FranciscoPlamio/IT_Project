@@ -8,66 +8,70 @@ use Illuminate\Support\Facades\Route;
 
 
 // Adminside Pages
-Route::prefix('admin')->name('admin.')->middleware('admin.auth')->group(function () {
-    // Dashboard 
-    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('admin.auth')
+    ->middleware(\App\Http\Middleware\BlockMobileDevices::class)
+    ->group(function () {
+        // Dashboard 
+        Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('cert-request', [AdminController::class, 'certRequest'])->name('cert-request');
-    Route::get('permit-request', [AdminController::class, 'permitRequest'])->name('permit-request');
+        Route::get('cert-request', [AdminController::class, 'certRequest'])->name('cert-request');
+        Route::get('permit-request', [AdminController::class, 'permitRequest'])->name('permit-request');
 
-    //Request management
-    Route::get('req-management', [AdminController::class, 'requestManagement'])->name('req-management');
-    Route::get('req-management/{formToken}', [AdminController::class, 'showRequestAttachments'])->name('req.attachments');
-    Route::post('req-management/save-remarks/{formId}/', [AdminController::class, 'saveRemarks'])->name('remarks.save');
-    Route::get('view-file', [AdminController::class, 'viewFile'])->name('viewFile');
-    Route::post('update-status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
-    Route::post('forms/{formId}/approve', [AdminController::class, 'approveForm']);
-    Route::post('forms/{formId}/decline', [AdminController::class, 'declineForm']);
+        //Request management
+        Route::get('req-management', [AdminController::class, 'requestManagement'])->name('req-management');
+        Route::get('req-management/{formToken}', [AdminController::class, 'showRequestAttachments'])->name('req.attachments');
+        Route::post('req-management/save-remarks/{formId}/', [AdminController::class, 'saveRemarks'])->name('remarks.save');
+        Route::get('view-file', [AdminController::class, 'viewFile'])->name('viewFile');
+        Route::post('update-status', [AdminController::class, 'updateStatus'])->name('admin.updateStatus');
+        Route::post('forms/{formId}/approve', [AdminController::class, 'approveForm']);
+        Route::post('forms/{formId}/decline', [AdminController::class, 'declineForm']);
 
-    //Request history page
-    Route::get('req-history', [AdminController::class, 'requestHistory'])->name('req-history');
-
-
-    //Admission slip
-    Route::get('admission-slip', [AdminController::class, 'admissionSlip'])->name('admission-slip');
-    Route::post('admission-slip', [AdminController::class, 'admissionSlipSubmit'])->name('admission-slip.submit');
-
-    // Declaration
-    Route::get('declaration', [AdminController::class, 'declaration'])->name('declaration');
-    Route::post('declaration', [AdminController::class, 'declarationSubmit'])->name('declaration.submit');
-
-    Route::get('bill-pay', [AdminController::class, 'billPay'])->name('bill-pay');
-    Route::get('form-fees', [AdminController::class, 'formFees'])->name('form-fees');
-    Route::get('get-form-data', [AdminController::class, 'getFormData'])->name('admin.getFormData');
-    Route::get('download-form', [AdminController::class, 'downloadFormPDF'])->name('admin.downloadForm');
-    Route::get('test', [AdminController::class, 'test'])->name('test');
-
-    // Certificate generation route
-    Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
-    Route::get('get-certificate-data/{token}', [FormsController::class, 'getCertificateData'])->name('get-certificate-data');
-
-    Route::get('certificates/verify', [CertificateController::class, 'showVerifyPage'])->name('certificates.verify');
-    Route::post('certificates/verify', [CertificateController::class, 'verifySubmit'])->name('certificates.verify.submit');
-    Route::get('certificates/download/{certificate_no}', [CertificateController::class, 'downloadCertificate'])->name('certificates.download');
-    Route::post('certificates/ocr', [CertificateController::class, 'runOCR'])->name('certificates.ocr');
+        //Request history page
+        Route::get('req-history', [AdminController::class, 'requestHistory'])->name('req-history');
 
 
+        //Admission slip
+        Route::get('admission-slip', [AdminController::class, 'admissionSlip'])->name('admission-slip');
+        Route::post('admission-slip', [AdminController::class, 'admissionSlipSubmit'])->name('admission-slip.submit');
+
+        // Declaration
+        Route::get('declaration', [AdminController::class, 'declaration'])->name('declaration');
+        Route::post('declaration', [AdminController::class, 'declarationSubmit'])->name('declaration.submit');
+
+        Route::get('bill-pay', [AdminController::class, 'billPay'])->name('bill-pay');
+        Route::get('form-fees', [AdminController::class, 'formFees'])->name('form-fees');
+        Route::get('get-form-data', [AdminController::class, 'getFormData'])->name('admin.getFormData');
+        Route::get('download-form', [AdminController::class, 'downloadFormPDF'])->name('admin.downloadForm');
+        Route::get('test', [AdminController::class, 'test'])->name('test');
+
+        // Certificate generation route
+        Route::get('generate-certificate', [FormsController::class, 'generateCertificate'])->name('generate-certificate');
+        Route::get('get-certificate-data/{token}', [FormsController::class, 'getCertificateData'])->name('get-certificate-data');
+
+        Route::get('certificates/verify', [CertificateController::class, 'showVerifyPage'])->name('certificates.verify');
+        Route::post('certificates/verify', [CertificateController::class, 'verifySubmit'])->name('certificates.verify.submit');
+        Route::get('certificates/download/{certificate_no}', [CertificateController::class, 'downloadCertificate'])->name('certificates.download');
+        Route::post('certificates/ocr', [CertificateController::class, 'runOCR'])->name('certificates.ocr');
 
 
-    // Permit
-    Route::get('generate-permit', [FormsController::class, 'generatePermit'])->name('generate-permit');
-    Route::get('get-permit-data/{token}', [FormsController::class, 'getPermitData'])->name('get-permit-data');
 
-    // Carousel Management
-    Route::get('carousel', [\App\Http\Controllers\AdminCarouselController::class, 'index'])->name('carousel.index');
-    Route::post('carousel/store', [\App\Http\Controllers\AdminCarouselController::class, 'store'])->name('carousel.store');
-    Route::post('carousel/destroy', [\App\Http\Controllers\AdminCarouselController::class, 'destroy'])->name('carousel.destroy');
 
-    // Payment QR Management
-    Route::get('payment-qr', [\App\Http\Controllers\AdminPaymentQRController::class, 'index'])->name('payment-qr.index');
-    Route::post('payment-qr/store', [\App\Http\Controllers\AdminPaymentQRController::class, 'store'])->name('payment-qr.store');
-    Route::post('payment-qr/destroy', [\App\Http\Controllers\AdminPaymentQRController::class, 'destroy'])->name('payment-qr.destroy');
-});
+        // Permit
+        Route::get('generate-permit', [FormsController::class, 'generatePermit'])->name('generate-permit');
+        Route::get('get-permit-data/{token}', [FormsController::class, 'getPermitData'])->name('get-permit-data');
+
+        // Carousel Management
+        Route::get('carousel', [\App\Http\Controllers\AdminCarouselController::class, 'index'])->name('carousel.index');
+        Route::post('carousel/store', [\App\Http\Controllers\AdminCarouselController::class, 'store'])->name('carousel.store');
+        Route::post('carousel/destroy', [\App\Http\Controllers\AdminCarouselController::class, 'destroy'])->name('carousel.destroy');
+
+        // Payment QR Management
+        Route::get('payment-qr', [\App\Http\Controllers\AdminPaymentQRController::class, 'index'])->name('payment-qr.index');
+        Route::post('payment-qr/store', [\App\Http\Controllers\AdminPaymentQRController::class, 'store'])->name('payment-qr.store');
+        Route::post('payment-qr/destroy', [\App\Http\Controllers\AdminPaymentQRController::class, 'destroy'])->name('payment-qr.destroy');
+    });
 
 
 // Show login page (GET)
