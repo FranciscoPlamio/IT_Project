@@ -9,6 +9,7 @@ use App\Http\Controllers\TemplatePreviewController;
 Route::get('/', function () {
     $carouselController = new \App\Http\Controllers\AdminCarouselController();
     $carouselSlides = $carouselController->getHomepageSlides();
+
     return view('homepage', compact('carouselSlides'));
 })->name('homepage');
 

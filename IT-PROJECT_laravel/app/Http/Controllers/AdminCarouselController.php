@@ -55,6 +55,9 @@ class AdminCarouselController extends Controller
     /**
      * Store new carousel slide or replace existing one
      */
+    /**
+     * Store new carousel slide or replace existing one
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -62,32 +65,16 @@ class AdminCarouselController extends Controller
             'replace_path' => 'nullable|string',
         ]);
 
+        // Check if this is a replace operation
         $replacePath = $request->input('replace_path');
 
         if ($replacePath) {
-            $result = $this->replaceQR($request, $replacePath);
-
-            // Log the replacement
-            QrCodeLog::create([
-                'admin_id' => Auth::id(),
-                'action' => 'replaced',
-                'file_name' => basename($replacePath),
-            ]);
-
-            return $result;
+            // Replace existing file
+            return $this->replaceSlide($request, $replacePath);
         }
 
         // Handle new upload
-        $result = $this->uploadSlide($request);
-
-        // Log the new upload
-        QrCodeLog::create([
-            'admin_id' => Auth::id(),
-            'action' => 'uploaded',
-            'file_name' => $request->file('image')->getClientOriginalName(),
-        ]);
-
-        return $result;
+        return $this->uploadSlide($request);
     }
 
     /**
@@ -120,7 +107,7 @@ class AdminCarouselController extends Controller
             }
 
             return redirect()->back()->with(
-                'success',
+                'message',
                 "Image uploaded successfully: $filename"
             );
         } catch (\Exception $e) {

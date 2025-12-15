@@ -137,9 +137,9 @@ class FormsController extends Controller
 
     public function show(Request $request, $formType)
     {
-        // if (self::userHasFormTransaction()) {
-        //     return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
-        // }
+        if (self::userHasFormTransaction()) {
+            return redirect()->route('transactions.index')->with('message', 'You already have existing Form. Please finish the process first before signing up a new form.');
+        }
         // Get all session keys
         $sessionKeys = array_keys(session()->all());
 
@@ -855,23 +855,39 @@ class FormsController extends Controller
 
             // --- Generate or retrieve certificate number ---
             $existingCert = Certificate::where('form_token', $formToken)->first();
+
             if ($existingCert) {
                 $certificateNo = $existingCert->certificate_no;
             } else {
-                // Generate unique certificate number
                 $year = now()->year;
                 $typeCode = preg_replace('/[^A-Z]/', '', $rawType) ?: 'GEN';
-                $count = Certificate::whereYear('date_issued', $year)->count() + 1;
-                $sequence = str_pad($count, 6, '0', STR_PAD_LEFT);
-                $certificateNo = "NTC-CAR-{$typeCode}-{$year}-{$sequence}";
+
+                // Get last sequence for the year
+                $lastCert = Certificate::whereYear('date_issued', $year)
+                    ->orderBy('sequence', 'desc')
+                    ->first();
+
+                $nextSequence = $lastCert ? $lastCert->sequence + 1 : 1;
+                $sequencePadded = str_pad($nextSequence, 6, '0', STR_PAD_LEFT);
+
+                // Generate random suffix
+                do {
+                    $randomSuffix = strtoupper(Str::random(4));
+                    $certificateNo = "NTC-CAR-{$typeCode}-{$year}-{$sequencePadded}-{$randomSuffix}";
+                } while (Certificate::where('certificate_no', $certificateNo)->exists());
 
                 // Save certificate record
                 Certificate::create([
                     'certificate_no'   => $certificateNo,
+                    'sequence'         => $nextSequence,
                     'form_token'       => $formToken,
                     'form_type'        => $transactionForm->form_type,
                     'certificate_type' => $rawType,
-                    'holder_name'      => trim("{$dbForm->first_name} " . ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') . "{$dbForm->last_name}"),
+                    'holder_name'      => trim(
+                        "{$dbForm->first_name} " .
+                            ($dbForm->middle_name ? strtoupper($dbForm->middle_name[0]) . '. ' : '') .
+                            "{$dbForm->last_name}"
+                    ),
                     'date_issued'      => now(),
                     'valid_until'      => now()->addYears((int)($dbForm->years ?? 3)),
                     'status'           => 'active',

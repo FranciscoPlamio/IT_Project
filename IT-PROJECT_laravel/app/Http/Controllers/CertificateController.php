@@ -48,8 +48,11 @@ class CertificateController extends Controller
         }
 
         // Optional: generate a link to the PDF
-        $pdfPath = "private/certificates/{$certificate->certificate_no}.pdf";
-        $pdfUrl = Storage::exists($pdfPath) ? route('admin.certificates.download', ['certificate_no' => $certificate->certificate_no]) : null;
+        $pdfPath = "certificates/{$certificate->certificate_no}.pdf";
+
+        $pdfUrl = Storage::exists($pdfPath)
+            ? route('admin.certificates.view', ['certificate_no' => $certificate->certificate_no])
+            : null;
 
         return view('adminside.verify', [
             'certificate' => $certificate,
@@ -57,11 +60,28 @@ class CertificateController extends Controller
         ]);
     }
 
+    public function viewCertificate($certificate_no)
+    {
+        $certificate = Certificate::where('certificate_no', $certificate_no)->firstOrFail();
+        $pdfPath = "certificates/{$certificate->certificate_no}.pdf";
+
+        abort_unless(Storage::exists($pdfPath), 404);
+
+        return response()->file(
+            storage_path("app/private/{$pdfPath}"),
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="' . $certificate_no . '.pdf"',
+            ]
+        );
+    }
+
+
     // Optional: allow admin to download/view certificate
     public function downloadCertificate($certificate_no)
     {
         $certificate = Certificate::where('certificate_no', $certificate_no)->firstOrFail();
-        $pdfPath = "private/certificates/{$certificate->certificate_no}.pdf";
+        $pdfPath = "certificates/{$certificate->certificate_no}.pdf";
 
         if (!Storage::exists($pdfPath)) {
             abort(404, 'Certificate file not found.');

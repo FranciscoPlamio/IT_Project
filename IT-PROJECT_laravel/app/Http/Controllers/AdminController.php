@@ -655,7 +655,7 @@ class AdminController extends Controller   // <-- rename this
 
                 // Build the certificate file path in private/certificates folder
                 $certificateFileName = $certificate->certificate_no . '.pdf';
-                $certificatePath = "private/certificates/{$certificateFileName}";
+                $certificatePath = "certificates/{$certificateFileName}";
 
                 if (!Storage::exists($certificatePath)) {
                     return redirect()->back()->withErrors(['Certificate file not found in storage.']);

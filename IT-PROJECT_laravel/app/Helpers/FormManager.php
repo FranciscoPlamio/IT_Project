@@ -59,6 +59,7 @@ class FormManager
 
             //Form 1-02 Payment
         } elseif ($formType === "form1-02") {
+
             //Modification
             if ($formData['application_type'] === "modification") {
                 $transactionData['payment_amount'] = 150;
@@ -72,7 +73,7 @@ class FormManager
                     "1PHN" => ["roc" => 120, "dst" => 30],
                     "2PHN" => ["roc" => 100, "dst" => 30],
                     "3PHN" => ["roc" => 60, "dst" => 30],
-                    "RROC-Aircraft" => ["roc" => 100, "dst" => 30],
+                    "TP RROC-Aircraft" => ["roc" => 100, "dst" => 30],
                     "SROP" => ["roc" => 60, "dst" => 30],
                     "GROC" => ["roc" => 60, "dst" => 30],
                     "RROC-RLM" => ["roc" => 60, "dst" => 30],

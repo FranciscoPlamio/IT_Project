@@ -52,6 +52,11 @@ Route::prefix('admin')
 
         Route::get('certificates/verify', [CertificateController::class, 'showVerifyPage'])->name('certificates.verify');
         Route::post('certificates/verify', [CertificateController::class, 'verifySubmit'])->name('certificates.verify.submit');
+        Route::get(
+            'certificates/{certificate_no}',
+            [CertificateController::class, 'viewCertificate']
+        )->name('certificates.view');
+
         Route::get('certificates/download/{certificate_no}', [CertificateController::class, 'downloadCertificate'])->name('certificates.download');
         Route::post('certificates/ocr', [CertificateController::class, 'runOCR'])->name('certificates.ocr');
 

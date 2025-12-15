@@ -92,7 +92,7 @@
                         'roc' => 60,
                         'dst' => 30,
                     ],
-                    'RROC-Aircraft' => [
+                    'TP RROC-Aircraft' => [
                         'ff' => 0,
                         'af' => 0,
                         'sem' => 0,
