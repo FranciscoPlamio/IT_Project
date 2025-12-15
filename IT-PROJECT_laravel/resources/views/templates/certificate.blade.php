@@ -134,7 +134,8 @@
             <tr>
                 <td>
                     <span class="label">Sex</span><br>
-                    <span class="value">{{ $certificate['sex'] }}</span>
+                    <span
+                        class="value">{{ $certificate['sex'] === 'male' ? 'Male' : ($certificate['sex'] === 'female' ? 'Female' : $certificate['sex']) }}</span>
                 </td>
                 <td>
                     <span class="label">Height / Weight</span><br>
