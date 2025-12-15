@@ -908,14 +908,16 @@ class FormsController extends Controller
                 ->setPaper('A5', 'portrait');
 
             // Private folder for certificates
+            // Save PDF first (always)
             $certificatePath = "certificates/{$certificateNo}.pdf";
             Storage::put($certificatePath, $pdf->output());
 
-            // Preview or download
+            // If preview, just stream
             if ($request->boolean('preview')) {
                 return $pdf->stream("{$certificateNo}.pdf");
-            } else {
-                // Save certificate record
+            } // Save certificate record if it doesn't exist
+
+            if (!$existingCert) {
                 Certificate::create([
                     'certificate_no'   => $certificateNo,
                     'sequence'         => $nextSequence,
