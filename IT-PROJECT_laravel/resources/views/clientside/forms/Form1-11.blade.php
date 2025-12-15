@@ -1,11 +1,8 @@
 <x-layout :title="'Application for Construction Permit/Radio Station License (Form 1-11)'" :form-header="['formNo' => 'NTC 1-11', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
 
     <main>
-        <form class="form1-01-container" id="form111" method="POST"
-            action="{{ route('forms.preview', ['formType' => $formType]) }}">
-            @csrf
-            <input type="hidden" name="form_token"
-                value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
+        <form class="form1-01-container" id="form111" method="POST" @csrf <input type="hidden" name="form_token"
+            value="{{ isset($form['form_token']) ? $form['form_token'] : session('form_token') }}">
             <div class="form1-01-header">APPLICATION FOR CONSTRUCTION PERMIT / RADIO STATION LICENSE</div>
             <div class="form1-01-note"><strong>NOTE:</strong> The system asks for additional info when applicant is
                 a minor.</div>
@@ -370,6 +367,61 @@
             </div>
         </form>
 
+        <style>
+            /* Form field validation styles */
+            .form-field.invalid input,
+            .form-field.invalid select,
+            .form-field.invalid textarea {
+                border-color: #dc3545;
+                background-color: rgba(220, 53, 69, 0.05);
+            }
+
+            /* Radio/checkbox group validation */
+            [data-require-one].invalid {
+                padding: 8px;
+                border: 1px solid #dc3545;
+                border-radius: 4px;
+                background-color: rgba(220, 53, 69, 0.05);
+            }
+
+            /* Step completion indicators */
+            .step-item.completed {
+                color: #28a745;
+            }
+
+            .step-item.completed .step-status {
+                color: #28a745;
+                font-weight: bold;
+            }
+
+            /* Hide all validation messages from components */
+            .validation-message,
+            .validation-summary,
+            .address-error,
+            .text-red {
+                display: none !important;
+            }
+
+            /* Highlight required fields more clearly */
+            .form-field input:required,
+            .form-field select:required {
+                background-color: rgba(0, 0, 0, 0.02);
+            }
+
+            /* Show invalid state more clearly */
+            .form-field.invalid {
+                position: relative;
+            }
+
+            .form-field.invalid::after {
+                content: "Required";
+                position: absolute;
+                right: 0;
+                top: 0;
+                font-size: 12px;
+                color: #dc3545;
+            }
+        </style>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
@@ -377,50 +429,33 @@
                 const stepsList = document.getElementById('stepsList11');
                 const form = document.getElementById('form111');
                 const validationLink11 = document.getElementById('validationLink11');
-                const warningCheckbox = document.getElementById('warning-agreement');
 
-                // Function to disable/enable all form fields
-                function toggleFormFields(enabled) {
-                    const formFields = form.querySelectorAll('input, select, textarea, button');
-                    formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
-                            return;
-                        }
-                        field.disabled = !enabled;
-                    });
-                }
-
-                // Initially disable all form fields
-                toggleFormFields(false);
-
-                // Add event listener to warning checkbox
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleFormFields(this.checked);
+                if (stepsList) {
+                    stepsList.addEventListener('click', (e) => {
+                        // Let the built-in navigation work
+                        const li = e.target.closest('.step-item');
+                        if (li) showStep(li.dataset.step);
                     });
                 }
 
                 function showStep(step) {
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && step !== 'personal') {
-                        return;
-                    }
-                    stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
-                        step));
-                    document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
-                        `step-${step}`));
+                    stepsList.querySelectorAll('.step-item').forEach(li =>
+                        li.classList.toggle('active', li.dataset.step === step)
+                    );
+                    document.querySelectorAll('.step-content').forEach(s =>
+                        s.classList.toggle('active', s.id === `step-${step}`)
+                    );
                 }
 
                 function currentStep() {
-                    const a = stepsList.querySelector('.step-item.active');
-                    return a ? a.dataset.step : stepsOrder[0];
+                    const active = stepsList.querySelector('.step-item.active');
+                    return active ? active.dataset.step : stepsOrder[0];
                 }
 
-                function go(d) {
-                    const i = stepsOrder.indexOf(currentStep());
-                    const n = Math.max(0, Math.min(stepsOrder.length - 1, i + d));
-                    showStep(stepsOrder[n]);
+                function go(delta) {
+                    const idx = stepsOrder.indexOf(currentStep());
+                    const nextIdx = Math.max(0, Math.min(stepsOrder.length - 1, idx + delta));
+                    showStep(stepsOrder[nextIdx]);
                 }
 
                 function validateGroups(section) {
@@ -428,107 +463,140 @@
                     section.querySelectorAll('[data-require-one]').forEach(group => {
                         const selector = group.getAttribute('data-require-one');
                         const items = group.querySelectorAll(selector);
-                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type ===
-                            'radio') ? el.checked : Boolean(el.value));
-                        if (!anyChecked) ok = false;
+                        const anyChecked = Array.from(items).some(el =>
+                            (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value
+                                .trim())
+                        );
+                        if (!anyChecked) {
+                            ok = false;
+                            group.classList.add('invalid');
+                        } else {
+                            group.classList.remove('invalid');
+                        }
                     });
                     return ok;
+                }
+
+                function getInvalidFields(section) {
+                    const invalid = [];
+                    section.querySelectorAll('input:not([type=hidden]), select, textarea').forEach(el => {
+                        // Skip optional empty fields
+                        if (!el.required && !el.value.trim()) return;
+
+                        if ((el.type === 'radio' || el.type === 'checkbox') && el.name) {
+                            // Only process first in group
+                            const group = section.querySelectorAll(`input[name="${el.name}"]`);
+                            if (group && group.length && group[0] !== el) return;
+                            const anyChecked = Array.from(group).some(r => r.checked);
+                            if (el.required && !anyChecked) invalid.push(group[0] || el);
+                        } else {
+                            if (el.required && !el.value.trim()) invalid.push(el);
+                        }
+                    });
+
+                    // Check require-one groups
+                    section.querySelectorAll('[data-require-one]').forEach(group => {
+                        const selector = group.getAttribute('data-require-one');
+                        const items = group.querySelectorAll(selector);
+                        const anyValid = Array.from(items).some(el =>
+                            (el.type === 'checkbox' || el.type === 'radio') ? el.checked : Boolean(el.value
+                                .trim())
+                        );
+                        if (!anyValid && items[0]) invalid.push(items[0]);
+                    });
+
+                    return invalid;
                 }
 
                 function validateActiveStep() {
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
-                    let valid = true;
-                    section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
-                        if (el.type === 'radio') {
-                            const name = el.name;
-                            const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
-                            const anyChecked = Array.from(group).some(r => r.checked);
-                            if (!anyChecked) valid = false;
-                        } else if (!el.value) {
-                            valid = false;
+
+                    // Special handling for first step
+                    if (step === 'application') {
+                        const radioService = document.querySelector('input[name="radio_service"]:checked');
+                        const valid = Boolean(radioService);
+
+                        const li = stepsList.querySelector(`.step-item[data-step="application"]`);
+                        if (valid) {
+                            li.classList.add('completed');
+                            li.querySelector('.step-status').textContent = '✓';
+                            section.querySelectorAll('.form-field').forEach(field => {
+                                field.classList.remove('invalid');
+                            });
+                        } else {
+                            li.classList.remove('completed');
+                            li.querySelector('.step-status').textContent = '';
+                            const radioGroup = section.querySelector('[data-require-one]');
+                            if (radioGroup) radioGroup.classList.add('invalid');
                         }
-                    });
-                    if (!validateGroups(section)) valid = false;
+                        return valid;
+                    }
+
+                    // For other steps, check required fields
+                    const invalidFields = getInvalidFields(section);
+                    const valid = invalidFields.length === 0 && validateGroups(section);
+
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
                         li.classList.add('completed');
-                        li.querySelector('.step-status').textContent = 'Done';
+                        li.querySelector('.step-status').textContent = '✓';
+                        section.querySelectorAll('.form-field').forEach(field => {
+                            field.classList.remove('invalid');
+                        });
                     } else {
                         li.classList.remove('completed');
                         li.querySelector('.step-status').textContent = '';
+                        invalidFields.forEach(field => {
+                            const formField = field.closest('.form-field');
+                            if (formField) formField.classList.add('invalid');
+                        });
                     }
                     return valid;
                 }
 
-                stepsList.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const li = e.target.closest('.step-item');
-                    if (!li) return;
-                });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
-                    // if (validateActiveStep()) go(1);
-                    go(1);
-                }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => {
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    go(-1);
-                }));
+                // Navigation with visual validation only
+                document.querySelectorAll('[data-next]').forEach(btn =>
+                    btn.addEventListener('click', () => {
+                        if (validateActiveStep()) {
+                            go(1);
+                        }
+                    })
+                );
+                document.querySelectorAll('[data-prev]').forEach(btn =>
+                    btn.addEventListener('click', () => go(-1))
+                );
 
-                // --- Conditional enable/disable fields ---
-                function toggleModificationReason() {
-                    const modReason = form.querySelector('input[name="modification_reason"]');
-                    const modRadio = form.querySelector('input[name="application_type"][value="modification"]');
-                    if (!modReason || !modRadio) return;
-                    const enabled = modRadio.checked;
-                    modReason.disabled = !enabled;
-                    if (!enabled) modReason.value = '';
-                }
+                // Live validation cleanup
+                if (form) {
+                    form.addEventListener('input', (e) => {
+                        const section = e.target.closest('.step-content');
+                        if (!section) return;
 
-                function toggleRadioServiceOthers() {
-                    const othersRadio = form.querySelector('input[name="radio_service"][value="others"]');
-                    const othersSpecify = form.querySelector('input[name="others_specify"]');
-                    if (!othersRadio || !othersSpecify) return;
-                    const enabled = othersRadio.checked;
-                    othersSpecify.disabled = !enabled;
-                    if (!enabled) othersSpecify.value = '';
-                }
+                        const invalid = getInvalidFields(section);
+                        if (invalid.length === 0 && validateGroups(section)) {
+                            const li = stepsList.querySelector(
+                                `.step-item[data-step="${section.id.replace('step-', '')}"]`);
+                            if (li) {
+                                li.classList.add('completed');
+                                li.querySelector('.step-status').textContent = '✓';
+                            }
+                        }
+                    });
 
-                // Bind listeners
-                form.querySelectorAll('input[name="application_type"]').forEach(r => {
-                    r.addEventListener('change', toggleModificationReason);
-                });
-                form.querySelectorAll('input[name="radio_service"]').forEach(r => {
-                    r.addEventListener('change', toggleRadioServiceOthers);
-                });
-
-                // Initialize on load
-                toggleModificationReason();
-                toggleRadioServiceOthers();
-
-                // Keep in sync when agreement toggles overall enabled state
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleModificationReason();
-                        toggleRadioServiceOthers();
+                    form.addEventListener('change', (e) => {
+                        const section = e.target.closest('.step-content');
+                        if (!section) return;
+                        validateActiveStep();
                     });
                 }
 
+                // Submit button with visual validation
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
-                        if (!warningCheckbox.checked) {
-                            alert('Please check the agreement checkbox first before proceeding.');
-                            return;
-                        }
-                        const formData = new FormData(form);
-                        formData.forEach((value, key) => {
-                            console.log(`${key}: ${value}`);
-                        });
                         if (!validateActiveStep()) return;
+
                         try {
                             if (window.grecaptcha) {
                                 const captchaResponse = window.grecaptcha.getResponse();
@@ -541,51 +609,15 @@
                                 }
                             }
                         } catch (e) {}
+
                         form.submit();
-
-                        // -- commented AJAX for now--
-                        // -- uncomment if fixed -Richmond
-
-                        //const formData = new FormData(form);
-                        // try {
-                        //     const res = await fetch(form.action, {
-                        //         method: 'POST',
-                        //         headers: {
-                        //             'Content-Type': 'application/json',
-                        //             'Accept': 'application/json'
-                        //         },
-                        //         body: formData
-                        //     });
-                        //     const text = await res.text();
-                        //     console.log(text);
-                        //     let json = null;
-                        //     try {
-                        //         json = JSON.parse(text);
-                        //     } catch (e) {}
-                        //     if (res.ok) {
-                        //         if (json.form_token) {
-                        //             localStorage.setItem('form_token', json.form_token);
-                        //         }
-                        //         localStorage.setItem('active-form', '1-11');
-                        //         if (validationLink11) {
-                        //             const token = json && json.form_token ? json.form_token : (localStorage
-                        //                 .getItem('form_token') || '');
-                        //             const url = new URL(validationLink11.href, window.location.origin);
-                        //             if (token) url.searchParams.set('token', token);
-                        //             window.location.href = url.toString();
-                        //         }
-                        //     } else {
-                        //         console.error('Save failed payload:', json || text);
-                        //         alert('Failed to save. Details logged to console.');
-                        //     }
-                        // } catch (e) {
-                        //     console.error('Network error:', e);
-                        //     alert('Network error. Please try again.');
-                        // }
                     });
                 }
+
+                // Initialize
                 showStep(stepsOrder[0]);
             })();
         </script>
+        {{-- Strict validator removed for Form 1-11 to preserve original inline validation behavior --}}
     </main>
 </x-layout>

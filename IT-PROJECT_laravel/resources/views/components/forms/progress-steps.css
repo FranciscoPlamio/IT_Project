@@ -1,0 +1,18 @@
+.steps-list .step-item {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+.steps-list .step-item:hover {
+    background-color: transparent !important;
+    cursor: default !important;
+}
+
+.step-item.active {
+    color: #0066cc;
+    font-weight: 600;
+}
+
+.step-item.completed .step-status {
+    color: #28a745;
+}

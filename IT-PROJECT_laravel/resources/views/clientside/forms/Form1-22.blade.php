@@ -397,24 +397,11 @@
                 const stepsOrder = ['application', 'applicant', 'equipment', 'antenna', 'signal']; // declaration removed
                 const stepsList = document.getElementById('stepsList22');
                 const form = document.getElementById('form122');
-                const warningCheckbox = document.getElementById('warning-agreement');
-                // Function to disable/enable all form fields
-                function toggleFormFields(enabled) {
-                    const formFields = form.querySelectorAll('input, select, textarea, button');
-                    formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
-                            return;
-                        }
-                        field.disabled = !enabled;
-                    });
-                }
-                // Initially disable all form fields
-                toggleFormFields(false);
-                // Add event listener to warning checkbox
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleFormFields(this.checked);
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
                     });
                 }
 
@@ -556,5 +543,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form122'])
     </main>
 </x-layout>

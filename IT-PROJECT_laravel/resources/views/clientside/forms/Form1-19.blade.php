@@ -229,36 +229,21 @@
                 const stepsOrder = ['equipment', 'applicant', 'particulars']; // declaration removed
                 const stepsList = document.getElementById('stepsList19');
                 const form = document.getElementById('form119');
-                const warningCheckbox = document.getElementById('warning-agreement');
-                // Function to disable/enable all form fields
-                function toggleFormFields(enabled) {
-                    const formFields = form.querySelectorAll('input, select, textarea, button');
-                    formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
-                            return;
-                        }
-                        field.disabled = !enabled;
-                    });
-                }
-                // Initially disable all form fields
-                toggleFormFields(false);
-                // Add event listener to warning checkbox
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleFormFields(this.checked);
+                if (form) {
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
                     });
                 }
 
                 function showStep(step) {
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && step !== 'equipment') {
-                        return;
-                    }
-                    stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
-                        step));
-                    document.querySelectorAll('.step-content').forEach(s => s.classList.toggle('active', s.id ===
-                        `step-${step}`));
+                    stepsList.querySelectorAll('.step-item').forEach(li => {
+                        li.classList.toggle('active', li.dataset.step === step);
+                    });
+                    document.querySelectorAll('.step-content').forEach(s => {
+                        s.classList.toggle('active', s.id === `step-${step}`);
+                    });
                 }
 
                 function currentStep() {
@@ -404,5 +389,6 @@
                 showStep(stepsOrder[0]);
             })();
         </script>
+        @include('components.forms.inline-validator', ['formId' => 'form119'])
     </main>
 </x-layout>

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use App\Models\Forms\FormsTransactions;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
 use TypeError;
 
 class FormManager
@@ -289,5 +290,35 @@ class FormManager
     public static function generateReferenceNumber($length = 10)
     {
         return strtoupper(Str::random($length));
+    }
+
+    /**
+     * Add universal validation to a form
+     *
+     * @return string
+     */
+    public static function addValidation()
+    {
+        return View::make('components.forms.universal-validation')->render();
+    }
+
+    /**
+     * Initialize form with validation and any additional setup
+     *
+     * @param string $formId The ID of the form to initialize
+     * @return string
+     */
+    public static function initializeForm($formId)
+    {
+        return self::addValidation() . "
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('$formId');
+                if (form) {
+                    // Any additional form-specific initialization can go here
+                    console.log('Form $formId initialized with universal validation');
+                }
+            });
+        </script>";
     }
 }
