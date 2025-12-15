@@ -57,38 +57,78 @@ class AdminController extends Controller   // <-- rename this
         return redirect()->route('admin.login'); // Goes back to index.blade.php
     }
 
-
     public function dashboard(Request $request)
     {
-        // Optional: login session validation
         if (!$request->session()->has('admin')) {
             return redirect()->route('admin.login');
         }
 
-        // Get admin user info
         $user = User::find($request->session()->get('admin'));
 
-        // Fetch data from forms_transactions (case-insensitive)
-        $done = FormsTransactions::where('status', new Regex('^done$', 'i'))->count();
-        $progress = FormsTransactions::where('status', new Regex('^processing$', 'i'))
-            ->orWhere('status', new Regex('^pending$', 'i'))
-            ->count();
-        $cancel = FormsTransactions::where('status', new Regex('^declined$', 'i'))->count();
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $range = $request->input('range');
+        $date = $request->input('date');
+
+        // Base query for recent apps
+        $recentAppsQuery = FormsTransactions::query();
+
+        $singleDate = $request->input('single_date');
+
+        // Apply date filters
+        if ($singleDate) {
+            // Single day filter takes priority
+            $recentAppsQuery->whereDate('created_at', $singleDate);
+        } elseif ($startDate && $endDate) {
+            $recentAppsQuery->whereDate('created_at', '>=', $startDate)
+                ->whereDate('created_at', '<=', $endDate);
+        } elseif ($date) {
+            $recentAppsQuery->whereDate('created_at', $date);
+        } elseif ($range) {
+            switch ($range) {
+                case 'yesterday':
+                    $recentAppsQuery->whereDate('created_at', now()->subDay());
+                    break;
+                case 'last7':
+                    $recentAppsQuery->whereBetween('created_at', [now()->subDays(6)->startOfDay(), now()->endOfDay()]);
+                    break;
+                case 'last30':
+                    $recentAppsQuery->whereBetween('created_at', [now()->subDays(29)->startOfDay(), now()->endOfDay()]);
+                    break;
+            }
+        } else {
+            // Default: today
+            $recentAppsQuery->whereDate('created_at', now());
+        }
+
+        // Clone query for counts
+        $countsQuery = clone $recentAppsQuery;
+
+        // Count for pie charts (all statuses)
+        $done = $countsQuery->where('status', 'done')->count();
+        $progress = $countsQuery->whereIn('status', ['pending', 'processing'])->count();
+        $cancel = $countsQuery->where('status', 'declined')->count();
 
         $total = $done + $progress + $cancel;
 
         $percentages = [
-            'done'     => $total > 0 ? round(($done / $total) * 100, 2) : 0,
+            'done' => $total > 0 ? round(($done / $total) * 100, 2) : 0,
             'progress' => $total > 0 ? round(($progress / $total) * 100, 2) : 0,
-            'cancel'   => $total > 0 ? round(($cancel / $total) * 100, 2) : 0,
+            'cancel' => $total > 0 ? round(($cancel / $total) * 100, 2) : 0,
         ];
 
-        // Get latest forms (15 most recent)
-        $recentApps = FormsTransactions::orderBy('created_at', 'desc')->take(15)->get();
+        // Paginate recent apps
+        $recentApps = $recentAppsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
-        // Normalize statuses and assign icons/classes
+        // Sum of payment_amount for filtered date(s) ONLY where status = done AND payment_status = paid
+        $filteredTotalPaid = $recentAppsQuery->clone()
+            ->where('status', 'done')
+            ->where('payment_status', 'paid')
+            ->sum('payment_amount') ?? 0;
+
+        // Normalize statuses for display
         foreach ($recentApps as $app) {
-            $status = strtolower(trim($app->status ?? 'pending')); // default = pending
+            $status = strtolower(trim($app->status ?? 'pending'));
             $app->normalized_status = $status;
 
             switch ($status) {
@@ -96,12 +136,10 @@ class AdminController extends Controller   // <-- rename this
                     $app->status_class = 'done';
                     $app->status_icon = 'Done.png';
                     break;
-
                 case 'declined':
                     $app->status_class = 'declined';
                     $app->status_icon = 'Cancel.png';
                     break;
-
                 default:
                     $app->status_class = 'progress';
                     $app->status_icon = 'In-prog.png';
@@ -109,16 +147,22 @@ class AdminController extends Controller   // <-- rename this
             }
         }
 
-        // Return everything to the dashboard view
         return view('adminside.dashboard', compact(
             'user',
             'percentages',
             'done',
             'progress',
             'cancel',
-            'recentApps'
+            'recentApps',
+            'filteredTotalPaid',
+            'startDate',
+            'endDate',
+            'range',
+            'date'
         ));
     }
+
+
 
     public function requestManagement(Request $request)
     {

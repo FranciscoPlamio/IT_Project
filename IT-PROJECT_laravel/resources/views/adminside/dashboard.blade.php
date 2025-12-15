@@ -1,9 +1,90 @@
 <x-admin-layout>
     <x-slot:head>
         @vite(['resources/css/adminside/dashboard.css', 'resources/js/adminside/dashboard.js'])
+        <style>
+            .summary-card {
+                background: #fff;
+                padding: 16px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                margin-bottom: 16px;
+            }
+
+            .summary-card .amount {
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: #16a34a;
+            }
+
+            /* Pagination */
+            .pagination-container {
+                margin-top: 16px;
+                display: flex;
+                justify-content: center;
+            }
+
+            .pagination {
+                display: flex;
+                gap: 6px;
+                list-style: none;
+                padding-left: 0;
+            }
+
+            .pagination li a {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 12px;
+                background: #f3f3f3;
+                border-radius: 6px;
+                color: #333;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.875rem;
+            }
+
+            .pagination li.active a {
+                background: #2563eb;
+                color: #fff;
+            }
+
+            .pagination li.disabled span {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            .filter-form {
+                margin-bottom: 16px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .filter-form input[type="date"],
+            .filter-form select {
+                padding: 6px 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+            }
+
+            .filter-form button {
+                padding: 6px 12px;
+                border-radius: 6px;
+                background-color: #2563eb;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+
+            .filter-form button:hover {
+                background-color: #1d4ed8;
+            }
+        </style>
     </x-slot:head>
-    <!-- Main Content -->
+
     <main class="main">
+
         <!-- Pie Charts -->
         <section class="pie">
             <div class="pie-card done">
@@ -25,32 +106,69 @@
             </div>
         </section>
 
+        <!-- Summary / Total Paid -->
+        <section class="summary mb-6">
+            <div class="summary-card total-paid">
+                <h3>Total Paid
+                    @if (request('single_date'))
+                        on {{ \Carbon\Carbon::parse(request('single_date'))->format('M d, Y') }}
+                    @elseif(request('start_date') && request('end_date'))
+                        from {{ \Carbon\Carbon::parse(request('start_date'))->format('M d, Y') }} to
+                        {{ \Carbon\Carbon::parse(request('end_date'))->format('M d, Y') }}
+                    @elseif(request('date'))
+                        on {{ \Carbon\Carbon::parse(request('date'))->format('M d, Y') }}
+                    @elseif(request('range') == 'yesterday')
+                        Yesterday
+                    @elseif(request('range') == 'last7')
+                        Last 7 Days
+                    @elseif(request('range') == 'last30')
+                        Last 30 Days
+                    @else
+                        Today
+                    @endif
+                </h3>
+                <p class="amount">₱ {{ number_format($filteredTotalPaid, 2) }}</p>
+            </div>
+        </section>
+
+        <!-- Filter Form -->
+        <form method="GET" class="filter-form">
+            <label for="single_date">Single Day:</label>
+            <input type="date" name="single_date" id="single_date" value="{{ request('single_date') }}">
+
+            <label for="start_date">From:</label>
+            <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}">
+
+            <label for="end_date">To:</label>
+            <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}">
+
+            <label for="range">Quick Range:</label>
+            <select name="range" id="range">
+                <option value="">-- Select --</option>
+                <option value="yesterday" {{ request('range') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                <option value="last7" {{ request('range') == 'last7' ? 'selected' : '' }}>Last 7 Days</option>
+                <option value="last30" {{ request('range') == 'last30' ? 'selected' : '' }}>Last 30 Days</option>
+            </select>
+
+            <button type="submit">Filter</button>
+            <a href="{{ route('admin.dashboard') }}"
+                class="ml-2 px-3 py-1 rounded bg-gray-500 text-white hover:bg-gray-600">Reset</a>
+        </form>
+
+
         <!-- Certification Log -->
         <section class="cert-log">
             <div class="table-header">
                 <h1>Certification Log</h1>
-                <div class="table-actions">
-                    <button class="refresh-btn" id="refresh-btn" title="Refresh data">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path>
-                            <path d="M21 3v5h-5"></path>
-                            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path>
-                            <path d="M3 21v-5h5"></path>
-                        </svg>
-                        Refresh
-                    </button>
-                </div>
             </div>
 
             @if ($recentApps->isEmpty())
                 <div class="empty-state">
                     <div class="empty-icon">📋</div>
                     <h3>No Applications Found</h3>
-                    <p>There are no recent applications to display at the moment.</p>
                 </div>
             @else
-                <div class="table-container">
+                <div class="table-container overflow-x-auto">
                     <table class="applications-table">
                         <thead>
                             <tr>
@@ -58,6 +176,7 @@
                                 <th>Form Type</th>
                                 <th>Date Submitted</th>
                                 <th>Status</th>
+                                <th>Payment Amount</th> <!-- New column -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -66,7 +185,6 @@
                                 @php
                                     $status = strtolower(trim($app->status ?? 'pending'));
                                     $isInProgress = in_array($status, ['pending', 'processing']);
-
                                     $targetRoute = $isInProgress
                                         ? route('admin.req-management', [
                                             'highlight' => $app->payment_reference,
@@ -75,26 +193,22 @@
                                         : route('admin.req-history', ['highlight' => $app->payment_reference]);
                                 @endphp
                                 <tr class="table-row" data-status="{{ $status }}">
-                                    <td class="app-id">
-                                        <span class="id-badge">{{ $app->payment_reference }}</span>
+                                    <td>{{ $app->payment_reference }}</td>
+                                    <td>{{ ucfirst($app->form_type) }}</td>
+                                    <td>
+                                        {{ optional($app->created_at)->format('d M Y') }}
+                                        <br>
+                                        {{ optional($app->created_at)->format('h:i A') }}
                                     </td>
-                                    <td class="form-type">
-                                        <span class="type-label">{{ ucfirst($app->form_type) }}</span>
-                                    </td>
-                                    <td class="date-submitted">
-                                        <span
-                                            class="date-text">{{ optional($app->created_at)->format('d M Y') }}</span>
-                                        <span
-                                            class="time-text">{{ optional($app->created_at)->format('h:i A') }}</span>
-                                    </td>
-                                    <td class="status-cell">
+                                    <td>
                                         <div class="status-badge {{ $app->status_class }}">
                                             <img src="{{ asset('images/' . $app->status_icon) }}"
                                                 alt="{{ ucfirst($status) }}">
-                                            <span>{{ ucfirst($status) }}</span>
+                                            {{ ucfirst($status) }}
                                         </div>
                                     </td>
-                                    <td class="actions">
+                                    <td>₱ {{ number_format($app->payment_amount, 2) }}</td>
+                                    <td>
                                         <a href="{{ $targetRoute }}" class="action-btn view-btn" title="View Details">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                                                 stroke="currentColor" stroke-width="2">
@@ -107,6 +221,17 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination-container">
+                        <ul class="pagination">
+                            @foreach ($recentApps->getUrlRange(1, $recentApps->lastPage()) as $page => $url)
+                                <li class="{{ $page == $recentApps->currentPage() ? 'active' : '' }}">
+                                    <a href="{{ $url }}">{{ $page }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             @endif
         </section>

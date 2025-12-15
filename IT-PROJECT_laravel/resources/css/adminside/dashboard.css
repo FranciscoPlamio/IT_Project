@@ -504,7 +504,7 @@ body {
 /* Always show scrollbars */
 .notifications,
 .cert-log {
-    overflow-y: scroll;
+    overflow-y: visible;
     scrollbar-gutter: stable;
 }
 
