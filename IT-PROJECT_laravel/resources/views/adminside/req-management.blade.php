@@ -236,10 +236,47 @@
                                                 $statusLabel = ucwords($rawStatus);
                                                 break;
                                         }
-                                    @endphp
-                                    @php
+
+                                        // Statuses that are manageable via the dropdown
                                         $managedStatuses = ['pending', 'processing', 'declined'];
                                         $isManagedStatus = in_array($status, $managedStatuses);
+
+                                        // Determine if this request currently has an active "Approve" action
+                                        $canApprove = false;
+
+                                        if ($req->form_type === 'form1-01') {
+                                            $canApprove = $req->form->admission_slip && $req->form->or;
+                                        } elseif (in_array($req->form_type, ['form1-02', 'form1-03'])) {
+                                            $certificateExists = false;
+                                            try {
+                                                $certificateExists = \App\Models\Certificate::where(
+                                                    'form_token',
+                                                    $req->form_token,
+                                                )->exists();
+                                            } catch (\Exception $e) {
+                                                $certificateExists = false;
+                                            }
+                                            $canApprove = $req->form->or && $certificateExists;
+                                        } elseif ($req->form_type === 'form1-09') {
+                                            $certificateExists = false;
+                                            try {
+                                                $files = Storage::disk('local')->files("forms/{$req->form_token}");
+                                                foreach ($files as $file) {
+                                                    if (Str::startsWith(basename($file), 'permit')) {
+                                                        $certificateExists = true;
+                                                        break;
+                                                    }
+                                                }
+                                            } catch (\Exception $e) {
+                                                $certificateExists = false;
+                                            }
+                                            $canApprove = $req->form->or && $certificateExists;
+                                        }
+
+                                        // Only treat approve as "active" when still in a pending/processing flow
+                                        if (!in_array($status, ['pending', 'processing'])) {
+                                            $canApprove = false;
+                                        }
                                     @endphp
                                     <td class="status-cell {{ $statusClass }}">
                                         @if ($isManagedStatus)
@@ -249,8 +286,10 @@
                                                 </option>
                                                 <option value="processing" @selected($status === 'processing')>Processing
                                                 </option>
-                                                <option value="declined" @selected($status === 'declined')>Decline
-                                                </option>
+                                                @unless ($canApprove)
+                                                    <option value="declined" @selected($status === 'declined')>Decline
+                                                    </option>
+                                                @endunless
                                             </select>
 
                                             @if ($req->payment_status == 'paid')
@@ -320,65 +359,14 @@
                                         <span class="action-placeholder">{{ $req->remarks }}</span>
                                     </td>
                                     <td class="action-cell">
-                                        @if ($req->form_type === 'form1-01')
-                                            @if ($req->form->admission_slip && $req->form->or)
-                                                <button class="badge-btn progress"
-                                                    onclick="openConfirmApproveModal('{{ $req->_id }}')"
-                                                    title="Approve Request">
-                                                    Approve
-                                                </button>
-                                            @else
-                                                <span class="muted-text">—</span>
-                                            @endif
-                                        @elseif($req->form_type === 'form1-02' || $req->form_type === 'form1-03')
-                                            @php
-                                                $certificateExists = false;
-
-                                                try {
-                                                    // Check if a certificate record exists for this form token
-                                                    $certificateExists = \App\Models\Certificate::where(
-                                                        'form_token',
-                                                        $req->form_token,
-                                                    )->exists();
-                                                } catch (\Exception $e) {
-                                                    $certificateExists = false;
-                                                }
-
-                                            @endphp
-                                            @if ($req->form->or && $certificateExists)
-                                                <button class="badge-btn progress"
-                                                    onclick="openConfirmApproveModal('{{ $req->_id }}')"
-                                                    title="Approve Request">
-                                                    Approve
-                                                </button>
-                                            @else
-                                                <span class="muted-text">—</span>
-                                            @endif
-                                        @elseif($req->form_type === 'form1-09')
-                                            @php
-                                                // Check if certificate has been generated (exists in attachments folder)
-                                                $certificateExists = false;
-                                                try {
-                                                    $files = Storage::disk('local')->files("forms/{$req->form_token}");
-                                                    foreach ($files as $file) {
-                                                        if (Str::startsWith(basename($file), 'permit')) {
-                                                            $certificateExists = true;
-                                                            break;
-                                                        }
-                                                    }
-                                                } catch (\Exception $e) {
-                                                    $certificateExists = false;
-                                                }
-                                            @endphp
-                                            @if ($req->form->or && $certificateExists)
-                                                <button class="badge-btn progress"
-                                                    onclick="openConfirmApproveModal('{{ $req->_id }}')"
-                                                    title="Approve Request">
-                                                    Approve
-                                                </button>
-                                            @else
-                                                <span class="muted-text">—</span>
-                                            @endif
+                                        @if ($canApprove)
+                                            <button class="badge-btn progress"
+                                                onclick="openConfirmApproveModal('{{ $req->_id }}')"
+                                                title="Approve Request">
+                                                Approve
+                                            </button>
+                                        @else
+                                            <span class="muted-text">—</span>
                                         @endif
                                     </td>
 
