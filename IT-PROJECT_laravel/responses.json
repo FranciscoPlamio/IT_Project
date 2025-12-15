@@ -3,10 +3,7 @@
     "Payment pending verification",
     "Payment amount needs adjustment",
     "Payment proof submitted",
-    "Payment cleared",
     "Awaiting payment",
-    "Payment verified - Processing",
-    "Payment incomplete - Please resubmit",
-    "Payment confirmed - Proceed with processing"
+    "Payment incomplete - Please resubmit"
 ]
 
