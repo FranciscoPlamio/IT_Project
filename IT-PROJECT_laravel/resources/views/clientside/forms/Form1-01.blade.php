@@ -599,7 +599,7 @@
                                 field.style.border = '';
                                 field.style.backgroundColor = '';
                                 const existingError = field.parentNode.querySelector(
-                                '.field-error-message');
+                                    '.field-error-message');
                                 if (existingError) {
                                     existingError.remove();
                                 }
@@ -773,7 +773,7 @@
 
                 // Initialize the form validator
                 window.formValidator = new FormValidator();
-
+                warningCheckbox = document.getElementById("warning-agreement")
                 stepsList.addEventListener('click', (e) => {
                     const li = e.target.closest('.step-item');
                     if (!li) return;
@@ -1100,7 +1100,6 @@
 
             // Initialize on page load if an exam type is already selected
             filterCourseOptions();
-            });
         </script>
     </main>
 </x-layout>

@@ -323,11 +323,14 @@
                                         <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
                                     @endif
                                 </div>
-                                <div class="step-actions"><button class="form1-01-btn" type="button"
-                                        id="validateBtn">Proceed to Validation</button>
+                                <div class="step-actions">
+                                    <button type="button" class="btn-secondary" data-prev>Back</button>
+                                    <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
+                                        Validation</button>
                                 </div>
 
                             </div>
+
                         </fieldset>
                     </section>
 
@@ -345,7 +348,11 @@
                 const form = document.getElementById('form102');
                 if (form) {
                     // per-form handler: stop fallback summary since this form renders its own UI
-                    form.addEventListener('form:validationFailed', function(evt){ try{ evt.preventDefault(); }catch(e){} });
+                    form.addEventListener('form:validationFailed', function(evt) {
+                        try {
+                            evt.preventDefault();
+                        } catch (e) {}
+                    });
                 }
                 const validationLink02 = document.getElementById('validationLink02');
                 const warningCheckbox = document.getElementById('warning-agreement');
