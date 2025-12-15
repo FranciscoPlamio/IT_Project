@@ -935,7 +935,7 @@ class FormsController extends Controller
                 ]);
             }
 
-            return response()->download(storage_path("app/{$certificatePath}"), "{$certificateNo}.pdf");
+            return response()->download(Storage::path($certificatePath), "{$certificateNo}.pdf");
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to generate certificate: ' . $e->getMessage()], 500);
         }

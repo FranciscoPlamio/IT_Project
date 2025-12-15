@@ -762,3 +762,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+/* ========== COLLAPSIBLE SECTIONS LOGIC ========== */
+document.addEventListener('DOMContentLoaded', function() {
+    const collapsibles = document.querySelectorAll('[data-collapsible]');
+
+    collapsibles.forEach(section => {
+        const trigger = section.querySelector('[data-collapsible-trigger]');
+        const content = section.querySelector('[data-collapsible-content]');
+        const label = section.querySelector('[data-toggle-label]');
+        const isDefaultCollapsed = section.hasAttribute('data-default-collapsed');
+
+        if (!trigger || !content) return;
+
+        // Function to update state
+        const setState = (isExpanded) => {
+            trigger.setAttribute('aria-expanded', isExpanded);
+            content.style.display = isExpanded ? 'block' : 'none';
+            if (label) {
+                label.textContent = isExpanded ? 'Hide details' : 'Show details';
+            }
+            // Rotate icon if it exists
+            const icon = trigger.querySelector('[data-toggle-icon]');
+            if (icon) {
+                 icon.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+                 icon.style.transition = 'transform 0.2s ease';
+            }
+        };
+
+        // Initialize state: Default to OPEN (true) unless explicitly set to collapsed
+        let shouldBeExpanded = !isDefaultCollapsed;
+        setState(shouldBeExpanded);
+
+        // Toggle on click
+        trigger.addEventListener('click', () => {
+             const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+             setState(!isExpanded);
+        });
+    });
+});

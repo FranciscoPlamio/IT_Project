@@ -49,9 +49,32 @@
                 }
 
                 function formatDateAndTime($value) {}
+
+                // Logic for Generated Files
+                $generatedFiles = collect([]);
+                $certificate = \App\Models\Certificate::where('form_token', $form->form_token)->first();
+
+                // 1. Certificates
+                if ($certificate) {
+                    $certificatePath = "certificates/{$certificate->certificate_no}.pdf";
+                    if (Illuminate\Support\Facades\Storage::disk('local')->exists($certificatePath)) {
+                        $generatedFiles->push($certificatePath);
+                    }
+                }
+
+                // 2. Permits & Receipts (scanned from files list)
+                // Filter out files that look like generated permits or official receipts
+                $detectedGeneratedFiles = $files->filter(function ($path) {
+                    $filename = basename($path);
+                    return (\Illuminate\Support\Str::startsWith($filename, 'permit_') ||
+                        \Illuminate\Support\Str::startsWith($filename, 'official_receipt_')) &&
+                        \Illuminate\Support\Str::endsWith(strtolower($filename), '.pdf');
+                });
+
+                $generatedFiles = $generatedFiles->merge($detectedGeneratedFiles);
             @endphp
 
-            <section class="info-card" data-collapsible>
+            <section id="section-applicant-details" class="info-card" data-collapsible>
                 <header class="section-heading">
                     <div>
                         <p class="section-eyebrow">Applicant Details</p>
@@ -105,7 +128,7 @@
             </section>
 
             @if ($form->form->or)
-                <section class="info-card" data-collapsible data-default-collapsed="true">
+                <section id="section-official-receipt" class="info-card" data-collapsible>
                     <header class="section-heading">
                         <div>
                             <p class="section-eyebrow">Official Receipt</p>
@@ -139,7 +162,7 @@
             @endif
 
             @if ($form->form->admission_slip)
-                <section class="info-card" data-collapsible data-default-collapsed="true">
+                <section id="section-admission-slip" class="info-card" data-collapsible>
                     <header class="section-heading">
                         <div>
                             <p class="section-eyebrow">Admission Slip</p>
@@ -175,7 +198,71 @@
                 </section>
             @endif
 
-            <section class="info-card" data-collapsible>
+            @if ($generatedFiles->isNotEmpty())
+                <section id="section-issued-documents" class="info-card" data-collapsible>
+                    <header class="section-heading">
+                        <div>
+                            <p class="section-eyebrow">System Generated</p>
+                            <h2>Issued Documents</h2>
+                            <p class="section-description">
+                                Official certificates and permits generated for this request.
+                            </p>
+                        </div>
+                        <button type="button" class="section-toggle" data-collapsible-trigger aria-expanded="true">
+                            <span data-toggle-label>Hide details</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                class="chevron-icon" data-toggle-icon>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+                            </svg>
+                        </button>
+                    </header>
+
+                    <div class="section-body" data-collapsible-content>
+                        <div class="attachment-grid">
+                            @foreach ($generatedFiles as $file)
+                                @php
+                                    $url = route('admin.viewFile', ['path' => $file]);
+                                    $fileName = basename($file);
+
+                                    // Default display name
+                                    $displayName = $fileName;
+
+                                    if ($certificate && $file === "certificates/{$certificate->certificate_no}.pdf") {
+                                        $displayName = 'Certificate - ' . $certificate->certificate_no;
+                                    } elseif (\Illuminate\Support\Str::startsWith($fileName, 'permit_')) {
+                                        $displayName = 'OfficialPermit';
+                                    } elseif (\Illuminate\Support\Str::startsWith($fileName, 'official_receipt_')) {
+                                        $displayName = 'Official Receipt';
+                                    }
+                                @endphp
+                                <article class="attachment-card">
+                                    <header class="attachment-card-header">
+                                        <h3>{{ $displayName }}</h3>
+                                        <span class="attachment-badge">PDF</span>
+                                    </header>
+
+                                    <div class="attachment-preview">
+                                        <iframe src="{{ $url }}"
+                                            title="{{ $displayName }} preview"></iframe>
+                                    </div>
+
+                                    <div class="attachment-actions">
+                                        <a href="{{ $url }}" target="_blank" class="btn btn-primary">Open</a>
+                                        @if ($certificate && $file === "certificates/{$certificate->certificate_no}.pdf")
+                                            <a href="{{ route('admin.certificates.verify') }}?certificate_no={{ urlencode($certificate->certificate_no) }}"
+                                                class="btn btn-success">
+                                                Verify
+                                            </a>
+                                        @endif
+                                    </div>
+                                </article>
+                            @endforeach
+                        </div>
+                    </div>
+                </section>
+            @endif
+
+            <section id="section-attachments" class="info-card" data-collapsible>
                 <header class="section-heading">
                     <div>
                         <p class="section-eyebrow">Attachments</p>
@@ -203,17 +290,8 @@
                 <div class="section-body" data-collapsible-content>
                     <div class="attachment-grid">
                         @php
-                            // Collect all form files
-                            $allFiles = $files;
-
-                            // Attempt to find generated certificate for this form
-                            $certificate = \App\Models\Certificate::where('form_token', $form->form_token)->first();
-                            if ($certificate) {
-                                $certificatePath = "private/certificates/{$certificate->certificate_no}.pdf";
-                                if (Storage::exists($certificatePath)) {
-                                    $allFiles->push($certificatePath);
-                                }
-                            }
+                            // Show only user-uploaded files here (exclude generated files)
+                            $allFiles = $files->diff($generatedFiles);
                         @endphp
 
                         @forelse ($allFiles as $file)
