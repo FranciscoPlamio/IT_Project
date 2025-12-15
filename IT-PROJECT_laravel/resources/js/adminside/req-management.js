@@ -248,8 +248,125 @@ function showFlashMessage(message, duration = 3000) {
     }, duration);
 }
 
+// Status confirmation modal state
+let pendingStatusChange = {
+    select: null,
+    requestId: null,
+    previousStatus: null,
+    selectedStatus: null,
+};
+
+function openStatusConfirmModal(select, requestId, previousStatus, selectedStatus) {
+    pendingStatusChange = {
+        select,
+        requestId,
+        previousStatus,
+        selectedStatus,
+    };
+
+    const modal = document.getElementById("confirmStatusModal");
+    const newStatusLabel = document.getElementById("newStatusLabel");
+
+    if (modal && newStatusLabel) {
+        newStatusLabel.textContent = capitalize(selectedStatus);
+        modal.style.display = "flex";
+    }
+}
+
+function closeStatusConfirmModal(revert = false) {
+    const modal = document.getElementById("confirmStatusModal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    if (revert && pendingStatusChange.select && pendingStatusChange.previousStatus) {
+        pendingStatusChange.select.value = pendingStatusChange.previousStatus;
+    }
+
+    pendingStatusChange = {
+        select: null,
+        requestId: null,
+        previousStatus: null,
+        selectedStatus: null,
+    };
+}
+
+function confirmStatusChange() {
+    const { select, requestId, previousStatus, selectedStatus } = pendingStatusChange;
+
+    if (!select || !requestId || !selectedStatus) {
+        closeStatusConfirmModal();
+        return;
+    }
+
+    closeStatusConfirmModal();
+
+    select.disabled = true;
+    select.classList.add("status-updating");
+
+    updateStatus(requestId, selectedStatus)
+        .then(() => {
+            // Store flash message for next page load
+            sessionStorage.setItem(
+                "flashMessage",
+                `Status updated to ${capitalize(selectedStatus)}.`
+            );
+
+            // Update current status in dataset
+            select.dataset.currentStatus = selectedStatus;
+            select.disabled = false;
+
+            // Reload the page (optional)
+            window.location.reload();
+        })
+        .catch((error) => {
+            alert(
+                error.message ||
+                    "Failed to update status. Please try again."
+            );
+            select.value = previousStatus;
+        })
+        .finally(() => {
+            const latestStatus = (
+                select.dataset.currentStatus || previousStatus
+            ).toLowerCase();
+            select.disabled = latestStatus === "done";
+            select.classList.remove("status-updating");
+        });
+}
+
+function initializeStatusConfirmModal() {
+    const cancelBtn = document.getElementById("confirmStatusCancel");
+    const confirmBtn = document.getElementById("confirmStatusYes");
+    const modal = document.getElementById("confirmStatusModal");
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener("click", () => {
+            closeStatusConfirmModal(true);
+        });
+    }
+
+    if (confirmBtn) {
+        confirmBtn.addEventListener("click", () => {
+            confirmStatusChange();
+        });
+    }
+
+    // Close modal when clicking outside the content
+    if (modal) {
+        modal.addEventListener("click", (e) => {
+            if (e.target === modal) {
+                closeStatusConfirmModal(true);
+            }
+        });
+    }
+}
+
 function initializeStatusDropdowns() {
     const statusSelects = document.querySelectorAll(".status-select");
+
+    // Initialize the status confirmation modal listeners
+    initializeStatusConfirmModal();
 
     statusSelects.forEach((select) => {
         const requestId = select.dataset.requestId;
@@ -286,38 +403,8 @@ function initializeStatusDropdowns() {
                 return;
             }
 
-            select.disabled = true;
-            select.classList.add("status-updating");
-
-            updateStatus(requestId, selectedStatus)
-                .then(() => {
-                    // Store flash message for next page load
-                    sessionStorage.setItem(
-                        "flashMessage",
-                        `Status updated to ${capitalize(selectedStatus)}.`
-                    );
-
-                    // Update current status in dataset
-                    select.dataset.currentStatus = selectedStatus;
-                    select.disabled = false;
-
-                    // Reload the page (optional)
-                    window.location.reload();
-                })
-                .catch((error) => {
-                    alert(
-                        error.message ||
-                            "Failed to update status. Please try again."
-                    );
-                    select.value = previousStatus;
-                })
-                .finally(() => {
-                    const latestStatus = (
-                        select.dataset.currentStatus || previousStatus
-                    ).toLowerCase();
-                    select.disabled = latestStatus === "done";
-                    select.classList.remove("status-updating");
-                });
+            // Show confirmation modal instead of directly updating
+            openStatusConfirmModal(select, requestId, previousStatus, selectedStatus);
         });
     });
 }

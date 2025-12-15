@@ -397,6 +397,20 @@
             </div>
         </div>
     </div>
+
+    <!-- Status Change Confirmation Modal -->
+    <div class="confirm-modal" id="confirmStatusModal" style="display:none;">
+        <div class="confirm-modal__content">
+            <h3>Confirm Status Change</h3>
+            <p id="statusChangeMessage">Are you sure you want to change the status to <strong
+                    id="newStatusLabel"></strong>?</p>
+
+            <div class="confirm-actions" style="margin-top: 20px;">
+                <button id="confirmStatusCancel" class="btn-secondary">Cancel</button>
+                <button id="confirmStatusYes" class="btn-primary">Confirm</button>
+            </div>
+        </div>
+    </div>
     <script>
         let approveId = null;
 
