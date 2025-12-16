@@ -177,6 +177,44 @@
                 margin-top: 2px;
                 display: block;
             }
+
+            /* Flex for button content */
+            .btn-primary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                /* space between text and spinner */
+                position: relative;
+            }
+
+            /* Spinner styles */
+            .spinner {
+                width: 16px;
+                height: 16px;
+                border: 2px solid #fff;
+                /* main color */
+                border-top: 2px solid transparent;
+                /* makes the spinning effect */
+                border-radius: 50%;
+                display: inline-block;
+                animation: spin 0.8s linear infinite;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            /* Spinner animation */
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         </style>
     </x-slot:head>
 
@@ -386,7 +424,11 @@
                 </div>
                 <div class="receipt-form__actions">
                     <button type="button" class="btn-secondary" id="receiptCancelBtn">Cancel</button>
-                    <button type="submit" class="btn-primary" id="saveBtn">Save Details</button>
+
+                    <button type="submit" class="btn-primary" id="saveBtn">
+                        <span class="btn-text">Save Details</span>
+                        <span class="spinner hidden"></span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -549,12 +591,31 @@
                     valid = false;
                 }
 
-                if (valid) {
+                if (!valid) {
+                    // If invalid, hide spinner (if it was shown)
+                    saveBtn.querySelector('.spinner').classList.add('hidden');
+                    saveBtn.querySelector('.btn-text').classList.remove('hidden');
+                    return; // stop here
+                }
+
+                // All valid → show spinner and submit form
+                saveBtn.disabled = true;
+
+                // Enable OR Amount input if disabled
+                orAmount.disabled = false;
+
+                // Submit the form
+                const form = saveBtn.closest('form');
+                if (form) {
                     document.querySelector('input[name="form_token"]').value = formToken;
                     document.querySelector('input[name="form_type"]').value = formType;
                     document.getElementById('or_amount').disabled = false;
+
+                    saveBtn.querySelector('.btn-text').classList.add('hidden');
+                    saveBtn.querySelector('.spinner').classList.remove('hidden');
                     form.submit();
                 }
+
             })
         });
     </script>

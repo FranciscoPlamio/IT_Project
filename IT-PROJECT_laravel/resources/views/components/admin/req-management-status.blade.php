@@ -4,7 +4,10 @@
     @if (!$req->form->or)
         <div class="status-badge progress">
             <img src="{{ asset('images/In-prog.png') }}">
-            <span>Pending Official Receiipt</span>
+            <span><a
+                    href="{{ route('admin.declaration', ['highlight' => $req->payment_reference, 'section' => 'history']) }}">Pending
+                    Official
+                    Receipt</a></span>
         </div>
     @else
         <div class="status-badge done">
@@ -19,7 +22,8 @@
         @else
             <div class="status-badge progress">
                 <img src="{{ asset('images/In-prog.png') }}">
-                <span>Pending Admission Slip</span>
+                <span><a href="{{ route('admin.admission-slip', ['highlight' => $req->payment_reference]) }}">Pending
+                        Admission Slip</a></span>
             </div>
         @endif
     @endif
@@ -32,7 +36,10 @@
     @if (!$req->form->or)
         <div class="status-badge progress">
             <img src="{{ asset('images/In-prog.png') }}">
-            <span>Pending Official Receiipt</span>
+            <span><a
+                    href="{{ route('admin.declaration', ['highlight' => $req->payment_reference, 'section' => 'history']) }}">Pending
+                    Official
+                    Receipt</a></span>
         </div>
     @else
         <div class="status-badge done">
@@ -58,7 +65,8 @@
         @else
             <div class="status-badge progress">
                 <img src="{{ asset('images/In-prog.png') }}">
-                <span>Pending Certificate</span>
+                <span><a href="{{ route('admin.cert-request', ['highlight' => $req->payment_reference]) }}">Pending
+                        Certificate</a></span>
             </div>
         @endif
     @endif

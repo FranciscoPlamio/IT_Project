@@ -533,8 +533,13 @@
                                     <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
                                 @endif
                             </div>
-                            <div class="step-actions"><button class="form1-01-btn" type="button"
-                                    id="validateBtn">Proceed to Validation</button></div>
+                            <div class="step-actions">
+                                <button type="button" class="btn-secondary" data-prev>Back</button>
+
+                                <x-forms.proceed-validation-btn class="form1-01-btn bg-blue-600 text-white px-4 py-2">
+                                    Proceed to Validation
+                                </x-forms.proceed-validation-btn>
+                            </div>
                         </fieldset>
                     </section>
 
@@ -702,6 +707,18 @@
                 toggleRadioServiceOthers();
                 toggleIntendedUseDependents();
 
+                function startLoading(btn) {
+                    btn.disabled = true;
+                    btn.querySelector('.btn-text')?.classList.add('hidden');
+                    btn.querySelector('.spinner')?.classList.remove('hidden');
+                }
+
+                function stopLoading(btn) {
+                    btn.disabled = false;
+                    btn.querySelector('.btn-text')?.classList.remove('hidden');
+                    btn.querySelector('.spinner')?.classList.add('hidden');
+                }
+
                 // Validate & submit
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
@@ -728,6 +745,7 @@
                         } catch (e) {}
 
                         form.submit();
+                        startLoading(validateBtn);
                     });
                 }
 

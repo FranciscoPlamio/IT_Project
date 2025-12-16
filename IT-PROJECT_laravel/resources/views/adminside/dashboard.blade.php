@@ -133,22 +133,40 @@
 
         <!-- Filter Form -->
         <form method="GET" class="filter-form">
-            <label for="single_date">Single Day:</label>
-            <input type="date" name="single_date" id="single_date" value="{{ request('single_date') }}">
-
-            <label for="start_date">From:</label>
-            <input type="date" name="start_date" id="start_date" value="{{ request('start_date') }}">
-
-            <label for="end_date">To:</label>
-            <input type="date" name="end_date" id="end_date" value="{{ request('end_date') }}">
-
-            <label for="range">Quick Range:</label>
-            <select name="range" id="range">
-                <option value="">-- Select --</option>
-                <option value="yesterday" {{ request('range') == 'yesterday' ? 'selected' : '' }}>Yesterday</option>
-                <option value="last7" {{ request('range') == 'last7' ? 'selected' : '' }}>Last 7 Days</option>
-                <option value="last30" {{ request('range') == 'last30' ? 'selected' : '' }}>Last 30 Days</option>
+            <label for="filter_type">Filter By:</label>
+            <select name="filter_type" id="filter_type">
+                <option value="single_date" {{ request('filter_type') == 'single_date' ? 'selected' : '' }}>Single Day
+                </option>
+                <option value="range" {{ request('filter_type') == 'range' ? 'selected' : '' }}>Date Range</option>
+                <option value="quick" {{ request('filter_type') == 'quick' ? 'selected' : '' }}>Quick Range</option>
             </select>
+
+            <!-- Single Day -->
+            <div class="filter-single-date" style="display:none;">
+                <label for="single_date">Date:</label>
+                <input type="date" name="single_date" id="single_date" max="{{ date('Y-m-d') }}">
+            </div>
+
+            <!-- Date Range -->
+            <div class="filter-range" style="display:none;">
+                <label for="start_date">From:</label>
+                <input type="date" name="start_date" id="start_date" max="{{ date('Y-m-d') }}">
+
+                <label for="end_date">To:</label>
+                <input type="date" name="end_date" id="end_date" max="{{ date('Y-m-d') }}">
+            </div>
+
+            <!-- Quick Range -->
+            <div class="filter-quick" style="display:none;">
+                <label for="range">Quick Range:</label>
+                <select name="range" id="range">
+                    <option value="">-- Select --</option>
+                    <option value="yesterday">Yesterday
+                    </option>
+                    <option value="last7">Last 7 Days</option>
+                    <option value="last30">Last 30 Days</option>
+                </select>
+            </div>
 
             <button type="submit">Filter</button>
             <a href="{{ route('admin.dashboard') }}"
@@ -236,4 +254,26 @@
             @endif
         </section>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterTypeSelect = document.getElementById('filter_type');
+            const singleDateDiv = document.querySelector('.filter-single-date');
+            const rangeDiv = document.querySelector('.filter-range');
+            const quickDiv = document.querySelector('.filter-quick');
+
+            function updateFilterVisibility() {
+                const value = filterTypeSelect.value;
+
+                singleDateDiv.style.display = value === 'single_date' ? 'block' : 'none';
+                rangeDiv.style.display = value === 'range' ? 'block' : 'none';
+                quickDiv.style.display = value === 'quick' ? 'block' : 'none';
+            }
+
+            // Initialize on page load
+            updateFilterVisibility();
+
+            // Update on change
+            filterTypeSelect.addEventListener('change', updateFilterVisibility);
+        });
+    </script>
 </x-admin-layout>

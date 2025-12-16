@@ -102,6 +102,42 @@
                 transform: translateY(-1px);
                 box-shadow: 0 8px 20px -15px rgba(15, 23, 42, 0.8);
             }
+
+            /* Flex layout for button content */
+            .badge-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                /* space between text and spinner */
+                position: relative;
+            }
+
+            /* Spinner styles */
+            .spinner {
+                width: 16px;
+                height: 16px;
+                border: 2px solid #fff;
+                border-top: 2px solid transparent;
+                border-radius: 50%;
+                display: inline-block;
+                animation: spin 0.8s linear infinite;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            /* Spinner animation */
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         </style>
     </x-slot:head>
 
@@ -360,10 +396,11 @@
                                     </td>
                                     <td class="action-cell">
                                         @if ($canApprove)
-                                            <button class="badge-btn progress"
+                                            <button class="badge-btn progress" id="approveBtn"
                                                 onclick="openConfirmApproveModal('{{ $req->_id }}')"
                                                 title="Approve Request">
-                                                Approve
+                                                <span class="btn-text">Approve</span>
+                                                <span class="spinner hidden"></span>
                                             </button>
                                         @else
                                             <span class="muted-text">—</span>
@@ -429,6 +466,7 @@
             const confirmInput = document.getElementById("confirmInput");
             const confirmButton = document.getElementById("confirmApproveYes");
             const warning = document.getElementById("confirmWarning");
+            const approveBtn = document.getElementById('approveBtn');
 
             // Live validation
             confirmInput.addEventListener("input", () => {
@@ -452,6 +490,11 @@
             // Confirm Approve
             confirmButton.addEventListener("click", () => {
                 document.getElementById("confirmApproveModal").style.display = "none";
+                // Show spinner, hide text
+                // Disable button to prevent double click
+                approveBtn.disabled = true;
+                approveBtn.querySelector('.btn-text').classList.add('hidden');
+                approveBtn.querySelector('.spinner').classList.remove('hidden');
                 approveRequest(approveId);
             });
         });

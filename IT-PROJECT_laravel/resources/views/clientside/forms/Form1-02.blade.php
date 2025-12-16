@@ -1,4 +1,7 @@
 <x-layout :title="'Application for Radio Operator Certificate (Form 1-02)'" :form-header="['formNo' => 'NTC 1-02', 'revisionNo' => '02', 'revisionDate' => '03/31/2023']">
+    @php
+        $category = request()->query('category', $form['category'] ?? null);
+    @endphp
     <main>
         <form class="form1-01-container" id="form102" method="POST"
             action="{{ route('forms.preview', ['formType' => $formType]) }}">
@@ -328,11 +331,14 @@
                                     @endif
                                 </div>
                                 <div class="step-actions">
-                                    <button type="button" class="btn-secondary" data-prev>Back</button><button
-                                        class="form1-01-btn" type="button" id="validateBtn">Proceed to
-                                        Validation</button>
-                                </div>
+                                    <button type="button" class="btn-secondary" data-prev>Back</button>
 
+                                    <x-forms.proceed-validation-btn
+                                        class="form1-01-btn bg-blue-600 text-white px-4 py-2">
+                                        Proceed to Validation
+                                    </x-forms.proceed-validation-btn>
+                                </div>
+                                <input type="hidden" name="category" value="{{ $category }}">
                             </div>
                         </fieldset>
                     </section>
@@ -496,6 +502,17 @@
                     go(-1);
                 }));
 
+                function startLoading(btn) {
+                    btn.disabled = true;
+                    btn.querySelector('.btn-text')?.classList.add('hidden');
+                    btn.querySelector('.spinner')?.classList.remove('hidden');
+                }
+
+                function stopLoading(btn) {
+                    btn.disabled = false;
+                    btn.querySelector('.btn-text')?.classList.remove('hidden');
+                    btn.querySelector('.spinner')?.classList.add('hidden');
+                }
                 // Final submit / validation button
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
@@ -516,6 +533,7 @@
                         } catch (e) {}
 
                         form.submit();
+                        startLoading(validateBtn);
                     });
                 }
 

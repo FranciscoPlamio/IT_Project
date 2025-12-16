@@ -50,6 +50,7 @@ class Form1_02Rules
                 'modification_reason' => ['required_if:application_type,modification', 'string', 'nullable'],
                 'years' => self::integerRules(required: true, min: 1, max: 10, isMod: true),
                 'certificate_type' => ['required', 'string'],
+                'category' => ['nullable', 'string'],
             ],
 
             'messages' => array_merge(

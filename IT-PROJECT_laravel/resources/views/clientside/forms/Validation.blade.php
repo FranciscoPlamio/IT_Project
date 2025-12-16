@@ -66,8 +66,13 @@
         <div class="validation-btns">
             <a class="form1-01-btn" id="backToEditBtn" href="#">Back to Edit</a>
             <x-forms.cancel-validation :formType="$targetFormType" />
-            <button class="form1-01-btn" id="proceedPayment" href="">Proceed to
-                Payment</button>
+            <button type="button" id="proceedPayment"
+                class="form1-01-btn flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2">
+                <span class="btn-text">Proceed to Payment</span>
+                <span
+                    class="spinner hidden w-5 h-5 rounded-full animate-spin
+                     !border-2 !border-solid !border-white !border-t-transparent"></span>
+            </button>
             <form id="paymentForm" enctype="multipart/form-data"
                 action="{{ route('forms.submit', ['formType' => $formType]) }}" method="POST" style="display:none;">
                 @csrf
@@ -190,7 +195,7 @@
 
             for (const key in formData) {
                 if (key === 'form_token' || key === '_id' || key === 'user_id' || key === 'created_at' || key ===
-                    'updated_at') continue;
+                    'updated_at' || key === 'category') continue;
                 const value = formatValue(key, formData[key]);
                 if (value === '' || value === null || value === undefined) continue;
                 const dt = document.createElement('dt');
@@ -260,10 +265,30 @@
                 return;
             }
 
+            // START spinner on the link/button
+            const btn = link; // if this is your <a> or <button> element
+            btn.disabled = true; // works if it's a button, optional for <a>
+
+            // Add spinner span if it doesn't exist
+            let spinner = btn.querySelector('.spinner');
+            if (!spinner) {
+                spinner = document.createElement('span');
+                spinner.className =
+                    "spinner w-5 h-5 rounded-full animate-spin border-2 border-solid border-white border-t-transparent inline-block ml-2";
+                btn.appendChild(spinner);
+            }
+            spinner.style.display = 'inline-block';
+
+            // Optional: hide the link text
+            const textSpan = btn.querySelector('.btn-text');
+            if (textSpan) textSpan.style.display = 'none';
+
+            // Append file inputs to the form
             inputs.forEach((input) => {
                 form.appendChild(input);
-            })
-            // Redirect to transaction page with payment method
+            });
+
+            // Submit the form
             form.submit();
         });
 

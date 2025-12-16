@@ -178,7 +178,7 @@ textarea.form1-01-input {
     font-weight: 600;
     cursor: pointer;
     transition: background 0.2s;
-    display: table;
+    display: flex;
     margin: 18px auto 0;
 }
 .form1-01-btn:hover {
@@ -410,9 +410,16 @@ textarea.form1-01-input {
 
 /* Shake animation for errors */
 @keyframes error-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-5px);
+    }
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 /* Field validation indicator icons */

@@ -349,10 +349,11 @@
                                                 Waiting for file
                                             </span>
 
-                                            <button id="submitBtn"
-                                                class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
-                                                disabled>
-                                                Submit Payment Proof
+                                            <button disabled id="submitBtn"
+                                                class="w-full sm:w-auto rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none flex items-center justify-center gap-2">
+                                                <span class="btn-text">Submit Payment Proof</span>
+                                                <span
+                                                    class="spinner hidden w-5 h-5 rounded-full animate-spin border-2 border-solid border-white border-t-transparent"></span>
                                             </button>
                                         </div>
                                     </div>
@@ -1139,6 +1140,16 @@
                 proofInput.addEventListener("change", updateProofState);
             }
             updateProofState();
+
+            submitBtn.addEventListener('click', () => {
+
+
+
+                // Hide text, show spinner
+                submitBtn.querySelector('.btn-text').classList.add('hidden');
+                submitBtn.querySelector('.spinner').classList.remove('hidden');
+
+            });
         })
     </script>
 </x-layout>

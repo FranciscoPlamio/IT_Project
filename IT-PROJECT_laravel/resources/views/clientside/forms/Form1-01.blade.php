@@ -299,8 +299,10 @@
                             </div>
                             <div class="step-actions">
                                 <button type="button" class="btn-secondary" data-prev>Back</button>
-                                <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
-                                    Validation</button>
+
+                                <x-forms.proceed-validation-btn class="form1-01-btn bg-blue-600 text-white px-4 py-2">
+                                    Proceed to Validation
+                                </x-forms.proceed-validation-btn>
                             </div>
                         </fieldset>
                     </section>
@@ -560,11 +562,28 @@
                         go(-1);
                     }));
 
-                    const validateBtn = document.getElementById('validateBtn');
+                    function startLoading(btn) {
+                        btn.disabled = true;
+                        btn.querySelector('.btn-text')?.classList.add('hidden');
+                        btn.querySelector('.spinner')?.classList.remove('hidden');
+                    }
+
+                    function stopLoading(btn) {
+                        btn.disabled = false;
+                        btn.querySelector('.btn-text')?.classList.remove('hidden');
+                        btn.querySelector('.spinner')?.classList.add('hidden');
+                    }
+
+                    const validateBtn = document.querySelector('[data-loading-btn]');
+
                     if (validateBtn) {
                         validateBtn.addEventListener('click', async () => {
+
+
+
                             if (!warningCheckbox.checked) {
                                 alert('Please check the agreement checkbox first before proceeding.');
+                                stopLoading(validateBtn);
                                 return;
                             }
 
@@ -572,17 +591,22 @@
                             formData.forEach((value, key) => {
                                 console.log(`${key}: ${value}`);
                             });
+
                             if (!validateActiveStep()) {
-                                // Show validation error message
                                 const errorDiv = document.createElement('p');
                                 errorDiv.className = 'text-red text-sm mt-1';
                                 errorDiv.textContent =
                                     'Please complete all required fields before proceeding.';
+
                                 const existingError = document.querySelector('.step-actions .text-red');
                                 if (existingError) existingError.remove();
+
                                 document.querySelector('.step-actions').appendChild(errorDiv);
+
+                                stopLoading(validateBtn);
                                 return;
                             }
+
                             try {
                                 if (window.grecaptcha) {
                                     const captchaResponse = window.grecaptcha.getResponse();
@@ -591,53 +615,23 @@
                                         errorDiv.className = 'text-red text-sm mt-1';
                                         errorDiv.textContent =
                                             'Please complete the CAPTCHA before proceeding.';
-                                        document.querySelector('.g-recaptcha').parentNode.appendChild(
-                                            errorDiv);
+
+                                        document.querySelector('.g-recaptcha')
+                                            .parentNode.appendChild(errorDiv);
+
+                                        stopLoading(validateBtn);
                                         return;
                                     }
                                 }
-                            } catch (e) {}
+                            } catch (e) {
+                                stopLoading(validateBtn);
+                                return;
+                            }
+
+                            // ✅ All checks passed → submit
                             form.submit();
-
-                            // -- commented AJAX for now--
-                            // -- uncomment if fixed -Richmond
-
-                            //const formData = new FormData(form);
-                            // try {
-                            //     const res = await fetch(form.action, {
-                            //         method: 'POST',
-                            //         headers: {
-                            //             'Content-Type': 'application/json',
-                            //             'Accept': 'application/json'
-                            //         },
-                            //         body: formData
-                            //     });
-                            //     const text = await res.text();
-                            //     console.log(text);
-                            //     let json = null;
-                            //     try {
-                            //         json = JSON.parse(text);
-                            //     } catch (e) {}
-                            //     if (res.ok) {
-                            //         if (json.form_token) {
-                            //             localStorage.setItem('form_token', json.form_token);
-                            //         }
-                            //         localStorage.setItem('active-form', '1-01');
-                            //         if (validationLink) {
-                            //             const token = json && json.form_token ? json.form_token : (localStorage
-                            //                 .getItem('form_token') || '');
-                            //             const url = new URL(validationLink.href, window.location.origin);
-                            //             if (token) url.searchParams.set('token', token);
-                            //             window.location.href = url.toString();
-                            //         }
-                            //     } else {
-                            //         console.error('Save failed payload:', json || text);
-                            //         alert('Failed to save. Details logged to console.');
-                            //     }
-                            // } catch (e) {
-                            //     console.error('Network error:', e);
-                            //     alert('Network error. Please try again.');
-                            // }
+                            // START loading ONLY after click
+                            startLoading(validateBtn);
                         });
                     }
 
@@ -836,8 +830,6 @@
                 // Initialize on page load if an exam type is already selected
                 filterCourseOptions();
 
-                // Real-time form validation auto-initializes via formValidation.js
-                // using the data-form-type attribute on the form
             });
         </script>
 

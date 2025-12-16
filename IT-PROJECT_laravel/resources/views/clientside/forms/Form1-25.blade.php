@@ -219,8 +219,11 @@
                             @endif
                         </div>
                         <div class="step-actions">
-                            <button class="form1-01-btn" type="button" id="validateBtn">Proceed to
-                                Validation</button>
+                            <button type="button" class="btn-secondary" data-prev>Back</button>
+
+                            <x-forms.proceed-validation-btn class="form1-01-btn bg-blue-600 text-white px-4 py-2">
+                                Proceed to Validation
+                            </x-forms.proceed-validation-btn>
                         </div>
                     </section>
                 </div>
@@ -310,6 +313,18 @@
                 // Initialize on load
                 toggleComplaintOthers();
 
+                function startLoading(btn) {
+                    btn.disabled = true;
+                    btn.querySelector('.btn-text')?.classList.add('hidden');
+                    btn.querySelector('.spinner')?.classList.remove('hidden');
+                }
+
+                function stopLoading(btn) {
+                    btn.disabled = false;
+                    btn.querySelector('.btn-text')?.classList.remove('hidden');
+                    btn.querySelector('.spinner')?.classList.add('hidden');
+                }
+
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', async () => {
@@ -331,6 +346,7 @@
                             }
                         } catch (e) {}
                         form.submit();
+                        startLoading(validateBtn);
                     });
                 }
                 showStep(stepsOrder[0]);

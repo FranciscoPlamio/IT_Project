@@ -177,6 +177,44 @@
                 margin-top: 2px;
                 display: block;
             }
+
+            /* Flex layout for button content */
+            .btn-primary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                /* space between text and spinner */
+                position: relative;
+            }
+
+            /* Spinner styles */
+            .spinner {
+                width: 16px;
+                height: 16px;
+                border: 2px solid #fff;
+                /* main color */
+                border-top: 2px solid transparent;
+                /* spinning effect */
+                border-radius: 50%;
+                display: inline-block;
+                animation: spin 0.8s linear infinite;
+            }
+
+            .hidden {
+                display: none;
+            }
+
+            /* Spinner animation */
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
         </style>
     </x-slot:head>
 
@@ -394,7 +432,11 @@
                 </div>
                 <div class="receipt-form__actions">
                     <button type="button" class="btn-secondary" id="receiptCancelBtn">Cancel</button>
-                    <button type="submit" class="btn-primary" id="saveBtn">Save Details</button>
+
+                    <button type="submit" class="btn-primary" id="saveBtn">
+                        <span class="btn-text">Save Details</span>
+                        <span class="spinner hidden"></span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -444,7 +486,7 @@
             const receiptCancelBtn = document.getElementById("receiptCancelBtn");
             const receiptForm = document.getElementById("receiptForm");
 
-            const openReceiptModal = (reference = "", applicant = "", form = "", address) => {
+            const openReceiptModal = (reference = "", applicant = "", form = "", address, placeOfExam) => {
                 if (!receiptModal) return;
                 if (receiptSubtitle) {
                     const details = [reference, applicant, form]
@@ -463,6 +505,10 @@
                 const admitNameInput = document.getElementById('admit_name');
                 admitNameInput.value = applicant;
 
+                const placeOfExamInput = document.getElementById('place_of_exam');
+                placeOfExamInput.value = placeOfExam;
+
+
                 receiptModal.style.display = "flex";
                 receiptModal.setAttribute("aria-hidden", "false");
             };
@@ -480,7 +526,8 @@
                     const form = button.dataset.form || "";
                     const or_amount = button.dataset.amount;
                     const address = button.dataset.address;
-                    openReceiptModal(reference, applicant, form, address);
+                    const placeOfExam = "NTC CAR Baguio City"
+                    openReceiptModal(reference, applicant, form, address, placeOfExam);
                 });
             });
 
@@ -605,6 +652,10 @@
                 if (valid) {
                     document.querySelector('input[name="form_token"]').value = formToken;
                     document.querySelector('input[name="form_type"]').value = formType;
+
+                    saveBtn.disabled = true;
+                    saveBtn.querySelector('.btn-text').classList.add('hidden');
+                    saveBtn.querySelector('.spinner').classList.remove('hidden');
                     form.submit();
                 }
             })

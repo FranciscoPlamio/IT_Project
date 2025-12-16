@@ -192,6 +192,21 @@
                 }
             });
         });
+        document.querySelectorAll('.form-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+
+                if (e.target.closest('a')) return;
+
+                const link = card.querySelector('a[href]');
+                if (link) {
+                    window.open(link.href, '_blank');
+
+                }
+            });
+
+            // 見た目をクリック可能に
+            card.style.cursor = 'pointer';
+        });
     </script>
 
 </x-layout>

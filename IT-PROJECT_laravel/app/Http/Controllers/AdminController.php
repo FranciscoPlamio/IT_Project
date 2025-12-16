@@ -383,7 +383,8 @@ class AdminController extends Controller   // <-- rename this
         });
 
 
-        return view('adminside.list-admission', compact('user', 'declarationText', 'declarationEntries', 'latestRequests'));
+        $highlight = $request->query('highlight');
+        return view('adminside.list-admission', compact('user', 'declarationText', 'declarationEntries', 'latestRequests', 'highlight'));
     }
 
     public function admissionSlipSubmit(Request $request)
@@ -462,8 +463,10 @@ class AdminController extends Controller   // <-- rename this
             }
         });
 
+        $highlight = $request->query('highlight');
 
-        return view('adminside.declaration', compact('user', 'declarationText', 'declarationEntries', 'latestRequests'));
+
+        return view('adminside.declaration', compact('user', 'declarationText', 'declarationEntries', 'latestRequests', 'highlight'));
     }
     public function declarationSubmit(Request $request)
     {
