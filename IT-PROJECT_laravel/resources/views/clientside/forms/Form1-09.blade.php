@@ -547,39 +547,34 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended']; // declaration removed
+                const stepsOrder = ['personal', 'application', 'station', 'source', 'intended'];
                 const stepsList = document.getElementById('stepsList09');
                 const form = document.getElementById('form109');
-                const validationLink09 = document.getElementById('validationLink09');
                 const warningCheckbox = document.getElementById('warning-agreement');
 
-                // Function to disable/enable all form fields
+                // Enable/disable all form fields
                 function toggleFormFields(enabled) {
                     const formFields = form.querySelectorAll('input, select, textarea, button');
                     formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
-                            return;
-                        }
+                        if (field.id === 'warning-agreement' || field.type === 'hidden') return;
                         field.disabled = !enabled;
                     });
                 }
 
-                // Initially disable all form fields
+                // Initially disable all fields
                 toggleFormFields(false);
 
-                // Add event listener to warning checkbox
                 if (warningCheckbox) {
                     warningCheckbox.addEventListener('change', function() {
                         toggleFormFields(this.checked);
+                        toggleRadioServiceOthers();
+                        toggleIntendedUseDependents();
                     });
                 }
 
+                // Show specific step
                 function showStep(step) {
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && step !== 'personal') {
-                        return;
-                    }
+                    if (!warningCheckbox.checked && step !== 'personal') return;
 
                     stepsList.querySelectorAll('.step-item').forEach(li => li.classList.toggle('active', li.dataset.step ===
                         step));
@@ -588,43 +583,52 @@
                 }
 
                 function currentStep() {
-                    const a = stepsList.querySelector('.step-item.active');
-                    return a ? a.dataset.step : stepsOrder[0];
+                    const active = stepsList.querySelector('.step-item.active');
+                    return active ? active.dataset.step : stepsOrder[0];
                 }
 
-                function go(d) {
-                    const i = stepsOrder.indexOf(currentStep());
-                    const n = Math.max(0, Math.min(stepsOrder.length - 1, i + d));
-                    showStep(stepsOrder[n]);
+                function go(delta) {
+                    const idx = stepsOrder.indexOf(currentStep());
+                    const nextIdx = Math.max(0, Math.min(stepsOrder.length - 1, idx + delta));
+                    showStep(stepsOrder[nextIdx]);
                 }
 
+                // Validate groups with data-require-one
                 function validateGroups(section) {
                     let ok = true;
                     section.querySelectorAll('[data-require-one]').forEach(group => {
                         const selector = group.getAttribute('data-require-one');
                         const items = group.querySelectorAll(selector);
-                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type ===
-                            'radio') ? el.checked : Boolean(el.value));
+                        const anyChecked = Array.from(items).some(el => (el.type === 'radio' || el.type ===
+                            'checkbox') ? el.checked : Boolean(el.value));
                         if (!anyChecked) ok = false;
                     });
                     return ok;
                 }
 
+                // Validate active step
                 function validateActiveStep() {
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
                     let valid = true;
+
+                    // Remove previous error messages
+                    section.querySelectorAll('p.text-red').forEach(el => el.remove());
+
+                    // Required fields
                     section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
                         if (el.type === 'radio') {
-                            const name = el.name;
-                            const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
-                            const anyChecked = Array.from(group).some(r => r.checked);
-                            if (!anyChecked) valid = false;
+                            const group = section.querySelectorAll(`input[type=radio][name="${el.name}"]`);
+                            if (!Array.from(group).some(r => r.checked)) valid = false;
                         } else if (!el.value) {
                             valid = false;
                         }
                     });
+
+                    // Validate custom groups
                     if (!validateGroups(section)) valid = false;
+
+                    // Update step status
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
                         li.classList.add('completed');
@@ -633,30 +637,40 @@
                         li.classList.remove('completed');
                         li.querySelector('.step-status').textContent = '';
                     }
+
+                    if (!valid) {
+                        const errorDiv = document.createElement('p');
+                        errorDiv.className = 'text-red text-sm mt-1 text-right';
+                        errorDiv.textContent = 'Please complete all required fields before proceeding.';
+                        const actionsContainer = section.querySelector('.step-actions');
+                        if (actionsContainer) actionsContainer.parentElement.appendChild(errorDiv);
+                    }
+
                     return valid;
                 }
 
-                stepsList.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const li = e.target.closest('.step-item');
-                    if (!li) return;
-                });
-                document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    if (validateActiveStep()) go(1);
-                }));
-                document.querySelectorAll('[data-prev]').forEach(b => b.addEventListener('click', () => {
-                    if (!warningCheckbox.checked) {
-                        alert('Please check the agreement checkbox first before proceeding.');
-                        return;
-                    }
-                    go(-1);
-                }));
+                // Disable sidebar navigation
+                stepsList.addEventListener('click', e => e.preventDefault());
 
-                // --- Conditional enable/disable fields ---
+                // Next / Prev buttons
+                document.addEventListener('click', e => {
+                    if (e.target.matches('[data-next]')) {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+                        if (validateActiveStep()) go(1);
+                    }
+                    if (e.target.matches('[data-prev]')) {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+                        go(-1);
+                    }
+                });
+
+                // --- Conditional fields ---
                 function toggleRadioServiceOthers() {
                     const othersRadio = form.querySelector('input[name="radio_service"][value="others"]');
                     const othersSpecify = form.querySelector('input[name="others_specify"]');
@@ -674,34 +688,32 @@
                     const isStorage = selectedUse && selectedUse.value === 'storage';
                     const isOthers = selectedUse && selectedUse.value === 'others_use';
                     storageLocation.disabled = !isStorage;
-                    if (!isStorage) storageLocation.value = '';
                     othersUseSpecify.disabled = !isOthers;
+                    if (!isStorage) storageLocation.value = '';
                     if (!isOthers) othersUseSpecify.value = '';
                 }
 
-                // Bind listeners
-                form.querySelectorAll('input[name="radio_service"]').forEach(r => {
-                    r.addEventListener('change', toggleRadioServiceOthers);
-                });
-                form.querySelectorAll('input[name="intended_use"]').forEach(r => {
-                    r.addEventListener('change', toggleIntendedUseDependents);
-                });
+                form.querySelectorAll('input[name="radio_service"]').forEach(r => r.addEventListener('change',
+                    toggleRadioServiceOthers));
+                form.querySelectorAll('input[name="intended_use"]').forEach(r => r.addEventListener('change',
+                    toggleIntendedUseDependents));
 
-                // Initialize on load
+                // Initialize conditional fields
                 toggleRadioServiceOthers();
                 toggleIntendedUseDependents();
 
-                // Keep in sync when agreement toggles overall enabled state
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleRadioServiceOthers();
-                        toggleIntendedUseDependents();
-                    });
-                }
-
+                // Validate & submit
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
-                    validateBtn.addEventListener('click', async () => {
+                    validateBtn.addEventListener('click', () => {
+                        if (!warningCheckbox.checked) {
+                            alert('Please check the agreement checkbox first before proceeding.');
+                            return;
+                        }
+
+                        if (!validateActiveStep()) return;
+
+                        // reCAPTCHA check
                         try {
                             if (window.grecaptcha) {
                                 const captchaResponse = window.grecaptcha.getResponse();
@@ -714,56 +726,15 @@
                                 }
                             }
                         } catch (e) {}
-                        const formData = new FormData(form);
-                        formData.forEach((value, key) => {
-                            console.log(`${key}: ${value}`);
-                        });
-                        if (!validateActiveStep()) return;
+
                         form.submit();
-
-                        // -- commented AJAX for now--
-                        // -- uncomment if fixed -Richmond
-
-                        //const formData = new FormData(form);
-                        // try {
-                        //     const res = await fetch(form.action, {
-                        //         method: 'POST',
-                        //         headers: {
-                        //             'Content-Type': 'application/json',
-                        //             'Accept': 'application/json'
-                        //         },
-                        //         body: formData
-                        //     });
-                        //     const text = await res.text();
-                        //     console.log(text);
-                        //     let json = null;
-                        //     try {
-                        //         json = JSON.parse(text);
-                        //     } catch (e) {}
-                        //     if (res.ok) {
-                        //         if (json.form_token) {
-                        //             localStorage.setItem('form_token', json.form_token);
-                        //         }
-                        //         localStorage.setItem('active-form', '1-09');
-                        //         if (validationLink09) {
-                        //             const token = json && json.form_token ? json.form_token : (localStorage
-                        //                 .getItem('form_token') || '');
-                        //             const url = new URL(validationLink09.href, window.location.origin);
-                        //             if (token) url.searchParams.set('token', token);
-                        //             window.location.href = url.toString();
-                        //         }
-                        //     } else {
-                        //         console.error('Save failed payload:', json || text);
-                        //         alert('Failed to save. Details logged to console.');
-                        //     }
-                        // } catch (e) {
-                        //     console.error('Network error:', e);
-                        //     alert('Network error. Please try again.');
-                        // }
                     });
                 }
+
+                // Initialize first step
                 showStep(stepsOrder[0]);
             })();
         </script>
+
     </main>
 </x-layout>

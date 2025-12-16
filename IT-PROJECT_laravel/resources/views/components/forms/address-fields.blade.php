@@ -37,7 +37,7 @@
 <div class="form-grid-2">
     <div class="form-field">
         <label class="form-label">Barangay <span class="text-red">*</span></label>
-        <select class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled
+        <select required class="form1-01-input address-select" name="barangay" id="barangaySelect" disabled
             data-old-value="{{ old('barangay', $form['barangay'] ?? '') }}">
             <option value="">Select Barangay</option>
         </select>
@@ -47,7 +47,7 @@
     </div>
     <div class="form-field">
         <label class="form-label">Zip Code <span class="text-red">*</span></label>
-        <select class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled
+        <select required class="form1-01-input address-select" name="zip_code" id="zipCodeSelect" disabled
             data-old-value="{{ old('zip_code', $form['zip_code'] ?? '') }}">
             <option value="">Select Zip Code</option>
         </select>
@@ -77,16 +77,10 @@
         <label class="form-label">Contact Number <span class="text-red">*</span>
             <small class="text-gray-500 ms-1">(09xxxxxxxxx - Numbers only)</small>
         </label>
-        <input class="form1-01-input" 
-               type="text" 
-               name="contact_number"
-               data-validate="phMobile"
-               maxlength="11"
-               inputmode="numeric"
-               pattern="09\d{9}"
-               title="Please enter a valid 11-digit Philippine mobile number starting with 09"
-               placeholder="09xxxxxxxxx"
-               value="{{ old('contact_number', $form['contact_number'] ?? '') }}">
+        <input class="form1-01-input" type="text" name="contact_number" data-validate="phMobile" maxlength="11"
+            inputmode="numeric" pattern="09\d{9}"
+            title="Please enter a valid 11-digit Philippine mobile number starting with 09" placeholder="09xxxxxxxxx"
+            value="{{ old('contact_number', $form['contact_number'] ?? '') }}" required>
         @error('contact_number')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -95,13 +89,8 @@
         <label class="form-label">Email Address <span class="text-red">*</span>
             <small class="text-gray-500 ms-1">(Gmail, Yahoo, or Outlook only)</small>
         </label>
-        <input class="form1-01-input" 
-               type="email" 
-               name="email" 
-               data-validate="email"
-               minlength="6"
-               maxlength="30"
-               value="{{ old('email', $form['email'] ?? '') }}">
+        <input class="form1-01-input" type="email" name="email" data-validate="email" minlength="6" maxlength="30"
+            value="{{ old('email', $form['email'] ?? '') }}" required>
         @error('email')
             <div class="text-red text-sm mt-1">{!! $message !!}</div>
         @enderror

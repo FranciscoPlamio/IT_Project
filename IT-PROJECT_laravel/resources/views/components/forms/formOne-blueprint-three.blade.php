@@ -11,7 +11,7 @@
         <label class="form-label">Date of Birth <span class="text-red">*</span>
         </label>
         <input class="form1-01-input" type="date" name="dob" min="{{ date('Y-m-d', strtotime('-70 years')) }}"
-            max="{{ date('Y-m-d', strtotime('-18 years')) }}" value="{{ old('dob', $form['dob'] ?? '') }}">
+            max="{{ date('Y-m-d', strtotime('-18 years')) }}" value="{{ old('dob', $form['dob'] ?? '') }}" required>
         @error('dob')
             <p class="text-red text-sm mt-1">{{ $message }}</p>
         @enderror
@@ -19,13 +19,13 @@
     <div class="form-field"><label class="form-label">Sex <span class="text-red">*</span></label>
         <div class="inline-radio">
             <label>
-                <input type="radio" name="sex" value="male"
+                <input type="radio" name="sex" value="male" required
                     {{ old('sex', $form['sex'] ?? '') === 'male' ? 'checked' : '' }}>
                 Male
             </label>
             <label>
                 <input type="radio" name="sex" value="female"
-                    {{ old('sex', $form['sex'] ?? '') === 'female' ? 'checked' : '' }}>
+                    {{ old('sex', $form['sex'] ?? '') === 'female' ? 'checked' : '' }} required>
                 Female
             </label>
         </div>
@@ -36,7 +36,7 @@
 
     <div class="form-field">
         <label class="form-label">Nationality <span class="text-red">*</span></label>
-        <select class="form1-01-input address-select" name="nationality" id="nationalitySelect"
+        <select required class="form1-01-input address-select" name="nationality" id="nationalitySelect"
             data-old-value="{{ old('nationality', $form['nationality'] ?? '') }}">
             <option value="">Select Nationality</option>
         </select>

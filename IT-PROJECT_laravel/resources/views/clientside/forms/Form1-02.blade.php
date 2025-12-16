@@ -52,7 +52,7 @@
                                 <div class="form-field">
                                     <label class="form-label">Weight (kg)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="weight"
-                                        value="{{ old('weight', $form['weight'] ?? '') }}">
+                                        value="{{ old('weight', $form['weight'] ?? '') }}" required>
                                     @error('weight')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -60,7 +60,7 @@
                                 <div class="form-field">
                                     <label class="form-label">Height (cm)<span class="text-red"> *</span></label>
                                     <input class="form1-01-input" type="text" name="height"
-                                        value="{{ old('height', $form['height'] ?? '') }}">
+                                        value="{{ old('height', $form['height'] ?? '') }}" required>
                                     @error('height')
                                         <p class="text-red text-sm mt-1">{{ $message }}</p>
                                     @enderror
@@ -73,12 +73,14 @@
                                     <div class="inline-radio">
                                         <label>
                                             <input type="radio" name="employment_status" value="employed"
-                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'employed' ? 'checked' : '' }}>
+                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'employed' ? 'checked' : '' }}
+                                                required>
                                             Employed
                                         </label>
                                         <label>
                                             <input type="radio" name="employment_status" value="unemployed"
-                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'unemployed' ? 'checked' : '' }}>
+                                                {{ old('employment_status', $form['employment_status'] ?? '') === 'unemployed' ? 'checked' : '' }}
+                                                required>
                                             Unemployed
                                         </label>
 
@@ -92,12 +94,14 @@
                                     <div class="inline-radio">
                                         <label>
                                             <input type="radio" name="employment_type" value="local"
-                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'local' ? 'checked' : '' }}>
+                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'local' ? 'checked' : '' }}
+                                                required>
                                             Local
                                         </label>
                                         <label>
                                             <input type="radio" name="employment_type" value="foreign"
-                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'foreign' ? 'checked' : '' }}>
+                                                {{ old('employment_type', $form['employment_type'] ?? '') === 'foreign' ? 'checked' : '' }}
+                                                required>
                                             Foreign
                                         </label>
                                     </div>
@@ -323,8 +327,10 @@
                                         <p class="text-red text-sm mt-1">{{ session('captcha_error') }}</p>
                                     @endif
                                 </div>
-                                <div class="step-actions"><button class="form1-01-btn" type="button"
-                                        id="validateBtn">Proceed to Validation</button>
+                                <div class="step-actions">
+                                    <button type="button" class="btn-secondary" data-prev>Back</button><button
+                                        class="form1-01-btn" type="button" id="validateBtn">Proceed to
+                                        Validation</button>
                                 </div>
 
                             </div>
@@ -340,45 +346,47 @@
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script>
             (function() {
-                const stepsOrder = ['personal', 'application', 'exam', ]; // declaration removed
+                const stepsOrder = ['personal', 'application', 'exam'];
                 const stepsList = document.getElementById('stepsList02');
                 const form = document.getElementById('form102');
-                const validationLink02 = document.getElementById('validationLink02');
                 const warningCheckbox = document.getElementById('warning-agreement');
 
-                // Function to disable/enable all form fields
+                // --- Enable/Disable all form fields except warning ---
                 function toggleFormFields(enabled) {
-                    const formFields = form.querySelectorAll('input, select, textarea, button');
-                    formFields.forEach(field => {
-                        // Skip the warning checkbox itself and hidden inputs
-                        if (field.id === 'warning-agreement' || field.type === 'hidden') {
-                            return;
-                        }
-                        field.disabled = !enabled;
+                    const fields = form.querySelectorAll('input, select, textarea, button');
+                    fields.forEach(f => {
+                        if (f.id === 'warning-agreement' || f.type === 'hidden') return;
+                        f.disabled = !enabled;
                     });
                 }
 
-                // Initially disable all form fields
-                toggleFormFields(false);
-
-                // Add event listener to warning checkbox
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleFormFields(this.checked);
-                    });
+                // --- Conditional fields ---
+                function toggleModificationReason() {
+                    const modReason = form.querySelector('input[name="modification_reason"]');
+                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
+                    if (!modReason || !isModification) return;
+                    modReason.disabled = !isModification.checked;
+                    modReason.required = isModification.checked; // dynamically required
+                    if (!isModification.checked) modReason.value = '';
                 }
 
+                function toggleOthersSpecify() {
+                    const othersSpecify = form.querySelector('input[name="others_specify"]');
+                    const othersRadio = form.querySelector('input[name="certificate_type"][value="others"]');
+                    if (!othersSpecify || !othersRadio) return;
+                    othersSpecify.disabled = !othersRadio.checked;
+                    othersSpecify.required = othersRadio.checked;
+                    if (!othersRadio.checked) othersSpecify.value = '';
+                }
+
+                // --- Show / Hide steps ---
                 function showStep(step) {
-                    // Only allow navigation if warning checkbox is checked
-                    if (!warningCheckbox.checked && step !== 'application') {
-                        return;
-                    }
-
+                    if (!warningCheckbox.checked && step !== 'personal') return;
                     stepsList.querySelectorAll('.step-item').forEach(li => {
                         li.classList.toggle('active', li.dataset.step === step);
                     });
-                    document.querySelectorAll('.step-content').forEach(s => {
-                        s.classList.toggle('active', s.id === `step-${step}`);
+                    document.querySelectorAll('.step-content').forEach(sec => {
+                        sec.classList.toggle('active', sec.id === `step-${step}`);
                     });
                 }
 
@@ -393,13 +401,14 @@
                     showStep(stepsOrder[nextIdx]);
                 }
 
+                // --- Validation ---
                 function validateGroups(section) {
                     let ok = true;
                     section.querySelectorAll('[data-require-one]').forEach(group => {
                         const selector = group.getAttribute('data-require-one');
                         const items = group.querySelectorAll(selector);
-                        const anyChecked = Array.from(items).some(el => (el.type === 'checkbox' || el.type ===
-                            'radio') ? el.checked : Boolean(el.value));
+                        const anyChecked = Array.from(items).some(el => !el.disabled && ((el.type === 'checkbox' ||
+                            el.type === 'radio') ? el.checked : Boolean(el.value)));
                         if (!anyChecked) ok = false;
                     });
                     return ok;
@@ -409,18 +418,36 @@
                     const step = currentStep();
                     const section = document.getElementById(`step-${step}`);
                     let valid = true;
+
+                    // Remove old errors
+                    section.querySelectorAll('p.text-red').forEach(el => el.remove());
+
+                    // Required fields (only enabled ones)
                     section.querySelectorAll('input[required], select[required], textarea[required]').forEach(el => {
+                        if (el.disabled) return;
                         if (el.type === 'radio') {
                             const name = el.name;
                             const group = section.querySelectorAll(`input[type=radio][name="${name}"]`);
-                            const anyChecked = Array.from(group).some(r => r.checked);
+                            const anyChecked = Array.from(group).some(r => !r.disabled && r.checked);
                             if (!anyChecked) valid = false;
                         } else if (!el.value) {
                             valid = false;
                         }
                     });
+
+                    // Validate data-require-one groups
                     if (!validateGroups(section)) valid = false;
 
+                    // Show error if invalid
+                    if (!valid) {
+                        const errorDiv = document.createElement('p');
+                        errorDiv.className = 'text-red text-sm mt-1 text-right';
+                        errorDiv.textContent = 'Please complete all required fields before proceeding.';
+                        const actionsContainer = section.querySelector('.step-actions');
+                        actionsContainer.parentElement.appendChild(errorDiv);
+                    }
+
+                    // Update step status
                     const li = stepsList.querySelector(`.step-item[data-step="${step}"]`);
                     if (valid) {
                         li.classList.add('completed');
@@ -429,25 +456,38 @@
                         li.classList.remove('completed');
                         li.querySelector('.step-status').textContent = '';
                     }
-                    console.log(valid);
+
                     return valid;
                 }
 
-                // Disable sidebar click navigation; use Next/Back only
-                stepsList.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const li = e.target.closest('.step-item');
-                    if (!li) return;
-                    // Intentionally do nothing to enforce Next/Back navigation only
-                });
+                // --- Event bindings ---
+                // Warning checkbox toggles everything
+                if (warningCheckbox) {
+                    warningCheckbox.addEventListener('change', () => {
+                        toggleFormFields(warningCheckbox.checked);
+                        toggleModificationReason();
+                        toggleOthersSpecify();
+                    });
+                }
 
+                // Conditional field listeners
+                form.querySelectorAll('input[name="application_type"]').forEach(r => r.addEventListener('change',
+                    toggleModificationReason));
+                form.querySelectorAll('input[name="certificate_type"]').forEach(r => r.addEventListener('change',
+                    toggleOthersSpecify));
+
+                // Next button
                 document.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', () => {
                     if (!warningCheckbox.checked) {
                         alert('Please check the agreement checkbox first before proceeding.');
                         return;
                     }
-                    if (validateActiveStep()) go(1);
+
+                    if (!validateActiveStep()) return;
+                    go(1);
                 }));
+
+                // Previous button
                 document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {
                     if (!warningCheckbox.checked) {
                         alert('Please check the agreement checkbox first before proceeding.');
@@ -456,51 +496,12 @@
                     go(-1);
                 }));
 
-
-                // --- Toggle enable/disable for conditional textboxes ---
-                function toggleModificationReason() {
-                    const modReason = form.querySelector('input[name="modification_reason"]');
-                    const isModification = form.querySelector('input[name="application_type"][value="modification"]');
-                    if (!modReason || !isModification) return;
-                    const enabled = isModification.checked;
-                    modReason.disabled = !enabled;
-                    if (!enabled) modReason.value = '';
-                }
-
-                function toggleOthersSpecify() {
-                    const othersSpecify = form.querySelector('input[name="others_specify"]');
-                    const othersRadio = form.querySelector('input[name="certificate_type"][value="others"]');
-                    if (!othersSpecify || !othersRadio) return;
-                    const enabled = othersRadio.checked;
-                    othersSpecify.disabled = !enabled;
-                    if (!enabled) othersSpecify.value = '';
-                }
-
-                // Bind change listeners for radios controlling the conditional fields
-                form.querySelectorAll('input[name="application_type"]').forEach(r => {
-                    r.addEventListener('change', toggleModificationReason);
-                });
-                form.querySelectorAll('input[name="certificate_type"]').forEach(r => {
-                    r.addEventListener('change', toggleOthersSpecify);
-                });
-
-                // Initialize states on load
-                toggleModificationReason();
-                toggleOthersSpecify();
-
-                // Keep conditional fields in sync when agreement toggles overall enabled state
-                if (warningCheckbox) {
-                    warningCheckbox.addEventListener('change', function() {
-                        toggleModificationReason();
-                        toggleOthersSpecify();
-                    });
-                }
-
-
+                // Final submit / validation button
                 const validateBtn = document.getElementById('validateBtn');
                 if (validateBtn) {
                     validateBtn.addEventListener('click', () => {
                         if (!validateActiveStep()) return;
+
                         try {
                             if (window.grecaptcha) {
                                 const captchaResponse = window.grecaptcha.getResponse();
@@ -513,36 +514,22 @@
                                 }
                             }
                         } catch (e) {}
-                        const formData = new FormData(form);
-                        formData.forEach((value, key) => {
-                            console.log(`${key}: ${value}`);
-                        });
-                        if (!validateActiveStep()) return;
-                        form.submit();
 
-                        // const entries = {};
-                        // for (const [key, value] of formData.entries()) {
-                        //     if (value instanceof File) {
-                        //         entries[key] = value.name || '';
-                        //     } else {
-                        //         if (entries[key]) {
-                        //             if (Array.isArray(entries[key])) entries[key].push(value);
-                        //             else entries[key] = [entries[key], value];
-                        //         } else {
-                        //             entries[key] = value;
-                        //         }
-                        //     }
-                        // }
-                        // localStorage.setItem('form1-02-data', JSON.stringify(entries));
-                        // localStorage.setItem('active-form', '1-02');
-                        // if (validationLink02) {
-                        //     window.location.href = validationLink02.href;
-                        // }
+                        form.submit();
                     });
                 }
 
+                // Disable clicking steps manually
+                stepsList.addEventListener('click', e => e.preventDefault());
+
+                // Initialize
+                toggleFormFields(false);
+                toggleModificationReason();
+                toggleOthersSpecify();
                 showStep(stepsOrder[0]);
+
             })();
         </script>
+
     </main>
 </x-layout>

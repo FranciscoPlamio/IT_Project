@@ -536,18 +536,20 @@
                                 errorMessage = 'Please select an exam type before proceeding.';
                             }
 
+                            const stepContainer = document.querySelector(`#step-${currentStepName}`);
+                            if (!stepContainer) return;
+
+                            // Remove any existing error messages first
+                            stepContainer.querySelectorAll('p.text-red').forEach(el => el.remove());
+
+                            // Create and append the new error message
                             const errorDiv = document.createElement('p');
                             errorDiv.className = 'text-red text-sm mt-1 text-right';
                             errorDiv.textContent = errorMessage;
 
-                            let x = document.querySelector(`#step-${currentStepName} .step-actions`)
-                                .parentElement
-                            const existingError = x.querySelector('p.text-red');
-
-                            if (existingError) existingError.remove();
-                            document.querySelector(`#step-${currentStepName} .step-actions`)
-                                .parentElement
-                                .appendChild(errorDiv);;
+                            // Append after step-actions
+                            const actionsContainer = stepContainer.querySelector('.step-actions');
+                            actionsContainer.parentElement.appendChild(errorDiv);
                         }
                     }));
                     document.querySelectorAll('[data-prev]').forEach(btn => btn.addEventListener('click', () => {

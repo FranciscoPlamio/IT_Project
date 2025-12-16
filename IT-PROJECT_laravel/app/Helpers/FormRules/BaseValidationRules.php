@@ -152,7 +152,7 @@ trait BaseValidationRules
      * @param int|null $max Maximum value
      * @return array
      */
-    public static function integerRules(bool $required = true, ?int $min = null, ?int $max = null): array
+    public static function integerRules(bool $required = true, ?int $min = null, ?int $max = null, bool $isMod = false): array
     {
         $rules = ['integer'];
 
@@ -163,11 +163,15 @@ trait BaseValidationRules
             $rules[] = "max:{$max}";
         }
 
-        if ($required) {
+        // Modify the first rule based on $isMod
+        if ($isMod) {
+            array_unshift($rules, 'nullable');
+        } elseif ($required) {
             array_unshift($rules, 'required');
         } else {
             array_unshift($rules, 'nullable');
         }
+
 
         return $rules;
     }
