@@ -383,8 +383,9 @@
                                         </h2>
                                         <p class="mt-3 text-base text-slate-600">
                                             We’ve received your GCash payment and will finish reviewing your application
-                                            shortly.
-                                            Once approved, you can download your form anytime.
+                                            shortly.<br>
+                                        <p class="text-base text-slate-600" style="font-weight: bold;">Once approved,
+                                            you can download your form anytime.</p>
                                         </p>
                                         <div
                                             class="mt-6 flex flex-col items-center gap-3 text-sm text-slate-500 sm:flex-row sm:justify-center">

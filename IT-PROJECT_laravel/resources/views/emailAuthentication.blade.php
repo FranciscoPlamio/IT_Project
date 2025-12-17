@@ -100,7 +100,8 @@
                     style="position:absolute;right:12px;top:12px;background:transparent;border:none;color:#fff;cursor:pointer;font-size:22px;line-height:1;">×</button>
             </div>
             <div style="padding:26px 30px;color:#2b2b2b;line-height:1.7;max-height:65vh;overflow:auto;">
-                <p style="margin:0 0 14px 0;font-size:16px;">The National Telecommunications Commission (NTC), in
+                <p style="margin:0 0 14px 0;font-size:16px;text-align:justify;">The National Telecommunications
+                    Commission (NTC), in
                     its
                     commitment to uphold the data privacy rights of individuals under the Data Privacy Act of 2012
                     (Republic Act No. 10173), hereby adopts this Privacy Policy. All personal information collected
@@ -112,15 +113,20 @@
                     personal information is kept secure, accurate, and confidential. Your personal information will
                     be
                     handled responsibly by the NTC in accordance with the Data Privacy Act of 2012.</p>
-                <ul style="margin:0 0 14px 18px;font-size:15px;color:#424242;">
-                    <li style="margin:6px 0;">We collect only necessary information to process your application.
-                    </li>
-                    <li style="margin:6px 0;">Your email will be used for authentication and official
-                        communications.
-                    </li>
-                    <li style="margin:6px 0;">You may contact NTC for questions or to exercise your data rights.
-                    </li>
-                </ul>
+                <div
+                    style="background:#fff5f5;border:1px solid #f5c2c2;border-left:4px solid #c0392b;border-radius:6px;padding:14px 16px;margin:0 0 14px 0;">
+                    <p style="margin:0 0 8px 0;font-size:14px;font-weight:600;color:#c0392b;">⚠ Important Conditions:
+                    </p>
+                    <ul style="margin:0 0 0 18px;font-size:15px;color:#5c1a1a;">
+                        <li style="margin:6px 0;">We collect only necessary information to process your application.
+                        </li>
+                        <li style="margin:6px 0;">Your email will be used for authentication and official
+                            communications.
+                        </li>
+                        <li style="margin:6px 0;">You may contact NTC for questions or to exercise your data rights.
+                        </li>
+                    </ul>
+                </div>
                 <label
                     style="display:flex;gap:10px;align-items:flex-start;margin-top:12px;cursor:pointer;font-size:15px;">
                     <input id="agreeCheckbox" type="checkbox" style="margin-top:4px;min-width:16px;">

@@ -101,14 +101,10 @@ class AdminController extends Controller   // <-- rename this
             $recentAppsQuery->whereDate('created_at', now());
         }
 
-        // Clone query for counts
-        $countsQuery = clone $recentAppsQuery;
-
-        // Count for pie charts (all statuses)
-        $done = $countsQuery->where('status', 'done')->count();
-        $progress = $countsQuery->whereIn('status', ['pending', 'processing'])->count();
-        $cancel = $countsQuery->where('status', 'declined')->count();
-
+        // Count for pie charts (all statuses) - clone separately for each count
+        $done = (clone $recentAppsQuery)->where('status', 'done')->count();
+        $progress = (clone $recentAppsQuery)->whereIn('status', ['pending', 'processing'])->count();
+        $cancel = (clone $recentAppsQuery)->where('status', 'declined')->count();
         $total = $done + $progress + $cancel;
 
         $percentages = [
@@ -116,7 +112,7 @@ class AdminController extends Controller   // <-- rename this
             'progress' => $total > 0 ? round(($progress / $total) * 100, 2) : 0,
             'cancel' => $total > 0 ? round(($cancel / $total) * 100, 2) : 0,
         ];
-
+        // dd($percentages);
         // Paginate recent apps
         $recentApps = $recentAppsQuery->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
