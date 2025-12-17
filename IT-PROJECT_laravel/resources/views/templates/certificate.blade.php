@@ -7,23 +7,23 @@
 
     <style>
         @page {
-            size: 150mm 190mm;
-            margin: 10mm;
+            size: 150mm 170mm;
+            margin: 5mm;
         }
 
         body {
             font-family: Arial, sans-serif;
+            padding: 5px;
             font-size: 14px;
             color: #000;
-            height: 190mm;
             overflow: hidden;
         }
 
         .container {
-            width: 420px;
-            padding: 18px;
+            width: fit-content;
+            height: fit-content;
+            padding: 5px;
             border: 1px solid #000;
-            margin: auto;
             page-break-inside: avoid;
             page-break-after: avoid;
         }

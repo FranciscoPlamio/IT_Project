@@ -6,16 +6,15 @@
     <title>NTC Official Permit</title>
     <style>
         @page {
-            size: 190mm 200.63mm;
-            margin: 0mm;
+            size: 190mm 195mm;
+            margin: 5mm;
         }
 
         body {
             font-family: Arial, sans-serif;
             font-size: 13px;
             color: #000;
-            margin: 40px;
-            height: {{ $pdf_height ?? '220.63' }}mm;
+            margin: 5px;
             overflow: hidden;
             page-break-inside: avoid;
             page-break-after: avoid;

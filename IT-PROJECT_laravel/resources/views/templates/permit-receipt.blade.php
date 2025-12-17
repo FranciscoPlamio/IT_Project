@@ -7,7 +7,7 @@
 
     <style>
         @page {
-            size: 250mm 185mm;
+            size: 200mm 169mm;
             margin: 5mm;
         }
 
@@ -15,14 +15,14 @@
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 13px;
             color: #000;
-            width: 100%;
+            width: fit-content;
             overflow: hidden;
         }
 
         .container {
-            max-width: 200mm;
-            width: 100%;
-            padding: 20px;
+            max-width: fit-content;
+            width: fit-content;
+            padding: 10px;
             border: 1px solid #000;
             margin: 0 auto;
             page-break-inside: avoid;
@@ -104,7 +104,7 @@
         <table class="no-border">
             <tr>
                 <td class="left"><strong>OR No:</strong> {{ $data['or_number'] ?? 'N/A' }}</td>
-                <td class="center"><strong>Date:</strong> {{ $data['or_date'] ?? 'N/A' }}</td>
+                <td class="right"><strong>Date:</strong> {{ $data['or_date'] ?? 'N/A' }}</td>
             </tr>
         </table>
 
@@ -150,7 +150,7 @@
                     @foreach ($data['items'] as $item)
                         <tr>
                             <td>{{ $item['description'] }}</td>
-                            <td>{{ $item['qty'] ?? 1 }}</td>
+                            <td class="center">{{ $item['qty'] ?? 1 }}</td>
                             <td>₱{{ number_format($item['unit_price'] ?? $item['amount'], 2) }}</td>
                             <td>₱{{ number_format($item['amount'], 2) }}</td>
                         </tr>

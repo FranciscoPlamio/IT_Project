@@ -6,7 +6,7 @@
     <title>NTC Examination Official Receipt</title>
     <style>
         @page {
-            size: 250mm 165mm;
+            size: 200mm 156mm;
             margin: 5mm;
         }
 
@@ -14,13 +14,13 @@
             font-family: DejaVu Sans, Arial, sans-serif;
             font-size: 13px;
             color: #000;
-            width: 100%;
+            width: fit-content;
             overflow: hidden;
         }
 
         .container {
             max-width: 200mm;
-            width: 100%;
+            width: fit-content;
             padding: 20px;
             border: 1px solid #000;
             margin: 0 auto;
@@ -98,7 +98,7 @@
         <table class="no-border">
             <tr>
                 <td class="left"><strong>OR No:</strong> {{ $data['or_number'] }}</td>
-                <td class="center"><strong>Date:</strong> {{ $data['or_date'] }}</td>
+                <td class="right"><strong>Date:</strong> {{ $data['or_date'] }}</td>
             </tr>
         </table>
 
@@ -115,7 +115,7 @@
                 <thead>
                     <tr>
                         <th>Description</th>
-                        <th class="right">Amount (PHP)</th>
+                        <th class="center">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -124,7 +124,7 @@
                         <td class="right">₱{{ number_format($data['exam_amount'], 2) }}</td>
                     </tr>
                     <tr>
-                        <td class="right bold">TOTAL AMOUNT</td>
+                        <td class="left bold">TOTAL AMOUNT</td>
                         <td class="right bold">₱{{ number_format($data['exam_amount'], 2) }}</td>
                     </tr>
                 </tbody>
