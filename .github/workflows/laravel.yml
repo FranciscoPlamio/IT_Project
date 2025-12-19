@@ -89,21 +89,27 @@ jobs:
         run: php artisan test
 
   # ===========================================
-  # DEPLOYMENT EXAMPLES (Uncomment one to use)
+  # DEPLOY TO RAILWAY
   # ===========================================
-
-  # ----- Deploy to Railway -----
   deploy-railway:
     needs: laravel-tests
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
       - name: Deploy to Railway
-        uses: bervProject/railway-deploy@main
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
-          service: your-service-name
+        env:
+          RAILWAY_TOKEN: ${{ secrets.bbf30847-4755-4722-8429-25d13d877c85 }}
+        run: railway up --service ${{ secrets.de5fc499-780f-4ef1-9f7a-256f2533a8e0 }}
+
+  # ===========================================
+  # OTHER DEPLOYMENT OPTIONS (Uncomment to use)
+  # ===========================================
 
   # ----- Deploy to Render -----
   # deploy-render:
