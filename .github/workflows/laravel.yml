@@ -10,6 +10,17 @@ jobs:
   laravel-tests:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     defaults:
       run:
         working-directory: IT-PROJECT_laravel
@@ -21,7 +32,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, dom, filter, gd, json, mongodb
+          extensions: mbstring, xml, ctype, iconv, intl, dom, filter, gd, json, mongodb
           coverage: none
 
       - name: Setup Node.js
@@ -60,19 +71,58 @@ jobs:
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
-      - name: Create SQLite Database
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
-
       - name: Run Migrations
         env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
+          DB_CONNECTION: mongodb
+          DB_HOST: 127.0.0.1
+          DB_PORT: 27017
+          DB_DATABASE: it_project_test
         run: php artisan migrate --force
 
       - name: Execute Tests via PHPUnit
         env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
+          DB_CONNECTION: mongodb
+          DB_HOST: 127.0.0.1
+          DB_PORT: 27017
+          DB_DATABASE: it_project_test
         run: php artisan test
+
+  # ===========================================
+  # DEPLOYMENT EXAMPLES (Uncomment one to use)
+  # ===========================================
+
+  # ----- Deploy to Railway -----
+  # deploy-railway:
+  #   needs: laravel-tests
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Deploy to Railway
+  #       uses: bervProject/railway-deploy@main
+  #       with:
+  #         railway_token: ${{ secrets.RAILWAY_TOKEN }}
+  #         service: your-service-name
+
+  # ----- Deploy to Render -----
+  # deploy-render:
+  #   needs: laravel-tests
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   steps:
+  #     - name: Trigger Render Deploy
+  #       run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+
+  # ----- Deploy to DigitalOcean App Platform -----
+  # deploy-digitalocean:
+  #   needs: laravel-tests
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Install doctl
+  #       uses: digitalocean/action-doctl@v2
+  #       with:
+  #         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+  #     - name: Deploy to DigitalOcean
+  #       run: doctl apps create-deployment ${{ secrets.DIGITALOCEAN_APP_ID }}
