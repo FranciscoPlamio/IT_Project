@@ -64,8 +64,9 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => env('MONGODB_URI', 'mongodb://localhost:27017'),
-            'database' => env('MONGODB_DATABASE', 'laravel_app'),
+            // Supports Railway's MONGO_URL, or custom MONGODB_URI, or localhost fallback
+            'dsn' => env('MONGO_URL', env('MONGODB_URI', 'mongodb://localhost:27017')),
+            'database' => env('MONGODB_DATABASE', 'it_project'),
         ],
 
         'mariadb' => [
