@@ -106,7 +106,7 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: de5fc499-780f-4ef1-9f7a-256f2533a8e0
-        run: cd IT-PROJECT_laravel && railway up --service project.ntc
+        run: railway up --service project.ntc
 
   # ===========================================
   # OTHER DEPLOYMENT OPTIONS (Uncomment to use)
