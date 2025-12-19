@@ -96,10 +96,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
+    defaults:
+      run:
+        working-directory: IT-PROJECT_laravel
+
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Railway CLI
+        working-directory: .
         run: npm install -g @railway/cli
 
       - name: Deploy to Railway
